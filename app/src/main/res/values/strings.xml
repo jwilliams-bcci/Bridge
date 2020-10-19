@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Bridge</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bridge_logo">Bridge Logo</string>
+    <string name="inspections_nremaining">Inspections\nRemaining</string>
+    <string name="title_route_sheet">Route Sheet</string>
+</resources>
