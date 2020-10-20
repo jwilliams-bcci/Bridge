@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Inspect">
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/fragment_inspections_remaining"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_inspect"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include2" />
+
+    <EditText
+        android:id="@+id/multiline_inspect_inspection_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@color/burgessBlue"
+        android:backgroundTint="@color/burgessBlue"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:lineSpacingExtra="2dp"
+        android:lines="3"
+        android:maxLines="3"
+        android:minLines="3"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:text="Community Name\nAddress City, State\nInspection type"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_inspect" />
+
+    <Button
+        android:id="@+id/button_inspect_add_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Add Note"
+        app:layout_constraintStart_toStartOf="@+id/multiline_inspect_inspection_details"
+        app:layout_constraintTop_toBottomOf="@+id/multiline_inspect_inspection_details" />
+
+    <Button
+        android:id="@+id/button_inspect_save_and_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Save &amp; Exit"
+        app:layout_constraintStart_toEndOf="@+id/button_inspect_add_note"
+        app:layout_constraintTop_toTopOf="@+id/button_inspect_add_note" />
+
+    <Button
+        android:id="@+id/button_inspect_review_and_submit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Review &amp; Submit"
+        app:layout_constraintEnd_toEndOf="@+id/multiline_inspect_inspection_details"
+        app:layout_constraintStart_toEndOf="@+id/button_inspect_save_and_exit"
+        app:layout_constraintTop_toTopOf="@+id/button_inspect_add_note" />
+
+    <Spinner
+        android:id="@+id/spinner_inspect_defect_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/multiline_inspect_inspection_details"
+        app:layout_constraintStart_toStartOf="@+id/multiline_inspect_inspection_details"
+        app:layout_constraintTop_toBottomOf="@+id/button_inspect_add_note" />
+
+    <Button
+        android:id="@+id/button_inspect_sort_defect_number"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="Sort by Defect Number"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_inspect_sort_defect_description"
+        app:layout_constraintHorizontal_weight="0"
+        app:layout_constraintStart_toStartOf="@+id/multiline_inspect_inspection_details"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_inspect_defect_category" />
+
+    <Button
+        android:id="@+id/button_inspect_sort_defect_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sort by Description"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/multiline_inspect_inspection_details"
+        app:layout_constraintHorizontal_weight="0"
+        app:layout_constraintTop_toTopOf="@+id/button_inspect_sort_defect_number" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
