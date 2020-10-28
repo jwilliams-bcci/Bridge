@@ -5,4 +5,10 @@
     <string name="bridge_logo">Bridge Logo</string>
     <string name="inspections_nremaining">Inspections\nRemaining</string>
     <string name="title_route_sheet">Route Sheet</string>
+    <string name="route_sheet_text_search_inspection_number_hint">Insp. #</string>
+    <string name="route_sheet_text_search_inspection_type_hint">Insp. Type</string>
+    <string name="route_sheet_text_search_address_hint">Address</string>
+    <string name="route_sheet_text_search_community_hint">Community</string>
+    <string name="route_sheet_button_print_route_sheet_text">Print Route Sheet</string>
+    <string name="route_sheet_button_order_route_sheet_text">Order Route Sheet</string>
 </resources>

@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/route_sheet_toolbar"
         android:layout_width="0dp"
         android:layout_height="41dp"
         android:background="#F27D00"
@@ -30,94 +30,98 @@
         app:titleTextColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/button_order_route_sheet"
+        android:id="@+id/route_sheet_button_order_route_sheet"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Order Route Sheet"
+        android:text="@string/route_sheet_button_order_route_sheet_text"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/button_print_route_sheet"
+        app:layout_constraintEnd_toStartOf="@+id/route_sheet_button_print_route_sheet"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
 
     <Button
-        android:id="@+id/button_print_route_sheet"
+        android:id="@+id/route_sheet_button_print_route_sheet"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Print Route Sheet"
+        android:text="@string/route_sheet_button_print_route_sheet_text"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button_order_route_sheet"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintStart_toEndOf="@+id/route_sheet_button_order_route_sheet"
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
 
     <EditText
-        android:id="@+id/text_search_community"
+        android:id="@+id/route_sheet_text_search_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:autofillHints="@string/route_sheet_text_search_community_hint"
         android:ems="10"
-        android:hint="Community"
+        android:hint="@string/route_sheet_text_search_community_hint"
         android:inputType="textPersonName"
         android:singleLine="false"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/text_search_address"
+        app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_address"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_order_route_sheet" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_order_route_sheet" />
 
     <EditText
-        android:id="@+id/text_search_address"
+        android:id="@+id/route_sheet_text_search_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:autofillHints="@string/route_sheet_text_search_address_hint"
         android:ems="10"
-        android:hint="Address"
+        android:hint="@string/route_sheet_text_search_address_hint"
         android:inputType="textPostalAddress"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/text_search_inspection_type"
+        app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_inspection_type"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/text_search_community"
-        app:layout_constraintTop_toTopOf="@+id/text_search_community" />
+        app:layout_constraintStart_toEndOf="@+id/route_sheet_text_search_community"
+        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
 
     <EditText
-        android:id="@+id/text_search_inspection_type"
+        android:id="@+id/route_sheet_text_search_inspection_type"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:autofillHints="@string/route_sheet_text_search_inspection_type_hint"
         android:ems="10"
-        android:hint="Insp. Type"
+        android:hint="@string/route_sheet_text_search_inspection_type_hint"
         android:inputType="textPersonName"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/text_search_inspection_number"
+        app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_inspection_number"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/text_search_address"
-        app:layout_constraintTop_toTopOf="@+id/text_search_community" />
+        app:layout_constraintStart_toEndOf="@+id/route_sheet_text_search_address"
+        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
 
     <EditText
-        android:id="@+id/text_search_inspection_number"
+        android:id="@+id/route_sheet_text_search_inspection_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="16dp"
+        android:autofillHints="@string/route_sheet_text_search_inspection_number_hint"
         android:ems="10"
-        android:hint="Insp. #"
+        android:hint="@string/route_sheet_text_search_inspection_number_hint"
         android:inputType="number"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/text_search_inspection_type"
-        app:layout_constraintTop_toTopOf="@+id/text_search_community" />
+        app:layout_constraintStart_toEndOf="@+id/route_sheet_text_search_inspection_type"
+        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_inspections"
+        android:id="@+id/route_sheet_list_inspections"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -128,6 +132,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_search_community"
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_text_search_community"
         tools:listitem="@layout/item_inspection_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>

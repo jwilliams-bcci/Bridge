@@ -15,13 +15,13 @@ public class RouteSheetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_sheet);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar((Toolbar) findViewById(R.id.route_sheet_toolbar));
 
         initializeDisplayContent();
     }
 
     private void initializeDisplayContent() {
-        final RecyclerView recyclerInspections = (RecyclerView) findViewById(R.id.list_inspections);
+        final RecyclerView recyclerInspections = (RecyclerView) findViewById(R.id.route_sheet_list_inspections);
         final LinearLayoutManager inspectionsLayoutManager = new LinearLayoutManager(this);
         recyclerInspections.setLayoutManager(inspectionsLayoutManager);
 
