@@ -5,13 +5,15 @@ import android.os.Parcelable;
 
 public class Inspection implements Parcelable {
     private int mInspectionId;
+    private int mBuilderId;
     private String mCommunity;
     private String mAddress;
     private String mInspectionType;
     private String mNotes;
 
-    public Inspection(int inspectionId, String community, String address, String inspectionType, String notes){
+    public Inspection(int inspectionId, int builderId, String community, String address, String inspectionType, String notes){
         mInspectionId = inspectionId;
+        mBuilderId = builderId;
         mCommunity = community;
         mAddress = address;
         mInspectionType = inspectionType;
@@ -20,6 +22,7 @@ public class Inspection implements Parcelable {
 
     protected Inspection(Parcel in) {
         mInspectionId = in.readInt();
+        mBuilderId = in.readInt();
         mCommunity = in.readString();
         mAddress = in.readString();
         mInspectionType = in.readString();
@@ -31,6 +34,12 @@ public class Inspection implements Parcelable {
     }
     public void setInspectionId(int inspectionId) {
         mInspectionId = inspectionId;
+    }
+    public int getBuilderId() {
+        return mBuilderId;
+    }
+    public void setBuilderId(int builderId) {
+        mBuilderId = builderId;
     }
     public String getCommunity() {
         return mCommunity;
@@ -77,6 +86,7 @@ public class Inspection implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(mInspectionId);
+        parcel.writeInt(mBuilderId);
         parcel.writeString(mCommunity);
         parcel.writeString(mAddress);
         parcel.writeString(mInspectionType);
