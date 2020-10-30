@@ -18,8 +18,8 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/route_sheet_toolbar"
         android:layout_width="0dp"
-        android:layout_height="41dp"
-        android:background="#F27D00"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/burgessOrange"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"

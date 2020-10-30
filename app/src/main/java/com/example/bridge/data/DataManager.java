@@ -1,5 +1,3 @@
-package com.example.bridge;
-
 import java.util.ArrayList;
 import java.util.List;
 

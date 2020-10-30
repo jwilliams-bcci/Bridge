@@ -1,5 +1,3 @@
-package com.example.bridge;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
