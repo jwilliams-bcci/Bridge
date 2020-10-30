@@ -1,3 +1,5 @@
+package com.example.bridge.data;
+
 public final class DefectItem {
     private final int mDefectItemId;
     private final int mDefectCategoryId;
