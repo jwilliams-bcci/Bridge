@@ -1,19 +1,21 @@
-package com.example.bridge.data;
+package com.example.bridge;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Inspection implements Parcelable {
     private int mInspectionId;
-    private int mBuilderId;
+    private String mBuilder;
+    private String mSuperintendent;
     private String mCommunity;
     private String mAddress;
     private String mInspectionType;
     private String mNotes;
 
-    public Inspection(int inspectionId, int builderId, String community, String address, String inspectionType, String notes){
+    public Inspection(int inspectionId, String builder, String superintendent, String community, String address, String inspectionType, String notes){
         mInspectionId = inspectionId;
-        mBuilderId = builderId;
+        mBuilder = builder;
+        mSuperintendent = superintendent;
         mCommunity = community;
         mAddress = address;
         mInspectionType = inspectionType;
@@ -22,7 +24,8 @@ public class Inspection implements Parcelable {
 
     protected Inspection(Parcel in) {
         mInspectionId = in.readInt();
-        mBuilderId = in.readInt();
+        mBuilder = in.readString();
+        mSuperintendent = in.readString();
         mCommunity = in.readString();
         mAddress = in.readString();
         mInspectionType = in.readString();
@@ -35,11 +38,17 @@ public class Inspection implements Parcelable {
     public void setInspectionId(int inspectionId) {
         mInspectionId = inspectionId;
     }
-    public int getBuilderId() {
-        return mBuilderId;
+    public String getBuilder() {
+        return mBuilder;
     }
-    public void setBuilderId(int builderId) {
-        mBuilderId = builderId;
+    public void setBuilder(String builder) {
+        mBuilder = builder;
+    }
+    public String getSuperintendent() {
+        return mSuperintendent;
+    }
+    public void setSuperintendent(String superintendent) {
+        mSuperintendent = superintendent;
     }
     public String getCommunity() {
         return mCommunity;
@@ -86,7 +95,8 @@ public class Inspection implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(mInspectionId);
-        parcel.writeInt(mBuilderId);
+        parcel.writeString(mBuilder);
+        parcel.writeString(mSuperintendent);
         parcel.writeString(mCommunity);
         parcel.writeString(mAddress);
         parcel.writeString(mInspectionType);

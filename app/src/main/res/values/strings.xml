@@ -11,4 +11,13 @@
     <string name="route_sheet_text_search_community_hint">Community</string>
     <string name="route_sheet_button_print_route_sheet_text">Print Route Sheet</string>
     <string name="route_sheet_button_order_route_sheet_text">Order Route Sheet</string>
+    <string name="inspection_details_text_builder_label">Builder:</string>
+    <string name="inspection_details_text_superintendent_label">Superintendent:</string>
+    <string name="inspection_details_text_notes_label">Notes:</string>
+    <string name="inspection_details_button_inspect_text">Inspect</string>
+    <string name="inspection_details_title">Inspection Summary</string>
+    <string name="inspection_details_button_view_history_text">View Inspection History</string>
+    <string name="inspection_details_button_transfer_inspection_text">Transfer Inspection</string>
+    <string name="inspection_details_button_assign_trainee_text">Assign Trainee</string>
+    <string name="inspection_details_button_edit_status_text">Edit Status</string>>
 </resources>

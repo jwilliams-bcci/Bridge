@@ -4,12 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-
-import com.example.bridge.data.DataManager;
-import com.example.bridge.data.Inspection;
-
 import java.util.List;
 
 public class RouteSheetActivity extends AppCompatActivity {

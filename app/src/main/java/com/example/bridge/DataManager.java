@@ -1,4 +1,4 @@
-package com.example.bridge.data;
+package com.example.bridge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,28 +59,28 @@ public class DataManager {
 
     //region Inspection Initializations
     private Inspection initializeInspection1() {
-        return new Inspection(1, 1, "Test Community 1", "123 One Road", "Final", "Notes go here");
+        return new Inspection(1, "Redhawk Builders", "Thurgood Stubbs\n555-5555", "Test Community 1", "123 One Road, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     private Inspection initializeInspection2() {
-        return new Inspection(2, 1, "Test Community 1", "234 One Road", "Final", "Notes go here");
+        return new Inspection(2, "Redhawk Builders", "Thurgood Stubbs\n555-5555", "Test Community 1", "234 One Road, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     private Inspection initializeInspection3() {
-        return new Inspection(3, 2, "Test Community 1", "345 One Road", "Final", "Notes go here");
+        return new Inspection(3, "Miami U Builders", "Thurgood Stubbs\n555-5555", "Test Community 1", "345 One Road, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     private Inspection initializeInspection4() {
-        return new Inspection(4, 2, "Test Community 1", "456 One Road", "Final", "Notes go here");
+        return new Inspection(4, "Miami U Builders", "Thurgood Stubbs\n555-5555", "Test Community 1", "456 One Road, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     private Inspection initializeInspection5() {
-        return new Inspection(5, 1, "Test Community 2", "123 Two Street", "Final", "Notes go here");
+        return new Inspection(5, "Redhawk Builders", "Remy Kuber\n777-7777", "Test Community 2", "123 Two Street, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     private Inspection initializeInspection6() {
-        return new Inspection(6, 1, "Test Community 2", "234 Two Street", "Final", "Notes go here");
+        return new Inspection(6, "Redhawk Builders", "Remy Kuber\n777-7777", "Test Community 2", "234 Two Street, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     private Inspection initializeInspection7() {
-        return new Inspection(7, 2, "Test Community 2", "345 Two Street", "Final", "Notes go here");
+        return new Inspection(7, "Miami U Builders", "Remy Kuber\n777-7777", "Test Community 2", "345 Two Street, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     private Inspection initializeInspection8() {
-        return new Inspection(8, 2, "Test Community 2", "456 Two Street", "Final", "Notes go here");
+        return new Inspection(8, "Miami U Builders", "Remy Kuber\n777-7777", "Test Community 2", "456 Two Street, Dallas, TX", "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
     }
     //endregion
 
@@ -89,7 +89,7 @@ public class DataManager {
         return new Builder(1, "Redhawk Builders");
     }
     private Builder initializeBuilder2() {
-        return new Builder(2, "MiamiU Builders");
+        return new Builder(2, "Miami U Builders");
     }
     //endregion
 }

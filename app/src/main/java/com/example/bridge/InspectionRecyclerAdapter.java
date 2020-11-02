@@ -1,13 +1,12 @@
 package com.example.bridge;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.bridge.data.Inspection;
-
 import java.util.List;
 
 public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRecyclerAdapter.ViewHolder> {
@@ -31,6 +30,7 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Inspection inspection = mInspectionList.get(position);
+        holder.mInspectionId = inspection.getInspectionId();
         holder.mTextCommunity.setText(inspection.getCommunity());
         holder.mTextAddress.setText(inspection.getAddress());
         holder.mTextInspectionType.setText(inspection.getInspectionType());
@@ -43,6 +43,7 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        public int mInspectionId;
         public final TextView mTextCommunity;
         public final TextView mTextAddress;
         public final TextView mTextInspectionType;
@@ -58,7 +59,9 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Intent intent = new Intent(mContext, InspectionDetailsActivity.class);
+                    intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
+                    mContext.startActivity(intent);
                 }
             });
         }
