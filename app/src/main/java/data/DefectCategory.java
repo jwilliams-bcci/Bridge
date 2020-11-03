@@ -1,4 +1,4 @@
-package com.example.bridge;
+package data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

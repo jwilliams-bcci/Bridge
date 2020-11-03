@@ -1,33 +1,30 @@
-package com.example.bridge;
+package data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Inspection implements Parcelable {
     private int mInspectionId;
-    private String mBuilder;
+    private int mBuilderId;
     private String mSuperintendent;
-    private String mCommunity;
-    private String mAddress;
+    private int mLocationId;
     private String mInspectionType;
     private String mNotes;
 
-    public Inspection(int inspectionId, String builder, String superintendent, String community, String address, String inspectionType, String notes){
+    public Inspection(int inspectionId, int builderId, String superintendent, int locationId, String inspectionType, String notes){
         mInspectionId = inspectionId;
-        mBuilder = builder;
+        mBuilderId = builderId;
         mSuperintendent = superintendent;
-        mCommunity = community;
-        mAddress = address;
+        mLocationId = locationId;
         mInspectionType = inspectionType;
         mNotes = notes;
     }
 
     protected Inspection(Parcel in) {
         mInspectionId = in.readInt();
-        mBuilder = in.readString();
+        mBuilderId = in.readInt();
         mSuperintendent = in.readString();
-        mCommunity = in.readString();
-        mAddress = in.readString();
+        mLocationId = in.readInt();
         mInspectionType = in.readString();
         mNotes = in.readString();
     }
@@ -38,11 +35,11 @@ public class Inspection implements Parcelable {
     public void setInspectionId(int inspectionId) {
         mInspectionId = inspectionId;
     }
-    public String getBuilder() {
-        return mBuilder;
+    public int getBuilderId() {
+        return mBuilderId;
     }
-    public void setBuilder(String builder) {
-        mBuilder = builder;
+    public void setBuilderd(int builderId) {
+        mBuilderId = builderId;
     }
     public String getSuperintendent() {
         return mSuperintendent;
@@ -50,17 +47,11 @@ public class Inspection implements Parcelable {
     public void setSuperintendent(String superintendent) {
         mSuperintendent = superintendent;
     }
-    public String getCommunity() {
-        return mCommunity;
+    public int getLocationId() {
+        return mLocationId;
     }
-    public void setCommunity(String community) {
-        mCommunity = community;
-    }
-    public String getAddress() {
-        return mAddress;
-    }
-    public void setAddress(String address) {
-        mAddress = address;
+    public void setAddress(int locationId) {
+        mLocationId = locationId;
     }
     public String getInspectionType() {
         return mInspectionType;
@@ -95,10 +86,9 @@ public class Inspection implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(mInspectionId);
-        parcel.writeString(mBuilder);
+        parcel.writeInt(mBuilderId);
         parcel.writeString(mSuperintendent);
-        parcel.writeString(mCommunity);
-        parcel.writeString(mAddress);
+        parcel.writeInt(mLocationId);
         parcel.writeString(mInspectionType);
         parcel.writeString(mNotes);
     }

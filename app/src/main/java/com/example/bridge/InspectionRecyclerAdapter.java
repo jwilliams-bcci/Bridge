@@ -9,6 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
+import data.DataManager;
+import data.Inspection;
+import data.Location;
+
 public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRecyclerAdapter.ViewHolder> {
     private final Context mContext;
     private final List<Inspection> mInspectionList;
@@ -30,9 +34,12 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Inspection inspection = mInspectionList.get(position);
+        Location location = DataManager.getInstance().getLocation(inspection.getLocationId());
         holder.mInspectionId = inspection.getInspectionId();
-        holder.mTextCommunity.setText(inspection.getCommunity());
-        holder.mTextAddress.setText(inspection.getAddress());
+        holder.mBuilderId = inspection.getBuilderId();
+        holder.mLocationId = inspection.getLocationId();
+        holder.mTextCommunity.setText(location.getCommunity());
+        holder.mTextAddress.setText(location.getFullAddress());
         holder.mTextInspectionType.setText(inspection.getInspectionType());
         holder.mTextInspectionNotes.setText(inspection.getNotes());
     }
@@ -44,6 +51,8 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public int mInspectionId;
+        public int mBuilderId;
+        public int mLocationId;
         public final TextView mTextCommunity;
         public final TextView mTextAddress;
         public final TextView mTextInspectionType;
@@ -61,6 +70,8 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
                 public void onClick(View view) {
                     Intent intent = new Intent(mContext, InspectionDetailsActivity.class);
                     intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
+                    intent.putExtra(InspectionDetailsActivity.BUILDER_ID, mBuilderId);
+                    intent.putExtra(InspectionDetailsActivity.LOCATION_ID, mLocationId);
                     mContext.startActivity(intent);
                 }
             });

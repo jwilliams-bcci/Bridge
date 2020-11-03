@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import java.util.List;
 
+import data.DataManager;
+import data.Inspection;
+
 public class RouteSheetActivity extends AppCompatActivity {
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.bridge;
+package data;
 
 public final class DefectItem {
     private final int mDefectItemId;

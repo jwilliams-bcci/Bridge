@@ -19,5 +19,9 @@
     <string name="inspection_details_button_view_history_text">View Inspection History</string>
     <string name="inspection_details_button_transfer_inspection_text">Transfer Inspection</string>
     <string name="inspection_details_button_assign_trainee_text">Assign Trainee</string>
-    <string name="inspection_details_button_edit_status_text">Edit Status</string>>
+    <string name="inspection_details_button_edit_status_text">Edit Status</string>
+    <string name="inspection_history_title">Inspection History</string>
+    <string name="transfer_inspection_title">Transfer Inspection</string>
+    <string name="transfer_inspection_button_transfer">Transfer</string>
+    <string name="assign_trainee_title">Assign Trainee</string>
 </resources>

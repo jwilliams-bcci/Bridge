@@ -31,14 +31,13 @@
         app:titleTextColor="@color/colorWhite" />
 
     <TextView
-        android:id="@+id/inspection_details_multiline_inspection_address"
+        android:id="@+id/inspection_details_text_inspection_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="@color/burgessBlue"
-        android:ems="12"
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:lineSpacingExtra="3dp"
@@ -60,8 +59,8 @@
         android:text="@string/inspection_details_text_builder_label"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/inspection_details_multiline_inspection_address"
-        app:layout_constraintTop_toBottomOf="@+id/inspection_details_multiline_inspection_address" />
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_text_inspection_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_details_text_inspection_address" />
 
     <TextView
         android:id="@+id/inspection_details_text_builder"
@@ -70,7 +69,7 @@
         android:layout_marginStart="8dp"
         android:editable="false"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="@+id/inspection_details_multiline_inspection_address"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_text_inspection_address"
         app:layout_constraintStart_toEndOf="@+id/inspection_details_text_builder_label"
         app:layout_constraintTop_toTopOf="@+id/inspection_details_text_builder_label" />
 
@@ -80,8 +79,8 @@
         android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="@+id/inspection_details_multiline_inspection_address"
-        app:layout_constraintStart_toStartOf="@+id/inspection_details_multiline_inspection_address"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_text_inspection_address"
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_text_inspection_address"
         app:layout_constraintTop_toBottomOf="@+id/inspection_details_text_builder" />
 
     <TextView
@@ -172,13 +171,13 @@
         android:background="@drawable/button_rounded_orange"
         android:text="@string/inspection_details_button_edit_status_text"
         android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toEndOf="@+id/button4"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_assign_trainee"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/button4"
-        app:layout_constraintTop_toBottomOf="@+id/button4" />
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_assign_trainee"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_details_button_assign_trainee" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/inspection_details_button_assign_trainee"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
