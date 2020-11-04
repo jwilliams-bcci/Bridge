@@ -1,5 +1,6 @@
 package data;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,9 @@ public class DataManager {
     private List<Location> mLocations = new ArrayList<>();
     private List<Inspector> mInspectors = new ArrayList<>();
     private List<InspectionHistory> mInspectionHistories = new ArrayList<>();
+    private List<InspectionResolution> mInspectionResolutions = new ArrayList<>();
+    private List<DefectCategory> mDefectCategories = new ArrayList<>();
+    private List<DefectItem> mDefectItems = new ArrayList<>();
 
     public static DataManager getInstance() {
         if(ourInstance == null) {
@@ -22,6 +26,9 @@ public class DataManager {
             ourInstance.initializeLocations();
             ourInstance.initializeInspectors();
             ourInstance.initializeInspectionHistories();
+            ourInstance.initializeInspectionResolutions();
+            ourInstance.initializeDefectCategories();
+            ourInstance.initializeDefectItems();
         }
         return ourInstance;
     }
@@ -81,9 +88,45 @@ public class DataManager {
         return mInspectionHistories.stream().filter(p -> p.getLocationId() == locationId).collect(Collectors.toList());
     }
     public InspectionHistory getInspectionHistory(int id) {
-        for(InspectionHistory inspectionHistory : mInspectionHistories) {
+        for (InspectionHistory inspectionHistory : mInspectionHistories) {
             if (id == inspectionHistory.getInspectionHistoryId()) {
                 return inspectionHistory;
+            }
+        }
+        return null;
+    }
+
+    public List<InspectionResolution> getInspectionResolutions() {
+        return mInspectionResolutions;
+    }
+    public InspectionResolution getInspectionResolution(int id) {
+        for (InspectionResolution inspectionResolution : mInspectionResolutions) {
+            if (id == inspectionResolution.getInspectionResolutionId()) {
+                return inspectionResolution;
+            }
+        }
+        return null;
+    }
+
+    public List<DefectCategory> getDefectCategories() {
+        return mDefectCategories;
+    }
+    public DefectCategory getDefectCategory(int id) {
+        for (DefectCategory defectCategory : mDefectCategories) {
+            if (id == defectCategory.getDefectCategoryId()) {
+                return defectCategory;
+            }
+        }
+        return null;
+    }
+
+    public List<DefectItem> getDefectItems() {
+        return mDefectItems;
+    }
+    public DefectItem getDefectItem(int id) {
+        for (DefectItem defectItem : mDefectItems) {
+            if (id == defectItem.getDefectItemId()) {
+                return defectItem;
             }
         }
         return null;
@@ -148,6 +191,46 @@ public class DataManager {
         mInspectionHistories.add(initializeInspectionHistory22());
         mInspectionHistories.add(initializeInspectionHistory23());
         mInspectionHistories.add(initializeInspectionHistory24());
+    }
+
+    private void initializeInspectionResolutions() {
+        mInspectionResolutions.add(initializeInspectionResolution1());
+        mInspectionResolutions.add(initializeInspectionResolution2());
+        mInspectionResolutions.add(initializeInspectionResolution3());
+    }
+
+    private void initializeDefectCategories() {
+        mDefectCategories.add(initializeDefectCategory1());
+        mDefectCategories.add(initializeDefectCategory2());
+        mDefectCategories.add(initializeDefectCategory3());
+        mDefectCategories.add(initializeDefectCategory4());
+        mDefectCategories.add(initializeDefectCategory5());
+        mDefectCategories.add(initializeDefectCategory6());
+        mDefectCategories.add(initializeDefectCategory7());
+    }
+
+    private void initializeDefectItems() {
+        mDefectItems.add(initializeDefectItem1());
+        mDefectItems.add(initializeDefectItem2());
+        mDefectItems.add(initializeDefectItem3());
+        mDefectItems.add(initializeDefectItem4());
+        mDefectItems.add(initializeDefectItem5());
+        mDefectItems.add(initializeDefectItem6());
+        mDefectItems.add(initializeDefectItem7());
+        mDefectItems.add(initializeDefectItem8());
+        mDefectItems.add(initializeDefectItem9());
+        mDefectItems.add(initializeDefectItem10());
+        mDefectItems.add(initializeDefectItem11());
+        mDefectItems.add(initializeDefectItem12());
+        mDefectItems.add(initializeDefectItem13());
+        mDefectItems.add(initializeDefectItem14());
+        mDefectItems.add(initializeDefectItem15());
+        mDefectItems.add(initializeDefectItem16());
+        mDefectItems.add(initializeDefectItem17());
+        mDefectItems.add(initializeDefectItem18());
+        mDefectItems.add(initializeDefectItem19());
+        mDefectItems.add(initializeDefectItem20());
+        mDefectItems.add(initializeDefectItem21());
     }
 
     //region Inspection Initializations
@@ -229,5 +312,45 @@ public class DataManager {
     private InspectionHistory initializeInspectionHistory22() { return new InspectionHistory(22, 8, new Date(), "Pre-Drywall - loc 8", "Craig Brooks", "Passed"); }
     private InspectionHistory initializeInspectionHistory23() { return new InspectionHistory(23, 8, new Date(), "Pre-Drywall - loc 8", "Craig Brooks", "Failed"); }
     private InspectionHistory initializeInspectionHistory24() { return new InspectionHistory(24, 8, new Date(), "Pre-Pour - loc 8", "Craig Brooks", "Passed"); }
+    //endregion
+
+    //region InspectionResolution Initializations
+    private InspectionResolution initializeInspectionResolution1() { return new InspectionResolution(1, "Cancel"); }
+    private InspectionResolution initializeInspectionResolution2() { return new InspectionResolution(2, "Defer"); }
+    private InspectionResolution initializeInspectionResolution3() { return new InspectionResolution(3, "Not Ready"); }
+    //endregion
+
+    //region DefectCategory Initializations
+    private DefectCategory initializeDefectCategory1() { return new DefectCategory(1, "Job Site"); }
+    private DefectCategory initializeDefectCategory2() { return new DefectCategory(1, "Frame"); }
+    private DefectCategory initializeDefectCategory3() { return new DefectCategory(1, "Cornice/Deck"); }
+    private DefectCategory initializeDefectCategory4() { return new DefectCategory(1, "Rough Roofing"); }
+    private DefectCategory initializeDefectCategory5() { return new DefectCategory(1, "Rough Plumbing"); }
+    private DefectCategory initializeDefectCategory6() { return new DefectCategory(1, "Rough HVAC"); }
+    private DefectCategory initializeDefectCategory7() { return new DefectCategory(1, "Rough Electrical"); }
+    //endregion
+
+    //region DefectItem Initializations
+    private DefectItem initializeDefectItem1() { return new DefectItem(1, 1, 1, "Address posted."); }
+    private DefectItem initializeDefectItem2() { return new DefectItem(2, 1, 6, "Cable pockets grouted"); }
+    private DefectItem initializeDefectItem3() { return new DefectItem(3, 1, 5, "Cables stressed"); }
+    private DefectItem initializeDefectItem4() { return new DefectItem(4, 2, 1, "Manually Entered Inspection Item"); }
+    private DefectItem initializeDefectItem5() { return new DefectItem(5, 2, 37, "Attic access sized properly"); }
+    private DefectItem initializeDefectItem6() { return new DefectItem(6, 2, 51, "Attic Insulation baffles"); }
+    private DefectItem initializeDefectItem7() { return new DefectItem(7, 3, 1, "Manually Entered Inspection Item"); }
+    private DefectItem initializeDefectItem8() { return new DefectItem(8, 3, 63, "Brick frieze installed properly"); }
+    private DefectItem initializeDefectItem9() { return new DefectItem(9, 3, 55, "Brick returns"); }
+    private DefectItem initializeDefectItem10() { return new DefectItem(10, 4, 1, "Manually Entered Inspection Item"); }
+    private DefectItem initializeDefectItem11() { return new DefectItem(11, 4, 77, "Air vents"); }
+    private DefectItem initializeDefectItem12() { return new DefectItem(12, 4, 73, "Boots"); }
+    private DefectItem initializeDefectItem13() { return new DefectItem(13, 5, 1, "Manually Entered Inspection Item"); }
+    private DefectItem initializeDefectItem14() { return new DefectItem(14, 5, 86, "Clean-outs capped"); }
+    private DefectItem initializeDefectItem15() { return new DefectItem(15, 5, 87, "Drain arms have fall"); }
+    private DefectItem initializeDefectItem16() { return new DefectItem(16, 6, 1, "Manually Entered Inspection Item"); }
+    private DefectItem initializeDefectItem17() { return new DefectItem(17, 6, 101, "Catwalk 24 in. wide to furnace"); }
+    private DefectItem initializeDefectItem18() { return new DefectItem(18, 6, 95, "Ducts installed properly"); }
+    private DefectItem initializeDefectItem19() { return new DefectItem(19, 7, 1, "Manually Entered Inspection Item"); }
+    private DefectItem initializeDefectItem20() { return new DefectItem(20, 7, 105, "Boxes"); }
+    private DefectItem initializeDefectItem21() { return new DefectItem(21, 7, 113, "Outlets must be >18 in. from firebox"); }
     //endregion
 }

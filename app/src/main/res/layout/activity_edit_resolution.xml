@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditResolutionActivity">
+
+    <include
+        android:id="@+id/include7"
+        layout="@layout/fragment_inspections_remaining"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/edit_resolution_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include7"
+        app:title="Edit Resolution"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:titleTextColor="@color/colorWhite" />
+
+    <TextView
+        android:id="@+id/edit_resolution_text_inspection_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/burgessBlue"
+        android:inputType="textMultiLine"
+        android:lineSpacingExtra="3dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_resolution_toolbar" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Select Resolution"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/edit_resolution_text_inspection_address"
+        app:layout_constraintTop_toBottomOf="@+id/edit_resolution_text_inspection_address" />
+
+    <Spinner
+        android:id="@+id/edit_resolution_spinner_resolutions"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/edit_resolution_text_inspection_address"
+        app:layout_constraintStart_toStartOf="@+id/edit_resolution_text_inspection_address"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Note"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textView12"
+        app:layout_constraintTop_toBottomOf="@+id/edit_resolution_spinner_resolutions" />
+
+    <EditText
+        android:id="@+id/edit_resolution_text_note"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:maxLines="3"
+        android:minLines="3"
+        app:layout_constraintEnd_toEndOf="@+id/edit_resolution_spinner_resolutions"
+        app:layout_constraintStart_toStartOf="@+id/edit_resolution_spinner_resolutions"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <ImageButton
+        android:id="@+id/edit_resolution_button_take_picture"
+        android:layout_width="@dimen/button_camera_width"
+        android:layout_height="@dimen/button_camera_height"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_blue"
+        app:layout_constraintStart_toStartOf="@+id/edit_resolution_text_note"
+        app:layout_constraintTop_toBottomOf="@+id/edit_resolution_text_note"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_blue"
+        android:text="@string/edit_resolution_button_submit_text"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="@+id/edit_resolution_text_note"
+        app:layout_constraintTop_toTopOf="@+id/edit_resolution_button_take_picture" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

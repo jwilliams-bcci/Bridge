@@ -2,7 +2,6 @@ package com.example.bridge;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
@@ -10,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import data.Builder;
 import data.DataManager;
 import data.Inspection;
-import data.InspectionHistory;
 import data.Location;
 
 public class InspectionDetailsActivity extends AppCompatActivity {
@@ -40,6 +38,14 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mBuilderId = intent.getIntExtra(BUILDER_ID, BUILDER_ID_NOT_SET);
         mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_SET);
 
+        Button inspectButton = findViewById(R.id.inspection_details_button_inspect);
+        inspectButton.setOnClickListener(view -> {
+            Intent inspectIntent = new Intent(InspectionDetailsActivity.this, InspectActivity.class);
+            inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+            inspectIntent.putExtra(InspectActivity.LOCATION_ID, mLocationId);
+            startActivity(inspectIntent);
+        });
+
         Button viewInspectionHistoryButton = findViewById(R.id.inspection_details_button_view_inspection_history);
         viewInspectionHistoryButton.setOnClickListener(view -> {
             Intent viewInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, InspectionHistoryActivity.class);
@@ -61,6 +67,14 @@ public class InspectionDetailsActivity extends AppCompatActivity {
             assignTraineeIntent.putExtra(AssignTraineeActivity.INSPECTION_ID, mInspectionId);
             assignTraineeIntent.putExtra(AssignTraineeActivity.LOCATION_ID, mLocationId);
             startActivity(assignTraineeIntent);
+        });
+
+        Button editResolutionButton = findViewById(R.id.inspection_details_button_edit_resolution);
+        editResolutionButton.setOnClickListener(view -> {
+            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
+            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
+            editResolutionIntent.putExtra(EditResolutionActivity.LOCATION_ID, mLocationId);
+            startActivity(editResolutionIntent);
         });
 
         displayAddress(textAddress);

@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_inspect"
+        android:id="@+id/inspect_toolbar"
         android:layout_width="0dp"
         android:layout_height="41dp"
         android:background="@color/burgessOrange"
@@ -24,91 +24,115 @@
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2" />
+        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:title="Inspect"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:titleTextColor="@color/colorWhite" />
 
     <EditText
-        android:id="@+id/multiline_inspect_inspection_details"
+        android:id="@+id/inspect_text_inspection_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@color/burgessBlue"
-        android:backgroundTint="@color/burgessBlue"
-        android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:lineSpacingExtra="2dp"
+        android:lineSpacingExtra="3dp"
         android:lines="3"
         android:maxLines="3"
         android:minLines="3"
         android:paddingHorizontal="8dp"
         android:paddingVertical="8dp"
-        android:text="Community Name\nAddress City, State\nInspection type"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_inspect" />
+        app:layout_constraintTop_toBottomOf="@+id/inspect_toolbar" />
 
     <Button
-        android:id="@+id/button_inspect_add_note"
+        android:id="@+id/inspect_button_add_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@drawable/button_rounded_orange"
         android:text="Add Note"
-        app:layout_constraintStart_toStartOf="@+id/multiline_inspect_inspection_details"
-        app:layout_constraintTop_toBottomOf="@+id/multiline_inspect_inspection_details" />
+        android:textColor="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="@+id/inspect_text_inspection_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspect_text_inspection_address" />
 
     <Button
-        android:id="@+id/button_inspect_save_and_exit"
+        android:id="@+id/inspect_button_save_and_exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:background="@drawable/button_rounded_orange"
         android:text="Save &amp; Exit"
-        app:layout_constraintStart_toEndOf="@+id/button_inspect_add_note"
-        app:layout_constraintTop_toTopOf="@+id/button_inspect_add_note" />
+        android:textColor="@color/colorWhite"
+        app:layout_constraintStart_toEndOf="@+id/inspect_button_add_note"
+        app:layout_constraintTop_toTopOf="@+id/inspect_button_add_note" />
 
     <Button
-        android:id="@+id/button_inspect_review_and_submit"
+        android:id="@+id/inspect_button_review_and_submit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:background="@drawable/button_rounded_orange"
         android:text="Review &amp; Submit"
-        app:layout_constraintEnd_toEndOf="@+id/multiline_inspect_inspection_details"
-        app:layout_constraintStart_toEndOf="@+id/button_inspect_save_and_exit"
-        app:layout_constraintTop_toTopOf="@+id/button_inspect_add_note" />
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="@+id/inspect_text_inspection_address"
+        app:layout_constraintStart_toEndOf="@+id/inspect_button_save_and_exit"
+        app:layout_constraintTop_toTopOf="@+id/inspect_button_add_note" />
 
     <Spinner
-        android:id="@+id/spinner_inspect_defect_category"
+        android:id="@+id/inspect_spinner_defect_category"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:backgroundTint="#000000"
-        app:layout_constraintEnd_toEndOf="@+id/multiline_inspect_inspection_details"
-        app:layout_constraintStart_toStartOf="@+id/multiline_inspect_inspection_details"
-        app:layout_constraintTop_toBottomOf="@+id/button_inspect_add_note" />
+        app:layout_constraintEnd_toEndOf="@+id/inspect_text_inspection_address"
+        app:layout_constraintStart_toStartOf="@+id/inspect_text_inspection_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspect_button_add_note" />
 
     <Button
-        android:id="@+id/button_inspect_sort_defect_number"
+        android:id="@+id/inspect_button_sort_by_defect_number"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
         android:text="Sort by Defect Number"
+        android:textColor="@color/colorWhite"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/button_inspect_sort_defect_description"
+        app:layout_constraintEnd_toStartOf="@+id/inspect_button_sort_by_description"
         app:layout_constraintHorizontal_weight="0"
-        app:layout_constraintStart_toStartOf="@+id/multiline_inspect_inspection_details"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_inspect_defect_category" />
+        app:layout_constraintStart_toStartOf="@+id/inspect_text_inspection_address"
+        app:layout_constraintTop_toBottomOf="@+id/inspect_spinner_defect_category" />
 
     <Button
-        android:id="@+id/button_inspect_sort_defect_description"
+        android:id="@+id/inspect_button_sort_by_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_orange"
         android:text="Sort by Description"
+        android:textColor="@color/colorWhite"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/multiline_inspect_inspection_details"
+        app:layout_constraintEnd_toEndOf="@+id/inspect_text_inspection_address"
         app:layout_constraintHorizontal_weight="0"
-        app:layout_constraintTop_toTopOf="@+id/button_inspect_sort_defect_number" />
+        app:layout_constraintTop_toTopOf="@+id/inspect_button_sort_by_defect_number" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/inspect_list_defect_items"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/inspect_button_sort_by_description"
+        app:layout_constraintStart_toStartOf="@+id/inspect_button_sort_by_defect_number"
+        app:layout_constraintTop_toBottomOf="@+id/inspect_button_sort_by_defect_number"
+        tools:listitem="@layout/item_defect_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

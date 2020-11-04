@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_height">41dp</dimen>
+    <dimen name="button_camera_width">89dp</dimen>
+    <dimen name="button_camera_height">49dp</dimen>
 </resources>

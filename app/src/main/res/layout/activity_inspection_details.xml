@@ -164,7 +164,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
     <Button
-        android:id="@+id/inspection_details_button_edit_status"
+        android:id="@+id/inspection_details_button_edit_resolution"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

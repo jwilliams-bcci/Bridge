@@ -3,6 +3,8 @@ package data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public final class DefectCategory implements Parcelable {
     private int mDefectCategoryId;
     private String mCategoryName;
@@ -51,5 +53,11 @@ public final class DefectCategory implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(mDefectCategoryId);
         parcel.writeString(mCategoryName);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return mCategoryName;
     }
 }
