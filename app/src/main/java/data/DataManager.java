@@ -17,6 +17,7 @@ public class DataManager {
     private List<InspectionResolution> mInspectionResolutions = new ArrayList<>();
     private List<DefectCategory> mDefectCategories = new ArrayList<>();
     private List<DefectItem> mDefectItems = new ArrayList<>();
+    private List mInspectDefectListItems = new ArrayList<>();
 
     public static DataManager getInstance() {
         if(ourInstance == null) {
@@ -29,6 +30,7 @@ public class DataManager {
             ourInstance.initializeInspectionResolutions();
             ourInstance.initializeDefectCategories();
             ourInstance.initializeDefectItems();
+            ourInstance.initializeInspectDefectList();
         }
         return ourInstance;
     }
@@ -123,6 +125,9 @@ public class DataManager {
     public List<DefectItem> getDefectItems() {
         return mDefectItems;
     }
+    public List<DefectItem> getDefectItems(int categoryId) {
+        return mDefectItems.stream().filter(p -> p.getDefectCategoryId() == categoryId).collect(Collectors.toList());
+    }
     public DefectItem getDefectItem(int id) {
         for (DefectItem defectItem : mDefectItems) {
             if (id == defectItem.getDefectItemId()) {
@@ -130,6 +135,21 @@ public class DataManager {
             }
         }
         return null;
+    }
+
+    public List getInspectDefectList() {
+        List listItems = new ArrayList();
+
+        for (Object object : mInspectDefectListItems) {
+            if (object instanceof DefectCategory) {
+                listItems.add(object);
+            }
+            else {
+                listItems.add(object);
+            }
+        }
+
+        return listItems;
     }
 
     private void initializeInspections() {
@@ -231,6 +251,11 @@ public class DataManager {
         mDefectItems.add(initializeDefectItem19());
         mDefectItems.add(initializeDefectItem20());
         mDefectItems.add(initializeDefectItem21());
+    }
+
+    private void initializeInspectDefectList() {
+        mInspectDefectListItems.addAll(mDefectCategories);
+        mInspectDefectListItems.addAll(getDefectItems(1));
     }
 
     //region Inspection Initializations

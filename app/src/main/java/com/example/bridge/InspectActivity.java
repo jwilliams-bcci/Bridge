@@ -16,6 +16,7 @@ import java.util.List;
 import data.DataManager;
 import data.DefectCategory;
 import data.DefectItem;
+import data.InspectDefectListItem;
 import data.Inspection;
 import data.InspectionResolution;
 import data.Location;
@@ -68,7 +69,10 @@ public class InspectActivity extends AppCompatActivity {
         recyclerDefectItems.setLayoutManager(defectItemsLayoutManager);
 
         List<DefectItem> defectItems = DataManager.getInstance().getDefectItems();
-        final DefectItemRecyclerAdapter defectItemRecyclerAdapter = new DefectItemRecyclerAdapter(this, defectItems);
+//        final DefectItemRecyclerAdapter defectItemRecyclerAdapter = new DefectItemRecyclerAdapter(this, defectItems);
+//        recyclerDefectItems.setAdapter(defectItemRecyclerAdapter);
+        List defectItems2 = DataManager.getInstance().getInspectDefectList();
+        final DefectItemRecyclerAdapter defectItemRecyclerAdapter = new DefectItemRecyclerAdapter(this, defectItems, defectItems2);
         recyclerDefectItems.setAdapter(defectItemRecyclerAdapter);
     }
 }

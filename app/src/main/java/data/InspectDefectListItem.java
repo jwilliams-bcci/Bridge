@@ -1,18 +1,12 @@
 package data;
 
-import androidx.annotation.NonNull;
-
-public class DefectItem {
+public class InspectDefectListItem {
     private int mDefectItemId;
     private int mDefectCategoryId;
     private int mItemNumber;
     private String mItemDescription;
 
-    public DefectItem(int defectItemId, int defectCategoryId, int itemNumber, String itemDescription) {
-        mDefectItemId = defectItemId;
-        mDefectCategoryId = defectCategoryId;
-        mItemNumber = itemNumber;
-        mItemDescription = itemDescription;
+    public InspectDefectListItem() {
     }
 
     public int getDefectItemId() {
@@ -41,11 +35,5 @@ public class DefectItem {
     }
     public void setItemDescription(String itemDescription) {
         mItemDescription = itemDescription;
-    }
-
-    @NonNull
-    @Override
-    public String toString() {
-        return mItemDescription;
     }
 }
