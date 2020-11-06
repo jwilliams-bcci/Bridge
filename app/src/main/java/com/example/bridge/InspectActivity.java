@@ -68,11 +68,8 @@ public class InspectActivity extends AppCompatActivity {
         final LinearLayoutManager defectItemsLayoutManager = new LinearLayoutManager(this);
         recyclerDefectItems.setLayoutManager(defectItemsLayoutManager);
 
-        List<DefectItem> defectItems = DataManager.getInstance().getDefectItems();
-//        final DefectItemRecyclerAdapter defectItemRecyclerAdapter = new DefectItemRecyclerAdapter(this, defectItems);
-//        recyclerDefectItems.setAdapter(defectItemRecyclerAdapter);
-        List defectItems2 = DataManager.getInstance().getInspectDefectList();
-        final DefectItemRecyclerAdapter defectItemRecyclerAdapter = new DefectItemRecyclerAdapter(this, defectItems, defectItems2);
+        List defectItems = DataManager.getInstance().getInspectDefectList();
+        final DefectItemRecyclerAdapter defectItemRecyclerAdapter = new DefectItemRecyclerAdapter(this, defectItems);
         recyclerDefectItems.setAdapter(defectItemRecyclerAdapter);
     }
 }

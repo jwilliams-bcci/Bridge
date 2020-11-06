@@ -16,13 +16,11 @@ import data.DefectItem;
 
 public class DefectItemRecyclerAdapter extends RecyclerView.Adapter<DefectItemRecyclerAdapter.ViewHolder> {
     private final Context mContext;
-    private final List<DefectItem> mDefectItemList;
     private final List mInspectDefectList;
     private final LayoutInflater mLayoutInflater;
 
-    public DefectItemRecyclerAdapter(Context context, List<DefectItem> defectItemList, List inspectDefectList) {
+    public DefectItemRecyclerAdapter(Context context, List inspectDefectList) {
         mContext = context;
-        mDefectItemList = defectItemList;
         mInspectDefectList = inspectDefectList;
         mLayoutInflater = LayoutInflater.from(mContext);
     }
@@ -68,7 +66,7 @@ public class DefectItemRecyclerAdapter extends RecyclerView.Adapter<DefectItemRe
 
     @Override
     public int getItemCount() {
-        return mDefectItemList.size();
+        return mInspectDefectList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
