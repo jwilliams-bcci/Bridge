@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,18 +51,14 @@ public class DefectItemRecyclerAdapter extends RecyclerView.Adapter<DefectItemRe
             holder.mTextItemDescription.setVisibility(View.VISIBLE);
             holder.mTextItemNumber.setText(Integer.toString(item.getItemNumber()));
             holder.mTextItemDescription.setText(item.getItemDescription());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast toast = Toast.makeText(mContext, "Defect item clicked", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+            });
         }
-//        DefectItem defectItem = mDefectItemList.get(position);
-//        holder.mTextSection.setVisibility(View.GONE);
-//        holder.mDefectItemId = defectItem.getDefectItemId();
-//        holder.mDefectCategoryId = defectItem.getDefectCategoryId();
-//        holder.mItemNumber = defectItem.getItemNumber();
-//        holder.mItemDescription = defectItem.getItemDescription();
-//        holder.mTextItemNumber.setText(Integer.toString(defectItem.getItemNumber()));
-//        holder.mTextItemDescription.setText(defectItem.getItemDescription());
-//        Object object = mInspectDefectList.get(position);
-//        holder.mTextItemNumber.setText("000");
-//        holder.mTextItemDescription.setText((String)object);
     }
 
     @Override

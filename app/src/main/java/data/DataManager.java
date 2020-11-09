@@ -140,13 +140,10 @@ public class DataManager {
     public List getInspectDefectList() {
         List listItems = new ArrayList();
 
-        for (Object object : mInspectDefectListItems) {
-            if (object instanceof DefectCategory) {
-                listItems.add(object);
-            }
-            else {
-                listItems.add(object);
-            }
+        for (Object object : mDefectCategories) {
+            DefectCategory category = (DefectCategory) object;
+            listItems.add(category);
+            listItems.addAll(getDefectItems(category.getDefectCategoryId()));
         }
 
         return listItems;
