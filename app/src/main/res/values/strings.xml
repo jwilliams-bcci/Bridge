@@ -25,4 +25,5 @@
     <string name="transfer_inspection_button_transfer">Transfer</string>
     <string name="assign_trainee_title">Assign Trainee</string>
     <string name="edit_resolution_button_submit_text">Submit</string>
+    <string name="defect_item_title">Defect Item</string>
 </resources>
