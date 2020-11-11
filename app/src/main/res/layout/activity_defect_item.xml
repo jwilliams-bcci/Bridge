@@ -19,7 +19,7 @@
         android:id="@+id/defect_item_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:background="@drawable/button_rounded_orange"
+        android:background="@color/burgessOrange"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,22 +38,20 @@
         android:layout_marginEnd="16dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="8dp"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/defect_item_toolbar" />
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
         android:orientation="horizontal"
         android:paddingHorizontal="8dp"
         android:paddingVertical="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_text_defect_item_details"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_text_defect_item_details"
         app:layout_constraintTop_toBottomOf="@+id/defect_item_text_defect_item_details">
 
         <RadioButton
@@ -85,4 +83,205 @@
             android:layout_weight="1"
             android:text="N/A" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:labelFor="@id/defect_item_text_location"
+        android:text="Location"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/radioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:labelFor="@id/defect_item_text_room"
+        android:text="Room"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textView7"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:labelFor="@id/defect_item_text_direction"
+        android:text="Direction"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:labelFor="@id/defect_item_text_fault"
+        android:text="Fault"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textView15"
+        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:labelFor="@id/defect_item_spinner_canned_comment"
+        android:text="Canned\nComment"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/textView16"
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="@+id/textView17"
+        app:layout_constraintTop_toBottomOf="@+id/textView17"
+        app:srcCompat="@android:drawable/ic_btn_speak_now" />
+
+    <EditText
+        android:id="@+id/defect_item_text_speech"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_border"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_spinner_canned_comment"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_spinner_canned_comment"
+        app:layout_constraintTop_toTopOf="@+id/imageButton" />
+
+    <TextView
+        android:id="@+id/defect_item_text_location"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:autofillHints="@string/defect_item_text_location_hint"
+        android:background="@drawable/text_border"
+        android:ems="10"
+        android:hint="@string/defect_item_text_location_hint"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView7"
+        app:layout_constraintEnd_toEndOf="@+id/radioGroup"
+        app:layout_constraintStart_toEndOf="@+id/textView7" />
+
+    <EditText
+        android:id="@+id/defect_item_text_room"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/defect_item_text_room_hint"
+        android:background="@drawable/text_border"
+        android:ems="10"
+        android:hint="@string/defect_item_text_room_hint"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_text_location"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_text_location" />
+
+    <EditText
+        android:id="@+id/defect_item_text_direction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/defect_item_text_direction_hint"
+        android:background="@drawable/text_border"
+        android:ems="10"
+        android:hint="@string/defect_item_text_direction_hint"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_text_room"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_text_room" />
+
+    <EditText
+        android:id="@+id/defect_item_text_fault"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:autofillHints="@string/defect_item_text_fault_hint"
+        android:background="@drawable/text_border"
+        android:ems="10"
+        android:hint="@string/defect_item_text_fault_hint"
+        android:inputType="textPersonName"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView16"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_text_direction"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_text_direction" />
+
+    <Spinner
+        android:id="@+id/defect_item_spinner_canned_comment"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_text_fault"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_text_fault"
+        app:layout_constraintTop_toTopOf="@+id/textView17" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Photo"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/imageButton"
+        app:layout_constraintTop_toBottomOf="@+id/defect_item_text_speech" />
+
+    <TextView
+        android:id="@+id/defect_item_text_photo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_border"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_text_speech"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_text_speech"
+        app:layout_constraintTop_toTopOf="@+id/textView18" />
+
+    <ImageButton
+        android:id="@+id/defect_item_button_camera"
+        android:layout_width="@dimen/button_camera_width"
+        android:layout_height="@dimen/button_camera_height"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_rounded_blue"
+        app:layout_constraintStart_toStartOf="@+id/textView18"
+        app:layout_constraintTop_toBottomOf="@+id/defect_item_text_photo"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+    <Button
+        android:id="@+id/defect_item_button_cancel"
+        android:layout_width="@dimen/button_camera_width"
+        android:layout_height="@dimen/button_camera_height"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@android:string/cancel"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_text_photo"
+        app:layout_constraintTop_toBottomOf="@+id/defect_item_text_photo" />
+
+    <Button
+        android:id="@+id/defect_item_button_save"
+        android:layout_width="@dimen/button_camera_width"
+        android:layout_height="@dimen/button_camera_height"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_rounded_blue"
+        android:text="@string/save"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toStartOf="@+id/defect_item_button_cancel"
+        app:layout_constraintStart_toEndOf="@+id/defect_item_button_camera"
+        app:layout_constraintTop_toBottomOf="@+id/defect_item_text_photo" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

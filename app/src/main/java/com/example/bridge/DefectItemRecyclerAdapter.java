@@ -1,6 +1,7 @@
 package com.example.bridge;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +55,9 @@ public class DefectItemRecyclerAdapter extends RecyclerView.Adapter<DefectItemRe
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast toast = Toast.makeText(mContext, "Defect item clicked", Toast.LENGTH_SHORT);
-                    toast.show();
+                    Intent intent = new Intent(mContext, DefectItemActivity.class);
+                    intent.putExtra(DefectItemActivity.DEFECT_ID, item.getDefectItemId());
+                    mContext.startActivity(intent);
                 }
             });
         }

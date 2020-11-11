@@ -18,6 +18,7 @@ public class DataManager {
     private List<DefectCategory> mDefectCategories = new ArrayList<>();
     private List<DefectItem> mDefectItems = new ArrayList<>();
     private List mInspectDefectListItems = new ArrayList<>();
+    private List<CannedComment> mCannedComments = new ArrayList<>();
 
     public static DataManager getInstance() {
         if(ourInstance == null) {
@@ -31,6 +32,7 @@ public class DataManager {
             ourInstance.initializeDefectCategories();
             ourInstance.initializeDefectItems();
             ourInstance.initializeInspectDefectList();
+            ourInstance.initializeCannedComments();
         }
         return ourInstance;
     }
@@ -145,8 +147,19 @@ public class DataManager {
             listItems.add(category);
             listItems.addAll(getDefectItems(category.getDefectCategoryId()));
         }
-
         return listItems;
+    }
+
+    public List<CannedComment> getCannedComments() {
+        return mCannedComments;
+    }
+    public CannedComment getCannedComment(int id) {
+        for (CannedComment cannedComment : mCannedComments) {
+            if (id == cannedComment.getCannedCommentId()) {
+                return cannedComment;
+            }
+        }
+        return null;
     }
 
     private void initializeInspections() {
@@ -253,6 +266,12 @@ public class DataManager {
     private void initializeInspectDefectList() {
         mInspectDefectListItems.addAll(mDefectCategories);
         mInspectDefectListItems.addAll(getDefectItems(1));
+    }
+
+    private void initializeCannedComments() {
+        mCannedComments.add(initializeCannedComment1());
+        mCannedComments.add(initializeCannedComment2());
+        mCannedComments.add(initializeCannedComment3());
     }
 
     //region Inspection Initializations
@@ -374,5 +393,11 @@ public class DataManager {
     private DefectItem initializeDefectItem19() { return new DefectItem(19, 7, 1, "Manually Entered Inspection Item"); }
     private DefectItem initializeDefectItem20() { return new DefectItem(20, 7, 105, "Boxes"); }
     private DefectItem initializeDefectItem21() { return new DefectItem(21, 7, 113, "Outlets must be >18 in. from firebox"); }
+    //endregion
+
+    //region CannedComment Initializations
+    private CannedComment initializeCannedComment1() { return new CannedComment(1, "Canned Comment 1"); }
+    private CannedComment initializeCannedComment2() { return new CannedComment(2, "Canned Comment 2"); }
+    private CannedComment initializeCannedComment3() { return new CannedComment(3, "Canned Comment 3"); }
     //endregion
 }

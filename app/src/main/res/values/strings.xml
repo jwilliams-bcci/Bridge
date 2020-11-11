@@ -26,4 +26,9 @@
     <string name="assign_trainee_title">Assign Trainee</string>
     <string name="edit_resolution_button_submit_text">Submit</string>
     <string name="defect_item_title">Defect Item</string>
+    <string name="defect_item_text_location_hint">Location</string>
+    <string name="defect_item_text_room_hint">Choose a room</string>
+    <string name="defect_item_text_direction_hint">Direction</string>
+    <string name="defect_item_text_fault_hint">Fault</string>
+    <string name="save">Save</string>
 </resources>
