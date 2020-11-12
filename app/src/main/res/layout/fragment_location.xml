@@ -4,47 +4,399 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:minWidth="350dp"
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="4dp"
     tools:context=".LocationFragment">
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:text="Button"
-        app:layout_constraintEnd_toStartOf="@+id/button4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/location_button_fourth"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_fourth_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_middle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_middle"
+        app:layout_constraintTop_toTopOf="@+id/location_button_third" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
+        android:id="@+id/location_button_third"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_third_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_left"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_left"
+        app:layout_constraintTop_toTopOf="@+id/location_button_up" />
+
+    <Button
+        android:id="@+id/location_button_south"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_south_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_right"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_right"
+        app:layout_constraintTop_toTopOf="@+id/location_button_fourth" />
+
+    <Button
+        android:id="@+id/location_button_up"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_up_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_left_rear"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_left_rear"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_exterior" />
+
+    <Button
+        android:id="@+id/location_button_east"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_east_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_right_rear"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_right_rear"
+        app:layout_constraintTop_toTopOf="@+id/location_button_south" />
+
+    <Button
+        android:id="@+id/location_button_main"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_main_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_middle"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_middle"
+        app:layout_constraintTop_toTopOf="@+id/location_button_basement" />
+
+    <Button
+        android:id="@+id/location_button_north"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_north_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_right_rear"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_right_rear"
+        app:layout_constraintTop_toTopOf="@+id/location_button_west" />
+
+    <Button
+        android:id="@+id/location_button_exterior"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_exterior_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_left_rear"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_left_rear"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_front_left_corner" />
+
+    <Button
+        android:id="@+id/location_button_west"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_west_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_right"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_right"
+        app:layout_constraintTop_toTopOf="@+id/location_button_main" />
+
+    <Button
+        android:id="@+id/location_button_basement"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_gray"
+        android:text="@string/location_button_basement_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_left"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_left"
+        app:layout_constraintTop_toTopOf="@+id/location_button_exterior" />
+
+    <Button
+        android:id="@+id/location_button_front"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:text="@string/location_button_front_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_front_middle" />
+
+    <Button
+        android:id="@+id/location_button_front_left_corner"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_location_blue"
+        android:text="@string/location_button_front_left_corner_text"
+        android:textColor="@color/colorWhite"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_left_corner"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_left_corner"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_left_front" />
+
+    <Button
+        android:id="@+id/location_button_front_right_corner"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_location_blue"
+        android:text="@string/location_button_front_right_corner_text"
+        android:textColor="@color/colorWhite"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_right_corner"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_right_corner"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_right_front" />
+
+    <Button
+        android:id="@+id/location_button_front_middle"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_front_middle_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_middle"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_middle"
+        app:layout_constraintTop_toTopOf="@+id/location_button_front_left" />
+
+    <Button
+        android:id="@+id/location_button_right_front"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_right_front"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_right_rear"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_right_rear"
+        app:layout_constraintTop_toTopOf="@+id/location_button_front_right" />
+
+    <Button
+        android:id="@+id/location_button_left_front"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:text="@string/location_button_left_front_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_left_rear"
+        app:layout_constraintStart_toStartOf="@+id/location_button_left_rear"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_left_middle" />
+
+    <Button
+        android:id="@+id/location_button_front_right"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_front_right_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_right"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_right"
+        app:layout_constraintTop_toTopOf="@+id/location_button_front_middle" />
+
+    <Button
+        android:id="@+id/location_button_front_left"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_front_left_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_left"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_left"
+        app:layout_constraintTop_toTopOf="@+id/location_button_left_front" />
+
+    <Button
+        android:id="@+id/location_button_middle"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:background="@drawable/button_location_blue"
+        android:text="@string/location_button_middle_text"
+        android:textColor="@color/colorWhite"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_middle"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_middle"
+        app:layout_constraintTop_toTopOf="@+id/location_button_left" />
+
+    <Button
+        android:id="@+id/location_button_left_middle"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:text="@string/location_button_left_middle_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_left_rear"
+        app:layout_constraintStart_toStartOf="@+id/location_button_left_rear"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_left_rear" />
+
+    <Button
+        android:id="@+id/location_button_left"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_left_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_left"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_left"
+        app:layout_constraintTop_toTopOf="@+id/location_button_left_middle" />
+
+    <Button
+        android:id="@+id/location_button_right_middle"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_right_middle_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_right_rear"
+        app:layout_constraintStart_toStartOf="@+id/location_button_right_rear"
+        app:layout_constraintTop_toTopOf="@+id/location_button_right" />
+
+    <Button
+        android:id="@+id/location_button_right"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_right_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_right"
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_right"
+        app:layout_constraintTop_toTopOf="@+id/location_button_middle" />
+
+    <Button
+        android:id="@+id/location_button_right_rear"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_right_rear_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_right_corner"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_right_corner"
+        app:layout_constraintTop_toTopOf="@+id/location_button_rear_right" />
+
+    <Button
+        android:id="@+id/location_button_rear_left_corner"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_location_blue"
+        android:text="@string/location_button_rear_left_corner_text"
+        android:textColor="@color/colorWhite"
+        android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="@+id/textView19"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <Button
+        android:id="@+id/location_button_rear"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="16dp"
+        android:text="@string/location_button_rear_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/location_button_rear_right_corner"
+        app:layout_constraintStart_toEndOf="@+id/location_button_rear_left_corner"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <Button
+        android:id="@+id/location_button_rear_right_corner"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_location_blue"
+        android:text="@string/location_button_rear_right_corner_text"
+        android:textColor="@color/colorWhite"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView19"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <Button
+        android:id="@+id/location_button_left_rear"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:layout_marginTop="8dp"
+        android:text="@string/location_button_left_rear_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear_left_corner"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear_left_corner"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_rear_left_corner" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:text="Button"
+        android:layout_marginTop="8dp"
+        android:text="Location"
+        android:textAlignment="center"
+        android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Button"
-        app:layout_constraintEnd_toStartOf="@+id/button4"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        android:id="@+id/location_button_rear_left"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_rear_left_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/location_button_rear_middle"
+        app:layout_constraintStart_toEndOf="@+id/location_button_left_rear"
+        app:layout_constraintTop_toTopOf="@+id/location_button_left_rear" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/location_button_rear_middle"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_rear_middle_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_rear"
+        app:layout_constraintStart_toStartOf="@+id/location_button_rear"
+        app:layout_constraintTop_toTopOf="@+id/location_button_rear_left" />
+
+    <Button
+        android:id="@+id/location_button_rear_right"
+        android:layout_width="@dimen/button_location_width"
+        android:layout_height="@dimen/button_location_height"
+        android:text="@string/location_button_rear_right_text"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@+id/location_button_right_rear"
+        app:layout_constraintStart_toEndOf="@+id/location_button_rear_middle"
+        app:layout_constraintTop_toTopOf="@+id/location_button_rear_middle" />
+
+    <EditText
+        android:id="@+id/location_text_result"
         android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/location_button_save_and_exit"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_fourth"
+        app:layout_constraintStart_toStartOf="@+id/location_button_up"
+        app:layout_constraintTop_toTopOf="@+id/location_button_save_and_exit" />
+
+    <Button
+        android:id="@+id/location_button_save_and_exit"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="300dp"
-        android:layout_marginBottom="300dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button5" />
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_blue"
+        android:text="@string/SaveAndExit"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="@+id/location_button_east"
+        app:layout_constraintStart_toStartOf="@+id/location_button_south"
+        app:layout_constraintTop_toBottomOf="@+id/location_button_fourth" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

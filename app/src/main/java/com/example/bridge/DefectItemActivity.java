@@ -2,16 +2,31 @@ package com.example.bridge;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import data.CannedComment;
 import data.DataManager;
@@ -22,25 +37,117 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     public static final String DEFECT_ID = "com.example.bridge.DEFECT_ID";
     public static final int DEFECT_ID_NOT_FOUND = -1;
+    public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+    public final Intent mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     private int mInspectionId;
     private int mDefectId;
     private Spinner mSpinnerCannedComment;
+    private LocationFragment mLocationFragment;
+    private TextView mDefectItemTextSpeech;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect_item);
         setSupportActionBar((Toolbar) findViewById(R.id.defect_item_toolbar));
+        checkPermission();
 
         Intent intent = getIntent();
         TextView textDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
 
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
+        mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        mSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+
+            }
+
+            @Override
+            public void onRmsChanged(float v) {
+
+            }
+
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+
+            }
+
+            @Override
+            public void onError(int i) {
+
+            }
+
+            @Override
+            public void onResults(Bundle bundle) {
+                ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                if(matches != null) {
+                    mDefectItemTextSpeech.setText(matches.get(0));
+                }
+            }
+
+            @Override
+            public void onPartialResults(Bundle bundle) {
+
+            }
+
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+
+            }
+        });
 
         TextView locationTextView = findViewById(R.id.defect_item_text_location);
         locationTextView.setOnClickListener(view -> {
-            LocationFragment.newInstance().show(getSupportFragmentManager(), "TAG");
+            mLocationFragment = LocationFragment.newInstance();
+            mLocationFragment.show(getSupportFragmentManager(), "TAG");
+        });
+
+        ImageButton buttonCamera = findViewById(R.id.defect_item_button_camera);
+        buttonCamera.setOnClickListener(view -> {
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            try {
+                startActivityForResult(cameraIntent, 1);
+            } catch (ActivityNotFoundException e) {
+                //error
+            }
+        });
+
+//        Button fragmentSaveAndExit = findViewById(R.id.location_button_save_and_exit);
+//        fragmentSaveAndExit.setOnClickListener(view -> {
+//            mLocationFragment.dismiss();
+//        });
+
+        ImageButton buttonMicrophone = findViewById(R.id.defect_item_button_microphone);
+        buttonMicrophone.setOnTouchListener((view, motionEvent) -> {
+            switch(motionEvent.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    mSpeechRecognizer.stopListening();
+                    break;
+                case MotionEvent.ACTION_DOWN:
+                    mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
+                    mDefectItemTextSpeech.setText("");
+                    mDefectItemTextSpeech.setHint("Listening...");
+                    break;
+                default:
+                    break;
+            }
+            return false;
         });
 
         displayDefectDetails(textDefectItemDetails);
@@ -59,5 +166,15 @@ public class DefectItemActivity extends AppCompatActivity {
         ArrayAdapter<CannedComment> adapterCannedComments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cannedComments);
         adapterCannedComments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerCannedComment.setAdapter(adapterCannedComments);
+    }
+
+    private void checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+                finish();
+            }
+        }
     }
 }

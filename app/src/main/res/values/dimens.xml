@@ -3,4 +3,6 @@
     <dimen name="toolbar_height">41dp</dimen>
     <dimen name="button_camera_width">89dp</dimen>
     <dimen name="button_camera_height">49dp</dimen>
+    <dimen name="button_location_width">75dp</dimen>
+    <dimen name="button_location_height">70dp</dimen>
 </resources>

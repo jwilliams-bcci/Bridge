@@ -140,7 +140,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/defect_item_button_microphone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -159,7 +159,7 @@
         android:minLines="3"
         app:layout_constraintEnd_toEndOf="@+id/defect_item_spinner_canned_comment"
         app:layout_constraintStart_toStartOf="@+id/defect_item_spinner_canned_comment"
-        app:layout_constraintTop_toTopOf="@+id/imageButton" />
+        app:layout_constraintTop_toTopOf="@+id/defect_item_button_microphone" />
 
     <TextView
         android:id="@+id/defect_item_text_location"
@@ -238,7 +238,7 @@
         android:layout_marginTop="24dp"
         android:text="Photo"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/imageButton"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_button_microphone"
         app:layout_constraintTop_toBottomOf="@+id/defect_item_text_speech" />
 
     <TextView
