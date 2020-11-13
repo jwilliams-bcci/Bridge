@@ -138,6 +138,7 @@ public class DefectItemActivity extends AppCompatActivity {
             switch(motionEvent.getAction()) {
                 case MotionEvent.ACTION_UP:
                     mSpeechRecognizer.stopListening();
+                    mDefectItemTextSpeech.setHint("");
                     break;
                 case MotionEvent.ACTION_DOWN:
                     mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
