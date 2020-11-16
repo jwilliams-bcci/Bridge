@@ -17,12 +17,14 @@ import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final String DEFECT_ID = "com.example.bridge.DEFECT_ID";
     public static final int DEFECT_ID_NOT_FOUND = -1;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-    public final Intent mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
     private int mInspectionId;
     private int mDefectId;
     private Spinner mSpinnerCannedComment;
@@ -59,42 +61,50 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
+        final Intent mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (mSpeechRecognizer.isRecognitionAvailable(this)) {
+            Log.d("SPEECH", "Recogniztion Available");
+        } else {
+            Log.d("SPEECH", "Recognition Unavailable");
+        }
 
         mSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle bundle) {
-
+                Log.d("SPEECH", "onReadyForSpeech");
             }
 
             @Override
             public void onBeginningOfSpeech() {
-
+                Log.d("SPEECH", "onBeginningOfSpeech");
             }
 
             @Override
             public void onRmsChanged(float v) {
-
+                Log.d("SPEECH", "onRmsChanged");
             }
 
             @Override
             public void onBufferReceived(byte[] bytes) {
-
+                Log.d("SPEECH", "onBufferReceived");
             }
 
             @Override
             public void onEndOfSpeech() {
-
+                Log.d("SPEECH", "onEndOfSpeech");
             }
 
             @Override
             public void onError(int i) {
-
+                Log.d("SPEECH", "onError");
             }
 
             @Override
             public void onResults(Bundle bundle) {
+                Log.d("SPEECH", "onResults");
                 ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if(matches != null) {
                     mDefectItemTextSpeech.setText(matches.get(0));
@@ -103,12 +113,12 @@ public class DefectItemActivity extends AppCompatActivity {
 
             @Override
             public void onPartialResults(Bundle bundle) {
-
+                Log.d("SPEECH", "onPartialResults");
             }
 
             @Override
             public void onEvent(int i, Bundle bundle) {
-
+                Log.d("SPEECH", "onEvent");
             }
         });
 
@@ -142,7 +152,7 @@ public class DefectItemActivity extends AppCompatActivity {
                     break;
                 case MotionEvent.ACTION_DOWN:
                     mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-                    mDefectItemTextSpeech.setText("");
+                    //mDefectItemTextSpeech.setText("");
                     mDefectItemTextSpeech.setHint("Listening...");
                     break;
                 default:
