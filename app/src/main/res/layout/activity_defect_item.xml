@@ -177,7 +177,7 @@
         app:layout_constraintEnd_toEndOf="@+id/radioGroup"
         app:layout_constraintStart_toEndOf="@+id/textView7" />
 
-    <EditText
+    <TextView
         android:id="@+id/defect_item_text_room"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
         app:layout_constraintEnd_toEndOf="@+id/defect_item_text_location"
         app:layout_constraintStart_toStartOf="@+id/defect_item_text_location" />
 
-    <EditText
+    <TextView
         android:id="@+id/defect_item_text_direction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

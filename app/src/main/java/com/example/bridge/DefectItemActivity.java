@@ -3,9 +3,13 @@ package com.example.bridge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.Manifest;
 import android.annotation.SuppressLint;
+//import android.app.FragmentManager;
+//import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -45,6 +49,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private int mDefectId;
     private Spinner mSpinnerCannedComment;
     private LocationFragment mLocationFragment;
+    private RoomFragment mRoomFragment;
     private TextView mDefectItemTextSpeech;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -64,12 +69,6 @@ public class DefectItemActivity extends AppCompatActivity {
         final Intent mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
-        if (mSpeechRecognizer.isRecognitionAvailable(this)) {
-            Log.d("SPEECH", "Recogniztion Available");
-        } else {
-            Log.d("SPEECH", "Recognition Unavailable");
-        }
 
         mSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
@@ -124,8 +123,16 @@ public class DefectItemActivity extends AppCompatActivity {
 
         TextView locationTextView = findViewById(R.id.defect_item_text_location);
         locationTextView.setOnClickListener(view -> {
+            Log.d("LOCATION", "Going into Location fragment...");
             mLocationFragment = LocationFragment.newInstance();
             mLocationFragment.show(getSupportFragmentManager(), "TAG");
+        });
+
+        TextView roomTextView = findViewById(R.id.defect_item_text_room);
+        roomTextView.setOnClickListener(view -> {
+            Log.d("ROOM", "Going into Room fragment...");
+            mRoomFragment = RoomFragment.newInstance();
+            mRoomFragment.show(getSupportFragmentManager(), "TAG");
         });
 
         ImageButton buttonCamera = findViewById(R.id.defect_item_button_camera);
@@ -137,11 +144,6 @@ public class DefectItemActivity extends AppCompatActivity {
                 //error
             }
         });
-
-//        Button fragmentSaveAndExit = findViewById(R.id.location_button_save_and_exit);
-//        fragmentSaveAndExit.setOnClickListener(view -> {
-//            mLocationFragment.dismiss();
-//        });
 
         ImageButton buttonMicrophone = findViewById(R.id.defect_item_button_microphone);
         buttonMicrophone.setOnTouchListener((view, motionEvent) -> {

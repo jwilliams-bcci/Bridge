@@ -1,22 +1,14 @@
 package com.example.bridge;
 
-import android.app.Dialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,7 +54,7 @@ public class LocationFragment extends DialogFragment {
 
     public void setClickListeners(View view) {
         EditText locationResultsDialog = view.findViewById(R.id.location_text_result);
-        //TextView locationResultsDefectItem = view.findViewById(R.id.defect_item_text_location);
+        TextView locationResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_location);
 
         //region First Row
         Button rearLeftCorner = view.findViewById(R.id.location_button_rear_left_corner);
@@ -236,7 +228,7 @@ public class LocationFragment extends DialogFragment {
 
         Button saveAndExit = view.findViewById(R.id.location_button_save_and_exit);
         saveAndExit.setOnClickListener(v -> {
-            //locationResultsDefectItem.setText(locationResultsDialog.getText());
+            locationResultsDefectItem.setText(locationResultsDialog.getText());
             mFragment.dismiss();
         });
     }
