@@ -1,23 +1,16 @@
 package com.example.bridge;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ListAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import data.DataManager;
@@ -59,29 +52,16 @@ public class RoomFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.fragment_room, container, false);
-        View view = inflater.inflate(R.layout.fragment_room, null);
-        GridView gridView = (GridView) view.findViewById(R.id.room_gridview_buttons);
+        View view = inflater.inflate(R.layout.fragment_room, container, false);
 
-        //RoomGridViewAdapter roomAdapter = new RoomGridViewAdapter(getActivity(), (ArrayList<Room>) DataManager.getInstance().getRooms());
-        gridView.setAdapter(new RoomGridViewAdapter(mFragment.getContext(), (List<Room>) DataManager.getInstance().getRooms()));
-        //gridView.setAdapter(new ArrayAdapter<Room>(mFragment.getContext(), android.R.layout.simple_list_item_1, (List<Room>) DataManager.getInstance().getRooms()));
+        final RecyclerView recyclerRooms = (RecyclerView) view.findViewById(R.id.room_recycler_buttons);
+        final GridLayoutManager roomsLayoutManager = new GridLayoutManager(view.getContext(), 3);
+        recyclerRooms.setLayoutManager(roomsLayoutManager);
+
+        List<Room> rooms = DataManager.getInstance().getRooms();
+        final RoomsRecyclerAdapter roomsRecyclerAdapter = new RoomsRecyclerAdapter(recyclerRooms.getContext(), rooms);
+        recyclerRooms.setAdapter(roomsRecyclerAdapter);
 
         return view;
     }
-
-//    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        LayoutInflater inflater = getActivity().getLayoutInflater();
-//        View view = inflater.inflate(R.layout.fragment_room, null);
-//        GridView gridView = (GridView) view.findViewById(R.id.room_gridview_buttons);
-//        RoomGridViewAdapter roomAdapter = new RoomGridViewAdapter(mFragment.getContext(), (ArrayList<Room>) DataManager.getInstance().getRooms());
-//        gridView.setAdapter(roomAdapter);
-//
-//        builder.setView(view);
-//        Dialog dialog = builder.create();
-//        return dialog;
-//    }
 }
