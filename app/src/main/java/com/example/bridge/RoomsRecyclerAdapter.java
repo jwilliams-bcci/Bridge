@@ -1,10 +1,13 @@
 package com.example.bridge;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +20,7 @@ public class RoomsRecyclerAdapter extends RecyclerView.Adapter<RoomsRecyclerAdap
     private final Context mContext;
     private final List<Room> mRooms;
     private final LayoutInflater mLayoutInflater;
+    private TextView mRoomResult;
 
     public RoomsRecyclerAdapter(Context context, List<Room> roomList) {
         mContext = context;
@@ -37,6 +41,16 @@ public class RoomsRecyclerAdapter extends RecyclerView.Adapter<RoomsRecyclerAdap
         holder.mRoomId = room.getRoomId();
         holder.mRoomName = room.getRoomName();
         holder.mRoomButton.setText(room.getRoomName());
+        holder.mRoomButton.setOnClickListener((v) -> {
+            TextView result = v.findViewById(R.id.room_text_result);
+            Button buttonClicked = (Button) v;
+            Log.d("ROOM", "Button clicked - " + buttonClicked.getText());
+            try {
+                //TODO: figure this shit out
+            } catch (Exception e) {
+                Log.d("ROOM", e.getMessage());
+            }
+        });
     }
 
     @Override

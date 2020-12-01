@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ import data.Room;
  */
 public class RoomFragment extends DialogFragment {
     private static RoomFragment mFragment;
+    private View mView;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,35 +59,20 @@ public class RoomFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_room, container, false);
-
-        final RecyclerView recyclerRooms = (RecyclerView) view.findViewById(R.id.room_recycler_buttons);
-        final GridLayoutManager roomsLayoutManager = new GridLayoutManager(view.getContext(), 3);
-        recyclerRooms.setLayoutManager(roomsLayoutManager);
-
+        mView = inflater.inflate(R.layout.fragment_room, container, false);
         List<Room> rooms = DataManager.getInstance().getRooms();
-        final RoomsRecyclerAdapter roomsRecyclerAdapter = new RoomsRecyclerAdapter(recyclerRooms.getContext(), rooms);
-        recyclerRooms.setAdapter(roomsRecyclerAdapter);
 
-        return view;
+        RecyclerView recyclerRooms = (RecyclerView) mView.findViewById(R.id.room_recycler_buttons);
+        Context contextFragment = this.getContext();
+        Context contextActivity = getActivity();
+        recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), rooms));
+
+        return mView;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Context context = requireActivity();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.fragment_room, null);
-
-        RecyclerView recyclerRooms = (RecyclerView) dialogView.findViewById(R.id.room_recycler_buttons);
-        recyclerRooms.setLayoutManager(new GridLayoutManager(context, 3));
-        List<Room> rooms = DataManager.getInstance().getRooms();
-        RoomsRecyclerAdapter roomsRecyclerAdapter = new RoomsRecyclerAdapter(context, rooms);
-        recyclerRooms.setAdapter(roomsRecyclerAdapter);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(dialogView);
-        builder.setTitle("Choose Room");
-        return builder.create();
+    public void appendResultText(String textToAppend) {
+        TextView result = mView.findViewById(R.id.room_text_result);
+        result.append(textToAppend + " ");
     }
 }
