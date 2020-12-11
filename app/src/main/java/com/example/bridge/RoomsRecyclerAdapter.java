@@ -21,11 +21,13 @@ public class RoomsRecyclerAdapter extends RecyclerView.Adapter<RoomsRecyclerAdap
     private final List<Room> mRooms;
     private final LayoutInflater mLayoutInflater;
     private TextView mRoomResult;
+    private OnButtonClickListener mOnButtonClickListener;
 
-    public RoomsRecyclerAdapter(Context context, List<Room> roomList) {
+    public RoomsRecyclerAdapter(Context context, List<Room> roomList, OnButtonClickListener onButtonClickListener) {
         mContext = context;
         mRooms = roomList;
         mLayoutInflater = LayoutInflater.from(mContext);
+        mOnButtonClickListener = onButtonClickListener;
     }
 
     @NonNull
@@ -46,7 +48,7 @@ public class RoomsRecyclerAdapter extends RecyclerView.Adapter<RoomsRecyclerAdap
             Button buttonClicked = (Button) v;
             Log.d("ROOM", "Button clicked - " + buttonClicked.getText());
             try {
-                //TODO: figure this shit out
+                mOnButtonClickListener.onButtonClick((String) buttonClicked.getText());
             } catch (Exception e) {
                 Log.d("ROOM", e.getMessage());
             }

@@ -27,9 +27,10 @@ import data.Room;
  * Use the {@link RoomFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RoomFragment extends DialogFragment {
+public class RoomFragment extends DialogFragment implements OnButtonClickListener {
     private static RoomFragment mFragment;
     private View mView;
+    private TextView mResults;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,19 +61,20 @@ public class RoomFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_room, container, false);
+        mResults = mView.findViewById(R.id.room_text_result);
         List<Room> rooms = DataManager.getInstance().getRooms();
 
         RecyclerView recyclerRooms = (RecyclerView) mView.findViewById(R.id.room_recycler_buttons);
         Context contextFragment = this.getContext();
         Context contextActivity = getActivity();
         recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), rooms));
+        recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), rooms, this));
 
         return mView;
     }
 
-    public void appendResultText(String textToAppend) {
-        TextView result = mView.findViewById(R.id.room_text_result);
-        result.append(textToAppend + " ");
+    @Override
+    public void onButtonClick(String buttonName) {
+        mResults.append(buttonName + " ");
     }
 }
