@@ -207,7 +207,7 @@
         app:layout_constraintEnd_toEndOf="@+id/defect_item_text_room"
         app:layout_constraintStart_toStartOf="@+id/defect_item_text_room" />
 
-    <EditText
+    <TextView
         android:id="@+id/defect_item_text_fault"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

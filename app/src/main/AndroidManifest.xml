@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.bridge">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.bridge">
+
     <queries>
         <intent>
             <action android:name="android.speech.RecognitionService" />
@@ -10,11 +12,9 @@
         android:name="android.hardware.camera2"
         android:required="true" />
 
-    <uses-permission
-        android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
-    <uses-permission-sdk-23
-        android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission-sdk-23 android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +23,9 @@
         android:roundIcon="@mipmap/ic_bridge_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".ReviewAndSubmitActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".DefectItemActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

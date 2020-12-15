@@ -7,14 +7,14 @@
     android:minWidth="350dp"
     android:paddingHorizontal="4dp"
     android:paddingVertical="4dp"
-    tools:context=".DirectionFragment">
+    tools:context=".FaultFragment">
 
     <TextView
-        android:id="@+id/direction_text_title"
+        android:id="@+id/fault_text_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Direction"
+        android:text="Fault"
         android:textAlignment="center"
         android:textSize="@dimen/fragment_title_size"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,19 +22,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/direction_text_result"
+        android:id="@+id/fault_text_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
-        android:hint="Enter Direction"
+        android:hint="Enter Fault"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/direction_button_save_and_exit"
+        android:id="@+id/fault_button_save_and_exit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -43,19 +43,19 @@
         android:text="@string/SaveAndExit"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/direction_text_result"
-        app:layout_constraintTop_toTopOf="@+id/direction_text_result" />
+        app:layout_constraintStart_toEndOf="@+id/fault_text_result"
+        app:layout_constraintTop_toTopOf="@+id/fault_text_result" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/direction_recycler_buttons"
+        android:id="@+id/fault_recycler_buttons"
         android:layout_width="0dp"
         android:layout_height="500dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/direction_text_result"
-        app:layout_constraintEnd_toEndOf="@+id/direction_button_save_and_exit"
-        app:layout_constraintStart_toStartOf="@+id/direction_text_result"
-        app:layout_constraintTop_toBottomOf="@+id/direction_text_title"
+        app:layout_constraintBottom_toTopOf="@+id/fault_text_result"
+        app:layout_constraintEnd_toEndOf="@+id/fault_button_save_and_exit"
+        app:layout_constraintStart_toStartOf="@+id/fault_text_result"
+        app:layout_constraintTop_toBottomOf="@+id/fault_text_title"
         tools:listitem="@layout/item_gridview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

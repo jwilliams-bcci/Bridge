@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -30,12 +32,7 @@ import data.Room;
 public class RoomFragment extends DialogFragment implements OnButtonClickListener {
     private static RoomFragment mFragment;
     private View mView;
-    private TextView mResults;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-    // TODO: Rename and change types of parameters
+    private EditText mRoomResultsDialog;
 
     public RoomFragment() {
         // Required empty public constructor
@@ -61,20 +58,25 @@ public class RoomFragment extends DialogFragment implements OnButtonClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_room, container, false);
-        mResults = mView.findViewById(R.id.room_text_result);
         List<Room> rooms = DataManager.getInstance().getRooms();
+        mRoomResultsDialog = mView.findViewById(R.id.room_text_result);
+        TextView roomResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_room);
 
         RecyclerView recyclerRooms = (RecyclerView) mView.findViewById(R.id.room_recycler_buttons);
-        Context contextFragment = this.getContext();
-        Context contextActivity = getActivity();
         recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), rooms, this));
+
+        Button saveAndExit = mView.findViewById(R.id.room_button_save_and_exit);
+        saveAndExit.setOnClickListener(v -> {
+            roomResultsDefectItem.setText(mRoomResultsDialog.getText());
+            mFragment.dismiss();
+        });
 
         return mView;
     }
 
     @Override
     public void onButtonClick(String buttonName) {
-        mResults.append(buttonName + " ");
+        mRoomResultsDialog.append(buttonName + " ");
     }
 }

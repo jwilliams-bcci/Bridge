@@ -52,13 +52,10 @@ public class DefectItemRecyclerAdapter extends RecyclerView.Adapter<DefectItemRe
             holder.mTextItemDescription.setVisibility(View.VISIBLE);
             holder.mTextItemNumber.setText(Integer.toString(item.getItemNumber()));
             holder.mTextItemDescription.setText(item.getItemDescription());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(mContext, DefectItemActivity.class);
-                    intent.putExtra(DefectItemActivity.DEFECT_ID, item.getDefectItemId());
-                    mContext.startActivity(intent);
-                }
+            holder.itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(mContext, DefectItemActivity.class);
+                intent.putExtra(DefectItemActivity.DEFECT_ID, item.getDefectItemId());
+                mContext.startActivity(intent);
             });
         }
     }

@@ -50,6 +50,8 @@ public class DefectItemActivity extends AppCompatActivity {
     private Spinner mSpinnerCannedComment;
     private LocationFragment mLocationFragment;
     private RoomFragment mRoomFragment;
+    private DirectionFragment mDirectionFragment;
+    private FaultFragment mFaultFragment;
     private TextView mDefectItemTextSpeech;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -133,6 +135,20 @@ public class DefectItemActivity extends AppCompatActivity {
             Log.d("ROOM", "Going into Room fragment...");
             mRoomFragment = RoomFragment.newInstance();
             mRoomFragment.show(getSupportFragmentManager(), "TAG");
+        });
+
+        TextView directionTextView = findViewById(R.id.defect_item_text_direction);
+        directionTextView.setOnClickListener(view -> {
+            Log.d("DIRECTION", "Going into Direction fragment...");
+            mDirectionFragment = DirectionFragment.newInstance();
+            mDirectionFragment.show(getSupportFragmentManager(), "TAG");
+        });
+
+        TextView faultTextView = findViewById(R.id.defect_item_text_fault);
+        faultTextView.setOnClickListener(view -> {
+            Log.d("FAULT", "Going into Fault fragment...");
+            mFaultFragment = FaultFragment.newInstance();
+            mFaultFragment.show(getSupportFragmentManager(), "TAG");
         });
 
         ImageButton buttonCamera = findViewById(R.id.defect_item_button_camera);

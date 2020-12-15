@@ -1,28 +1,35 @@
 package com.example.bridge;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.List;
+
+import data.DataManager;
+import data.Direction;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link DirectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DirectionFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class DirectionFragment extends DialogFragment implements OnButtonClickListener {
+    private static DirectionFragment mFragment;
+    private View mView;
+    private EditText mDirectionResultsDialog;
 
     public DirectionFragment() {
         // Required empty public constructor
@@ -32,33 +39,39 @@ public class DirectionFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment DirectionFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DirectionFragment newInstance(String param1, String param2) {
-        DirectionFragment fragment = new DirectionFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static DirectionFragment newInstance() {
+        mFragment = new DirectionFragment();
+        return mFragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_direction, container, false);
+        List<Direction> directions = DataManager.getInstance().getDirections();
+        mDirectionResultsDialog = mView.findViewById(R.id.direction_text_result);
+        TextView directionResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_direction);
+
+        RecyclerView recyclerDirections = (RecyclerView) mView.findViewById(R.id.direction_recycler_buttons);
+        recyclerDirections.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        recyclerDirections.setAdapter(new DirectionsRecyclerAdapter(getActivity(), directions, this));
+
+        Button saveAndExit = mView.findViewById(R.id.direction_button_save_and_exit);
+        saveAndExit.setOnClickListener(v -> {
+            directionResultsDefectItem.setText(mDirectionResultsDialog.getText());
+            mFragment.dismiss();
+        });
+
+        return mView;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_direction, container, false);
+    public void onButtonClick(String buttonName) {
+        mDirectionResultsDialog.append(buttonName + " ");
     }
 }

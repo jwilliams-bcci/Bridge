@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReviewAndSubmitActivity">
+
+    <EditText
+        android:id="@+id/review_and_submit_text_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/burgessBlue"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:lineSpacingExtra="3dp"
+        android:lines="3"
+        android:maxLines="3"
+        android:minLines="3"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_toolbar" />
+
+    <include
+        android:id="@+id/include9"
+        layout="@layout/fragment_inspections_remaining"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/review_and_submit_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include9"
+        app:title="Review &amp; Submit"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:titleTextColor="@color/colorWhite" />
+
+    <Button
+        android:id="@+id/review_and_submit_button_attach_file"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="Attach File"
+        app:layout_constraintStart_toStartOf="@+id/review_and_submit_text_address"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_text_address" />
+
+    <Button
+        android:id="@+id/review_and_submit_button_submit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_rounded_blue"
+        android:text="Submit"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="@+id/review_and_submit_text_address"
+        app:layout_constraintStart_toEndOf="@+id/review_and_submit_button_attach_file"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_text_address" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/review_and_submit_text_address"
+        app:layout_constraintStart_toStartOf="@+id/review_and_submit_text_address"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_button_submit"
+        tools:listitem="@layout/item_defect_item" />
+</androidx.constraintlayout.widget.ConstraintLayout>

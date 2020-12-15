@@ -3,6 +3,7 @@ package com.example.bridge;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -46,6 +47,14 @@ public class InspectActivity extends AppCompatActivity {
         displayAddress(textAddress);
         fillSpinner(mSpinnerDefectCategories);
         displayDefectItems();
+
+        Button buttonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
+        buttonReviewAndSubmit.setOnClickListener(v -> {
+            Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
+            reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+            reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.LOCATION_ID, mLocationId);
+            startActivity(reviewAndSubmitIntent);
+        });
     }
 
     private void displayAddress(TextView textAddress) {

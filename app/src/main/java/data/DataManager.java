@@ -21,6 +21,8 @@ public class DataManager {
     private List<CannedComment> mCannedComments = new ArrayList<>();
     private List<Room> mRooms = new ArrayList<>();
     private List<Direction> mDirections = new ArrayList<>();
+    private List<Fault> mFaults = new ArrayList<>();
+    private List<InspectionDefect> mInspectionDefects = new ArrayList<>();
 
     public static DataManager getInstance() {
         if(ourInstance == null) {
@@ -37,6 +39,8 @@ public class DataManager {
             ourInstance.initializeCannedComments();
             ourInstance.initializeRooms();
             ourInstance.initializeDirections();
+            ourInstance.initializeFaults();
+            ourInstance.initializeInspectionDefects();
         }
         return ourInstance;
     }
@@ -190,6 +194,30 @@ public class DataManager {
         return null;
     }
 
+    public List<Fault> getFaults() {
+        return mFaults;
+    }
+    public Fault getFault(int id) {
+        for (Fault fault : mFaults) {
+            if (id == fault.getFaultId()) {
+                return fault;
+            }
+        }
+        return null;
+    }
+
+    public List<InspectionDefect> getInspectionDefects() {
+        return mInspectionDefects;
+    }
+    public InspectionDefect getInspectionDefect(int id) {
+        for (InspectionDefect inspectionDefect : mInspectionDefects) {
+            if (id == inspectionDefect.getInspectionDefectId()) {
+                return inspectionDefect;
+            }
+        }
+        return null;
+    }
+
     private void initializeInspections() {
         mInspections.add(initializeInspection1());
         mInspections.add(initializeInspection2());
@@ -292,8 +320,10 @@ public class DataManager {
     }
 
     private void initializeInspectDefectList() {
-        mInspectDefectListItems.addAll(mDefectCategories);
-        mInspectDefectListItems.addAll(getDefectItems(1));
+        for (DefectCategory category : mDefectCategories) {
+            mInspectDefectListItems.add(category);
+            mInspectDefectListItems.addAll(getDefectItems(category.getDefectCategoryId()));
+        }
     }
 
     private void initializeCannedComments() {
@@ -536,6 +566,191 @@ public class DataManager {
         mDirections.add(initializeDirection143());
     }
 
+    private void initializeFaults() {
+        mFaults.add(initializeFault1());
+        mFaults.add(initializeFault2());
+        mFaults.add(initializeFault3());
+        mFaults.add(initializeFault4());
+        mFaults.add(initializeFault5());
+        mFaults.add(initializeFault6());
+        mFaults.add(initializeFault7());
+        mFaults.add(initializeFault8());
+        mFaults.add(initializeFault9());
+        mFaults.add(initializeFault10());
+        mFaults.add(initializeFault11());
+        mFaults.add(initializeFault12());
+        mFaults.add(initializeFault13());
+        mFaults.add(initializeFault14());
+        mFaults.add(initializeFault15());
+        mFaults.add(initializeFault16());
+        mFaults.add(initializeFault17());
+        mFaults.add(initializeFault18());
+        mFaults.add(initializeFault19());
+        mFaults.add(initializeFault20());
+        mFaults.add(initializeFault21());
+        mFaults.add(initializeFault22());
+        mFaults.add(initializeFault23());
+        mFaults.add(initializeFault24());
+        mFaults.add(initializeFault25());
+        mFaults.add(initializeFault26());
+        mFaults.add(initializeFault27());
+        mFaults.add(initializeFault28());
+        mFaults.add(initializeFault29());
+        mFaults.add(initializeFault30());
+        mFaults.add(initializeFault31());
+        mFaults.add(initializeFault32());
+        mFaults.add(initializeFault33());
+        mFaults.add(initializeFault34());
+        mFaults.add(initializeFault35());
+        mFaults.add(initializeFault36());
+        mFaults.add(initializeFault37());
+        mFaults.add(initializeFault38());
+        mFaults.add(initializeFault39());
+        mFaults.add(initializeFault40());
+        mFaults.add(initializeFault41());
+        mFaults.add(initializeFault42());
+        mFaults.add(initializeFault43());
+        mFaults.add(initializeFault44());
+        mFaults.add(initializeFault45());
+        mFaults.add(initializeFault46());
+        mFaults.add(initializeFault47());
+        mFaults.add(initializeFault48());
+        mFaults.add(initializeFault49());
+        mFaults.add(initializeFault50());
+        mFaults.add(initializeFault51());
+        mFaults.add(initializeFault52());
+        mFaults.add(initializeFault53());
+        mFaults.add(initializeFault54());
+        mFaults.add(initializeFault55());
+        mFaults.add(initializeFault56());
+        mFaults.add(initializeFault57());
+        mFaults.add(initializeFault58());
+        mFaults.add(initializeFault59());
+        mFaults.add(initializeFault60());
+        mFaults.add(initializeFault61());
+        mFaults.add(initializeFault62());
+        mFaults.add(initializeFault63());
+        mFaults.add(initializeFault64());
+        mFaults.add(initializeFault65());
+        mFaults.add(initializeFault66());
+        mFaults.add(initializeFault67());
+        mFaults.add(initializeFault68());
+        mFaults.add(initializeFault69());
+        mFaults.add(initializeFault70());
+        mFaults.add(initializeFault71());
+        mFaults.add(initializeFault72());
+        mFaults.add(initializeFault73());
+        mFaults.add(initializeFault74());
+        mFaults.add(initializeFault75());
+        mFaults.add(initializeFault76());
+        mFaults.add(initializeFault77());
+        mFaults.add(initializeFault78());
+        mFaults.add(initializeFault79());
+        mFaults.add(initializeFault80());
+        mFaults.add(initializeFault81());
+        mFaults.add(initializeFault82());
+        mFaults.add(initializeFault83());
+        mFaults.add(initializeFault84());
+        mFaults.add(initializeFault85());
+        mFaults.add(initializeFault86());
+        mFaults.add(initializeFault87());
+        mFaults.add(initializeFault88());
+        mFaults.add(initializeFault89());
+        mFaults.add(initializeFault90());
+        mFaults.add(initializeFault91());
+        mFaults.add(initializeFault92());
+        mFaults.add(initializeFault93());
+        mFaults.add(initializeFault94());
+        mFaults.add(initializeFault95());
+        mFaults.add(initializeFault96());
+        mFaults.add(initializeFault97());
+        mFaults.add(initializeFault98());
+        mFaults.add(initializeFault99());
+        mFaults.add(initializeFault100());
+        mFaults.add(initializeFault101());
+        mFaults.add(initializeFault102());
+        mFaults.add(initializeFault103());
+        mFaults.add(initializeFault104());
+        mFaults.add(initializeFault105());
+        mFaults.add(initializeFault106());
+        mFaults.add(initializeFault107());
+        mFaults.add(initializeFault108());
+        mFaults.add(initializeFault109());
+        mFaults.add(initializeFault110());
+        mFaults.add(initializeFault111());
+        mFaults.add(initializeFault112());
+        mFaults.add(initializeFault113());
+        mFaults.add(initializeFault114());
+        mFaults.add(initializeFault115());
+        mFaults.add(initializeFault116());
+        mFaults.add(initializeFault117());
+        mFaults.add(initializeFault118());
+        mFaults.add(initializeFault119());
+        mFaults.add(initializeFault120());
+        mFaults.add(initializeFault121());
+        mFaults.add(initializeFault122());
+        mFaults.add(initializeFault123());
+        mFaults.add(initializeFault124());
+        mFaults.add(initializeFault125());
+        mFaults.add(initializeFault133());
+        mFaults.add(initializeFault127());
+        mFaults.add(initializeFault128());
+        mFaults.add(initializeFault129());
+        mFaults.add(initializeFault130());
+        mFaults.add(initializeFault131());
+        mFaults.add(initializeFault159());
+        mFaults.add(initializeFault133());
+        mFaults.add(initializeFault134());
+        mFaults.add(initializeFault135());
+        mFaults.add(initializeFault136());
+        mFaults.add(initializeFault137());
+        mFaults.add(initializeFault138());
+        mFaults.add(initializeFault139());
+        mFaults.add(initializeFault140());
+        mFaults.add(initializeFault141());
+        mFaults.add(initializeFault142());
+        mFaults.add(initializeFault143());
+        mFaults.add(initializeFault144());
+        mFaults.add(initializeFault145());
+        mFaults.add(initializeFault146());
+        mFaults.add(initializeFault147());
+        mFaults.add(initializeFault148());
+        mFaults.add(initializeFault149());
+        mFaults.add(initializeFault150());
+        mFaults.add(initializeFault151());
+        mFaults.add(initializeFault152());
+        mFaults.add(initializeFault153());
+        mFaults.add(initializeFault154());
+        mFaults.add(initializeFault155());
+        mFaults.add(initializeFault156());
+        mFaults.add(initializeFault157());
+        mFaults.add(initializeFault158());
+        mFaults.add(initializeFault160());
+        mFaults.add(initializeFault161());
+        mFaults.add(initializeFault162());
+        mFaults.add(initializeFault163());
+        mFaults.add(initializeFault164());
+        mFaults.add(initializeFault165());
+        mFaults.add(initializeFault166());
+        mFaults.add(initializeFault167());
+        mFaults.add(initializeFault168());
+        mFaults.add(initializeFault169());
+        mFaults.add(initializeFault170());
+        mFaults.add(initializeFault171());
+        mFaults.add(initializeFault172());
+        mFaults.add(initializeFault173());
+        mFaults.add(initializeFault174());
+        mFaults.add(initializeFault175());
+        mFaults.add(initializeFault176());
+        mFaults.add(initializeFault177());
+    }
+
+    private void initializeInspectionDefects() {
+        mInspectionDefects.add(initializeInspectionDefect1());
+        mInspectionDefects.add(initializeInspectionDefect2());
+        mInspectionDefects.add(initializeInspectionDefect3());
+    }
+
     //region Inspection Initializations
     private Inspection initializeInspection1() {
         return new Inspection(1, 1, "Thurgood Stubbs\n555-5555", 1, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
@@ -625,12 +840,12 @@ public class DataManager {
 
     //region DefectCategory Initializations
     private DefectCategory initializeDefectCategory1() { return new DefectCategory(1, "Job Site"); }
-    private DefectCategory initializeDefectCategory2() { return new DefectCategory(1, "Frame"); }
-    private DefectCategory initializeDefectCategory3() { return new DefectCategory(1, "Cornice/Deck"); }
-    private DefectCategory initializeDefectCategory4() { return new DefectCategory(1, "Rough Roofing"); }
-    private DefectCategory initializeDefectCategory5() { return new DefectCategory(1, "Rough Plumbing"); }
-    private DefectCategory initializeDefectCategory6() { return new DefectCategory(1, "Rough HVAC"); }
-    private DefectCategory initializeDefectCategory7() { return new DefectCategory(1, "Rough Electrical"); }
+    private DefectCategory initializeDefectCategory2() { return new DefectCategory(2, "Frame"); }
+    private DefectCategory initializeDefectCategory3() { return new DefectCategory(3, "Cornice/Deck"); }
+    private DefectCategory initializeDefectCategory4() { return new DefectCategory(4, "Rough Roofing"); }
+    private DefectCategory initializeDefectCategory5() { return new DefectCategory(5, "Rough Plumbing"); }
+    private DefectCategory initializeDefectCategory6() { return new DefectCategory(6, "Rough HVAC"); }
+    private DefectCategory initializeDefectCategory7() { return new DefectCategory(7, "Rough Electrical"); }
     //endregion
 
     //region DefectItem Initializations
@@ -895,5 +1110,189 @@ public class DataManager {
     private Direction initializeDirection140() { return new Direction(140, "Vacuum Breaker"); }
     private Direction initializeDirection142() { return new Direction(142, "Smoke Detector"); }
     private Direction initializeDirection143() { return new Direction(143, "Doorbell"); }
+    //endregion
+
+    //region Fault Initializations
+    private Fault initializeFault1() { return new Fault(1, "Access Panel Missing"); }
+    private Fault initializeFault2() { return new Fault(2, "Accessible-Not"); }
+    private Fault initializeFault3() { return new Fault(3, "Aligned-Not"); }
+    private Fault initializeFault4() { return new Fault(4, "Anti-Tip Device"); }
+    private Fault initializeFault5() { return new Fault(5, "Balanced-Not"); }
+    private Fault initializeFault6() { return new Fault(6, "Battery low"); }
+    private Fault initializeFault7() { return new Fault(7, "Bent"); }
+    private Fault initializeFault8() { return new Fault(8, "Binds"); }
+    private Fault initializeFault9() { return new Fault(9, "Blocked-Not"); }
+    private Fault initializeFault10() { return new Fault(10, "Bowed"); }
+    private Fault initializeFault11() { return new Fault(11, "Braced-Not"); }
+    private Fault initializeFault12() { return new Fault(12, "Broken"); }
+    private Fault initializeFault13() { return new Fault(13, "Bulbs out"); }
+    private Fault initializeFault14() { return new Fault(14, "Calibration"); }
+    private Fault initializeFault15() { return new Fault(15, "Cap Nuts"); }
+    private Fault initializeFault16() { return new Fault(16, "Caulk corners"); }
+    private Fault initializeFault17() { return new Fault(17, "Caulked-Not"); }
+    private Fault initializeFault18() { return new Fault(18, "Centered, Not"); }
+    private Fault initializeFault19() { return new Fault(19, "Check all"); }
+    private Fault initializeFault20() { return new Fault(20, "Chipped"); }
+    private Fault initializeFault21() { return new Fault(21, "Clearance Insufficient"); }
+    private Fault initializeFault22() { return new Fault(22, "Connected-Not"); }
+    private Fault initializeFault23() { return new Fault(23, "Continuous-not"); }
+    private Fault initializeFault24() { return new Fault(24, "Covered"); }
+    private Fault initializeFault25() { return new Fault(25, "Cracked"); }
+    private Fault initializeFault26() { return new Fault(26, "Crooked"); }
+    private Fault initializeFault27() { return new Fault(27, "Crown"); }
+    private Fault initializeFault28() { return new Fault(28, "Damaged"); }
+    private Fault initializeFault29() { return new Fault(29, "Debris"); }
+    private Fault initializeFault30() { return new Fault(30, "Deflected"); }
+    private Fault initializeFault31() { return new Fault(31, "Dips"); }
+    private Fault initializeFault32() { return new Fault(32, "Dirty"); }
+    private Fault initializeFault33() { return new Fault(33, "Drags Carpet"); }
+    private Fault initializeFault34() { return new Fault(34, "Failed"); }
+    private Fault initializeFault35() { return new Fault(35, "Fall-no"); }
+    private Fault initializeFault36() { return new Fault(36, "Fill Valve Leaks"); }
+    private Fault initializeFault37() { return new Fault(37, "Flashed-Not"); }
+    private Fault initializeFault38() { return new Fault(38, "Flush-Not"); }
+    private Fault initializeFault39() { return new Fault(39, "Flush-Not properly"); }
+    private Fault initializeFault40() { return new Fault(40, "Full Bearing-Not"); }
+    private Fault initializeFault41() { return new Fault(41, "Full throw-Not"); }
+    private Fault initializeFault42() { return new Fault(42, "Gap, no"); }
+    private Fault initializeFault43() { return new Fault(43, "Gaps"); }
+    private Fault initializeFault44() { return new Fault(44, "Gas off"); }
+    private Fault initializeFault45() { return new Fault(45, "Ground"); }
+    private Fault initializeFault46() { return new Fault(46, "Grounded-Not"); }
+    private Fault initializeFault47() { return new Fault(47, "Grout incomplete"); }
+    private Fault initializeFault48() { return new Fault(48, "Hanging"); }
+    private Fault initializeFault49() { return new Fault(49, "High"); }
+    private Fault initializeFault50() { return new Fault(50, "Holes"); }
+    private Fault initializeFault51() { return new Fault(51, "Inadequate"); }
+    private Fault initializeFault52() { return new Fault(52, "Incomplete"); }
+    private Fault initializeFault53() { return new Fault(53, "Inoperative"); }
+    private Fault initializeFault54() { return new Fault(54, "Inspected-Not"); }
+    private Fault initializeFault55() { return new Fault(55, "Installed-Not"); }
+    private Fault initializeFault56() { return new Fault(56, "Labeled-Not"); }
+    private Fault initializeFault57() { return new Fault(57, "Lap Improper"); }
+    private Fault initializeFault58() { return new Fault(58, "Latch-won't"); }
+    private Fault initializeFault59() { return new Fault(59, "Leaks"); }
+    private Fault initializeFault60() { return new Fault(60, "Level-Not"); }
+    private Fault initializeFault61() { return new Fault(61, "Long"); }
+    private Fault initializeFault62() { return new Fault(62, "Loose"); }
+    private Fault initializeFault63() { return new Fault(63, "Low"); }
+    private Fault initializeFault64() { return new Fault(64, "Low Pressure"); }
+    private Fault initializeFault65() { return new Fault(65, "Missing"); }
+    private Fault initializeFault66() { return new Fault(66, "Mutilated"); }
+    private Fault initializeFault67() { return new Fault(67, "Nail Pops"); }
+    private Fault initializeFault68() { return new Fault(68, "Nailed Properly-Not"); }
+    private Fault initializeFault69() { return new Fault(69, "Narrow, too"); }
+    private Fault initializeFault70() { return new Fault(70, "Noisy"); }
+    private Fault initializeFault71() { return new Fault(71, "Non-Corrosive Screws"); }
+    private Fault initializeFault72() { return new Fault(72, "Notched-Not"); }
+    private Fault initializeFault73() { return new Fault(73, "Obstructed"); }
+    private Fault initializeFault74() { return new Fault(74, "Overcut"); }
+    private Fault initializeFault75() { return new Fault(75, "Overlapped-Not"); }
+    private Fault initializeFault76() { return new Fault(76, "Overspanned"); }
+    private Fault initializeFault77() { return new Fault(77, "Painted-Not"); }
+    private Fault initializeFault78() { return new Fault(78, "Plumb-Not"); }
+    private Fault initializeFault79() { return new Fault(79, "Pops"); }
+    private Fault initializeFault80() { return new Fault(80, "Power-No"); }
+    private Fault initializeFault81() { return new Fault(81, "Primed-Not"); }
+    private Fault initializeFault82() { return new Fault(82, "Removed-Not"); }
+    private Fault initializeFault83() { return new Fault(83, "Required"); }
+    private Fault initializeFault84() { return new Fault(84, "Responding-Not"); }
+    private Fault initializeFault85() { return new Fault(85, "Reversed"); }
+    private Fault initializeFault86() { return new Fault(86, "Safety Lines"); }
+    private Fault initializeFault87() { return new Fault(87, "Sag"); }
+    private Fault initializeFault88() { return new Fault(88, "Scratched"); }
+    private Fault initializeFault89() { return new Fault(89, "Sealed, Not"); }
+    private Fault initializeFault90() { return new Fault(90, "Secured-Not"); }
+    private Fault initializeFault91() { return new Fault(91, "Shimmed-Not"); }
+    private Fault initializeFault92() { return new Fault(92, "Short"); }
+    private Fault initializeFault93() { return new Fault(93, "Should be"); }
+    private Fault initializeFault94() { return new Fault(94, "Sized-Oversized"); }
+    private Fault initializeFault95() { return new Fault(95, "Sized-Undersized"); }
+    private Fault initializeFault96() { return new Fault(96, "Sleeved-Not"); }
+    private Fault initializeFault97() { return new Fault(97, "Spaced Properly-Not"); }
+    private Fault initializeFault98() { return new Fault(98, "Squeaks"); }
+    private Fault initializeFault99() { return new Fault(99, "Stained"); }
+    private Fault initializeFault100() { return new Fault(100, "Startup-Not"); }
+    private Fault initializeFault101() { return new Fault(101, "Studs- doubles needed"); }
+    private Fault initializeFault102() { return new Fault(102, "Supported-Not"); }
+    private Fault initializeFault103() { return new Fault(103, "Tab(s) missing"); }
+    private Fault initializeFault104() { return new Fault(104, "Teed-Not"); }
+    private Fault initializeFault105() { return new Fault(105, "Tested-Not"); }
+    private Fault initializeFault106() { return new Fault(106, "Tight, too"); }
+    private Fault initializeFault107() { return new Fault(107, "Touch-up-Needs"); }
+    private Fault initializeFault108() { return new Fault(108, "Twisted"); }
+    private Fault initializeFault109() { return new Fault(109, "Uneven"); }
+    private Fault initializeFault110() { return new Fault(110, "Unpacked-Not"); }
+    private Fault initializeFault111() { return new Fault(111, "Verified-Not"); }
+    private Fault initializeFault112() { return new Fault(112, "Verify"); }
+    private Fault initializeFault113() { return new Fault(113, "Visible-Not"); }
+    private Fault initializeFault114() { return new Fault(114, "Water-No"); }
+    private Fault initializeFault115() { return new Fault(115, "Water pressure held at"); }
+    private Fault initializeFault116() { return new Fault(116, "Wavy"); }
+    private Fault initializeFault117() { return new Fault(117, "Wide, too"); }
+    private Fault initializeFault118() { return new Fault(118, "Wired Incorrectly"); }
+    private Fault initializeFault119() { return new Fault(119, "Workers present"); }
+    private Fault initializeFault120() { return new Fault(120, "<60°, Not Tested"); }
+    private Fault initializeFault121() { return new Fault(121, "Voids"); }
+    private Fault initializeFault122() { return new Fault(122, "Compressed"); }
+    private Fault initializeFault123() { return new Fault(123, "Contact, Not in"); }
+    private Fault initializeFault124() { return new Fault(124, "Fitted, Not"); }
+    private Fault initializeFault125() { return new Fault(125, "Pre-Cornice not passed"); }
+    private Fault initializeFault133() { return new Fault(133, "Rust observed"); }
+    private Fault initializeFault127() { return new Fault(127, "Overshot"); }
+    private Fault initializeFault128() { return new Fault(128, "Undershot"); }
+    private Fault initializeFault129() { return new Fault(129, "Improper"); }
+    private Fault initializeFault130() { return new Fault(130, "Covered, Not"); }
+    private Fault initializeFault131() { return new Fault(131, "Blower Door Results"); }
+    private Fault initializeFault159() { return new Fault(159, "Square, Not"); }
+    private Fault initializeFault134() { return new Fault(134, "Adjust"); }
+    private Fault initializeFault135() { return new Fault(135, "Insulated, Not"); }
+    private Fault initializeFault136() { return new Fault(136, "Protected, Not"); }
+    private Fault initializeFault137() { return new Fault(137, "Furnace Model Number"); }
+    private Fault initializeFault138() { return new Fault(138, "Compressor Model Number"); }
+    private Fault initializeFault139() { return new Fault(139, "Water Heater Model Number"); }
+    private Fault initializeFault140() { return new Fault(140, "Within 18 in."); }
+    private Fault initializeFault141() { return new Fault(141, "Within 20 in."); }
+    private Fault initializeFault142() { return new Fault(142, "Verify at Final"); }
+    private Fault initializeFault143() { return new Fault(143, "Steel splice plate missing"); }
+    private Fault initializeFault144() { return new Fault(144, "Splice block"); }
+    private Fault initializeFault145() { return new Fault(145, "Wires, max 2 per staple"); }
+    private Fault initializeFault146() { return new Fault(146, "Wires, too close to nailing surface"); }
+    private Fault initializeFault147() { return new Fault(147, "Tape Failing to adhere"); }
+    private Fault initializeFault148() { return new Fault(148, "Material, improper"); }
+    private Fault initializeFault149() { return new Fault(149, "HVAC Contractor Checklist Defects:"); }
+    private Fault initializeFault150() { return new Fault(150, "Slow"); }
+    private Fault initializeFault151() { return new Fault(151, "Duct Lkg Unit 1 Outside Failed"); }
+    private Fault initializeFault152() { return new Fault(152, "Duct Lkg Unit 2 Outside Failed"); }
+    private Fault initializeFault153() { return new Fault(153, "Duct Lkg Unit 3 Outside Failed"); }
+    private Fault initializeFault154() { return new Fault(154, "Duct Lkg Unit 1Total Failed"); }
+    private Fault initializeFault155() { return new Fault(155, "Duct Lkg Unit 2 Total Failed"); }
+    private Fault initializeFault156() { return new Fault(156, "Duct Lkg Unit 3 Total Failed"); }
+    private Fault initializeFault157() { return new Fault(157, "Blower Door Failed"); }
+    private Fault initializeFault158() { return new Fault(158, "Blocked & Sealed, Not"); }
+    private Fault initializeFault160() { return new Fault(160, "Inconsistent"); }
+    private Fault initializeFault161() { return new Fault(161, "Firestop chase tops"); }
+    private Fault initializeFault162() { return new Fault(162, "Firestop top plate penetrations"); }
+    private Fault initializeFault163() { return new Fault(163, "Firestop dropped ceiling"); }
+    private Fault initializeFault164() { return new Fault(164, "Firestop horizontal chase"); }
+    private Fault initializeFault165() { return new Fault(165, "Firestop rake walls"); }
+    private Fault initializeFault166() { return new Fault(166, "Firestop stairway"); }
+    private Fault initializeFault167() { return new Fault(167, "Compressed by electrical"); }
+    private Fault initializeFault168() { return new Fault(168, "Compressed by low voltage"); }
+    private Fault initializeFault169() { return new Fault(169, "Compressed by plumbing"); }
+    private Fault initializeFault170() { return new Fault(170, "Compressed by framing"); }
+    private Fault initializeFault171() { return new Fault(171, "Roof Decking not gapped properly"); }
+    private Fault initializeFault172() { return new Fault(172, "Filled to overflow, Not"); }
+    private Fault initializeFault173() { return new Fault(173, "Vented, Not"); }
+    private Fault initializeFault174() { return new Fault(174, "Secure and Seal"); }
+    private Fault initializeFault175() { return new Fault(175, "Poly sealed, Not"); }
+    private Fault initializeFault176() { return new Fault(176, "per Builder specifications, Not"); }
+    private Fault initializeFault177() { return new Fault(177, "ZIP System Properly rolled, Not"); }
+    //endregion
+
+    //region Inspection Defect Initializations
+    private InspectionDefect initializeInspectionDefect1() { return new InspectionDefect(1, 1, 1, 2, "Right Front Up", "Bedroom-MSTR", "Above", "Canned Comment 1", "This is a note."); }
+    private InspectionDefect initializeInspectionDefect2() { return new InspectionDefect(2, 1, 11, 2, "Left Rear Down", "Attic-Drop Down", "Behind", "Canned Comment 1", "This is a note."); }
+    private InspectionDefect initializeInspectionDefect3() { return new InspectionDefect(3, 1, 18, 2, "Middle Up", "Deck", "Chase", "Canned Comment 1", "This is a note."); }
     //endregion
 }

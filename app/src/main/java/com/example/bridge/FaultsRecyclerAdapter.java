@@ -7,24 +7,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import data.Room;
+import data.Fault;
 
-public class RoomsRecyclerAdapter extends RecyclerView.Adapter<RoomsRecyclerAdapter.ViewHolder> {
+public class FaultsRecyclerAdapter extends RecyclerView.Adapter<FaultsRecyclerAdapter.ViewHolder> {
     private final Context mContext;
-    private final List<Room> mRooms;
+    private final List<Fault> mFaults;
     private final LayoutInflater mLayoutInflater;
+    private TextView mFaultResult;
     private OnButtonClickListener mOnButtonClickListener;
 
-    public RoomsRecyclerAdapter(Context context, List<Room> roomList, OnButtonClickListener onButtonClickListener) {
+    public FaultsRecyclerAdapter(Context context, List<Fault> faultList, OnButtonClickListener onButtonClickListener) {
         mContext = context;
-        mRooms = roomList;
+        mFaults = faultList;
         mLayoutInflater = LayoutInflater.from(mContext);
         mOnButtonClickListener = onButtonClickListener;
     }
@@ -38,35 +38,35 @@ public class RoomsRecyclerAdapter extends RecyclerView.Adapter<RoomsRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Room room = mRooms.get(position);
-        holder.mRoomId = room.getRoomId();
-        holder.mRoomName = room.getRoomName();
-        holder.mRoomButton.setText(room.getRoomName());
-        holder.mRoomButton.setOnClickListener(v -> {
-            TextView result = v.findViewById(R.id.room_text_result);
+        Fault fault = mFaults.get(position);
+        holder.mFaultId = fault.getFaultId();
+        holder.mFault = fault.getFault();
+        holder.mFaultButton.setText(fault.getFault());
+        holder.mFaultButton.setOnClickListener(v -> {
+            TextView result = v.findViewById(R.id.fault_text_result);
             Button buttonClicked = (Button) v;
-            Log.d("ROOM", "Button clicked - " + buttonClicked.getText());
+            Log.d("FAULT", "Button clicked - " + buttonClicked.getText());
             try {
                 mOnButtonClickListener.onButtonClick((String) buttonClicked.getText());
             } catch (Exception e) {
-                Log.d("ROOM", e.getMessage());
+                Log.d("FAULT", e.getMessage());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mRooms.size();
+        return mFaults.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public int mRoomId;
-        public String mRoomName;
-        public final Button mRoomButton;
+        public int mFaultId;
+        public String mFault;
+        public final Button mFaultButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mRoomButton = (Button) itemView.findViewById(R.id.item_gridview_button);
+            mFaultButton = (Button) itemView.findViewById(R.id.item_gridview_button);
         }
     }
 }
