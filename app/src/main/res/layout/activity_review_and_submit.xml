@@ -75,6 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/review_and_submit_text_address" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/review_and_submit_recycler_inspection_defects"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -83,5 +84,5 @@
         app:layout_constraintEnd_toEndOf="@+id/review_and_submit_text_address"
         app:layout_constraintStart_toStartOf="@+id/review_and_submit_text_address"
         app:layout_constraintTop_toBottomOf="@+id/review_and_submit_button_submit"
-        tools:listitem="@layout/item_defect_item" />
+        tools:listitem="@layout/item_inspection_defect" />
 </androidx.constraintlayout.widget.ConstraintLayout>

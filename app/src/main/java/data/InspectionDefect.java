@@ -10,6 +10,7 @@ public class InspectionDefect {
     private String mDirection;
     private String mCannedComment;
     private String mNote;
+    private boolean mVisible;
 
     public InspectionDefect (int inspectionDefectId, int inspectionId, int defectItemId, int defectStatusId, String location, String room, String direction, String cannedComment, String note) {
         mInspectionDefectId = inspectionDefectId;
@@ -21,6 +22,7 @@ public class InspectionDefect {
         mDirection = direction;
         mCannedComment = cannedComment;
         mNote = note;
+        mVisible = false;
     }
 
     public int getInspectionDefectId() {
@@ -84,5 +86,12 @@ public class InspectionDefect {
     }
     public void setNote(String note) {
         mNote = note;
+    }
+
+    public boolean isVisible() {
+        return mVisible;
+    }
+    public void setVisible(boolean visible) {
+        mVisible = visible;
     }
 }
