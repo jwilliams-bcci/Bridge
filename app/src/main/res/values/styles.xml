@@ -7,4 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="spinnerFontSize" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textSize">16dp</item>
+    </style>
+
 </resources>

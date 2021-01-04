@@ -38,7 +38,7 @@ public class Inspection implements Parcelable {
     public int getBuilderId() {
         return mBuilderId;
     }
-    public void setBuilderd(int builderId) {
+    public void setBuilderId(int builderId) {
         mBuilderId = builderId;
     }
     public String getSuperintendent() {

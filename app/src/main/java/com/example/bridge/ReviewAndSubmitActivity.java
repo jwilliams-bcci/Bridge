@@ -6,11 +6,20 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.print.PrintAttributes;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,6 +27,7 @@ import java.util.List;
 import data.DataManager;
 import data.Inspection;
 import data.InspectionDefect;
+import data.InspectionResolution;
 import data.Location;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
@@ -61,11 +71,15 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             mStatusCorrect = true;
-                            Intent routeSheetIntent = new Intent(ReviewAndSubmitActivity.this, RouteSheetActivity.class);
-                            startActivity(routeSheetIntent);
+                            returnToRouteSheet();
                         }
                     })
-                    .setNegativeButton("No", null)
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            showEditResolutionDialog();
+                        }
+                    })
                     .show();
 
             new AlertDialog.Builder(this)
@@ -88,5 +102,29 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         textAddress.append(location.getCommunity() + "\n");
         textAddress.append(location.getFullAddress() + "\n");
         textAddress.append(inspection.getInspectionType());
+    }
+
+    private void showEditResolutionDialog() {
+        View view = getLayoutInflater().inflate(R.layout.dialog_edit_resolution, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        builder.setTitle("Change Resolution");
+        builder.create().show();
+
+        Spinner spinnerResolutions = (Spinner) view.findViewById(R.id.dialog_edit_resolution_spinner_resolutions);
+        List<InspectionResolution> inspectionResolutions = DataManager.getInstance().getInspectionResolutions();
+        ArrayAdapter<InspectionResolution> adapterInspectionResolutions = new ArrayAdapter<>(this, R.layout.item_spinner_item, inspectionResolutions);
+        spinnerResolutions.setAdapter(adapterInspectionResolutions);
+
+        Button buttonSaveResolution = (Button) view.findViewById(R.id.dialog_edit_resolution_button_save);
+        buttonSaveResolution.setOnClickListener(v -> {
+            returnToRouteSheet();
+        });
+    }
+
+    private void returnToRouteSheet() {
+        Intent routeSheetIntent = new Intent(ReviewAndSubmitActivity.this, RouteSheetActivity.class);
+        startActivity(routeSheetIntent);
     }
 }
