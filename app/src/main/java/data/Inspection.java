@@ -10,6 +10,7 @@ public class Inspection implements Parcelable {
     private int mLocationId;
     private String mInspectionType;
     private String mNotes;
+    private boolean mIsComplete;
 
     public Inspection(int inspectionId, int builderId, String superintendent, int locationId, String inspectionType, String notes){
         mInspectionId = inspectionId;
@@ -18,6 +19,7 @@ public class Inspection implements Parcelable {
         mLocationId = locationId;
         mInspectionType = inspectionType;
         mNotes = notes;
+        mIsComplete = false;
     }
 
     protected Inspection(Parcel in) {
@@ -65,6 +67,8 @@ public class Inspection implements Parcelable {
     public void setNotes(String notes) {
         mNotes = notes;
     }
+    public boolean getIsComplete() { return mIsComplete; }
+    public void setIsComplete(boolean isComplete) { mIsComplete = isComplete; }
 
     public static final Creator<Inspection> CREATOR = new Creator<Inspection>() {
         @Override

@@ -71,6 +71,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             mStatusCorrect = true;
+                            DataManager.getInstance().getInspection(1).setIsComplete(true);
                             returnToRouteSheet();
                         }
                     })

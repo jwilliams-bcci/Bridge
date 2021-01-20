@@ -46,7 +46,13 @@ public class DataManager {
     }
 
     public List<Inspection> getInspections() {
-        return mInspections;
+        List<Inspection> result = new ArrayList<Inspection>();
+        for (Inspection i : mInspections) {
+            if(!i.getIsComplete()) {
+                result.add(i);
+            }
+        }
+        return result;
     }
     public Inspection getInspection(int id) {
         for (Inspection inspection : mInspections) {
@@ -220,13 +226,13 @@ public class DataManager {
 
     private void initializeInspections() {
         mInspections.add(initializeInspection1());
-        mInspections.add(initializeInspection2());
-        mInspections.add(initializeInspection3());
-        mInspections.add(initializeInspection4());
-        mInspections.add(initializeInspection5());
-        mInspections.add(initializeInspection6());
-        mInspections.add(initializeInspection7());
-        mInspections.add(initializeInspection8());
+//        mInspections.add(initializeInspection2());
+//        mInspections.add(initializeInspection3());
+//        mInspections.add(initializeInspection4());
+//        mInspections.add(initializeInspection5());
+//        mInspections.add(initializeInspection6());
+//        mInspections.add(initializeInspection7());
+//        mInspections.add(initializeInspection8());
     }
 
     private void initializeBuilders() {
@@ -253,9 +259,9 @@ public class DataManager {
     }
 
     private void initializeInspectionHistories() {
-        mInspectionHistories.add(initializeInspectionHistory1());
-        mInspectionHistories.add(initializeInspectionHistory2());
-        mInspectionHistories.add(initializeInspectionHistory3());
+//        mInspectionHistories.add(initializeInspectionHistory1());
+//        mInspectionHistories.add(initializeInspectionHistory2());
+//        mInspectionHistories.add(initializeInspectionHistory3());
         mInspectionHistories.add(initializeInspectionHistory4());
         mInspectionHistories.add(initializeInspectionHistory5());
         mInspectionHistories.add(initializeInspectionHistory6());
@@ -747,40 +753,40 @@ public class DataManager {
 
     private void initializeInspectionDefects() {
         mInspectionDefects.add(initializeInspectionDefect1());
-        mInspectionDefects.add(initializeInspectionDefect2());
-        mInspectionDefects.add(initializeInspectionDefect3());
+//        mInspectionDefects.add(initializeInspectionDefect2());
+//        mInspectionDefects.add(initializeInspectionDefect3());
     }
 
     //region Inspection Initializations
     private Inspection initializeInspection1() {
-        return new Inspection(1, 1, "Thurgood Stubbs\n555-5555", 1, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+        return new Inspection(1, 1, "Jerry Williams\n(513) 518-2469", 1, "Pre-Drywall HB2833", "");
     }
-    private Inspection initializeInspection2() {
-        return new Inspection(2, 1, "Thurgood Stubbs\n555-5555", 2, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
-    }
-    private Inspection initializeInspection3() {
-        return new Inspection(3, 2, "Thurgood Stubbs\n555-5555", 3, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
-    }
-    private Inspection initializeInspection4() {
-        return new Inspection(4, 2, "Thurgood Stubbs\n555-5555", 4, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
-    }
-    private Inspection initializeInspection5() {
-        return new Inspection(5, 1, "Remy Kuber\n777-7777", 5, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
-    }
-    private Inspection initializeInspection6() {
-        return new Inspection(6, 1, "Remy Kuber\n777-7777", 6, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
-    }
-    private Inspection initializeInspection7() {
-        return new Inspection(7, 2, "Remy Kuber\n777-7777", 7, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
-    }
-    private Inspection initializeInspection8() {
-        return new Inspection(8, 2, "Remy Kuber\n777-7777", 8, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
-    }
+//    private Inspection initializeInspection2() {
+//        return new Inspection(2, 1, "Thurgood Stubbs\n555-5555", 2, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+//    }
+//    private Inspection initializeInspection3() {
+//        return new Inspection(3, 2, "Thurgood Stubbs\n555-5555", 3, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+//    }
+//    private Inspection initializeInspection4() {
+//        return new Inspection(4, 2, "Thurgood Stubbs\n555-5555", 4, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+//    }
+//    private Inspection initializeInspection5() {
+//        return new Inspection(5, 1, "Remy Kuber\n777-7777", 5, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+//    }
+//    private Inspection initializeInspection6() {
+//        return new Inspection(6, 1, "Remy Kuber\n777-7777", 6, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+//    }
+//    private Inspection initializeInspection7() {
+//        return new Inspection(7, 2, "Remy Kuber\n777-7777", 7, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+//    }
+//    private Inspection initializeInspection8() {
+//        return new Inspection(8, 2, "Remy Kuber\n777-7777", 8, "Final", "Notes go here. Notes go here. Notes go here. Notes go here.");
+//    }
     //endregion
 
     //region Builder Initializations
     private Builder initializeBuilder1() {
-        return new Builder(1, "Redhawk Builders");
+        return new Builder(1, "Sandlin Homes");
     }
     private Builder initializeBuilder2() {
         return new Builder(2, "Miami U Builders");
@@ -788,7 +794,7 @@ public class DataManager {
     //endregion
 
     //region Location Initializations
-    private Location initializeLocation1() { return new Location(1, "123 One Road, Dallas, TX", 75068, "Dallas", "TX", "Test Community 1"); }
+    private Location initializeLocation1() { return new Location(1, "1111 King Fisher Drive", 75068, "Dallas", "TX", "Westlake - 2012"); }
     private Location initializeLocation2() { return new Location(2, "234 One Road, Dallas, TX", 75068, "Dallas", "TX", "Test Community 1"); }
     private Location initializeLocation3() { return new Location(3, "345 One Road, Dallas, TX", 75068, "Dallas", "TX", "Test Community 1"); }
     private Location initializeLocation4() { return new Location(4, "456 One Road, Dallas, TX", 75068, "Dallas", "TX", "Test Community 1"); }
@@ -806,9 +812,9 @@ public class DataManager {
     //endregion
 
     //region InspectionHistory Initializations
-    private InspectionHistory initializeInspectionHistory1() { return new InspectionHistory(1, 1, new Date(), "Pre-Drywall - loc 1", "Craig Brooks", "Passed"); }
-    private InspectionHistory initializeInspectionHistory2() { return new InspectionHistory(2, 1, new Date(), "Pre-Drywall - loc 1", "Craig Brooks", "Failed"); }
-    private InspectionHistory initializeInspectionHistory3() { return new InspectionHistory(3, 1, new Date(), "Pre-Pour - loc 1", "Craig Brooks", "Passed"); }
+//    private InspectionHistory initializeInspectionHistory1() { return new InspectionHistory(1, 1, new Date(), "Pre-Drywall - loc 1", "Craig Brooks", "Passed"); }
+//    private InspectionHistory initializeInspectionHistory2() { return new InspectionHistory(2, 1, new Date(), "Pre-Drywall - loc 1", "Craig Brooks", "Failed"); }
+//    private InspectionHistory initializeInspectionHistory3() { return new InspectionHistory(3, 1, new Date(), "Pre-Pour - loc 1", "Craig Brooks", "Passed"); }
     private InspectionHistory initializeInspectionHistory4() { return new InspectionHistory(4, 2, new Date(), "Pre-Drywall - loc 2", "Craig Brooks", "Passed"); }
     private InspectionHistory initializeInspectionHistory5() { return new InspectionHistory(5, 2, new Date(), "Pre-Drywall - loc 2", "Craig Brooks", "Failed"); }
     private InspectionHistory initializeInspectionHistory6() { return new InspectionHistory(6, 2, new Date(), "Pre-Pour - loc 2", "Craig Brooks", "Passed"); }
@@ -1292,7 +1298,7 @@ public class DataManager {
 
     //region Inspection Defect Initializations
     private InspectionDefect initializeInspectionDefect1() { return new InspectionDefect(1, 1, 1, 2, "Right Front Up", "Bedroom-MSTR", "Above", "Canned Comment 1", "This is a note."); }
-    private InspectionDefect initializeInspectionDefect2() { return new InspectionDefect(2, 1, 11, 2, "Left Rear Down", "Attic-Drop Down", "Behind", "Canned Comment 1", "This is a note."); }
-    private InspectionDefect initializeInspectionDefect3() { return new InspectionDefect(3, 1, 18, 2, "Middle Up", "Deck", "Chase", "Canned Comment 1", "This is a note."); }
+//    private InspectionDefect initializeInspectionDefect2() { return new InspectionDefect(2, 1, 11, 2, "Left Rear Down", "Attic-Drop Down", "Behind", "Canned Comment 1", "This is a note."); }
+//    private InspectionDefect initializeInspectionDefect3() { return new InspectionDefect(3, 1, 18, 2, "Middle Up", "Deck", "Chase", "Canned Comment 1", "This is a note."); }
     //endregion
 }
