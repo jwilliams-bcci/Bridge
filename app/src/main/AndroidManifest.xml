@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bridge">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
     <queries>
         <intent>
             <action android:name="android.speech.RecognitionService" />
@@ -23,6 +27,14 @@
         android:roundIcon="@mipmap/ic_bridge_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="true" />
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
+
         <activity
             android:name=".ReviewAndSubmitActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
@@ -46,6 +58,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".InspectActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".UploadProgress"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".RouteSheetActivity"
