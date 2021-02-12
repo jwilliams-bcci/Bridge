@@ -3,7 +3,9 @@ package data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Inspection implements Parcelable {
+import androidx.room.Entity;
+
+public class Inspection {
     private int mInspectionId;
     private int mBuilderId;
     private String mSuperintendent;
@@ -69,31 +71,4 @@ public class Inspection implements Parcelable {
     }
     public boolean getIsComplete() { return mIsComplete; }
     public void setIsComplete(boolean isComplete) { mIsComplete = isComplete; }
-
-    public static final Creator<Inspection> CREATOR = new Creator<Inspection>() {
-        @Override
-        public Inspection createFromParcel(Parcel in) {
-            return new Inspection(in);
-        }
-
-        @Override
-        public Inspection[] newArray(int size) {
-            return new Inspection[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mInspectionId);
-        parcel.writeInt(mBuilderId);
-        parcel.writeString(mSuperintendent);
-        parcel.writeInt(mLocationId);
-        parcel.writeString(mInspectionType);
-        parcel.writeString(mNotes);
-    }
 }
