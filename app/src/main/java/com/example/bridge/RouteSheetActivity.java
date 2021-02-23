@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import java.util.List;
 
+import data.BridgeRoomDatabase;
 import data.DataManager;
 import data.Inspection;
+import data.Inspection_DAO;
+import data.Inspection_Table;
 import data.Room;
 
 public class RouteSheetActivity extends AppCompatActivity {
@@ -24,11 +27,11 @@ public class RouteSheetActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
-        final RecyclerView recyclerInspections = (RecyclerView) findViewById(R.id.route_sheet_list_inspections);
+        RecyclerView recyclerInspections = findViewById(R.id.route_sheet_list_inspections);
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Inspection> inspections = DataManager.getInstance().getInspections();
-        List<Room> rooms = DataManager.getInstance().getRooms();
+        //List<Inspection> inspections = DataManager.getInstance().getInspections();
+        List<Inspection_Table> inspections = BridgeRoomDatabase.getInspections();
         recyclerInspections.setAdapter(new InspectionRecyclerAdapter(this, inspections));
     }
 }

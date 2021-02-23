@@ -12,6 +12,7 @@ import java.util.List;
 
 import data.DataManager;
 import data.Inspection;
+import data.Inspection_Table;
 import data.Location;
 
 public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRecyclerAdapter.ViewHolder> {
@@ -19,7 +20,7 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
     private final List<Inspection> mInspectionList;
     private final LayoutInflater mLayoutInflater;
 
-    public InspectionRecyclerAdapter(Context context, List<Inspection> inspectionList) {
+    public InspectionRecyclerAdapter(Context context, List<Inspection_Table> inspectionList) {
         mContext = context;
         mInspectionList = inspectionList;
         mLayoutInflater = LayoutInflater.from(mContext);

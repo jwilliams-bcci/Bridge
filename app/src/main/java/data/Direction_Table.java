@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey;
 public class Direction_Table {
     @PrimaryKey
     public int id;
-    public String text;
+    public String direction_description;
 }
