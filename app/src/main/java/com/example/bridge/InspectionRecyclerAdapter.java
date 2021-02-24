@@ -17,7 +17,7 @@ import data.Location;
 
 public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRecyclerAdapter.ViewHolder> {
     private final Context mContext;
-    private final List<Inspection> mInspectionList;
+    private final List<Inspection_Table> mInspectionList;
     private final LayoutInflater mLayoutInflater;
 
     public InspectionRecyclerAdapter(Context context, List<Inspection_Table> inspectionList) {
@@ -35,15 +35,15 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Inspection inspection = mInspectionList.get(position);
-        Location location = DataManager.getInstance().getLocation(inspection.getLocationId());
-        holder.mInspectionId = inspection.getInspectionId();
-        holder.mBuilderId = inspection.getBuilderId();
-        holder.mLocationId = inspection.getLocationId();
+        Inspection_Table inspection = mInspectionList.get(position);
+        Location location = DataManager.getInstance().getLocation(inspection.location_id);
+        holder.mInspectionId = inspection.inspection_number;
+        holder.mBuilderId = inspection.builder_id;
+        holder.mLocationId = inspection.location_id;
         holder.mTextCommunity.setText(location.getCommunity());
         holder.mTextAddress.setText(location.getFullAddress());
-        holder.mTextInspectionType.setText(inspection.getInspectionType());
-        holder.mTextInspectionNotes.setText(inspection.getNotes());
+        holder.mTextInspectionType.setText(inspection.inspection_type);
+        holder.mTextInspectionNotes.setText(inspection.notes);
     }
 
     @Override

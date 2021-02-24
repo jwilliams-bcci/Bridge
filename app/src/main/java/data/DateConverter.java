@@ -11,29 +11,13 @@ import java.time.OffsetDateTime;
 import java.util.Date;
 
 public class DateConverter {
-    static DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
     @TypeConverter
-    public static Date fromString(String value) {
-        if (value != null) {
-            try {
-                return df.parse(value);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+    public static Date fromTimestamp(Long value) {
+        return value == null ? null : new Date(value);
     }
 
     @TypeConverter
-    public static String toOffsetDateTime(OffsetDateTime value) {
-        if (value != null) {
-            try {
-                return value.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+    public static Long dateToTimestamp(Date date) {
+        return date == null ? null : date.getTime();
     }
 }
