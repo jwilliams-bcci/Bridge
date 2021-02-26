@@ -9,12 +9,30 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import data.DAOs.Builder_DAO;
+import data.DAOs.CannedComment_DAO;
+import data.DAOs.DefectCategory_DAO;
+import data.DAOs.DefectItem_DAO;
+import data.DAOs.Direction_DAO;
+import data.DAOs.InspectionDefect_DAO;
+import data.DAOs.InspectionResolution_DAO;
+import data.DAOs.Inspection_DAO;
+import data.DAOs.Location_DAO;
+import data.DAOs.Room_DAO;
+import data.Tables.Builder_Table;
+import data.Tables.CannedComment_Table;
+import data.Tables.DefectCategory_Table;
+import data.Tables.DefectItem_Table;
+import data.Tables.Direction_Table;
+import data.Tables.InspectionDefect_Table;
+import data.Tables.InspectionResolution_Table;
+import data.Tables.Inspection_Table;
+import data.Tables.Location_Table;
+import data.Tables.Room_Table;
 
 @Database(entities = {
         Builder_Table.class,
@@ -27,7 +45,9 @@ import java.util.concurrent.Executors;
         InspectionResolution_Table.class,
         Location_Table.class,
         Room_Table.class
-}, version = 1, exportSchema = false)
+        }, views = {
+        RouteSheet_View.class
+        }, version = 2, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -65,17 +85,16 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
             // If you want to keep data through app restarts, comment out the following block
             databaseWriteExecutor.execute(() -> {
                 // Populate the database in the background. If you want to start with more data, just add it!
-                Inspection_DAO dao = INSTANCE.mInspectionDao();
-                dao.deleteAll();
+                Location_DAO locationDao = INSTANCE.mLocationDao();
+                locationDao.deleteAll();
+                Location_Table newLocation = new Location_Table(1, "1111 One Avenue", 75068, "Dallas", "TX", "Two Tree Estates");
+                locationDao.insert(newLocation);
 
+                Inspection_DAO inspectionDao = INSTANCE.mInspectionDao();
+                inspectionDao.deleteAll();
                 Inspection_Table newInspection = new Inspection_Table(1, 1001, new Date(System.currentTimeMillis()), 1, "Sup Williams", 1, "Pre-Drywall", "Notes go here", false, false);
-                dao.insert(newInspection);
+                inspectionDao.insert(newInspection);
             });
         }
     };
-
-    public static List<Inspection_Table> getInspections() {
-        Inspection_DAO dao = INSTANCE.mInspectionDao();
-        return (List<Inspection_Table>) dao.getInspections();
-    }
 }

@@ -1,4 +1,4 @@
-package data;
+package data.Tables;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -7,6 +7,8 @@ import androidx.room.TypeConverters;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
+
+import data.DateConverter;
 
 @Entity(tableName = "inspection_table")
 public class Inspection_Table {

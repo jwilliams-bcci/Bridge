@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import data.DataManager;
-import data.Inspection;
-import data.Inspection_Table;
+import data.Tables.Inspection_Table;
 import data.Location;
 
 public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRecyclerAdapter.ViewHolder> {

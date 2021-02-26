@@ -1,4 +1,4 @@
-package data;
+package data.Tables;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

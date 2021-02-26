@@ -2,20 +2,13 @@ package com.example.bridge;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
-import java.util.List;
-
-import data.BridgeRoomDatabase;
-import data.DataManager;
-import data.Inspection;
-import data.Inspection_DAO;
-import data.Inspection_Table;
-import data.Room;
 
 public class RouteSheetActivity extends AppCompatActivity {
+    private InspectionViewModel mInspectionViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +21,13 @@ public class RouteSheetActivity extends AppCompatActivity {
 
     private void initializeDisplayContent() {
         RecyclerView recyclerInspections = findViewById(R.id.route_sheet_list_inspections);
+        final InspectionListAdapter adapter = new InspectionListAdapter(new InspectionListAdapter.InspectionDiff());
+        recyclerInspections.setAdapter(adapter);
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 
-        //List<Inspection> inspections = DataManager.getInstance().getInspections();
-        List<Inspection_Table> inspections = BridgeRoomDatabase.getInspections();
-        recyclerInspections.setAdapter(new InspectionRecyclerAdapter(this, inspections));
+        mInspectionViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectionViewModel.class);
+        mInspectionViewModel.getAllInspectionsForRouteSheet().observe(this, inspections -> {
+            adapter.submitList(inspections);
+        });
     }
 }

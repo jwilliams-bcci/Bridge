@@ -1,4 +1,4 @@
-package data;
+package data.DAOs;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -8,14 +8,16 @@ import androidx.room.Query;
 
 import java.util.List;
 
-@Dao
-public interface Location_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(Location_Table location);
+import data.Tables.Room_Table;
 
-    @Query("DELETE FROM location_table")
+@Dao
+public interface Room_DAO {
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    void insert(Room_Table room);
+
+    @Query("DELETE FROM room_table")
     void deleteAll();
 
-    @Query("SELECT * FROM location_table ORDER BY id ASC")
-    LiveData<List<Location_Table>> getLocations();
+    @Query("SELECT * FROM room_table ORDER BY id ASC")
+    LiveData<List<Room_Table>> getRooms();
 }

@@ -1,4 +1,4 @@
-package data;
+package data.DAOs;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -7,6 +7,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
+
+import data.Tables.InspectionDefect_Table;
 
 @Dao
 public interface InspectionDefect_DAO {
