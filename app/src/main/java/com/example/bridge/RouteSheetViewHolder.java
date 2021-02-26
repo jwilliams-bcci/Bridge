@@ -8,13 +8,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class InspectionViewHolder extends RecyclerView.ViewHolder {
+public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     private final TextView mInspectionCommunity;
     private final TextView mInspectionAddress;
     private final TextView mInspectionType;
     private final TextView mInspectionNotes;
 
-    public InspectionViewHolder(@NonNull View itemView) {
+    public RouteSheetViewHolder(@NonNull View itemView) {
         super(itemView);
         mInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
         mInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
@@ -29,8 +29,8 @@ public class InspectionViewHolder extends RecyclerView.ViewHolder {
         mInspectionNotes.setText(notes);
     }
 
-    public static InspectionViewHolder create(ViewGroup parent) {
+    public static RouteSheetViewHolder create(ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inspection_list, parent, false);
-        return new InspectionViewHolder(view);
+        return new RouteSheetViewHolder(view);
     }
 }

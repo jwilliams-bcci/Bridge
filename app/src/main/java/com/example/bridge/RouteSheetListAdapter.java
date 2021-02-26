@@ -8,19 +8,19 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import data.RouteSheet_View;
 
-public class InspectionListAdapter extends ListAdapter<RouteSheet_View, InspectionViewHolder> {
-    protected InspectionListAdapter(@NonNull InspectionDiff diffCallback) {
+public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> {
+    protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
     }
 
     @NonNull
     @Override
-    public InspectionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return InspectionViewHolder.create(parent);
+    public RouteSheetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return RouteSheetViewHolder.create(parent);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull InspectionViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
         RouteSheet_View current = getItem(position);
         holder.bind(current.community, current.address, current.inspection_type, current.notes);
     }

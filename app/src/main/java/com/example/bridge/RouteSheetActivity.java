@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 public class RouteSheetActivity extends AppCompatActivity {
-    private InspectionViewModel mInspectionViewModel;
+    private RouteSheetViewModel mRouteSheetViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +21,12 @@ public class RouteSheetActivity extends AppCompatActivity {
 
     private void initializeDisplayContent() {
         RecyclerView recyclerInspections = findViewById(R.id.route_sheet_list_inspections);
-        final InspectionListAdapter adapter = new InspectionListAdapter(new InspectionListAdapter.InspectionDiff());
+        final RouteSheetListAdapter adapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
         recyclerInspections.setAdapter(adapter);
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 
-        mInspectionViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectionViewModel.class);
-        mInspectionViewModel.getAllInspectionsForRouteSheet().observe(this, inspections -> {
+        mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
+        mRouteSheetViewModel.getAllInspectionsForRouteSheet().observe(this, inspections -> {
             adapter.submitList(inspections);
         });
     }

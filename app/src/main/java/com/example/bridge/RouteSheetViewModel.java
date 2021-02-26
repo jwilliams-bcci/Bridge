@@ -12,11 +12,11 @@ import data.InspectionRepository;
 import data.Tables.Inspection_Table;
 import data.RouteSheet_View;
 
-public class InspectionViewModel extends AndroidViewModel {
+public class RouteSheetViewModel extends AndroidViewModel {
     private InspectionRepository mRepository;
     private final LiveData<List<RouteSheet_View>> mAllInspectionsForRouteSheet;
 
-    public InspectionViewModel(@NonNull Application application) {
+    public RouteSheetViewModel(@NonNull Application application) {
         super(application);
         mRepository = new InspectionRepository(application);
         mAllInspectionsForRouteSheet = mRepository.getAllInspectionsForRouteSheet();
