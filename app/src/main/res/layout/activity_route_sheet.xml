@@ -35,44 +35,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/route_sheet_button_order_route_sheet_text"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/route_sheet_button_print_route_sheet"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
-
-    <Button
-        android:id="@+id/route_sheet_button_print_route_sheet"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/route_sheet_button_print_route_sheet_text"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/route_sheet_button_order_route_sheet"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
-
-    <EditText
-        android:id="@+id/route_sheet_text_search_community"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:autofillHints="@string/route_sheet_text_search_community_hint"
-        android:ems="10"
-        android:hint="@string/route_sheet_text_search_community_hint"
-        android:inputType="textPersonName"
-        android:singleLine="false"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_address"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_order_route_sheet" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_update_route_sheet" />
 
     <EditText
         android:id="@+id/route_sheet_text_search_address"
@@ -105,6 +74,23 @@
         app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
 
     <EditText
+        android:id="@+id/route_sheet_text_search_community"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:autofillHints="@string/route_sheet_text_search_community_hint"
+        android:ems="10"
+        android:hint="@string/route_sheet_text_search_community_hint"
+        android:inputType="textPersonName"
+        android:singleLine="false"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_address"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_order_route_sheet" />
+
+    <EditText
         android:id="@+id/route_sheet_text_search_inspection_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -120,6 +106,20 @@
         app:layout_constraintStart_toEndOf="@+id/route_sheet_text_search_inspection_type"
         app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
 
+    <Button
+        android:id="@+id/route_sheet_button_print_route_sheet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/route_sheet_button_print_route_sheet_text"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/route_sheet_button_order_route_sheet"
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_update_route_sheet" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/route_sheet_list_inspections"
         android:layout_width="0dp"
@@ -134,4 +134,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/route_sheet_text_search_community"
         tools:listitem="@layout/item_inspection_list" />
+
+    <Button
+        android:id="@+id/route_sheet_button_update_route_sheet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="Update Route Sheet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -85,15 +85,15 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
             // If you want to keep data through app restarts, comment out the following block
             databaseWriteExecutor.execute(() -> {
                 // Populate the database in the background. If you want to start with more data, just add it!
-                Location_DAO locationDao = INSTANCE.mLocationDao();
-                locationDao.deleteAll();
-                Location_Table newLocation = new Location_Table(1, "1111 One Avenue", 75068, "Dallas", "TX", "Two Tree Estates");
-                locationDao.insert(newLocation);
-
-                Inspection_DAO inspectionDao = INSTANCE.mInspectionDao();
-                inspectionDao.deleteAll();
-                Inspection_Table newInspection = new Inspection_Table(1, 1001, new Date(System.currentTimeMillis()), 1, "Sup Williams", 1, "Pre-Drywall", "Notes go here", false, false);
-                inspectionDao.insert(newInspection);
+//                Location_DAO locationDao = INSTANCE.mLocationDao();
+//                locationDao.deleteAll();
+//                Location_Table newLocation = new Location_Table(1, "1111 One Avenue", 75068, "Dallas", "TX", "Two Tree Estates");
+//                locationDao.insert(newLocation);
+//
+//                Inspection_DAO inspectionDao = INSTANCE.mInspectionDao();
+//                inspectionDao.deleteAll();
+//                Inspection_Table newInspection = new Inspection_Table(1, 1001, new Date(System.currentTimeMillis()), 1, "Sup Williams", 1, "Pre-Drywall", "Notes go here", false, false);
+//                inspectionDao.insert(newInspection);
             });
         }
     };

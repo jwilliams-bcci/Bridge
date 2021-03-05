@@ -36,7 +36,7 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Inspection_Table inspection = mInspectionList.get(position);
         Location location = DataManager.getInstance().getLocation(inspection.location_id);
-        holder.mInspectionId = inspection.inspection_number;
+        holder.mInspectionId = inspection.id;
         holder.mBuilderId = inspection.builder_id;
         holder.mLocationId = inspection.location_id;
         holder.mTextCommunity.setText(location.getCommunity());
