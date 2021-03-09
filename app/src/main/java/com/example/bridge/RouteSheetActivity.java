@@ -2,6 +2,8 @@ package com.example.bridge;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,9 +34,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import data.RouteSheet_View;
 import data.Tables.Inspection_Table;
 
 public class RouteSheetActivity extends AppCompatActivity {
@@ -52,13 +56,14 @@ public class RouteSheetActivity extends AppCompatActivity {
 
         Button buttonOrderRouteSheet = findViewById(R.id.route_sheet_button_order_route_sheet);
         buttonOrderRouteSheet.setOnClickListener(v -> {
-            Toast.makeText(getApplicationContext(), sharedPreferences.getString("AuthorizationToken", "aaa"), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Order route sheet", Toast.LENGTH_LONG).show();
         });
 
         Button buttonUpdateRouteSheet = findViewById(R.id.route_sheet_button_update_route_sheet);
         buttonUpdateRouteSheet.setOnClickListener(v -> {
             //Toast.makeText(getApplicationContext(), "Updating route sheet for InspectorID " + sharedPreferences.getString("InspectorId", "NULL"), Toast.LENGTH_LONG).show();
             updateRouteSheet();
+            Toast.makeText(getApplicationContext(), "Route sheet updated.", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -69,9 +74,8 @@ public class RouteSheetActivity extends AppCompatActivity {
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 
         mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
-        mRouteSheetViewModel.getAllInspectionsForRouteSheet().observe(this, inspections -> {
-            adapter.submitList(inspections);
-        });
+        mRouteSheetViewModel.getAllInspectionsForRouteSheet().observe(this, inspections ->
+                adapter.submitList(inspections));
     }
 
     private void updateRouteSheet() {

@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import data.RouteSheet_View;
+import data.Tables.Inspection_Table;
 
-public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> {
+public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSheetViewHolder> {
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
     }
@@ -21,19 +22,19 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     @Override
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
-        RouteSheet_View current = getItem(position);
+        Inspection_Table current = getItem(position);
         holder.bind(current.community, current.address, current.inspection_type, current.notes);
     }
 
-    public static class InspectionDiff extends DiffUtil.ItemCallback<RouteSheet_View> {
+    public static class InspectionDiff extends DiffUtil.ItemCallback<Inspection_Table> {
         @Override
-        public boolean areItemsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
+        public boolean areItemsTheSame(@NonNull Inspection_Table oldItem, @NonNull Inspection_Table newItem) {
             return oldItem == newItem;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
-            return oldItem.inspection_id == newItem.inspection_id;
+        public boolean areContentsTheSame(@NonNull Inspection_Table oldItem, @NonNull Inspection_Table newItem) {
+            return oldItem.id == newItem.id;
         }
     }
 }

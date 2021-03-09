@@ -11,15 +11,15 @@ import data.Tables.Inspection_Table;
 
 public class InspectionRepository {
     private Inspection_DAO mInspectionDao;
-    private LiveData<List<RouteSheet_View>> mAllInspectionsForRouteSheet;
+    private LiveData<List<Inspection_Table>> mAllInspectionsForRouteSheet;
 
     public InspectionRepository(Application application) {
         BridgeRoomDatabase db = BridgeRoomDatabase.getDatabase(application);
         mInspectionDao = db.mInspectionDao();
-        mAllInspectionsForRouteSheet = mInspectionDao.getInspectionsForRouteSheet();
+        mAllInspectionsForRouteSheet = mInspectionDao.getInspections();
     }
 
-    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet() {
+    public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet() {
         return mAllInspectionsForRouteSheet;
     }
 

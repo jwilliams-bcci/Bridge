@@ -61,10 +61,10 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mTextCommunity = (TextView) itemView.findViewById(R.id.text_recycler_community);
-            mTextAddress = (TextView) itemView.findViewById(R.id.text_recycler_address);
-            mTextInspectionType = (TextView) itemView.findViewById(R.id.text_recycler_inspection_type);
-            mTextInspectionNotes = (TextView) itemView.findViewById(R.id.text_recycler_inspection_notes);
+            mTextCommunity = itemView.findViewById(R.id.text_recycler_community);
+            mTextAddress = itemView.findViewById(R.id.text_recycler_address);
+            mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
+            mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

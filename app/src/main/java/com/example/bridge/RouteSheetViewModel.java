@@ -14,7 +14,7 @@ import data.RouteSheet_View;
 
 public class RouteSheetViewModel extends AndroidViewModel {
     private InspectionRepository mRepository;
-    private final LiveData<List<RouteSheet_View>> mAllInspectionsForRouteSheet;
+    private final LiveData<List<Inspection_Table>> mAllInspectionsForRouteSheet;
 
     public RouteSheetViewModel(@NonNull Application application) {
         super(application);
@@ -22,7 +22,7 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mAllInspectionsForRouteSheet = mRepository.getAllInspectionsForRouteSheet();
     }
 
-    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet() {
+    public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet() {
         return mAllInspectionsForRouteSheet;
     }
 

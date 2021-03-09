@@ -1,9 +1,12 @@
 package com.example.bridge;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +23,9 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
         mInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
         mInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
+
+        itemView.setOnClickListener(v -> {
+        });
     }
 
     public void bind(String community, String address, String inspectionType, String notes) {
