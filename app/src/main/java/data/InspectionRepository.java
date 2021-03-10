@@ -19,6 +19,10 @@ public class InspectionRepository {
         mAllInspectionsForRouteSheet = mInspectionDao.getInspections();
     }
 
+    public LiveData<Inspection_Table> getInspection(int inspection_id) {
+        return mInspectionDao.getInspection(inspection_id);
+    }
+
     public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet() {
         return mAllInspectionsForRouteSheet;
     }

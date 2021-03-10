@@ -21,4 +21,7 @@ public interface Inspection_DAO {
 
     @Query("SELECT * FROM inspection_table ORDER BY id ASC")
     LiveData<List<Inspection_Table>> getInspections();
+
+    @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
+    LiveData<Inspection_Table> getInspection(int inspection_id);
 }

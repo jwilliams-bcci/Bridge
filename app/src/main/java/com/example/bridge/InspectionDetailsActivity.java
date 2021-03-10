@@ -1,17 +1,25 @@
 package com.example.bridge;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+
 import data.Builder;
 import data.DataManager;
 import data.Inspection;
 import data.Location;
+import data.Tables.Inspection_Table;
 
 public class InspectionDetailsActivity extends AppCompatActivity {
+    private InspectionDetailsViewModel mInspectionDetailsViewModel;
+    private SharedPreferences mSharedPreferences;
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
     public static final String BUILDER_ID = "com.example.bridge.BUILDER_ID";
     public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
@@ -19,6 +27,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     public static final int BUILDER_ID_NOT_SET = -1;
     public static final int LOCATION_ID_NOT_SET = -1;
     private int mInspectionId;
+    private LiveData<Inspection_Table> mInspection;
     private int mBuilderId;
     private int mLocationId;
 
@@ -26,17 +35,18 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspection_details);
-        setSupportActionBar((Toolbar) findViewById(R.id.inspection_details_toolbar));
+        setSupportActionBar(findViewById(R.id.inspection_details_toolbar));
+        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
 
         Intent intent = getIntent();
+        mInspectionDetailsViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectionDetailsViewModel.class);
         TextView textAddress = findViewById(R.id.inspection_details_text_inspection_address);
         TextView textBuilder = findViewById(R.id.inspection_details_text_builder);
         TextView textSuperintendent = findViewById(R.id.inspection_details_text_superintendent);
         TextView textNotes = findViewById(R.id.inspection_details_text_notes);
 
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_SET);
-        mBuilderId = intent.getIntExtra(BUILDER_ID, BUILDER_ID_NOT_SET);
-        mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_SET);
+        mInspection = mInspectionDetailsViewModel.getInspection(mInspectionId);
 
         Button inspectButton = findViewById(R.id.inspection_details_button_inspect);
         inspectButton.setOnClickListener(view -> {
@@ -82,18 +92,20 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     }
 
     private void displayAddress(TextView textAddress) {
-        Inspection inspection = DataManager.getInstance().getInspection(mInspectionId);
-        Location location = DataManager.getInstance().getLocation(inspection.getLocationId());
-        textAddress.append(location.getCommunity() + "\n");
-        textAddress.append(location.getFullAddress() + "\n");
-        textAddress.append(inspection.getInspectionType());
+        //Inspection inspection = DataManager.getInstance().getInspection(mInspectionId);
+        //Location location = DataManager.getInstance().getLocation(inspection.getLocationId());
+        mInspection.observe(this, insp -> {
+            textAddress.append(insp.community + "\n");
+            textAddress.append(insp.address + "\n");
+            textAddress.append(insp.inspection_type);
+        });
     }
 
     private void displayInspectionSummary(TextView textBuilder, TextView textSuperintendent, TextView textNotes) {
-        Inspection inspection = DataManager.getInstance().getInspection(mInspectionId);
-        Builder builder = DataManager.getInstance().getBuilder(mBuilderId);
-        textBuilder.setText(builder.getBuilderName());
-        textSuperintendent.setText(inspection.getSuperintendent());
-        textNotes.setText(inspection.getNotes());
+        mInspection.observe(this, insp -> {
+            textBuilder.setText(insp.builder_name);
+            textSuperintendent.setText(insp.super_name);
+            textNotes.setText(insp.notes);
+        });
     }
 }

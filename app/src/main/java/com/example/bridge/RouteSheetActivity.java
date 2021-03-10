@@ -1,9 +1,6 @@
 package com.example.bridge;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +17,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -32,25 +28,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import data.RouteSheet_View;
 import data.Tables.Inspection_Table;
 
 public class RouteSheetActivity extends AppCompatActivity {
     private RouteSheetViewModel mRouteSheetViewModel;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_sheet);
         setSupportActionBar(findViewById(R.id.route_sheet_toolbar));
-        sharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
 
         initializeDisplayContent();
 
@@ -85,7 +78,7 @@ public class RouteSheetActivity extends AppCompatActivity {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "https://apistage.burgess-inc.com/api/Bridge/GetInspections?inspectorid="
-                + sharedPreferences.getString("InspectorId", "NULL")
+                + mSharedPreferences.getString("InspectorId", "NULL")
                 + "&inspectiondate=" + formatter.format(LocalDateTime.now());
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -135,7 +128,7 @@ public class RouteSheetActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("Authorization", "Bearer " + sharedPreferences.getString("AuthorizationToken", "NULL"));
+                params.put("Authorization", "Bearer " + mSharedPreferences.getString("AuthorizationToken", "NULL"));
                 return params;
             }
         };

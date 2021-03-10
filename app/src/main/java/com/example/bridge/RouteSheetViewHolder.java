@@ -12,27 +12,35 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
-    private final TextView mInspectionCommunity;
-    private final TextView mInspectionAddress;
-    private final TextView mInspectionType;
-    private final TextView mInspectionNotes;
+    public int mInspectionId;
+    public int mBuilderName;
+    public String mInspectionAddress;
+
+    private final TextView mTextInspectionCommunity;
+    private final TextView mTextInspectionAddress;
+    private final TextView mTextInspectionType;
+    private final TextView mTextInspectionNotes;
 
     public RouteSheetViewHolder(@NonNull View itemView) {
         super(itemView);
-        mInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
-        mInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
-        mInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
-        mInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
+        mTextInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
+        mTextInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
+        mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
+        mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
 
         itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
+            intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
+            Toast.makeText(v.getContext(), "Inspection selected", Toast.LENGTH_SHORT).show();
+            v.getContext().startActivity(intent);
         });
     }
 
     public void bind(String community, String address, String inspectionType, String notes) {
-        mInspectionCommunity.setText(community);
-        mInspectionAddress.setText(address);
-        mInspectionType.setText(inspectionType);
-        mInspectionNotes.setText(notes);
+        mTextInspectionCommunity.setText(community);
+        mTextInspectionAddress.setText(address);
+        mTextInspectionType.setText(inspectionType);
+        mTextInspectionNotes.setText(notes);
     }
 
     public static RouteSheetViewHolder create(ViewGroup parent) {
