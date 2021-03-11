@@ -1,4 +1,4 @@
-package data;
+package data.Repositories;
 
 import android.app.Application;
 
@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import data.BridgeRoomDatabase;
 import data.DAOs.DefectItem_DAO;
 import data.Tables.DefectItem_Table;
 

@@ -8,9 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import data.InspectionRepository;
+import data.Repositories.InspectionRepository;
 import data.Tables.Inspection_Table;
-import data.RouteSheet_View;
 
 public class RouteSheetViewModel extends AndroidViewModel {
     private InspectionRepository mRepository;

@@ -80,51 +80,43 @@ public class RouteSheetActivity extends AppCompatActivity {
         String url = "https://apistage.burgess-inc.com/api/Bridge/GetInspections?inspectorid="
                 + mSharedPreferences.getString("InspectorId", "NULL")
                 + "&inspectiondate=" + formatter.format(LocalDateTime.now());
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject obj = response.getJSONObject(i);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
 
-                        inspection.id = obj.optInt("InspectionID");
-                        inspection.inspection_date = format.parse(obj.getString("InspectionDate"));
-                        inspection.location_id = obj.optInt("LocationID");
-                        inspection.builder_name = obj.getString("BuilderName");
-                        inspection.builder_id = obj.optInt("BuilderID");
-                        inspection.super_name = obj.getString("SuperName");
-                        inspection.inspector = obj.getString("Inspector");
-                        inspection.community = obj.getString("Community");
-                        inspection.community_id = obj.optInt("CommunityID");
-                        inspection.city = obj.getString("City");
-                        inspection.inspection_type = obj.getString("InspectionType");
-                        inspection.reinspect = obj.getBoolean("ReInspect");
-                        inspection.address = obj.getString("Address1");
-                        inspection.inspection_status_id = obj.optInt("InspectionStatusID");
-                        inspection.inspection_status = obj.getString("InspectionStatus");
-                        inspection.super_phone = obj.getString("SuperPhone");
-                        inspection.super_email = obj.getString("SuperEmailAddress");
-                        inspection.super_present = obj.optInt("SuperintendentPresent");
-                        inspection.incomplete_reason = obj.getString("IncompleteReason");
-                        inspection.incomplete_reason_id = obj.optInt("IncompleteReasonID");
-                        inspection.notes = obj.getString("Comment");
-                        inspection.is_complete = false;
-                        inspection.is_uploaded = false;
+                    inspection.id = obj.optInt("InspectionID");
+                    inspection.inspection_date = format.parse(obj.getString("InspectionDate"));
+                    inspection.location_id = obj.optInt("LocationID");
+                    inspection.builder_name = obj.getString("BuilderName");
+                    inspection.builder_id = obj.optInt("BuilderID");
+                    inspection.super_name = obj.getString("SuperName");
+                    inspection.inspector = obj.getString("Inspector");
+                    inspection.community = obj.getString("Community");
+                    inspection.community_id = obj.optInt("CommunityID");
+                    inspection.city = obj.getString("City");
+                    inspection.inspection_type = obj.getString("InspectionType");
+                    inspection.reinspect = obj.getBoolean("ReInspect");
+                    inspection.address = obj.getString("Address1");
+                    inspection.inspection_status_id = obj.optInt("InspectionStatusID");
+                    inspection.inspection_status = obj.getString("InspectionStatus");
+                    inspection.super_phone = obj.getString("SuperPhone");
+                    inspection.super_email = obj.getString("SuperEmailAddress");
+                    inspection.super_present = obj.optInt("SuperintendentPresent");
+                    inspection.incomplete_reason = obj.getString("IncompleteReason");
+                    inspection.incomplete_reason_id = obj.optInt("IncompleteReasonID");
+                    inspection.notes = obj.getString("Comment");
+                    inspection.is_complete = false;
+                    inspection.is_uploaded = false;
 
-                        mRouteSheetViewModel.insert(inspection);
-                    } catch (JSONException e) {
-                        Toast.makeText(getApplicationContext(), "Error with getting JSON " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    } catch (ParseException e) {
-                        Toast.makeText(getApplicationContext(), "Error in parsing date", Toast.LENGTH_SHORT).show();
-                    }
+                    mRouteSheetViewModel.insert(inspection);
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Error with getting JSON " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (ParseException e) {
+                    Toast.makeText(getApplicationContext(), "Error in parsing date", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Shit's fucked, yo " + error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }) {
+        }, error -> Toast.makeText(getApplicationContext(), "Shit's fucked, yo " + error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();

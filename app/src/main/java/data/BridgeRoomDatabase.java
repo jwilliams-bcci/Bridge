@@ -47,7 +47,7 @@ import data.Tables.Room_Table;
         Room_Table.class
         }, views = {
         RouteSheet_View.class
-        }, version = 2, exportSchema = false)
+        }, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -62,7 +62,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Room_DAO mRoomDao();
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -70,6 +70,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), BridgeRoomDatabase.class, "bridge_database")
                             .addCallback(sRoomDatabaseCallback)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

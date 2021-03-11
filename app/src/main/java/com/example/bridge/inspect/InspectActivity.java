@@ -1,6 +1,8 @@
-package com.example.bridge;
+package com.example.bridge.inspect;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -9,17 +11,19 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bridge.DefectItemRecyclerAdapter;
+import com.example.bridge.R;
+import com.example.bridge.ReviewAndSubmitActivity;
 
 import java.util.List;
 
 import data.DataManager;
 import data.DefectCategory;
-import data.DefectItem;
-import data.InspectDefectListItem;
 import data.Inspection;
-import data.InspectionResolution;
 import data.Location;
 
 public class InspectActivity extends AppCompatActivity {
@@ -30,12 +34,15 @@ public class InspectActivity extends AppCompatActivity {
     private int mInspectionId;
     private int mLocationId;
     private Spinner mSpinnerDefectCategories;
+    private InspectViewModel mInspectViewModel;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspect);
         setSupportActionBar((Toolbar) findViewById(R.id.inspect_toolbar));
+        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
 
         Intent intent = getIntent();
         TextView textAddress = findViewById(R.id.inspect_text_inspection_address);
@@ -44,8 +51,10 @@ public class InspectActivity extends AppCompatActivity {
         mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_FOUND);
         mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
 
-        displayAddress(textAddress);
-        fillSpinner(mSpinnerDefectCategories);
+        mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
+
+        //displayAddress(textAddress);
+        //fillSpinner(mSpinnerDefectCategories);
         displayDefectItems();
 
         Button buttonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
@@ -73,12 +82,12 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void displayDefectItems() {
-        final RecyclerView recyclerDefectItems = (RecyclerView) findViewById(R.id.inspect_list_defect_items);
-        final LinearLayoutManager defectItemsLayoutManager = new LinearLayoutManager(this);
-        recyclerDefectItems.setLayoutManager(defectItemsLayoutManager);
+        RecyclerView recyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
+        final InspectListAdapter adapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
+        recyclerDefectItems.setAdapter(adapter);
+        recyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
 
-        List defectItems = DataManager.getInstance().getInspectDefectList();
-        final DefectItemRecyclerAdapter defectItemRecyclerAdapter = new DefectItemRecyclerAdapter(this, defectItems);
-        recyclerDefectItems.setAdapter(defectItemRecyclerAdapter);
+        mInspectViewModel.getAllDefectItems().observe(this, defectItems ->
+                adapter.submitList(defectItems));
     }
 }

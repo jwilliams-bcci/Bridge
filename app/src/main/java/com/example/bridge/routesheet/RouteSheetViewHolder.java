@@ -33,7 +33,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
             intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
-            Toast.makeText(v.getContext(), "Inspection selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(v.getContext(), "Inspection " + mInspectionId + " selected", Toast.LENGTH_SHORT).show();
             v.getContext().startActivity(intent);
         });
     }
