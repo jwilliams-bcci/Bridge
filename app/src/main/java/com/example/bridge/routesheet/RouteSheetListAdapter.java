@@ -1,4 +1,4 @@
-package com.example.bridge;
+package com.example.bridge.routesheet;
 
 import android.view.ViewGroup;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import data.RouteSheet_View;
 import data.Tables.Inspection_Table;
 
 public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSheetViewHolder> {

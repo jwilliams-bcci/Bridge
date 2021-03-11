@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey;
 public class DefectItem_Table {
     @PrimaryKey
     public int id;
-    public int defect_category_id;
     public int item_number;
     public String item_description;
+    public int defect_category_id;
+    public String category_name;
 }

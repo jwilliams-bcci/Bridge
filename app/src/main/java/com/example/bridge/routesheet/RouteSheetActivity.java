@@ -1,4 +1,4 @@
-package com.example.bridge;
+package com.example.bridge.routesheet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.bridge.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +55,6 @@ public class RouteSheetActivity extends AppCompatActivity {
 
         Button buttonUpdateRouteSheet = findViewById(R.id.route_sheet_button_update_route_sheet);
         buttonUpdateRouteSheet.setOnClickListener(v -> {
-            //Toast.makeText(getApplicationContext(), "Updating route sheet for InspectorID " + sharedPreferences.getString("InspectorId", "NULL"), Toast.LENGTH_LONG).show();
             updateRouteSheet();
             Toast.makeText(getApplicationContext(), "Route sheet updated.", Toast.LENGTH_SHORT).show();
         });

@@ -62,7 +62,7 @@
             android:name=".UploadProgress"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".RouteSheetActivity"
+            android:name=".routesheet.RouteSheetActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 

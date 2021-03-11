@@ -18,6 +18,6 @@ public interface DefectItem_DAO {
     @Query("DELETE FROM defect_item_table")
     void deleteAll();
 
-    @Query("SELECT * FROM defect_item_table ORDER BY id ASC")
+    @Query("SELECT * FROM defect_item_table ORDER BY defect_category_id, item_number ASC")
     LiveData<List<DefectItem_Table>> getDefectItems();
 }
