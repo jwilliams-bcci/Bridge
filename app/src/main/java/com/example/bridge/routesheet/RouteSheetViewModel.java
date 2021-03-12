@@ -12,20 +12,18 @@ import data.Repositories.InspectionRepository;
 import data.Tables.Inspection_Table;
 
 public class RouteSheetViewModel extends AndroidViewModel {
-    private InspectionRepository mRepository;
-    private final LiveData<List<Inspection_Table>> mAllInspectionsForRouteSheet;
+    private InspectionRepository mInspectionRepository;
 
     public RouteSheetViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new InspectionRepository(application);
-        mAllInspectionsForRouteSheet = mRepository.getAllInspectionsForRouteSheet();
+        mInspectionRepository = new InspectionRepository(application);
     }
 
     public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet() {
-        return mAllInspectionsForRouteSheet;
+        return mInspectionRepository.getAllInspectionsForRouteSheet();
     }
 
     public void insert(Inspection_Table inspection) {
-        mRepository.insert(inspection);
+        mInspectionRepository.insert(inspection);
     }
 }

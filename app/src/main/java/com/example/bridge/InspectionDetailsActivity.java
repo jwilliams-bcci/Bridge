@@ -90,12 +90,10 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     }
 
     private void displayAddress(TextView textAddress) {
-        //Inspection inspection = DataManager.getInstance().getInspection(mInspectionId);
-        //Location location = DataManager.getInstance().getLocation(inspection.getLocationId());
-        mInspection.observe(this, insp -> {
-            textAddress.append(insp.community + "\n");
-            textAddress.append(insp.address + "\n");
-            textAddress.append(insp.inspection_type);
+        mInspection.observe(this, inspection -> {
+            textAddress.append(inspection.community + "\n");
+            textAddress.append(inspection.address + "\n");
+            textAddress.append(inspection.inspection_type);
         });
     }
 

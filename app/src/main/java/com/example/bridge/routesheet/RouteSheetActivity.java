@@ -47,6 +47,7 @@ public class RouteSheetActivity extends AppCompatActivity {
         mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
 
         initializeDisplayContent();
+        updateRouteSheet();
 
         Button buttonOrderRouteSheet = findViewById(R.id.route_sheet_button_order_route_sheet);
         buttonOrderRouteSheet.setOnClickListener(v -> {
@@ -73,18 +74,15 @@ public class RouteSheetActivity extends AppCompatActivity {
 
     private void updateRouteSheet() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
-        Inspection_Table inspection = new Inspection_Table();
         DateFormat format = new SimpleDateFormat("MM-dd-YYYY", Locale.ENGLISH);
 
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://apistage.burgess-inc.com/api/Bridge/GetInspections?inspectorid="
-                + mSharedPreferences.getString("InspectorId", "NULL")
-                + "&inspectiondate=" + formatter.format(LocalDateTime.now());
+        String url = "https://apistage.burgess-inc.com/api/Bridge/GetInspections?inspectorid=" + mSharedPreferences.getString("InspectorId", "NULL") + "&inspectiondate=" + formatter.format(LocalDateTime.now());
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
                 try {
                     JSONObject obj = response.getJSONObject(i);
-
+                    Inspection_Table inspection = new Inspection_Table();
                     inspection.id = obj.optInt("InspectionID");
                     inspection.inspection_date = format.parse(obj.getString("InspectionDate"));
                     inspection.location_id = obj.optInt("LocationID");
@@ -116,7 +114,7 @@ public class RouteSheetActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Error in parsing date", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, error -> Toast.makeText(getApplicationContext(), "Shit's fucked, yo " + error.getMessage(), Toast.LENGTH_LONG).show()) {
+        }, error -> Toast.makeText(getApplicationContext(), "Error in updating route sheet " + error.getMessage(), Toast.LENGTH_LONG).show()) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();

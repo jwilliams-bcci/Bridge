@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -14,20 +15,31 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.example.bridge.BridgeAPIQueue;
 import com.example.bridge.R;
+import com.example.bridge.ServerCallback;
 import com.example.bridge.routesheet.RouteSheetActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import data.Tables.DefectItem_Table;
 
@@ -52,47 +64,63 @@ public class LoginActivity extends AppCompatActivity {
             String userName = textUserName.getText().toString();
             String password = textPassword.getText().toString();
 
-            RequestQueue queue = Volley.newRequestQueue(this);
-            JsonObjectRequest loginRequest = loginUser("https://apistage.burgess-inc.com/api/Bridge/Login?userName="+userName+"&password="+password);
-            JsonArrayRequest updateDefectItemsRequest = updateDefectItems("https://apistage.burgess-inc.com/api/Bridge/GetDefectItems");
+            RequestQueue queue = BridgeAPIQueue.getInstance(this).getRequestQueue();
+            JsonObjectRequest loginRequest = loginUser("https://apistage.burgess-inc.com/api/Bridge/Login?userName=" + userName + "&password=" + password, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+            });
+            JsonArrayRequest updateDefectItemsRequest = updateDefectItems("https://apistage.burgess-inc.com/api/Bridge/GetDefectItems", new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
+                    startActivity(routeSheetIntent);
+                }
+                @Override
+                public void onFailure() {
+
+                }
+            });
 
             queue.add(loginRequest);
             queue.add(updateDefectItemsRequest);
-            //queue.stop();
         });
     }
 
-    private JsonObjectRequest loginUser(String url) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-
+    private JsonObjectRequest loginUser(String url, final ServerCallback callBack) {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
-            try {
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                editor.putString("AuthorizationToken", response.getString("AuthorizationToken"));
-                editor.putString("SecurityUserId", response.getString("SecurityUserId"));
-                editor.putString("InspectorId", response.getString("InspectorId"));
-                editor.apply();
-            } catch (JSONException e) {
-                Toast.makeText(getApplicationContext(), "Incorrect Username / Password", Toast.LENGTH_SHORT).show();
-            }
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putString("AuthorizationToken", response.optString("AuthorizationToken"));
+            editor.putString("SecurityUserId", response.optString("SecurityUserId"));
+            editor.putString("InspectorId", response.optString("InspectorId"));
+            editor.apply();
+
+            callBack.onSuccess();
         }, error -> {
             NetworkResponse response = error.networkResponse;
             if (error instanceof AuthFailureError && response != null) {
                 Toast.makeText(getApplicationContext(), "Incorrect Username / Password", Toast.LENGTH_SHORT).show();
             }
-        });
+        }) {
+            @Override
+            protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
+                return super.parseNetworkResponse(response);
+            }
+        };
         return request;
     }
 
-    private JsonArrayRequest updateDefectItems(String url) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        DefectItem_Table defectItem = new DefectItem_Table();
-
+    private JsonArrayRequest updateDefectItems(String url, final ServerCallback callBack) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
                 try {
                     JSONObject obj = response.getJSONObject(i);
-
+                    DefectItem_Table defectItem = new DefectItem_Table();
                     defectItem.id = obj.optInt("DefectItemID");
                     defectItem.item_number = obj.optInt("ItemNumber");
                     defectItem.item_description = obj.optString("ItemDescription");
@@ -101,19 +129,22 @@ public class LoginActivity extends AppCompatActivity {
 
                     mLoginViewModel.insertDefectItem(defectItem);
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Error with getting JSON " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                } catch (Exception e) {
-                    Log.e("TAG", e.getMessage());
+                    Toast.makeText(getApplicationContext(), "Error in getting defect JSON", Toast.LENGTH_SHORT).show();
                 }
             }
-            Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
-            startActivity(routeSheetIntent);
-        }, error -> Toast.makeText(getApplicationContext(), "Shit's fucked, yo " + error.getMessage(), Toast.LENGTH_SHORT).show()) {
+            callBack.onSuccess();
+        }, error -> {
+            Toast.makeText(getApplicationContext(), "Error in updating defect items, Authorization token is " + mSharedPreferences.getString("AuthorizationToken","NULL"), Toast.LENGTH_SHORT).show();
+        }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Authorization", "Bearer " + mSharedPreferences.getString("AuthorizationToken", "NULL"));
                 return params;
+            }
+            @Override
+            protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+                return super.parseNetworkResponse(response);
             }
         };
         return request;

@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +26,7 @@ import data.DataManager;
 import data.DefectCategory;
 import data.Inspection;
 import data.Location;
+import data.Tables.Inspection_Table;
 
 public class InspectActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
@@ -36,6 +38,7 @@ public class InspectActivity extends AppCompatActivity {
     private Spinner mSpinnerDefectCategories;
     private InspectViewModel mInspectViewModel;
     private SharedPreferences mSharedPreferences;
+    private LiveData<Inspection_Table> mInspection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +53,11 @@ public class InspectActivity extends AppCompatActivity {
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
         mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_FOUND);
         mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
-
         mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
+        mInspection = mInspectViewModel.getInspection(mInspectionId);
 
-        //displayAddress(textAddress);
-        //fillSpinner(mSpinnerDefectCategories);
+        displayAddress(textAddress);
+        fillSpinner(mSpinnerDefectCategories);
         displayDefectItems();
 
         Button buttonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
@@ -67,18 +70,19 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void displayAddress(TextView textAddress) {
-        Inspection inspection = DataManager.getInstance().getInspection(mInspectionId);
-        Location location = DataManager.getInstance().getLocation(mLocationId);
-        textAddress.append(location.getCommunity() + "\n");
-        textAddress.append(location.getFullAddress() + "\n");
-        textAddress.append(inspection.getInspectionType());
+        mInspection.observe(this, inspection -> {
+            textAddress.append(inspection.community + "\n");
+            textAddress.append(inspection.address + "\n");
+            textAddress.append(inspection.inspection_type);
+        });
     }
 
     private void fillSpinner(Spinner spinnerDefectCategories) {
-        List<DefectCategory> defectCategories = DataManager.getInstance().getDefectCategories();
-        ArrayAdapter<DefectCategory> adapterDefectCategories = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, defectCategories);
-        adapterDefectCategories.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerDefectCategories.setAdapter(adapterDefectCategories);
+        mInspectViewModel.getDefectCategories().observe(this, defectCategories -> {
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, defectCategories);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerDefectCategories.setAdapter(adapter);
+        });
     }
 
     private void displayDefectItems() {

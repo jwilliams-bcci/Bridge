@@ -20,4 +20,10 @@ public interface DefectItem_DAO {
 
     @Query("SELECT * FROM defect_item_table ORDER BY defect_category_id, item_number ASC")
     LiveData<List<DefectItem_Table>> getDefectItems();
+
+    @Query("SELECT * FROM defect_item_table WHERE category_name = :categoryName ORDER BY item_number ASC")
+    LiveData<List<DefectItem_Table>> getDefectItemsFiltered(String categoryName);
+
+    @Query("SELECT DISTINCT category_name FROM defect_item_table ORDER BY defect_category_id ASC")
+    LiveData<List<String>> getDefectCategories();
 }

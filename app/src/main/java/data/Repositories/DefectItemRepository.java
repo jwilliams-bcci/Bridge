@@ -22,6 +22,14 @@ public class DefectItemRepository {
         return mDefectItemDao.getDefectItems();
     }
 
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String categoryName) {
+        return mDefectItemDao.getDefectItemsFiltered(categoryName);
+    }
+
+    public LiveData<List<String>> getDefectCategories() {
+        return mDefectItemDao.getDefectCategories();
+    }
+
     public void insert(DefectItem_Table defectItem) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
             mDefectItemDao.insert(defectItem);
