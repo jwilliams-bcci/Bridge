@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -58,7 +61,7 @@ public class InspectActivity extends AppCompatActivity {
 
         displayAddress(textAddress);
         fillSpinner(mSpinnerDefectCategories);
-        displayDefectItems();
+        displayDefectItems("ALL");
 
         Button buttonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
         buttonReviewAndSubmit.setOnClickListener(v -> {
@@ -83,15 +86,33 @@ public class InspectActivity extends AppCompatActivity {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerDefectCategories.setAdapter(adapter);
         });
+
+        spinnerDefectCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                displayDefectItems(parent.getSelectedItem().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
-    private void displayDefectItems() {
+    private void displayDefectItems(String filter) {
         RecyclerView recyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
         final InspectListAdapter adapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
         recyclerDefectItems.setAdapter(adapter);
         recyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
 
-        mInspectViewModel.getAllDefectItems().observe(this, defectItems ->
-                adapter.submitList(defectItems));
+        if (filter.equals("ALL")) {
+            mInspectViewModel.getAllDefectItems().observe(this, defectItems ->
+                    adapter.submitList(defectItems));
+        }
+        else {
+            mInspectViewModel.getAllDefectItemsFiltered(filter).observe(this, defectItems ->
+                    adapter.submitList(defectItems));
+        }
     }
 }
