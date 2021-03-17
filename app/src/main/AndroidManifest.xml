@@ -38,7 +38,7 @@
             android:name=".ReviewAndSubmitActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".DefectItemActivity"
+            android:name=".defectitem.DefectItemActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".EditResolutionActivity"

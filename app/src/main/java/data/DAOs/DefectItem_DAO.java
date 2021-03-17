@@ -26,4 +26,7 @@ public interface DefectItem_DAO {
 
     @Query("SELECT 'ALL' AS [category_name] UNION SELECT DISTINCT category_name FROM defect_item_table ORDER BY category_name ASC")
     LiveData<List<String>> getDefectCategories();
+
+    @Query("SELECT * FROM defect_item_table WHERE id = :defect_item_id")
+    LiveData<DefectItem_Table> getDefectItem(int defect_item_id);
 }

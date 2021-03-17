@@ -1,18 +1,25 @@
-package com.example.bridge;
+package com.example.bridge.defectitem;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 //import android.app.FragmentManager;
 //import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,10 +32,18 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.bridge.DirectionFragment;
+import com.example.bridge.FaultFragment;
+import com.example.bridge.LocationFragment;
+import com.example.bridge.R;
+import com.example.bridge.RoomFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,41 +52,57 @@ import java.util.Locale;
 import data.CannedComment;
 import data.DataManager;
 import data.DefectItem;
+import data.Tables.DefectItem_Table;
 
 public class DefectItemActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     public static final String DEFECT_ID = "com.example.bridge.DEFECT_ID";
     public static final int DEFECT_ID_NOT_FOUND = -1;
+    public static final int REQUEST_IMAGE_CAPTURE = 1;
+    public boolean pictureTaken = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
 
     private int mInspectionId;
     private int mDefectId;
+    private DefectItemViewModel mDefectItemViewModel;
+    private LiveData<DefectItem_Table> mDefectItem;
     private Spinner mSpinnerCannedComment;
+    private TextView mDefectItemDetails;
+    private TextView mDefectItemTextSpeech;
+    private ImageView mImageViewThumbnail;
+    private SharedPreferences mSharedPreferences;
+    private Button mSaveInspectionDefect;
+
+    // Fragments
     private LocationFragment mLocationFragment;
     private RoomFragment mRoomFragment;
     private DirectionFragment mDirectionFragment;
     private FaultFragment mFaultFragment;
-    private TextView mDefectItemTextSpeech;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect_item);
-        setSupportActionBar((Toolbar) findViewById(R.id.defect_item_toolbar));
+        setSupportActionBar(findViewById(R.id.defect_item_toolbar));
         checkPermission();
+        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
 
         Intent intent = getIntent();
-        TextView textDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
+        mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
 
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
+        mImageViewThumbnail = findViewById(R.id.defect_item_imageview_thumbnail);
+        mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
+        mDefectItem = mDefectItemViewModel.getDefectItem(mDefectId);
+
+        // Voice to text
         final Intent mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
         mSpeechRecognizer.setRecognitionListener(new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle bundle) {
@@ -151,11 +182,15 @@ public class DefectItemActivity extends AppCompatActivity {
             mFaultFragment.show(getSupportFragmentManager(), "TAG");
         });
 
+        mSaveInspectionDefect.setOnClickListener(v -> {
+
+        });
+
         ImageButton buttonCamera = findViewById(R.id.defect_item_button_camera);
         buttonCamera.setOnClickListener(view -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             try {
-                startActivityForResult(cameraIntent, 1);
+                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
             } catch (ActivityNotFoundException e) {
                 //error
             }
@@ -179,22 +214,24 @@ public class DefectItemActivity extends AppCompatActivity {
             return false;
         });
 
-        displayDefectDetails(textDefectItemDetails);
+        displayDefectDetails(mDefectItemDetails);
         fillSpinner(mSpinnerCannedComment);
     }
 
     private void displayDefectDetails(TextView textDefectItemDetails) {
-        DefectItem defectItem = DataManager.getInstance().getDefectItem(mDefectId);
-        textDefectItemDetails.append(Integer.toString(defectItem.getItemNumber()));
-        textDefectItemDetails.append(" - ");
-        textDefectItemDetails.append(defectItem.getItemDescription());
+        mDefectItem.observe(this, defectItem -> {
+            textDefectItemDetails.append(Integer.toString(defectItem.item_number));
+            textDefectItemDetails.append(" - ");
+            textDefectItemDetails.append(defectItem.item_description);
+        });
     }
 
-    private void fillSpinner(Spinner cannedCommentSpinner) {
-        List<CannedComment> cannedComments = DataManager.getInstance().getCannedComments();
-        ArrayAdapter<CannedComment> adapterCannedComments = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, cannedComments);
-        adapterCannedComments.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerCannedComment.setAdapter(adapterCannedComments);
+    private void fillSpinner(Spinner spinnerCannedComments) {
+        mDefectItemViewModel.getCannedComments().observe(this, cannedComments -> {
+            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, cannedComments);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCannedComments.setAdapter(adapter);
+        });
     }
 
     private void checkPermission() {
@@ -204,6 +241,21 @@ public class DefectItemActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
+        }
+    }
+
+    private void saveInspectionDefect() {
+        
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageViewThumbnail.setImageBitmap(imageBitmap);
+            pictureTaken = true;
         }
     }
 }

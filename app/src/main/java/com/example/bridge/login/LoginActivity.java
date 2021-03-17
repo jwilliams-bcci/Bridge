@@ -41,6 +41,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_Table;
 
 public class LoginActivity extends AppCompatActivity {
@@ -75,6 +76,17 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             });
+            JsonArrayRequest updateCannedCommentsRequest = updateCannedComments("https://apistage.burgess-inc.com/api/Bridge/GetCannedComments", new ServerCallback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onFailure() {
+
+                }
+            });
             JsonArrayRequest updateDefectItemsRequest = updateDefectItems("https://apistage.burgess-inc.com/api/Bridge/GetDefectItems", new ServerCallback() {
                 @Override
                 public void onSuccess() {
@@ -88,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
             });
 
             queue.add(loginRequest);
+            queue.add(updateCannedCommentsRequest);
             queue.add(updateDefectItemsRequest);
         });
     }
@@ -135,6 +148,37 @@ public class LoginActivity extends AppCompatActivity {
             callBack.onSuccess();
         }, error -> {
             Toast.makeText(getApplicationContext(), "Error in updating defect items, Authorization token is " + mSharedPreferences.getString("AuthorizationToken","NULL"), Toast.LENGTH_SHORT).show();
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Authorization", "Bearer " + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+            @Override
+            protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+                return super.parseNetworkResponse(response);
+            }
+        };
+        return request;
+    }
+
+    private JsonArrayRequest updateCannedComments(String url, final ServerCallback callBack) {
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    CannedComment_Table cannedComment = new CannedComment_Table();
+                    cannedComment.id = obj.optInt("CommentKey");
+                    cannedComment.text = obj.optString("Comment");
+
+                    mLoginViewModel.insertCannedComment(cannedComment);
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Error in getting Canned Comment JSON", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, error -> {
+            Toast.makeText(getApplicationContext(), "Error in updating Canned Comments, Authorization token is " + mSharedPreferences.getString("AuthorizationToken", "NULL"), Toast.LENGTH_SHORT).show();
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {

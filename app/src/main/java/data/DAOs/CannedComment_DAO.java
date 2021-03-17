@@ -18,6 +18,6 @@ public interface CannedComment_DAO {
     @Query("DELETE FROM canned_comment_table")
     void deleteAll();
 
-    @Query("SELECT * FROM canned_comment_table ORDER BY id ASC")
-    LiveData<List<CannedComment_Table>> getCannedComments();
+    @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table ORDER BY text ASC")
+    LiveData<List<String>> getCannedComments();
 }

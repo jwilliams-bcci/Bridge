@@ -18,6 +18,10 @@ public class DefectItemRepository {
         mDefectItemDao = db.mDefectItemDao();
     }
 
+    public LiveData<DefectItem_Table> getDefectItem(int defect_item_id) {
+        return mDefectItemDao.getDefectItem(defect_item_id);
+    }
+
     public LiveData<List<DefectItem_Table>> getAllDefectItems() {
         return mDefectItemDao.getDefectItems();
     }

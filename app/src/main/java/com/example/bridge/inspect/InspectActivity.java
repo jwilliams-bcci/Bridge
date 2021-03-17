@@ -47,7 +47,7 @@ public class InspectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspect);
-        setSupportActionBar((Toolbar) findViewById(R.id.inspect_toolbar));
+        setSupportActionBar(findViewById(R.id.inspect_toolbar));
         mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
 
         Intent intent = getIntent();

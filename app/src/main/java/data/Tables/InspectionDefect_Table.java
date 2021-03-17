@@ -15,4 +15,5 @@ public class InspectionDefect_Table {
     public int direction_id;
     public int canned_comment_id;
     public String note;
+    public String picture_path;
 }
