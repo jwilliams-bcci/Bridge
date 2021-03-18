@@ -46,7 +46,8 @@ import data.Tables.Room_Table;
         Location_Table.class,
         Room_Table.class
         }, views = {
-        RouteSheet_View.class
+        RouteSheet_View.class,
+        ReviewAndSubmit_View.class
         }, version = 1, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
