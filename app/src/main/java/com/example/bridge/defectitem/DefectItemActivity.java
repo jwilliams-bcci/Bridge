@@ -35,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import data.CannedComment;
 import data.DataManager;
 import data.DefectItem;
 import data.Tables.DefectItem_Table;
+import data.Tables.InspectionDefect_Table;
 
 public class DefectItemActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
@@ -67,8 +69,13 @@ public class DefectItemActivity extends AppCompatActivity {
     private int mDefectId;
     private DefectItemViewModel mDefectItemViewModel;
     private LiveData<DefectItem_Table> mDefectItem;
+    private RadioGroup mRadioGroupDefectStatus;
     private Spinner mSpinnerCannedComment;
     private TextView mDefectItemDetails;
+    private TextView mDefectItemTextLocation;
+    private TextView mDefectItemTextRoom;
+    private TextView mDefectItemTextDirection;
+    private TextView mDefectItemTextFault;
     private TextView mDefectItemTextSpeech;
     private ImageView mImageViewThumbnail;
     private SharedPreferences mSharedPreferences;
@@ -96,6 +103,12 @@ public class DefectItemActivity extends AppCompatActivity {
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
         mImageViewThumbnail = findViewById(R.id.defect_item_imageview_thumbnail);
+        mRadioGroupDefectStatus = findViewById(R.id.defect_item_radio_group);
+        mDefectItemTextLocation = findViewById(R.id.defect_item_text_location);
+        mDefectItemTextRoom = findViewById(R.id.defect_item_text_room);
+        mDefectItemTextDirection = findViewById(R.id.defect_item_text_direction);
+        mDefectItemTextFault = findViewById(R.id.defect_item_text_fault);
+        mSaveInspectionDefect = findViewById(R.id.defect_item_button_save);
         mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         mDefectItem = mDefectItemViewModel.getDefectItem(mDefectId);
 
@@ -183,7 +196,49 @@ public class DefectItemActivity extends AppCompatActivity {
         });
 
         mSaveInspectionDefect.setOnClickListener(v -> {
+            int selectedRadioId = mRadioGroupDefectStatus.getCheckedRadioButtonId();
+            int defectStatusId = 0;
+            boolean buttonSelected = true;
+            String comment = "";
+            switch (selectedRadioId) {
+                case R.id.defect_item_radio_nc:
+                    defectStatusId = 2;
+                    break;
+                case R.id.defect_item_radio_c:
+                    defectStatusId = 3;
+                    break;
+                case R.id.defect_item_radio_r:
+                    defectStatusId = 6;
+                    break;
+                case R.id.defect_item_radio_na:
+                    defectStatusId = 4;
+                    break;
+                default:
+                    buttonSelected = false;
+            }
 
+            if (!mDefectItemTextSpeech.getText().toString().equals("")) {
+                comment = "" + mDefectItemTextSpeech.getText();
+            } else {
+                comment += mDefectItemTextLocation.getText().toString();
+                comment += mDefectItemTextRoom.getText().toString();
+                comment += mDefectItemTextDirection.getText().toString();
+                comment += mDefectItemTextFault.getText().toString();
+                comment += mSpinnerCannedComment.getSelectedItem().toString();
+            }
+
+            if (pictureTaken) {
+                
+            }
+
+            InspectionDefect_Table inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, null);
+
+            if (buttonSelected) {
+                mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
+                Toast.makeText(getApplicationContext(), "Saving defect to Inspection... StatusId: " + defectStatusId + " Comment: " + comment, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Please select a status", Toast.LENGTH_SHORT).show();
+            }
         });
 
         ImageButton buttonCamera = findViewById(R.id.defect_item_button_camera);

@@ -10,10 +10,14 @@ public class InspectionDefect_Table {
     public int inspection_id;
     public int defect_item_id;
     public int defect_status_id;
-    public int location_id;
-    public int room_id;
-    public int direction_id;
-    public int canned_comment_id;
-    public String note;
+    public String comment;
     public String picture_path;
+
+    public InspectionDefect_Table(int inspection_id, int defect_item_id, int defect_status_id, String comment, String picture_path) {
+        this.inspection_id = inspection_id;
+        this.defect_item_id = defect_item_id;
+        this.defect_status_id = defect_status_id;
+        this.comment = comment;
+        this.picture_path = picture_path;
+    }
 }
