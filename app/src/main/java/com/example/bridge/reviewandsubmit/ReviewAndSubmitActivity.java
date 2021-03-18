@@ -1,8 +1,9 @@
-package com.example.bridge;
+package com.example.bridge.reviewandsubmit;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.bridge.R;
+import com.example.bridge.ReviewAndSubmitRecyclerAdapter;
 import com.example.bridge.routesheet.RouteSheetActivity;
 
 import java.util.List;
@@ -35,6 +38,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private int mLocationId;
     private boolean mSupervisorPresent;
     private boolean mStatusCorrect;
+    private ReviewAndSubmitViewModel mReviewAndSubmitViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +49,20 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         Intent intent = getIntent();
         TextView textAddress = findViewById(R.id.review_and_submit_text_address);
 
+        mReviewAndSubmitViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
-        mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_FOUND);
+        //mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_FOUND);
         mSupervisorPresent = false;
         mStatusCorrect = false;
 
-        displayAddress(textAddress);
+        //displayAddress(textAddress);
 
-        RecyclerView recyclerInspectionDefects = (RecyclerView) findViewById(R.id.review_and_submit_recycler_inspection_defects);
+        RecyclerView recyclerInspectionDefects = findViewById(R.id.review_and_submit_recycler_inspection_defects);
+        final ReviewAndSubmitListAdapter adapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.InspectionDefectDiff());
+        recyclerInspectionDefects.setAdapter(adapter);
         recyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
-        List<InspectionDefect> inspectionDefects = DataManager.getInstance().getInspectionDefects();
-        recyclerInspectionDefects.setAdapter(new ReviewAndSubmitRecyclerAdapter(this, inspectionDefects));
+        mReviewAndSubmitViewModel.getAllInspectionDefects(mInspectionId).observe(this, inspectionDefects ->
+                adapter.submitList(inspectionDefects));
 
         Button buttonSubmit = findViewById(R.id.review_and_submit_button_submit);
         buttonSubmit.setOnClickListener(v -> {

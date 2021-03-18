@@ -10,25 +10,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bridge.DefectItemRecyclerAdapter;
 import com.example.bridge.R;
-import com.example.bridge.ReviewAndSubmitActivity;
+import com.example.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 
-import java.util.List;
-
-import data.DataManager;
-import data.DefectCategory;
-import data.Inspection;
-import data.Location;
 import data.Tables.Inspection_Table;
 
 public class InspectActivity extends AppCompatActivity {
@@ -67,12 +58,12 @@ public class InspectActivity extends AppCompatActivity {
         buttonReviewAndSubmit.setOnClickListener(v -> {
             Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
             reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
-            reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.LOCATION_ID, mLocationId);
             startActivity(reviewAndSubmitIntent);
         });
     }
 
     private void displayAddress(TextView textAddress) {
+        textAddress.setText("");
         mInspection.observe(this, inspection -> {
             textAddress.append(inspection.community + "\n");
             textAddress.append(inspection.address + "\n");

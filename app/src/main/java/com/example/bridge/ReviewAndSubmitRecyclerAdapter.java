@@ -70,11 +70,7 @@ public class ReviewAndSubmitRecyclerAdapter extends RecyclerView.Adapter<ReviewA
             super(itemView);
             mTextDefectNumber = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_defect_number);
             mTextDefectDescription = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_defect_description);
-            mTextStatus = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_status);
-            mTextLocation = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_location);
-            mTextRoom = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_room);
-            mTextDirection = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_direction);
-            mTextNote = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_note);
+            mTextStatus = (TextView) itemView.findViewById(R.id.item_inspection_defect_text_comment);
             mExpandableLayout = (ConstraintLayout) itemView.findViewById(R.id.item_inspection_defect_constraint_layout_expandable_layout);
 
             mTextDefectNumber.setOnClickListener(v -> {

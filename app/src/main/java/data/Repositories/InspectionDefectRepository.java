@@ -22,8 +22,8 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefect(inspection_defect_id);
     }
 
-    public LiveData<List<InspectionDefect_Table>> getAllInspectionDefects() {
-        return mInspectionDefectDao.getInspectionDefects();
+    public LiveData<List<InspectionDefect_Table>> getAllInspectionDefects(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefects(inspection_id);
     }
 
     public void insert(InspectionDefect_Table inspectionDefect) {

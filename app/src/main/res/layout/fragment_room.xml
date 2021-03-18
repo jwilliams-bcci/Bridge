@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="350dp"
     android:paddingHorizontal="4dp"
     android:paddingVertical="4dp"
     tools:context=".RoomFragment">
@@ -14,25 +13,15 @@
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="2dp"
         android:text="Room"
         android:textAlignment="center"
         android:textSize="@dimen/fragment_title_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <AutoCompleteTextView
-        android:id="@+id/room_autocomplete_text_room"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:hint="Start typing to find a room..."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/room_text_result"
@@ -50,7 +39,7 @@
         android:id="@+id/room_button_save_and_exit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/button_location_blue"
         android:text="@string/SaveAndExit"
@@ -61,15 +50,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/room_recycler_buttons"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="500dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/room_text_result"
         app:layout_constraintEnd_toEndOf="@+id/room_button_save_and_exit"
         app:layout_constraintStart_toStartOf="@+id/room_text_result"
-        app:layout_constraintTop_toBottomOf="@+id/room_autocomplete_text_room"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:listitem="@layout/item_gridview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

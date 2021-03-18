@@ -49,55 +49,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_text_defect_number">
 
                 <TextView
-                    android:id="@+id/item_inspection_defect_text_status"
+                    android:id="@+id/item_inspection_defect_text_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="Status"
+                    android:text="Comment"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/item_inspection_defect_text_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Location"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="@+id/item_inspection_defect_text_status"
-                    app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_text_status" />
-
-                <TextView
-                    android:id="@+id/item_inspection_defect_text_room"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Room"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="@+id/item_inspection_defect_text_location"
-                    app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_text_location" />
-
-                <TextView
-                    android:id="@+id/item_inspection_defect_text_direction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Direction"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="@+id/item_inspection_defect_text_room"
-                    app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_text_room" />
-
-                <TextView
-                    android:id="@+id/item_inspection_defect_text_note"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Note"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toStartOf="@+id/item_inspection_defect_text_direction"
-                    app:layout_constraintTop_toBottomOf="@+id/item_inspection_defect_text_direction" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

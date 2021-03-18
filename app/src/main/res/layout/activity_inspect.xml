@@ -29,7 +29,7 @@
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
         app:titleTextColor="@color/colorWhite" />
 
-    <EditText
+    <TextView
         android:id="@+id/inspect_text_inspection_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

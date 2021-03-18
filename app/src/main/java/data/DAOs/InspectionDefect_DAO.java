@@ -18,8 +18,8 @@ public interface InspectionDefect_DAO {
     @Query("DELETE FROM inspection_defect_table")
     void deleteAll();
 
-    @Query("SELECT * FROM inspection_defect_table ORDER BY id ASC")
-    LiveData<List<InspectionDefect_Table>> getInspectionDefects();
+    @Query("SELECT * FROM inspection_defect_table WHERE inspection_id = :inspection_id ORDER BY id ASC")
+    LiveData<List<InspectionDefect_Table>> getInspectionDefects(int inspection_id);
 
     @Query("SELECT * FROM inspection_defect_table WHERE id = :inspection_defect_id")
     LiveData<InspectionDefect_Table> getInspectionDefect(int inspection_defect_id);

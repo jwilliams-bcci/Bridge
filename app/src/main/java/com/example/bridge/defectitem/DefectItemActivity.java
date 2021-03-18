@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,9 +21,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.speech.RecognitionListener;
@@ -45,8 +49,13 @@ import com.example.bridge.FaultFragment;
 import com.example.bridge.LocationFragment;
 import com.example.bridge.R;
 import com.example.bridge.RoomFragment;
+import com.example.bridge.inspect.InspectActivity;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,9 +70,12 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     public static final String DEFECT_ID = "com.example.bridge.DEFECT_ID";
     public static final int DEFECT_ID_NOT_FOUND = -1;
+    public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
+    public static final int LOCATION_ID_NOT_FOUND = -1;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean pictureTaken = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+    private String currentPhotoPath;
 
     private int mInspectionId;
     private int mDefectId;
@@ -99,6 +111,7 @@ public class DefectItemActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
 
+        mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
@@ -227,15 +240,20 @@ public class DefectItemActivity extends AppCompatActivity {
                 comment += mSpinnerCannedComment.getSelectedItem().toString();
             }
 
-            if (pictureTaken) {
-                
-            }
+            InspectionDefect_Table inspectionDefect;
 
-            InspectionDefect_Table inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, null);
+            if (pictureTaken) {
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, currentPhotoPath);
+            } else {
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, null);
+            }
 
             if (buttonSelected) {
                 mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
-                Toast.makeText(getApplicationContext(), "Saving defect to Inspection... StatusId: " + defectStatusId + " Comment: " + comment, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Saving defect to Inspection... StatusId: " + defectStatusId + " Comment: " + comment, Toast.LENGTH_SHORT).show();
+                Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
+                inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+                startActivity(inspectIntent);
             } else {
                 Toast.makeText(getApplicationContext(), "Please select a status", Toast.LENGTH_SHORT).show();
             }
@@ -244,10 +262,18 @@ public class DefectItemActivity extends AppCompatActivity {
         ImageButton buttonCamera = findViewById(R.id.defect_item_button_camera);
         buttonCamera.setOnClickListener(view -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            try {
-                startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-            } catch (ActivityNotFoundException e) {
-                //error
+            if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                File photoFile = null;
+                try {
+                    photoFile = createImageFile();
+                } catch (IOException e) {
+                    Toast.makeText(getApplicationContext(), "Error saving image: " + e.getMessage(), Toast.LENGTH_SHORT);
+                }
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(this, "com.example.bridge", photoFile);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                }
             }
         });
 
@@ -260,7 +286,6 @@ public class DefectItemActivity extends AppCompatActivity {
                     break;
                 case MotionEvent.ACTION_DOWN:
                     mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-                    //mDefectItemTextSpeech.setText("");
                     mDefectItemTextSpeech.setHint("Listening...");
                     break;
                 default:
@@ -299,16 +324,21 @@ public class DefectItemActivity extends AppCompatActivity {
         }
     }
 
-    private void saveInspectionDefect() {
-        
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "Bridge_" + mInspectionId + "_" + mDefectId + "_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Bitmap imageBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(currentPhotoPath), 128, 128);
             mImageViewThumbnail.setImageBitmap(imageBitmap);
             pictureTaken = true;
         }

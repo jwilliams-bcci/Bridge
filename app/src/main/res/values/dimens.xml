@@ -3,8 +3,8 @@
     <dimen name="toolbar_height">41dp</dimen>
     <dimen name="button_camera_width">89dp</dimen>
     <dimen name="button_camera_height">49dp</dimen>
-    <dimen name="button_location_width">75dp</dimen>
-    <dimen name="button_location_height">70dp</dimen>
+    <dimen name="button_location_width">60dp</dimen>
+    <dimen name="button_location_height">55dp</dimen>
     <dimen name="fragment_title_size">36sp</dimen>
     <!--
     Because the window insets on round devices are larger than 15dp, this padding only applies

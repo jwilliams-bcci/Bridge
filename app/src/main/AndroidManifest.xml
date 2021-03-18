@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bridge">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.bridge">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission-sdk-23 android:name="android.permission.RECORD_AUDIO" />
 
@@ -35,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ReviewAndSubmitActivity"
+            android:name=".reviewandsubmit.ReviewAndSubmitActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".defectitem.DefectItemActivity"
@@ -64,6 +65,16 @@
         <activity
             android:name=".routesheet.RouteSheetActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.bridge"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
     </application>
 
 </manifest>

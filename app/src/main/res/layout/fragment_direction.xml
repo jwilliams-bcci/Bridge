@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="350dp"
     android:paddingHorizontal="4dp"
     android:paddingVertical="4dp"
     tools:context=".DirectionFragment">
@@ -48,9 +47,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/direction_recycler_buttons"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="500dp"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/direction_text_result"
