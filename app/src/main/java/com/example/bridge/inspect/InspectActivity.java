@@ -27,7 +27,7 @@ public class InspectActivity extends AppCompatActivity {
     public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     public static final int LOCATION_ID_NOT_FOUND = -1;
-    private int mInspectionId;
+    public int mInspectionId;
     private int mLocationId;
     private Spinner mSpinnerDefectCategories;
     private InspectViewModel mInspectViewModel;
@@ -94,6 +94,7 @@ public class InspectActivity extends AppCompatActivity {
     private void displayDefectItems(String filter) {
         RecyclerView recyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
         final InspectListAdapter adapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
+        adapter.setInspectionId(mInspectionId);
         recyclerDefectItems.setAdapter(adapter);
         recyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
 

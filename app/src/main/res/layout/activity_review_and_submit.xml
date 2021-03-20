@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".reviewandsubmit.ReviewAndSubmitActivity">
 
-    <EditText
+    <TextView
         android:id="@+id/review_and_submit_text_address"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

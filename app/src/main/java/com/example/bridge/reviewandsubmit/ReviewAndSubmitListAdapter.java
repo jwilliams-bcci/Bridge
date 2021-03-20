@@ -6,11 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import data.ReviewAndSubmit_View;
 import data.Tables.InspectionDefect_Table;
 
-public class ReviewAndSubmitListAdapter extends ListAdapter<InspectionDefect_Table, ReviewAndSubmitViewHolder> {
+public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View, ReviewAndSubmitViewHolder> {
 
-    protected ReviewAndSubmitListAdapter(@NonNull DiffUtil.ItemCallback<InspectionDefect_Table> diffCallback) {
+    protected ReviewAndSubmitListAdapter(@NonNull DiffUtil.ItemCallback<ReviewAndSubmit_View> diffCallback) {
         super(diffCallback);
     }
 
@@ -22,20 +23,23 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<InspectionDefect_Tab
 
     @Override
     public void onBindViewHolder(@NonNull ReviewAndSubmitViewHolder holder, int position) {
-        InspectionDefect_Table current = getItem(position);
-        holder.mInspectionDefectId = current.id;
-        holder.bind(current.id, current.comment);
+        ReviewAndSubmit_View current = getItem(position);
+        boolean showThumbnail = false;
+        if (current.picture_path != null) {
+            showThumbnail = true;
+        }
+        holder.bind(current.item_number, current.item_description, current.comment, showThumbnail);
     }
 
-    public static class InspectionDefectDiff extends DiffUtil.ItemCallback<InspectionDefect_Table> {
+    public static class ReviewAndSubmitDiff extends DiffUtil.ItemCallback<ReviewAndSubmit_View> {
         @Override
-        public boolean areItemsTheSame(@NonNull InspectionDefect_Table oldItem, @NonNull InspectionDefect_Table newItem) {
+        public boolean areItemsTheSame(@NonNull ReviewAndSubmit_View oldItem, @NonNull ReviewAndSubmit_View newItem) {
             return oldItem == newItem;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull InspectionDefect_Table oldItem, @NonNull InspectionDefect_Table newItem) {
-            return oldItem.id == newItem.id;
+        public boolean areContentsTheSame(@NonNull ReviewAndSubmit_View oldItem, @NonNull ReviewAndSubmit_View newItem) {
+            return oldItem.inspection_defect_id == newItem.inspection_defect_id;
         }
     }
 }

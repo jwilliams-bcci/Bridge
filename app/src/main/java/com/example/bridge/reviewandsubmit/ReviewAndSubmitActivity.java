@@ -3,12 +3,15 @@ package com.example.bridge.reviewandsubmit;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +31,7 @@ import data.Inspection;
 import data.InspectionDefect;
 import data.InspectionResolution;
 import data.Location;
+import data.Tables.Inspection_Table;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
@@ -39,12 +43,15 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private boolean mSupervisorPresent;
     private boolean mStatusCorrect;
     private ReviewAndSubmitViewModel mReviewAndSubmitViewModel;
+    private SharedPreferences mSharedPreferences;
+    private LiveData<Inspection_Table> mInspection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_and_submit);
         setSupportActionBar((Toolbar) findViewById(R.id.review_and_submit_toolbar));
+        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
 
         Intent intent = getIntent();
         TextView textAddress = findViewById(R.id.review_and_submit_text_address);
@@ -54,14 +61,15 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         //mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_FOUND);
         mSupervisorPresent = false;
         mStatusCorrect = false;
+        mInspection = mReviewAndSubmitViewModel.getInspection(mInspectionId);
 
-        //displayAddress(textAddress);
+        displayAddress(textAddress);
 
         RecyclerView recyclerInspectionDefects = findViewById(R.id.review_and_submit_recycler_inspection_defects);
-        final ReviewAndSubmitListAdapter adapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.InspectionDefectDiff());
+        final ReviewAndSubmitListAdapter adapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
         recyclerInspectionDefects.setAdapter(adapter);
         recyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
-        mReviewAndSubmitViewModel.getAllInspectionDefects(mInspectionId).observe(this, inspectionDefects ->
+        mReviewAndSubmitViewModel.getInspectionDefectsForReview(mInspectionId).observe(this, inspectionDefects ->
                 adapter.submitList(inspectionDefects));
 
         Button buttonSubmit = findViewById(R.id.review_and_submit_button_submit);
@@ -74,7 +82,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             mStatusCorrect = true;
-                            DataManager.getInstance().getInspection(1).setIsComplete(true);
+                            //completeInspection();
                             returnToRouteSheet();
                         }
                     })
@@ -101,11 +109,18 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     }
 
     private void displayAddress(TextView textAddress) {
-        Inspection inspection = DataManager.getInstance().getInspection(mInspectionId);
-        Location location = DataManager.getInstance().getLocation(mLocationId);
-        textAddress.append(location.getCommunity() + "\n");
-        textAddress.append(location.getFullAddress() + "\n");
-        textAddress.append(inspection.getInspectionType());
+        textAddress.setText("");
+        mInspection.observe(this, inspection -> {
+            textAddress.append(inspection.community + "\n");
+            textAddress.append(inspection.address + "\n");
+            textAddress.append(inspection.inspection_type);
+        });
+    }
+
+    private void completeInspection() {
+        mInspection.observe(this, inspection -> {
+            mReviewAndSubmitViewModel.completeInspection(inspection.id);
+        });
     }
 
     private void showEditResolutionDialog() {
@@ -116,12 +131,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         builder.setTitle("Change Resolution");
         builder.create().show();
 
-        Spinner spinnerResolutions = (Spinner) view.findViewById(R.id.dialog_edit_resolution_spinner_resolutions);
+        Spinner spinnerResolutions = view.findViewById(R.id.dialog_edit_resolution_spinner_resolutions);
         List<InspectionResolution> inspectionResolutions = DataManager.getInstance().getInspectionResolutions();
         ArrayAdapter<InspectionResolution> adapterInspectionResolutions = new ArrayAdapter<>(this, R.layout.item_spinner_item, inspectionResolutions);
         spinnerResolutions.setAdapter(adapterInspectionResolutions);
 
-        Button buttonSaveResolution = (Button) view.findViewById(R.id.dialog_edit_resolution_button_save);
+        Button buttonSaveResolution = view.findViewById(R.id.dialog_edit_resolution_button_save);
         buttonSaveResolution.setOnClickListener(v -> {
             returnToRouteSheet();
         });

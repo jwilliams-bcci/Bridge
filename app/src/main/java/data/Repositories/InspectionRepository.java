@@ -33,4 +33,8 @@ public class InspectionRepository {
             mInspectionDao.insert(inspection);
         });
     }
+
+    public void completeInspection(int inspection_id) {
+        mInspectionDao.completeInspection(inspection_id);
+    }
 }

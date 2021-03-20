@@ -8,6 +8,7 @@ import java.util.List;
 
 import data.BridgeRoomDatabase;
 import data.DAOs.InspectionDefect_DAO;
+import data.ReviewAndSubmit_View;
 import data.Tables.InspectionDefect_Table;
 
 public class InspectionDefectRepository {
@@ -24,6 +25,10 @@ public class InspectionDefectRepository {
 
     public LiveData<List<InspectionDefect_Table>> getAllInspectionDefects(int inspection_id) {
         return mInspectionDefectDao.getInspectionDefects(inspection_id);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReview(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReview(inspection_id);
     }
 
     public void insert(InspectionDefect_Table inspectionDefect) {

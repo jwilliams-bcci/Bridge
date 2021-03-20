@@ -89,6 +89,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private TextView mDefectItemTextDirection;
     private TextView mDefectItemTextFault;
     private TextView mDefectItemTextSpeech;
+    private Button mButtonCancel;
     private ImageView mImageViewThumbnail;
     private SharedPreferences mSharedPreferences;
     private Button mSaveInspectionDefect;
@@ -122,6 +123,8 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemTextDirection = findViewById(R.id.defect_item_text_direction);
         mDefectItemTextFault = findViewById(R.id.defect_item_text_fault);
         mSaveInspectionDefect = findViewById(R.id.defect_item_button_save);
+        mButtonCancel = findViewById(R.id.defect_item_button_cancel);
+
         mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         mDefectItem = mDefectItemViewModel.getDefectItem(mDefectId);
 
@@ -292,6 +295,12 @@ public class DefectItemActivity extends AppCompatActivity {
                     break;
             }
             return false;
+        });
+
+        mButtonCancel.setOnClickListener(v -> {
+            Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
+            inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+            startActivity(inspectIntent);
         });
 
         displayDefectDetails(mDefectItemDetails);

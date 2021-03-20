@@ -1,6 +1,8 @@
 package com.example.bridge.inspect;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.example.bridge.R;
 
 public class InspectViewHolder extends RecyclerView.ViewHolder {
     public int mDefectItemId;
+    public int mInspectionId;
     private final TextView mTextDefectItemNumber;
     private final TextView mTextDefectItemDescription;
     private final TextView mTextDefectItemSection;
@@ -27,16 +30,18 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), DefectItemActivity.class);
+            intent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
             intent.putExtra(DefectItemActivity.DEFECT_ID, mDefectItemId);
             Toast.makeText(v.getContext(), mTextDefectItemDescription.getText() + " selected", Toast.LENGTH_SHORT).show();
             v.getContext().startActivity(intent);
         });
     }
 
-    public void bind(String itemNumber, String itemDescription, String sectionName, boolean showSection) {
+    public void bind(String itemNumber, String itemDescription, String sectionName, boolean showSection, int inspectionId) {
         mTextDefectItemSection.setText(sectionName);
         mTextDefectItemNumber.setText(itemNumber);
         mTextDefectItemDescription.setText(itemDescription);
+        mInspectionId = inspectionId;
 
         if (showSection) {
             mTextDefectItemSection.setVisibility(View.VISIBLE);

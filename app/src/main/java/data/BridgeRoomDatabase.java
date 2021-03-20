@@ -71,7 +71,6 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), BridgeRoomDatabase.class, "bridge_database")
                             .addCallback(sRoomDatabaseCallback)
-                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
