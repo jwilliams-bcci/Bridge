@@ -32,17 +32,19 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), DefectItemActivity.class);
             intent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
+            intent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
             intent.putExtra(DefectItemActivity.DEFECT_ID, mDefectItemId);
             Toast.makeText(v.getContext(), mTextDefectItemDescription.getText() + " selected", Toast.LENGTH_SHORT).show();
             v.getContext().startActivity(intent);
         });
     }
 
-    public void bind(String itemNumber, String itemDescription, String sectionName, boolean showSection, int inspectionId) {
+    public void bind(String itemNumber, String itemDescription, String sectionName, boolean showSection, int inspectionId, int inspectionTypeId) {
         mTextDefectItemSection.setText(sectionName);
         mTextDefectItemNumber.setText(itemNumber);
         mTextDefectItemDescription.setText(itemDescription);
         mInspectionId = inspectionId;
+        mInspectionTypeId = inspectionTypeId;
 
         if (showSection) {
             mTextDefectItemSection.setVisibility(View.VISIBLE);

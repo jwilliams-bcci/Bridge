@@ -10,6 +10,7 @@ import data.Tables.DefectItem_Table;
 
 public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectViewHolder> {
     private int mInspectionId;
+    private int mInspectionTypeId;
 
     protected InspectListAdapter(@NonNull DiffUtil.ItemCallback<DefectItem_Table> diffCallback) {
         super(diffCallback);
@@ -34,11 +35,15 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
             }
         }
         holder.mDefectItemId = current.id;
-        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.category_name), showSection, mInspectionId);
+        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.category_name), showSection, mInspectionId, mInspectionTypeId);
     }
 
-    public void setInspectionId(int inspectionId) {
+    public void setInspectionId (int inspectionId) {
         mInspectionId = inspectionId;
+    }
+
+    public void setInspectionTypeId (int inspectionTypeId) {
+        mInspectionTypeId = inspectionTypeId;
     }
 
     public static class InspectDiff extends DiffUtil.ItemCallback<DefectItem_Table> {

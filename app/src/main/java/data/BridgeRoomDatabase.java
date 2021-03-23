@@ -51,7 +51,7 @@ import data.Tables.Room_Table;
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 4, exportSchema = false)
+        }, version = 5, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -66,7 +66,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Room_DAO mRoomDao();
     public abstract DefectCategory_InspectionType_DAO mDefectCategory_InspectionTypeDao();
     private static volatile BridgeRoomDatabase INSTANCE;
-    private static final int NUMBER_OF_THREADS = 5;
+    private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static BridgeRoomDatabase getDatabase(final Context context) {

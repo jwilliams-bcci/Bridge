@@ -107,6 +107,7 @@ public class InspectActivity extends AppCompatActivity {
         RecyclerView recyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
         final InspectListAdapter adapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
         adapter.setInspectionId(mInspectionId);
+        adapter.setInspectionTypeId(mInspectionTypeId);
         recyclerDefectItems.setAdapter(adapter);
         recyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
 
