@@ -68,7 +68,7 @@ public class RouteSheetActivity extends AppCompatActivity {
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 
         mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
-        mRouteSheetViewModel.getAllInspectionsForRouteSheet().observe(this, inspections ->
+        mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString("InspectorId", "0"))).observe(this, inspections ->
                 adapter.submitList(inspections));
     }
 
@@ -89,10 +89,12 @@ public class RouteSheetActivity extends AppCompatActivity {
                     inspection.builder_name = obj.getString("BuilderName");
                     inspection.builder_id = obj.optInt("BuilderID");
                     inspection.super_name = obj.getString("SuperName");
+                    inspection.inspector_id = obj.optInt("InspectorID");
                     inspection.inspector = obj.getString("Inspector");
                     inspection.community = obj.getString("Community");
                     inspection.community_id = obj.optInt("CommunityID");
                     inspection.city = obj.getString("City");
+                    inspection.inspection_type_id = obj.optInt("InspectionTypeID");
                     inspection.inspection_type = obj.getString("InspectionType");
                     inspection.reinspect = obj.getBoolean("ReInspect");
                     inspection.address = obj.getString("Address1");

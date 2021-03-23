@@ -68,6 +68,8 @@ import data.Tables.InspectionDefect_Table;
 public class DefectItemActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
+    public static final String INSPECTION_TYPE_ID = "com.example.bridge.INSPECTION_TYPE_ID";
+    public static final int INSPECTION_TYPE_ID_NOT_FOUND = -1;
     public static final String DEFECT_ID = "com.example.bridge.DEFECT_ID";
     public static final int DEFECT_ID_NOT_FOUND = -1;
     public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
@@ -78,6 +80,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private String currentPhotoPath;
 
     private int mInspectionId;
+    private int mInspectionTypeId;
     private int mDefectId;
     private DefectItemViewModel mDefectItemViewModel;
     private LiveData<DefectItem_Table> mDefectItem;
@@ -113,6 +116,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
 
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mInspectionTypeId = intent.getIntExtra(INSPECTION_TYPE_ID, INSPECTION_TYPE_ID_NOT_FOUND);
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
@@ -256,6 +260,7 @@ public class DefectItemActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Saving defect to Inspection... StatusId: " + defectStatusId + " Comment: " + comment, Toast.LENGTH_SHORT).show();
                 Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
                 inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+                inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
                 startActivity(inspectIntent);
             } else {
                 Toast.makeText(getApplicationContext(), "Please select a status", Toast.LENGTH_SHORT).show();
@@ -300,6 +305,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mButtonCancel.setOnClickListener(v -> {
             Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
             inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+            inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
             startActivity(inspectIntent);
         });
 

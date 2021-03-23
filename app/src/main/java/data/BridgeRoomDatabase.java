@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 import data.DAOs.Builder_DAO;
 import data.DAOs.CannedComment_DAO;
 import data.DAOs.DefectCategory_DAO;
+import data.DAOs.DefectCategory_InspectionType_DAO;
 import data.DAOs.DefectItem_DAO;
 import data.DAOs.Direction_DAO;
 import data.DAOs.InspectionDefect_DAO;
@@ -25,6 +26,7 @@ import data.DAOs.Location_DAO;
 import data.DAOs.Room_DAO;
 import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
+import data.Tables.DefectCategory_InspectionType_XRef;
 import data.Tables.DefectCategory_Table;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
@@ -44,11 +46,12 @@ import data.Tables.Room_Table;
         InspectionDefect_Table.class,
         InspectionResolution_Table.class,
         Location_Table.class,
-        Room_Table.class
+        Room_Table.class,
+        DefectCategory_InspectionType_XRef.class
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 1, exportSchema = false)
+        }, version = 4, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -61,8 +64,9 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract InspectionResolution_DAO mInspectionResolutionDao();
     public abstract Location_DAO mLocationDao();
     public abstract Room_DAO mRoomDao();
+    public abstract DefectCategory_InspectionType_DAO mDefectCategory_InspectionTypeDao();
     private static volatile BridgeRoomDatabase INSTANCE;
-    private static final int NUMBER_OF_THREADS = 4;
+    private static final int NUMBER_OF_THREADS = 5;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
@@ -71,6 +75,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), BridgeRoomDatabase.class, "bridge_database")
                             .addCallback(sRoomDatabaseCallback)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

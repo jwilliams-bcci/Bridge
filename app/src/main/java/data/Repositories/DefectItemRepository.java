@@ -22,16 +22,16 @@ public class DefectItemRepository {
         return mDefectItemDao.getDefectItem(defect_item_id);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItems() {
-        return mDefectItemDao.getDefectItems();
+    public LiveData<List<DefectItem_Table>> getAllDefectItems(int inspection_type_id) {
+        return mDefectItemDao.getDefectItems(inspection_type_id);
     }
 
     public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String categoryName) {
         return mDefectItemDao.getDefectItemsFiltered(categoryName);
     }
 
-    public LiveData<List<String>> getDefectCategories() {
-        return mDefectItemDao.getDefectCategories();
+    public LiveData<List<String>> getDefectCategories(int inspection_type_id) {
+        return mDefectItemDao.getDefectCategories(inspection_type_id);
     }
 
     public void insert(DefectItem_Table defectItem) {

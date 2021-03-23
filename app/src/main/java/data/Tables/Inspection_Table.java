@@ -15,12 +15,14 @@ import data.DateConverter;
 public class Inspection_Table {
     @PrimaryKey
     public int id;
+    public int inspection_type_id;
     @TypeConverters({DateConverter.class})
     public Date inspection_date;
     public int location_id;
     public String builder_name;
     public int builder_id;
     public String super_name;
+    public int inspector_id;
     public String inspector;
     public String community;
     public int community_id;
@@ -45,12 +47,12 @@ public class Inspection_Table {
 
     public Inspection_Table(@NonNull int id, Date inspection_date, int location_id,
                             String builder_name, int builder_id, String super_name,
-                            String inspector, String community, int community_id, String city,
-                            String inspection_type, boolean reinspect, String address,
-                            int inspection_status_id, String inspection_status, String super_phone,
-                            String super_email, int super_present, String incomplete_reason,
-                            int incomplete_reason_id, String notes, boolean is_complete,
-                            boolean is_uploaded) {
+                            int inspector_id, String inspector, String community, int community_id,
+                            String city, int inspection_type_id, String inspection_type,
+                            boolean reinspect, String address, int inspection_status_id,
+                            String inspection_status, String super_phone, String super_email,
+                            int super_present, String incomplete_reason, int incomplete_reason_id,
+                            String notes, boolean is_complete, boolean is_uploaded) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.builder_name = builder_name;
@@ -59,8 +61,10 @@ public class Inspection_Table {
         this.community = community;
         this.community_id = community_id;
         this.city = city;
+        this.inspector_id = inspector_id;
         this.inspector = inspector;
         this.location_id = location_id;
+        this.inspection_type_id = inspection_type_id;
         this.inspection_type = inspection_type;
         this.reinspect = reinspect;
         this.address = address;

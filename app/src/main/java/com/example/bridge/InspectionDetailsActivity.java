@@ -19,12 +19,15 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     private InspectionDetailsViewModel mInspectionDetailsViewModel;
     private SharedPreferences mSharedPreferences;
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
+    public static final String INSPECTION_TYPE_ID = "com.example.bridge.INSPECTION_TYPE_ID";
     public static final String BUILDER_ID = "com.example.bridge.BUILDER_ID";
     public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
     public static final int INSPECTION_ID_NOT_SET = -1;
+    public static final int INSPECTION_TYPE_ID_NOT_SET = -1;
     public static final int BUILDER_ID_NOT_SET = -1;
     public static final int LOCATION_ID_NOT_SET = -1;
     private int mInspectionId;
+    private int mInspectionTypeId;
     private LiveData<Inspection_Table> mInspection;
     private int mBuilderId;
     private int mLocationId;
@@ -44,12 +47,15 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         TextView textNotes = findViewById(R.id.inspection_details_text_notes);
 
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_SET);
+        mInspectionTypeId = intent.getIntExtra(INSPECTION_TYPE_ID, INSPECTION_TYPE_ID_NOT_SET);
         mInspection = mInspectionDetailsViewModel.getInspection(mInspectionId);
+
 
         Button inspectButton = findViewById(R.id.inspection_details_button_inspect);
         inspectButton.setOnClickListener(view -> {
             Intent inspectIntent = new Intent(InspectionDetailsActivity.this, InspectActivity.class);
             inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+            inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
             inspectIntent.putExtra(InspectActivity.LOCATION_ID, mLocationId);
             startActivity(inspectIntent);
         });

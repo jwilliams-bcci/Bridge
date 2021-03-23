@@ -19,20 +19,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bridge.R;
 import com.example.bridge.reviewandsubmit.ReviewAndSubmitActivity;
+import com.example.bridge.routesheet.RouteSheetActivity;
 
 import data.Tables.Inspection_Table;
 
 public class InspectActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
+    public static final String INSPECTION_TYPE_ID = "com.example.bridge.INSPECTION_TYPE_ID";
     public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
+    public static final int INSPECTION_TYPE_ID_NOT_FOUND = -1;
     public static final int LOCATION_ID_NOT_FOUND = -1;
     public int mInspectionId;
     private int mLocationId;
+    public int mInspectionTypeId;
     private Spinner mSpinnerDefectCategories;
     private InspectViewModel mInspectViewModel;
     private SharedPreferences mSharedPreferences;
     private LiveData<Inspection_Table> mInspection;
+    private Button mButtonSaveAndExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +50,12 @@ public class InspectActivity extends AppCompatActivity {
         TextView textAddress = findViewById(R.id.inspect_text_inspection_address);
 
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mInspectionTypeId = intent.getIntExtra(INSPECTION_TYPE_ID, INSPECTION_ID_NOT_FOUND);
         mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_FOUND);
         mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
         mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
         mInspection = mInspectViewModel.getInspection(mInspectionId);
+        mButtonSaveAndExit = findViewById(R.id.inspect_button_save_and_exit);
 
         displayAddress(textAddress);
         fillSpinner(mSpinnerDefectCategories);
@@ -59,6 +66,11 @@ public class InspectActivity extends AppCompatActivity {
             Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
             reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
             startActivity(reviewAndSubmitIntent);
+        });
+
+        mButtonSaveAndExit.setOnClickListener(v -> {
+            Intent routeSheetIntent = new Intent(InspectActivity.this, RouteSheetActivity.class);
+            startActivity(routeSheetIntent);
         });
     }
 
@@ -72,7 +84,7 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void fillSpinner(Spinner spinnerDefectCategories) {
-        mInspectViewModel.getDefectCategories().observe(this, defectCategories -> {
+        mInspectViewModel.getDefectCategories(mInspectionTypeId).observe(this, defectCategories -> {
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, defectCategories);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerDefectCategories.setAdapter(adapter);
@@ -99,7 +111,7 @@ public class InspectActivity extends AppCompatActivity {
         recyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
 
         if (filter.equals("ALL")) {
-            mInspectViewModel.getAllDefectItems().observe(this, defectItems ->
+            mInspectViewModel.getAllDefectItems(mInspectionTypeId).observe(this, defectItems ->
                     adapter.submitList(defectItems));
         }
         else {

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -63,7 +64,7 @@ public class RoomFragment extends DialogFragment implements OnButtonClickListene
         TextView roomResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_room);
 
         RecyclerView recyclerRooms = (RecyclerView) mView.findViewById(R.id.room_recycler_buttons);
-        recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), rooms, this));
 
         Button saveAndExit = mView.findViewById(R.id.room_button_save_and_exit);

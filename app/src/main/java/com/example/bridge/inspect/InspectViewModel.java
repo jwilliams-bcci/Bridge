@@ -23,19 +23,23 @@ public class InspectViewModel extends AndroidViewModel {
         mInspectionRepository = new InspectionRepository(application);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItems() {
-        return mDefectItemRepository.getAllDefectItems();
+    public LiveData<List<DefectItem_Table>> getAllDefectItems(int inspection_type_id) {
+        return mDefectItemRepository.getAllDefectItems(inspection_type_id);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String categoryName) {
-        return mDefectItemRepository.getAllDefectItemsFiltered(categoryName);
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String category_name) {
+        return mDefectItemRepository.getAllDefectItemsFiltered(category_name);
     }
 
-    public LiveData<List<String>> getDefectCategories() {
-        return mDefectItemRepository.getDefectCategories();
+    public LiveData<List<String>> getDefectCategories(int inspection_type_id) {
+        return mDefectItemRepository.getDefectCategories(inspection_type_id);
     }
 
     public LiveData<Inspection_Table> getInspection(int inspection_id) {
         return mInspectionRepository.getInspection(inspection_id);
+    }
+
+    public LiveData<Integer> getInspectionTypeId(int inspection_id) {
+        return mInspectionRepository.getInspectionTypeId(inspection_id);
     }
 }

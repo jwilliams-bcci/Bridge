@@ -17,6 +17,7 @@ import com.example.bridge.R;
 
 public class InspectViewHolder extends RecyclerView.ViewHolder {
     public int mDefectItemId;
+    public int mInspectionTypeId;
     public int mInspectionId;
     private final TextView mTextDefectItemNumber;
     private final TextView mTextDefectItemDescription;

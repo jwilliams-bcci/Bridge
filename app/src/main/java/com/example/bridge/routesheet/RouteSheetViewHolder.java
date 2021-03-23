@@ -15,6 +15,7 @@ import com.example.bridge.R;
 
 public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public int mInspectionId;
+    public int mInspectionTypeId;
     public int mBuilderName;
     public String mInspectionAddress;
 
@@ -33,6 +34,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
             intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
+            intent.putExtra(InspectionDetailsActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
             Toast.makeText(v.getContext(), "Inspection " + mInspectionId + " selected", Toast.LENGTH_SHORT).show();
             v.getContext().startActivity(intent);
         });

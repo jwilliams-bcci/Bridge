@@ -23,6 +23,7 @@ public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSh
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
         Inspection_Table current = getItem(position);
         holder.mInspectionId = current.id;
+        holder.mInspectionTypeId = current.inspection_type_id;
         holder.bind(current.community, current.address, current.inspection_type, current.notes);
     }
 
