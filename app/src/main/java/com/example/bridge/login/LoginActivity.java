@@ -43,6 +43,7 @@ import java.util.concurrent.TimeoutException;
 
 import data.Tables.CannedComment_Table;
 import data.Tables.DefectCategory_InspectionType_XRef;
+import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 
 public class LoginActivity extends AppCompatActivity {
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             });
-            JsonArrayRequest updateDCITReference = updateDefectCategory_InspectionTypeXRef("https://apistage.burgess-inc.com/api/Bridge/GetDefectCategory_InspectionType_XRef", new ServerCallback() {
+            JsonArrayRequest updateDIITReference = updateDefectItem_InspectionTypeXRef("https://apistage.burgess-inc.com/api/Bridge/GetDefectItem_InspectionType_XRef", new ServerCallback() {
                 @Override
                 public void onSuccess() {
 
@@ -112,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
 
             queue.add(updateCannedCommentsRequest);
             queue.add(updateDefectItemsRequest);
-            queue.add(updateDCITReference);
+            queue.add(updateDIITReference);
             queue.add(loginRequest);
         });
     }
@@ -206,18 +207,18 @@ public class LoginActivity extends AppCompatActivity {
         return request;
     }
 
-    private JsonArrayRequest updateDefectCategory_InspectionTypeXRef(String url, final ServerCallback callback) {
+    private JsonArrayRequest updateDefectItem_InspectionTypeXRef(String url, final ServerCallback callback) {
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
                 try {
                     JSONObject obj = response.getJSONObject(i);
-                    DefectCategory_InspectionType_XRef relation = new DefectCategory_InspectionType_XRef();
-                    relation.defect_category_id = obj.optInt("DefectCategoryID");
+                    DefectItem_InspectionType_XRef relation = new DefectItem_InspectionType_XRef();
+                    relation.defect_item_id = obj.optInt("DefectItemID");
                     relation.inspection_type_id = obj.optInt("InspectionTypeID");
 
                     mLoginViewModel.insertReference(relation);
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Error in getting DC/IT Xref", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error in getting DI/IT Xref", Toast.LENGTH_SHORT).show();
                 }
             }
         }, error -> {

@@ -1,7 +1,9 @@
 package com.example.bridge.routesheet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +11,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.bridge.OnStartDragListener;
 import com.example.bridge.R;
 
 import org.json.JSONArray;
@@ -38,6 +42,7 @@ import data.Tables.Inspection_Table;
 public class RouteSheetActivity extends AppCompatActivity {
     private RouteSheetViewModel mRouteSheetViewModel;
     private SharedPreferences mSharedPreferences;
+    private ImageView mReorderHandle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,7 @@ public class RouteSheetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route_sheet);
         setSupportActionBar(findViewById(R.id.route_sheet_toolbar));
         mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
+        mReorderHandle = findViewById(R.id.item_inspection_list_imageview_reorder_handle);
 
         initializeDisplayContent();
         updateRouteSheet();
@@ -61,9 +67,24 @@ public class RouteSheetActivity extends AppCompatActivity {
         });
     }
 
+    ItemTouchHelper.SimpleCallback mSimpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.START, 0) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
+
     private void initializeDisplayContent() {
         RecyclerView recyclerInspections = findViewById(R.id.route_sheet_list_inspections);
         final RouteSheetListAdapter adapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
+        //ItemTouchHelper.Callback callback = new ItemMoveCallback(adapter);
+        //ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        //touchHelper.attachToRecyclerView(recyclerInspections);
         recyclerInspections.setAdapter(adapter);
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 

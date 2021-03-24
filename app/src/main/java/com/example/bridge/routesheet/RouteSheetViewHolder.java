@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextInspectionAddress;
     private final TextView mTextInspectionType;
     private final TextView mTextInspectionNotes;
+    public final ImageView mReorderHandle;
 
     public RouteSheetViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -30,6 +32,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mTextInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
         mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
         mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
+        mReorderHandle = itemView.findViewById(R.id.item_inspection_list_imageview_reorder_handle);
 
         itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);

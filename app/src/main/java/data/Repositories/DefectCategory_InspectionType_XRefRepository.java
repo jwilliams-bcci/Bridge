@@ -14,9 +14,9 @@ public class DefectCategory_InspectionType_XRefRepository {
         mDCITDao = db.mDefectCategory_InspectionTypeDao();
     }
 
-    public void insert(DefectCategory_InspectionType_XRef reference) {
+    public void insert(DefectCategory_InspectionType_XRef relation) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mDCITDao.insert(reference);
+            mDCITDao.insert(relation);
         });
     }
 }
