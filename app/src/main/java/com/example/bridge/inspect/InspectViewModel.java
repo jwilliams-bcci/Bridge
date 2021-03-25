@@ -27,8 +27,8 @@ public class InspectViewModel extends AndroidViewModel {
         return mDefectItemRepository.getAllDefectItems(inspection_type_id);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String category_name) {
-        return mDefectItemRepository.getAllDefectItemsFiltered(category_name);
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String category_name, int inspection_type_id) {
+        return mDefectItemRepository.getAllDefectItemsFiltered(category_name, inspection_type_id);
     }
 
     public LiveData<List<String>> getDefectCategories(int inspection_type_id) {

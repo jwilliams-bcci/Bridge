@@ -40,6 +40,7 @@ public class Inspection_Table {
     public String notes;
     public boolean is_complete;
     public boolean is_uploaded;
+    public int route_sheet_order;
 
     public Inspection_Table () {
 
@@ -52,7 +53,8 @@ public class Inspection_Table {
                             boolean reinspect, String address, int inspection_status_id,
                             String inspection_status, String super_phone, String super_email,
                             int super_present, String incomplete_reason, int incomplete_reason_id,
-                            String notes, boolean is_complete, boolean is_uploaded) {
+                            String notes, boolean is_complete, boolean is_uploaded,
+                            int route_sheet_order) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.builder_name = builder_name;
@@ -78,5 +80,6 @@ public class Inspection_Table {
         this.notes = notes;
         this.is_complete = is_complete;
         this.is_uploaded = is_uploaded;
+        this.route_sheet_order = route_sheet_order;
     }
 }

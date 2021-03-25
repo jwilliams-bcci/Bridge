@@ -26,8 +26,8 @@ public class DefectItemRepository {
         return mDefectItemDao.getDefectItems(inspection_type_id);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String categoryName) {
-        return mDefectItemDao.getDefectItemsFiltered(categoryName);
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String category_name, int inspection_type_id) {
+        return mDefectItemDao.getDefectItemsFiltered(category_name, inspection_type_id);
     }
 
     public LiveData<List<String>> getDefectCategories(int inspection_type_id) {

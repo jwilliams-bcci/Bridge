@@ -116,7 +116,7 @@ public class InspectActivity extends AppCompatActivity {
                     adapter.submitList(defectItems));
         }
         else {
-            mInspectViewModel.getAllDefectItemsFiltered(filter).observe(this, defectItems ->
+            mInspectViewModel.getAllDefectItemsFiltered(filter, mInspectionTypeId).observe(this, defectItems ->
                     adapter.submitList(defectItems));
         }
     }
