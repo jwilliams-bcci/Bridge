@@ -26,4 +26,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
     public void insert(Inspection_Table inspection) {
         mInspectionRepository.insert(inspection);
     }
+
+    public void swapOrder(int inspection_id, int new_order) {
+        mInspectionRepository.swapOrder(inspection_id, new_order);
+    }
 }

@@ -19,7 +19,7 @@ public interface Inspection_DAO {
     @Query("DELETE FROM inspection_table")
     void deleteAll();
 
-    @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id")
+    @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
     LiveData<List<Inspection_Table>> getInspections(int inspector_id);
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
@@ -32,4 +32,6 @@ public interface Inspection_DAO {
     void completeInspection(int inspection_id);
 
     //TODO: implement query to reorder the route sheet order based on drag and drop
+    @Query("UPDATE inspection_Table SET route_sheet_order = :new_order WHERE id = :inspection_id")
+    void swapOrder(int inspection_id, int new_order);
 }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,10 +37,11 @@ import java.util.Map;
 
 import data.Tables.Inspection_Table;
 
-public class RouteSheetActivity extends AppCompatActivity {
+public class RouteSheetActivity extends AppCompatActivity implements OnStartDragListener {
     private RouteSheetViewModel mRouteSheetViewModel;
     private SharedPreferences mSharedPreferences;
     private ImageView mReorderHandle;
+    private ItemTouchHelper mItemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +72,22 @@ public class RouteSheetActivity extends AppCompatActivity {
         RecyclerView recyclerInspections = findViewById(R.id.route_sheet_list_inspections);
         final RouteSheetListAdapter adapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
         recyclerInspections.setAdapter(adapter);
+        adapter.setDragListener(this);
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 
         mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
-        mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString("InspectorId", "0"))).observe(this, inspections ->
-                adapter.submitList(inspections));
+        mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString("InspectorId", "0"))).observe(this, inspections -> {
+            adapter.submitList(inspections);
+            adapter.setCurrentList(inspections);
+            //adapter.notifyDataSetChanged();
+        });
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerInspections);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerInspections);
     }
+
+
 
     private void updateRouteSheet() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
@@ -117,6 +125,7 @@ public class RouteSheetActivity extends AppCompatActivity {
                     inspection.notes = obj.getString("Comment");
                     inspection.is_complete = false;
                     inspection.is_uploaded = false;
+                    inspection.route_sheet_order = obj.optInt("Order");
 
                     mRouteSheetViewModel.insert(inspection);
                 } catch (JSONException e) {
@@ -134,5 +143,12 @@ public class RouteSheetActivity extends AppCompatActivity {
             }
         };
         queue.add(request);
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
+        int pos = viewHolder.getAdapterPosition() + 1;
+        Log.d("DRAG","Position of drag is... " + pos);
     }
 }

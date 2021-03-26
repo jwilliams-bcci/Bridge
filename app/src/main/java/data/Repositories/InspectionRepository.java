@@ -39,4 +39,8 @@ public class InspectionRepository {
     public void completeInspection(int inspection_id) {
         mInspectionDao.completeInspection(inspection_id);
     }
+
+    public void swapOrder(int inspection_id, int new_order) {
+        mInspectionDao.swapOrder(inspection_id, new_order);
+    }
 }
