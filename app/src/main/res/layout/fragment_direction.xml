@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="4dp"
     android:paddingVertical="4dp"
-    tools:context=".DirectionFragment">
+    tools:context=".defectitem.DirectionFragment">
 
     <TextView
         android:id="@+id/direction_text_title"

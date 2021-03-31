@@ -1,4 +1,4 @@
-package com.example.bridge;
+package com.example.bridge.defectitem;
 
 import android.os.Bundle;
 
@@ -13,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.bridge.FaultsRecyclerAdapter;
+import com.example.bridge.OnButtonClickListener;
+import com.example.bridge.R;
 
 import java.util.List;
 

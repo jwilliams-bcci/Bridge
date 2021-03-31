@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="4dp"
     android:paddingVertical="4dp"
-    tools:context=".RoomFragment">
+    tools:context=".defectitem.RoomFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

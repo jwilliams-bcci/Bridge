@@ -21,16 +21,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.bridge.R;
-import com.example.bridge.ReviewAndSubmitRecyclerAdapter;
 import com.example.bridge.routesheet.RouteSheetActivity;
 
-import java.util.List;
-
-import data.DataManager;
-import data.Inspection;
-import data.InspectionDefect;
-import data.InspectionResolution;
-import data.Location;
+import data.Enums.IncompleteReason;
 import data.Tables.Inspection_Table;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
@@ -132,9 +125,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         builder.create().show();
 
         Spinner spinnerResolutions = view.findViewById(R.id.dialog_edit_resolution_spinner_resolutions);
-        List<InspectionResolution> inspectionResolutions = DataManager.getInstance().getInspectionResolutions();
-        ArrayAdapter<InspectionResolution> adapterInspectionResolutions = new ArrayAdapter<>(this, R.layout.item_spinner_item, inspectionResolutions);
-        spinnerResolutions.setAdapter(adapterInspectionResolutions);
+        spinnerResolutions.setAdapter(new ArrayAdapter<IncompleteReason>(this, android.R.layout.simple_spinner_item, IncompleteReason.values()));
 
         Button buttonSaveResolution = view.findViewById(R.id.dialog_edit_resolution_button_save);
         buttonSaveResolution.setOnClickListener(v -> {

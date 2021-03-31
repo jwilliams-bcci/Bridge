@@ -38,6 +38,10 @@ public class InspectActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
     private LiveData<Inspection_Table> mInspection;
     private Button mButtonSaveAndExit;
+    private Button mButtonSortItemNumber;
+    private Button mButtonSortDescription;
+    private RecyclerView mRecyclerDefectItems;
+    private InspectListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +60,19 @@ public class InspectActivity extends AppCompatActivity {
         mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
         mInspection = mInspectViewModel.getInspection(mInspectionId);
         mButtonSaveAndExit = findViewById(R.id.inspect_button_save_and_exit);
+        mButtonSortItemNumber = findViewById(R.id.inspect_button_sort_by_defect_number);
+        mButtonSortDescription = findViewById(R.id.inspect_button_sort_by_description);
+        mRecyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
 
         displayAddress(textAddress);
         fillSpinner(mSpinnerDefectCategories);
+
+        mAdapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
+        mAdapter.setInspectionId(mInspectionId);
+        mAdapter.setInspectionTypeId(mInspectionTypeId);
+        mRecyclerDefectItems.setAdapter(mAdapter);
+        mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
+
         displayDefectItems("ALL");
 
         Button buttonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
@@ -71,6 +85,16 @@ public class InspectActivity extends AppCompatActivity {
         mButtonSaveAndExit.setOnClickListener(v -> {
             Intent routeSheetIntent = new Intent(InspectActivity.this, RouteSheetActivity.class);
             startActivity(routeSheetIntent);
+        });
+
+        mButtonSortItemNumber.setOnClickListener(v -> {
+            mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId).observe(this, defectItems ->
+                    mAdapter.submitList(defectItems));
+        });
+
+        mButtonSortDescription.setOnClickListener(v -> {
+            mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId).observe(this, defectItems ->
+                    mAdapter.submitList(defectItems));
         });
     }
 
@@ -104,20 +128,7 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void displayDefectItems(String filter) {
-        RecyclerView recyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
-        final InspectListAdapter adapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
-        adapter.setInspectionId(mInspectionId);
-        adapter.setInspectionTypeId(mInspectionTypeId);
-        recyclerDefectItems.setAdapter(adapter);
-        recyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
-
-        if (filter.equals("ALL")) {
-            mInspectViewModel.getAllDefectItems(mInspectionTypeId).observe(this, defectItems ->
-                    adapter.submitList(defectItems));
-        }
-        else {
-            mInspectViewModel.getAllDefectItemsFiltered(filter, mInspectionTypeId).observe(this, defectItems ->
-                    adapter.submitList(defectItems));
-        }
+        mInspectViewModel.getAllDefectItemsFilteredNumberSort(filter, mInspectionTypeId).observe(this, defectItems ->
+                mAdapter.submitList(defectItems));
     }
 }

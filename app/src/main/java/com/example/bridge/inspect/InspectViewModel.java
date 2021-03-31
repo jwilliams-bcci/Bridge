@@ -23,12 +23,20 @@ public class InspectViewModel extends AndroidViewModel {
         mInspectionRepository = new InspectionRepository(application);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItems(int inspection_type_id) {
-        return mDefectItemRepository.getAllDefectItems(inspection_type_id);
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredNumberSort(String category_name, int inspection_type_id) {
+        if (category_name.equals("ALL")) {
+            return mDefectItemRepository.getAllDefectItemsNumberSort(inspection_type_id);
+        } else {
+            return mDefectItemRepository.getAllDefectItemsFilteredNumberSort(category_name, inspection_type_id);
+        }
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFiltered(String category_name, int inspection_type_id) {
-        return mDefectItemRepository.getAllDefectItemsFiltered(category_name, inspection_type_id);
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredDescriptionSort(String category_name, int inspection_type_id) {
+        if (category_name.equals("ALL")) {
+            return mDefectItemRepository.getAllDefectItemsDescriptionSort(inspection_type_id);
+        } else {
+            return mDefectItemRepository.getAllDefectItemsFilteredDescriptionSort(category_name, inspection_type_id);
+        }
     }
 
     public LiveData<List<String>> getDefectCategories(int inspection_type_id) {

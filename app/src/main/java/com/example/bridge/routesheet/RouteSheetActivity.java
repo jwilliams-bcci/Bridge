@@ -19,8 +19,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.bridge.SimpleItemTouchHelperCallback;
-import com.example.bridge.OnStartDragListener;
 import com.example.bridge.R;
 
 import org.json.JSONException;
@@ -79,7 +77,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString("InspectorId", "0"))).observe(this, inspections -> {
             adapter.submitList(inspections);
             adapter.setCurrentList(inspections);
-            //adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         });
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
@@ -149,6 +147,12 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
         int pos = viewHolder.getAdapterPosition() + 1;
-        Log.d("DRAG","Position of drag is... " + pos);
+        Log.d("DRAG", "Position of drag is... " + pos);
+    }
+
+    @Override
+    public void onEndDrag(RecyclerView.ViewHolder viewHolder) {
+        int pos = viewHolder.getAdapterPosition() + 1;
+        Log.d("DRAG", "Position of drag is... " + pos);
     }
 }

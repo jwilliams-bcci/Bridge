@@ -1,4 +1,4 @@
-package com.example.bridge;
+package com.example.bridge.defectitem;
 
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.bridge.R;
 
 /**
  * A simple {@link Fragment} subclass.

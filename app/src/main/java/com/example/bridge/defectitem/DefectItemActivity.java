@@ -2,12 +2,8 @@ package com.example.bridge.defectitem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -15,7 +11,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 //import android.app.FragmentManager;
 //import android.app.FragmentTransaction;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,7 +29,6 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -44,11 +38,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.bridge.DirectionFragment;
-import com.example.bridge.FaultFragment;
-import com.example.bridge.LocationFragment;
 import com.example.bridge.R;
-import com.example.bridge.RoomFragment;
 import com.example.bridge.inspect.InspectActivity;
 
 import java.io.File;
@@ -56,12 +46,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import data.CannedComment;
-import data.DataManager;
-import data.DefectItem;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="4dp"
     android:paddingVertical="4dp"
-    tools:context=".LocationFragment">
+    tools:context=".defectitem.LocationFragment">
 
     <Button
         android:id="@+id/location_button_fourth"

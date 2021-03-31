@@ -1,7 +1,5 @@
-package com.example.bridge;
+package com.example.bridge.defectitem;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -15,6 +13,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.example.bridge.DirectionsRecyclerAdapter;
+import com.example.bridge.OnButtonClickListener;
+import com.example.bridge.R;
 
 import java.util.List;
 

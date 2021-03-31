@@ -1,7 +1,9 @@
 package com.example.bridge.routesheet;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -42,6 +44,15 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
             intent.putExtra(InspectionDetailsActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
             Toast.makeText(v.getContext(), "Inspection " + mInspectionId + " selected", Toast.LENGTH_SHORT).show();
             v.getContext().startActivity(intent);
+        });
+
+        mReorderHandle.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                Log.d("DRAG", "Action is ACTION_DOWN");
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                Log.d("DRAG", "Action is ACTION_UP");
+            }
+            return true;
         });
     }
 
