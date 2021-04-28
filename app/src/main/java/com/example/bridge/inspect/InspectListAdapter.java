@@ -28,14 +28,14 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
         boolean showSection = true;
         if (position > 0) {
             DefectItem_Table previous = getItem(position-1);
-            if (previous.category_name.equals(current.category_name)) {
+            if (previous.defect_category_name.equals(current.defect_category_name)) {
                 showSection = false;
             } else {
                 showSection = true;
             }
         }
         holder.mDefectItemId = current.id;
-        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.category_name), showSection, mInspectionId, mInspectionTypeId);
+        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId);
     }
 
     public void setInspectionId (int inspectionId) {

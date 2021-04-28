@@ -40,8 +40,10 @@ public class InspectActivity extends AppCompatActivity {
     private Button mButtonSaveAndExit;
     private Button mButtonSortItemNumber;
     private Button mButtonSortDescription;
+    private Button mButtonAddNote;
     private RecyclerView mRecyclerDefectItems;
     private InspectListAdapter mAdapter;
+    private AddNoteFragment mAddNoteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class InspectActivity extends AppCompatActivity {
         mButtonSaveAndExit = findViewById(R.id.inspect_button_save_and_exit);
         mButtonSortItemNumber = findViewById(R.id.inspect_button_sort_by_defect_number);
         mButtonSortDescription = findViewById(R.id.inspect_button_sort_by_description);
+        mButtonAddNote = findViewById(R.id.inspect_button_add_note);
         mRecyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
 
         displayAddress(textAddress);
@@ -95,6 +98,11 @@ public class InspectActivity extends AppCompatActivity {
         mButtonSortDescription.setOnClickListener(v -> {
             mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId).observe(this, defectItems ->
                     mAdapter.submitList(defectItems));
+        });
+
+        mButtonAddNote.setOnClickListener(v -> {
+            mAddNoteFragment = AddNoteFragment.newInstance();
+            mAddNoteFragment.show(getSupportFragmentManager(), "TAG");
         });
     }
 

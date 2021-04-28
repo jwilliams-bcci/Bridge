@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,15 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.android.volley.toolbox.Volley;
 import com.example.bridge.BridgeAPIQueue;
 import com.example.bridge.R;
 import com.example.bridge.ServerCallback;
@@ -33,16 +28,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import data.Tables.CannedComment_Table;
-import data.Tables.DefectCategory_InspectionType_XRef;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 
@@ -66,6 +60,10 @@ public class LoginActivity extends AppCompatActivity {
             textUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
             String userName = textUserName.getText().toString();
             String password = textPassword.getText().toString();
+            String inspectorId = mSharedPreferences.getString("InspectorId", "NULL");
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
+            DateFormat format = new SimpleDateFormat("MM-dd-YYYY", Locale.ENGLISH);
 
             RequestQueue queue = BridgeAPIQueue.getInstance(this).getRequestQueue();
             JsonObjectRequest loginRequest = loginUser("https://apistage.burgess-inc.com/api/Bridge/Login?userName=" + userName + "&password=" + password, new ServerCallback() {
@@ -88,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
             });
-            JsonArrayRequest updateDefectItemsRequest = updateDefectItems("https://apistage.burgess-inc.com/api/Bridge/GetDefectItems", new ServerCallback() {
+            JsonArrayRequest updateDefectItemsRequest = updateDefectItems("https://apistage.burgess-inc.com/api/Bridge/GetDefectItems?inspectorId=" + inspectorId + "&inspectionDate=" + formatter.format(LocalDateTime.now()), new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
@@ -148,10 +146,12 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject obj = response.getJSONObject(i);
                     DefectItem_Table defectItem = new DefectItem_Table();
                     defectItem.id = obj.optInt("DefectItemID");
-                    defectItem.item_number = obj.optInt("ItemNumber");
-                    defectItem.item_description = obj.optString("ItemDescription");
                     defectItem.defect_category_id = obj.optInt("DefectCategoryID");
-                    defectItem.category_name = obj.optString("CategoryName");
+                    defectItem.defect_category_name = obj.optString("DefectCategoryName");
+                    defectItem.item_number = obj.optInt("ItemNumber");
+                    defectItem.inspection_type_id = obj.optInt("InspectionTypeID");
+                    defectItem.item_description = obj.optString("ItemDescription");
+                    defectItem.spanish_item_description = obj.optString("SpanishItemDescription");
 
                     mLoginViewModel.insertDefectItem(defectItem);
                 } catch (JSONException e) {
