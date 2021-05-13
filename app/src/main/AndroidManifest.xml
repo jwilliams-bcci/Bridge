@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example.bridge">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.burgess.bridge">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +17,7 @@
 
     <uses-feature
         android:name="android.hardware.camera2"
-        android:required="true" />
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +28,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".login.LoginActivity"
+            android:name="com.burgess.bridge.login.LoginActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,39 +36,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".reviewandsubmit.ReviewAndSubmitActivity"
+            android:name="com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".defectitem.DefectItemActivity"
+            android:name="com.burgess.bridge.defectitem.DefectItemActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".EditResolutionActivity"
+            android:name="com.burgess.bridge.EditResolutionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".AssignTraineeActivity"
+            android:name="com.burgess.bridge.AssignTraineeActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".TransferInspectionActivity"
+            android:name="com.burgess.bridge.TransferInspectionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".InspectionHistoryActivity"
+            android:name="com.burgess.bridge.InspectionHistoryActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".InspectionDetailsActivity"
+            android:name="com.burgess.bridge.InspectionDetailsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".inspect.InspectActivity"
+            android:name="com.burgess.bridge.inspect.InspectActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".UploadProgress"
+            android:name="com.burgess.bridge.UploadProgress"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".routesheet.RouteSheetActivity"
+            android:name="com.burgess.bridge.routesheet.RouteSheetActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.bridge"
+            android:authorities="com.burgess.bridge"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

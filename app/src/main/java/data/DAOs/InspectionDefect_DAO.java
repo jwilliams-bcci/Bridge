@@ -22,6 +22,9 @@ public interface InspectionDefect_DAO {
     @Query("SELECT * FROM inspection_defect_table WHERE inspection_id = :inspection_id ORDER BY id ASC")
     LiveData<List<InspectionDefect_Table>> getInspectionDefects(int inspection_id);
 
+    @Query("SELECT * FROM inspection_defect_table WHERE inspection_id= :inspection_id ORDER BY id ASC")
+    List<InspectionDefect_Table> getInspectionDefectsSync(int inspection_id);
+
     @Query("SELECT * FROM inspection_defect_table WHERE id = :inspection_defect_id")
     LiveData<InspectionDefect_Table> getInspectionDefect(int inspection_defect_id);
 

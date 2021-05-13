@@ -27,6 +27,10 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefects(inspection_id);
     }
 
+    public List<InspectionDefect_Table> getAllInspectionDefectsSync(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsSync(inspection_id);
+    }
+
     public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReview(int inspection_id) {
         return mInspectionDefectDao.getInspectionDefectsForReview(inspection_id);
     }

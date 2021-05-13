@@ -20,4 +20,8 @@ public class InspectionDefect_Table {
         this.comment = comment;
         this.picture_path = picture_path;
     }
+
+    public InspectionDefect_Table() {
+
+    }
 }
