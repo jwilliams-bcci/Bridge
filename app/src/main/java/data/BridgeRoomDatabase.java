@@ -9,7 +9,6 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,6 +20,7 @@ import data.DAOs.DefectItem_DAO;
 import data.DAOs.DefectItem_InspectionType_DAO;
 import data.DAOs.Direction_DAO;
 import data.DAOs.InspectionDefect_DAO;
+import data.DAOs.InspectionHistory_DAO;
 import data.DAOs.InspectionResolution_DAO;
 import data.DAOs.Inspection_DAO;
 import data.DAOs.Location_DAO;
@@ -33,10 +33,13 @@ import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
 import data.Tables.InspectionDefect_Table;
+import data.Tables.InspectionHistory_Table;
 import data.Tables.InspectionResolution_Table;
 import data.Tables.Inspection_Table;
 import data.Tables.Location_Table;
 import data.Tables.Room_Table;
+import data.Views.ReviewAndSubmit_View;
+import data.Views.RouteSheet_View;
 
 @Database(entities = {
         Builder_Table.class,
@@ -50,11 +53,12 @@ import data.Tables.Room_Table;
         Location_Table.class,
         Room_Table.class,
         DefectCategory_InspectionType_XRef.class,
-        DefectItem_InspectionType_XRef.class
+        DefectItem_InspectionType_XRef.class,
+        InspectionHistory_Table.class
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 8, exportSchema = false)
+        }, version = 9, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -69,6 +73,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Room_DAO mRoomDao();
     public abstract DefectCategory_InspectionType_DAO mDefectCategory_InspectionTypeDao();
     public abstract DefectItem_InspectionType_DAO mDefectItem_InspectionTypeDao();
+    public abstract InspectionHistory_DAO mInspectionHistoryDao();
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);

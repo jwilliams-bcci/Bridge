@@ -42,7 +42,9 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.inspect.InspectActivity;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,8 +60,6 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final int INSPECTION_TYPE_ID_NOT_FOUND = -1;
     public static final String DEFECT_ID = "com.example.bridge.DEFECT_ID";
     public static final int DEFECT_ID_NOT_FOUND = -1;
-    public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
-    public static final int LOCATION_ID_NOT_FOUND = -1;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean pictureTaken = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
@@ -243,7 +243,6 @@ public class DefectItemActivity extends AppCompatActivity {
 
             if (buttonSelected) {
                 mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
-                //Toast.makeText(getApplicationContext(), "Saving defect to Inspection... StatusId: " + defectStatusId + " Comment: " + comment, Toast.LENGTH_SHORT).show();
                 Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
                 inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
                 inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
@@ -261,7 +260,7 @@ public class DefectItemActivity extends AppCompatActivity {
                 try {
                     photoFile = createImageFile();
                 } catch (IOException e) {
-                    Toast.makeText(getApplicationContext(), "Error saving image: " + e.getMessage(), Toast.LENGTH_SHORT);
+                    Toast.makeText(getApplicationContext(), "Error saving image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
                 if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(this, "com.burgess.bridge", photoFile);
@@ -330,7 +329,6 @@ public class DefectItemActivity extends AppCompatActivity {
         String imageFileName = "Bridge_" + mInspectionId + "_" + mDefectId + "_" + timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
@@ -339,8 +337,8 @@ public class DefectItemActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap imageBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(currentPhotoPath), 128, 128);
-            mImageViewThumbnail.setImageBitmap(imageBitmap);
+            Bitmap imageThumbnailBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(currentPhotoPath), 128, 128);
+            mImageViewThumbnail.setImageBitmap(imageThumbnailBitmap);
             pictureTaken = true;
         }
     }

@@ -9,7 +9,6 @@ import androidx.room.Query;
 import java.util.List;
 
 import data.Tables.Inspection_Table;
-import data.RouteSheet_View;
 
 @Dao
 public interface Inspection_DAO {
@@ -27,6 +26,9 @@ public interface Inspection_DAO {
 
     @Query("SELECT inspection_type_id FROM inspection_table WHERE id = :inspection_id")
     LiveData<Integer> getInspectionTypeId(int inspection_id);
+
+    @Query("SELECT reinspect FROM inspection_table WHERE id = :inspection_id")
+    boolean getReinspect(int inspection_id);
 
     @Query("UPDATE inspection_table SET is_complete = 1 WHERE id = :inspection_id")
     void completeInspection(int inspection_id);

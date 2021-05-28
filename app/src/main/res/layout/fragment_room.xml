@@ -25,27 +25,26 @@
 
     <EditText
         android:id="@+id/room_text_result"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="Enter room"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/room_button_save_and_exit"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/room_button_save_and_exit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/button_location_blue"
         android:text="@string/SaveAndExit"
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/room_text_result"
         app:layout_constraintTop_toTopOf="@+id/room_text_result" />
 
     <androidx.recyclerview.widget.RecyclerView

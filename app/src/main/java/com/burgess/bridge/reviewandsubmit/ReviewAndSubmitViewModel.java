@@ -11,7 +11,7 @@ import java.util.List;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionRepository;
-import data.ReviewAndSubmit_View;
+import data.Views.ReviewAndSubmit_View;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 
@@ -27,6 +27,10 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         mInspectionRepository = new InspectionRepository(application);
     }
 
+    public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
+        return mInspectionDefectRepository.getInspectionDefect(inspectionDefectId);
+    }
+
     public LiveData<List<InspectionDefect_Table>> getAllInspectionDefects(int inspectionId) {
         return mInspectionDefectRepository.getAllInspectionDefects(inspectionId);
     }
@@ -37,6 +41,10 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReview(int inspectionId) {
         return mInspectionDefectRepository.getInspectionDefectsForReview(inspectionId);
+    }
+
+    public List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewSync(inspectionId);
     }
 
     public LiveData<Inspection_Table> getInspection(int inspectionId) {

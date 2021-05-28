@@ -1,4 +1,4 @@
-package data;
+package data.Views;
 
 import androidx.room.DatabaseView;
 

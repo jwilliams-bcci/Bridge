@@ -30,6 +30,10 @@ public class InspectionRepository {
         return mInspectionDao.getInspectionTypeId(inspection_id);
     }
 
+    public boolean getReinspect(int inspection_id) {
+        return mInspectionDao.getReinspect(inspection_id);
+    }
+
     public void insert(Inspection_Table inspection) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
             mInspectionDao.insert(inspection);

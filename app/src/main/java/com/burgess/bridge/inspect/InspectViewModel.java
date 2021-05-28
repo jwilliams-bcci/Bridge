@@ -23,19 +23,35 @@ public class InspectViewModel extends AndroidViewModel {
         mInspectionRepository = new InspectionRepository(application);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredNumberSort(String category_name, int inspection_type_id) {
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredNumberSort(String category_name, int inspection_type_id, boolean isReinspect, int inspection_id) {
         if (category_name.equals("ALL")) {
-            return mDefectItemRepository.getAllDefectItemsNumberSort(inspection_type_id);
+            if (isReinspect) {
+                return mDefectItemRepository.getAllReinspectionDefectItemsNumberSort(inspection_id);
+            } else {
+                return mDefectItemRepository.getAllDefectItemsNumberSort(inspection_type_id);
+            }
         } else {
-            return mDefectItemRepository.getAllDefectItemsFilteredNumberSort(category_name, inspection_type_id);
+            if (isReinspect) {
+                return mDefectItemRepository.getAllReinspectionDefectItemsFilteredNumberSort(category_name, inspection_id);
+            } else {
+                return mDefectItemRepository.getAllDefectItemsFilteredNumberSort(category_name, inspection_type_id);
+            }
         }
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredDescriptionSort(String category_name, int inspection_type_id) {
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredDescriptionSort(String category_name, int inspection_type_id, boolean isReinspect, int inspection_id) {
         if (category_name.equals("ALL")) {
-            return mDefectItemRepository.getAllDefectItemsDescriptionSort(inspection_type_id);
+            if (isReinspect) {
+                return mDefectItemRepository.getAllReinspectionDefectItemsDescriptionSort(inspection_id);
+            } else {
+                return mDefectItemRepository.getAllDefectItemsDescriptionSort(inspection_type_id);
+            }
         } else {
-            return mDefectItemRepository.getAllDefectItemsFilteredDescriptionSort(category_name, inspection_type_id);
+            if (isReinspect) {
+                return mDefectItemRepository.getAllReinspectionDefectItemsFilteredDescriptionSort(category_name, inspection_id);
+            } else {
+                return mDefectItemRepository.getAllDefectItemsFilteredDescriptionSort(category_name, inspection_type_id);
+            }
         }
     }
 
@@ -45,6 +61,10 @@ public class InspectViewModel extends AndroidViewModel {
 
     public LiveData<Inspection_Table> getInspection(int inspection_id) {
         return mInspectionRepository.getInspection(inspection_id);
+    }
+
+    public boolean getReinspect(int inspection_id) {
+        return mInspectionRepository.getReinspect(inspection_id);
     }
 
     public LiveData<Integer> getInspectionTypeId(int inspection_id) {

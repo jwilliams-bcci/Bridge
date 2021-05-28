@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import data.ReviewAndSubmit_View;
+import data.Views.ReviewAndSubmit_View;
 
 public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View, ReviewAndSubmitViewHolder> {
 

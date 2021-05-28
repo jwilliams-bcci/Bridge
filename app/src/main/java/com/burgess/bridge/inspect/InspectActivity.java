@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +22,13 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 
+import java.util.List;
+import java.util.Objects;
+
+import data.Tables.DefectItem_Table;
 import data.Tables.Inspection_Table;
+
+import static com.burgess.bridge.Constants.PREF;
 
 public class InspectActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
@@ -30,9 +37,12 @@ public class InspectActivity extends AppCompatActivity {
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     public static final int INSPECTION_TYPE_ID_NOT_FOUND = -1;
     public static final int LOCATION_ID_NOT_FOUND = -1;
+    public static final String TAG = "INSPECT";
+
     public int mInspectionId;
     private int mLocationId;
     public int mInspectionTypeId;
+    public boolean mReinspection;
     private Spinner mSpinnerDefectCategories;
     private InspectViewModel mInspectViewModel;
     private SharedPreferences mSharedPreferences;
@@ -50,7 +60,7 @@ public class InspectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspect);
         setSupportActionBar(findViewById(R.id.inspect_toolbar));
-        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
 
         Intent intent = getIntent();
         TextView textAddress = findViewById(R.id.inspect_text_inspection_address);
@@ -61,6 +71,7 @@ public class InspectActivity extends AppCompatActivity {
         mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
         mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
         mInspection = mInspectViewModel.getInspection(mInspectionId);
+        mReinspection = mInspectViewModel.getReinspect(mInspectionId);
         mButtonSaveAndExit = findViewById(R.id.inspect_button_save_and_exit);
         mButtonSortItemNumber = findViewById(R.id.inspect_button_sort_by_defect_number);
         mButtonSortDescription = findViewById(R.id.inspect_button_sort_by_description);
@@ -91,12 +102,12 @@ public class InspectActivity extends AppCompatActivity {
         });
 
         mButtonSortItemNumber.setOnClickListener(v -> {
-            mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId).observe(this, defectItems ->
+            mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mReinspection, mInspectionId).observe(this, defectItems ->
                     mAdapter.submitList(defectItems));
         });
 
         mButtonSortDescription.setOnClickListener(v -> {
-            mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId).observe(this, defectItems ->
+            mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mReinspection, mInspectionId).observe(this, defectItems ->
                     mAdapter.submitList(defectItems));
         });
 
@@ -136,7 +147,7 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void displayDefectItems(String filter) {
-        mInspectViewModel.getAllDefectItemsFilteredNumberSort(filter, mInspectionTypeId).observe(this, defectItems ->
+        mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(filter, mInspectionTypeId, mReinspection, mInspectionId).observe(this, defectItems ->
                 mAdapter.submitList(defectItems));
     }
 }

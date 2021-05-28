@@ -29,6 +29,7 @@ public class Inspection_Table {
     public String city;
     public String inspection_type;
     public boolean reinspect;
+    public int inspection_order;
     public String address;
     public int inspection_status_id;
     public String inspection_status;
@@ -50,11 +51,11 @@ public class Inspection_Table {
                             String builder_name, int builder_id, String super_name,
                             int inspector_id, String inspector, String community, int community_id,
                             String city, int inspection_type_id, String inspection_type,
-                            boolean reinspect, String address, int inspection_status_id,
-                            String inspection_status, String super_phone, String super_email,
-                            int super_present, String incomplete_reason, int incomplete_reason_id,
-                            String notes, boolean is_complete, boolean is_uploaded,
-                            int route_sheet_order) {
+                            boolean reinspect, int inspection_order, String address,
+                            int inspection_status_id, String inspection_status, String super_phone,
+                            String super_email, int super_present, String incomplete_reason,
+                            int incomplete_reason_id, String notes, boolean is_complete,
+                            boolean is_uploaded, int route_sheet_order) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.builder_name = builder_name;
@@ -69,6 +70,7 @@ public class Inspection_Table {
         this.inspection_type_id = inspection_type_id;
         this.inspection_type = inspection_type;
         this.reinspect = reinspect;
+        this.inspection_order = inspection_order;
         this.address = address;
         this.inspection_status_id = inspection_status_id;
         this.inspection_status = inspection_status;
