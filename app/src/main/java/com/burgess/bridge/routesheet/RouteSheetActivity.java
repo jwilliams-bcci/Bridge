@@ -208,6 +208,10 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
                     hist.inspection_id = inspectionId;
                     hist.previous_inspection_id = obj.optInt("InspectionID");
                     hist.defect_item_id = obj.optInt("DefectItemID");
+                    hist.defect_item_number = obj.optInt("ItemNumber");
+                    hist.defect_category_id = obj.optInt("DefectCategoryID");
+                    hist.defect_category_name = obj.optString("CategoryName");
+                    hist.defect_item_description = obj.optString("ItemDescription");
                     hist.comment = obj.optString("Comment");
                     mRouteSheetViewModel.insertInspectionHistory(hist);
                 } catch (JSONException e) {

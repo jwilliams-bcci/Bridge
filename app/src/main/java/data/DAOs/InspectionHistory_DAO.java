@@ -18,9 +18,32 @@ public interface InspectionHistory_DAO {
     @Query("DELETE FROM inspection_history_table")
     void deleteAll();
 
-    @Query("SELECT * FROM inspection_history_table WHERE inspection_id = :inspection_id")
+    @Query("SELECT * " +
+            "FROM inspection_history_table " +
+            "WHERE inspection_id = :inspection_id")
     LiveData<List<InspectionHistory_Table>> getInspectionHistory(int inspection_id);
 
-    @Query("SELECT * FROM inspection_history_table WHERE inspection_id = :inspection_id")
-    List<InspectionHistory_Table> getInspectionHistorySync(int inspection_id);
+    @Query("SELECT h.* " +
+            "FROM inspection_history_table h " +
+            "WHERE h.inspection_id = :inspection_id " +
+            "ORDER BY h.defect_category_id, h.defect_item_number ASC")
+    LiveData<List<InspectionHistory_Table>> getInspectionHistoryNumberSort(int inspection_id);
+
+    @Query("SELECT h.* " +
+            "FROM inspection_history_table h " +
+            "WHERE h.inspection_id = :inspection_id " +
+            "ORDER BY h.defect_category_id, h.defect_item_description ASC")
+    LiveData<List<InspectionHistory_Table>> getInspectionHistoryDescriptionSort(int inspection_id);
+
+    @Query("SELECT h.* " +
+            "FROM inspection_history_table h " +
+            "WHERE h.inspection_id = :inspection_id AND h.defect_category_name = :category_name " +
+            "ORDER BY h.defect_category_id, h.defect_item_number ASC")
+    LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredNumberSort(String category_name, int inspection_id);
+
+    @Query("SELECT h.* " +
+            "FROM inspection_history_table h " +
+            "WHERE h.inspection_id = :inspection_id AND h.defect_category_name = :category_name " +
+            "ORDER BY h.defect_category_id, h.defect_item_description ASC")
+    LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredDescriptionSort(String category_name, int inspection_id);
 }

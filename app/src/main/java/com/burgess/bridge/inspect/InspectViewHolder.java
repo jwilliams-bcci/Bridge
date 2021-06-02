@@ -15,6 +15,7 @@ import com.burgess.bridge.R;
 
 public class InspectViewHolder extends RecyclerView.ViewHolder {
     public int mDefectItemId;
+    public int mInspectionHistoryId;
     public int mInspectionTypeId;
     public int mInspectionId;
     private final TextView mTextDefectItemNumber;
@@ -32,6 +33,7 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
             intent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
             intent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
             intent.putExtra(DefectItemActivity.DEFECT_ID, mDefectItemId);
+            intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, mInspectionHistoryId);
             Toast.makeText(v.getContext(), mTextDefectItemDescription.getText() + " selected", Toast.LENGTH_SHORT).show();
             v.getContext().startActivity(intent);
         });

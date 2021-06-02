@@ -9,49 +9,53 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import data.Repositories.DefectItemRepository;
+import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Tables.DefectItem_Table;
+import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
 
 public class InspectViewModel extends AndroidViewModel {
     private DefectItemRepository mDefectItemRepository;
     private InspectionRepository mInspectionRepository;
+    private InspectionHistoryRepository mInspectionHistoryRepository;
 
     public InspectViewModel(@NonNull Application application) {
         super(application);
         mDefectItemRepository = new DefectItemRepository(application);
         mInspectionRepository = new InspectionRepository(application);
+        mInspectionHistoryRepository = new InspectionHistoryRepository(application);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredNumberSort(String category_name, int inspection_type_id, boolean isReinspect, int inspection_id) {
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredNumberSort(String category_name, int inspection_type_id, int inspection_id) {
         if (category_name.equals("ALL")) {
-            if (isReinspect) {
-                return mDefectItemRepository.getAllReinspectionDefectItemsNumberSort(inspection_id);
-            } else {
-                return mDefectItemRepository.getAllDefectItemsNumberSort(inspection_type_id);
-            }
+            return mDefectItemRepository.getAllDefectItemsNumberSort(inspection_type_id);
         } else {
-            if (isReinspect) {
-                return mDefectItemRepository.getAllReinspectionDefectItemsFilteredNumberSort(category_name, inspection_id);
-            } else {
-                return mDefectItemRepository.getAllDefectItemsFilteredNumberSort(category_name, inspection_type_id);
-            }
+            return mDefectItemRepository.getAllDefectItemsFilteredNumberSort(category_name, inspection_type_id);
         }
     }
 
-    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredDescriptionSort(String category_name, int inspection_type_id, boolean isReinspect, int inspection_id) {
+    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredNumberSort(String category_name, int inspection_type_id, int inspection_id) {
         if (category_name.equals("ALL")) {
-            if (isReinspect) {
-                return mDefectItemRepository.getAllReinspectionDefectItemsDescriptionSort(inspection_id);
-            } else {
-                return mDefectItemRepository.getAllDefectItemsDescriptionSort(inspection_type_id);
-            }
+            return mInspectionHistoryRepository.getInspectionHistoryNumberSort(inspection_id);
         } else {
-            if (isReinspect) {
-                return mDefectItemRepository.getAllReinspectionDefectItemsFilteredDescriptionSort(category_name, inspection_id);
-            } else {
-                return mDefectItemRepository.getAllDefectItemsFilteredDescriptionSort(category_name, inspection_type_id);
-            }
+            return mInspectionHistoryRepository.getInspectionHistoryFilteredNumberSort(category_name, inspection_id);
+        }
+    }
+
+    public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredDescriptionSort(String category_name, int inspection_type_id, int inspection_id) {
+        if (category_name.equals("ALL")) {
+            return mDefectItemRepository.getAllDefectItemsDescriptionSort(inspection_type_id);
+        } else {
+            return mDefectItemRepository.getAllDefectItemsFilteredDescriptionSort(category_name, inspection_id);
+        }
+    }
+
+    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredDescriptionSort(String category_name, int inspection_type_id, int inspection_id) {
+        if (category_name.equals("ALL")) {
+            return mInspectionHistoryRepository.getInspectionHistoryDescriptionSort(inspection_id);
+        } else {
+            return mInspectionHistoryRepository.getInspectionHistoryFilteredDescriptionSort(category_name, inspection_id);
         }
     }
 

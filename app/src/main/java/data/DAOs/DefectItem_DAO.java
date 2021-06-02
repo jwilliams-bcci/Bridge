@@ -56,7 +56,7 @@ public interface DefectItem_DAO {
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
             "INNER JOIN inspection_history_table h ON h.defect_item_id = d.id " +
-            "WHERE defect_category_name = :categoryName AND h.inspection_id = :inspection_id " +
+            "WHERE d.defect_category_name = :categoryName AND h.inspection_id = :inspection_id " +
             "ORDER BY d.item_number ASC")
     LiveData<List<DefectItem_Table>> getReinspectionDefectItemsFilteredNumberSort(String categoryName, int inspection_id);
 
@@ -70,7 +70,7 @@ public interface DefectItem_DAO {
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
             "INNER JOIN inspection_history_table h ON h.defect_item_id = d.id " +
-            "WHERE defect_category_name = :categoryName AND h.inspection_id = :inspection_id " +
+            "WHERE d.defect_category_name = :categoryName AND h.inspection_id = :inspection_id " +
             "ORDER BY d.item_description ASC")
     LiveData<List<DefectItem_Table>> getReinspectionDefectItemsFilteredDescriptionSort(String categoryName, int inspection_id);
 

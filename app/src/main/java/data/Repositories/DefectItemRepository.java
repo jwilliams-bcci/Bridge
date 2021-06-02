@@ -27,32 +27,16 @@ public class DefectItemRepository {
         return mDefectItemDao.getDefectItemsNumberSort(inspection_type_id);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllReinspectionDefectItemsNumberSort(int inspection_id) {
-        return mDefectItemDao.getReinspectionDefectItemsNumberSort(inspection_id);
-    }
-
     public LiveData<List<DefectItem_Table>> getAllDefectItemsDescriptionSort(int inspection_type_id) {
         return mDefectItemDao.getDefectItemsDescriptionSort(inspection_type_id);
-    }
-
-    public LiveData<List<DefectItem_Table>> getAllReinspectionDefectItemsDescriptionSort(int inspection_id) {
-        return mDefectItemDao.getReinspectionDefectItemsDescriptionSort(inspection_id);
     }
 
     public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredNumberSort(String category_name, int inspection_type_id) {
         return mDefectItemDao.getDefectItemsFilteredNumberSort(category_name, inspection_type_id);
     }
 
-    public LiveData<List<DefectItem_Table>> getAllReinspectionDefectItemsFilteredNumberSort(String category_name, int inspection_id) {
-        return mDefectItemDao.getReinspectionDefectItemsFilteredNumberSort(category_name, inspection_id);
-    }
-
     public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredDescriptionSort(String category_name, int inspection_type_id) {
         return mDefectItemDao.getDefectItemsFilteredDescriptionSort(category_name, inspection_type_id);
-    }
-
-    public LiveData<List<DefectItem_Table>> getAllReinspectionDefectItemsFilteredDescriptionSort(String category_name, int inspection_id) {
-        return mDefectItemDao.getReinspectionDefectItemsFilteredDescriptionSort(category_name, inspection_id);
     }
 
     public LiveData<List<String>> getDefectCategories(int inspection_type_id) {

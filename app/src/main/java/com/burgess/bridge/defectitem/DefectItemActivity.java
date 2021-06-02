@@ -54,12 +54,14 @@ import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
 
 public class DefectItemActivity extends AppCompatActivity {
-    public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
+    public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
-    public static final String INSPECTION_TYPE_ID = "com.example.bridge.INSPECTION_TYPE_ID";
+    public static final String INSPECTION_TYPE_ID = "com.burgess.bridge.INSPECTION_TYPE_ID";
     public static final int INSPECTION_TYPE_ID_NOT_FOUND = -1;
-    public static final String DEFECT_ID = "com.example.bridge.DEFECT_ID";
+    public static final String DEFECT_ID = "com.burgess.bridge.DEFECT_ID";
     public static final int DEFECT_ID_NOT_FOUND = -1;
+    public static final String INSPECTION_HISTORY_ID = "com.burgess.bridge.INSPECTION_HISTORY_ID";
+    public static final int INSPECTION_HISTORY_ID_NOT_FOUND = -1;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean pictureTaken = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);

@@ -58,7 +58,7 @@ import data.Views.RouteSheet_View;
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 9, exportSchema = false)
+        }, version = 10, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
