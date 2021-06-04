@@ -53,6 +53,8 @@ import java.util.Locale;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
 
+import static com.burgess.bridge.Constants.PREF;
+
 public class DefectItemActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
@@ -62,6 +64,8 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final int DEFECT_ID_NOT_FOUND = -1;
     public static final String INSPECTION_HISTORY_ID = "com.burgess.bridge.INSPECTION_HISTORY_ID";
     public static final int INSPECTION_HISTORY_ID_NOT_FOUND = -1;
+    public static final String INSPECTION_DEFECT_ID = "com.burgess.bridge.INSPECTION_DEFECT_ID";
+    public static final int INSPECTION_DEFECT_ID_NOT_FOUND = -1;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public boolean pictureTaken = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
@@ -70,6 +74,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private int mInspectionId;
     private int mInspectionTypeId;
     private int mDefectId;
+    private int mInspectionDefectId;
     private DefectItemViewModel mDefectItemViewModel;
     private LiveData<DefectItem_Table> mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
@@ -98,7 +103,7 @@ public class DefectItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_defect_item);
         setSupportActionBar(findViewById(R.id.defect_item_toolbar));
         checkPermission();
-        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
 
         Intent intent = getIntent();
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
@@ -106,6 +111,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
         mInspectionTypeId = intent.getIntExtra(INSPECTION_TYPE_ID, INSPECTION_TYPE_ID_NOT_FOUND);
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
+        mInspectionDefectId = intent.getIntExtra(INSPECTION_DEFECT_ID, INSPECTION_DEFECT_ID_NOT_FOUND);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
         mImageViewThumbnail = findViewById(R.id.defect_item_imageview_thumbnail);
@@ -244,11 +250,19 @@ public class DefectItemActivity extends AppCompatActivity {
             }
 
             if (buttonSelected) {
-                mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
-                Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
-                inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
-                inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
-                startActivity(inspectIntent);
+                if (mInspectionDefectId > 0) {
+                    InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
+                    currentItem.comment = comment;
+                    currentItem.defect_status_id = defectStatusId;
+                    mDefectItemViewModel.updateInspectionDefect(currentItem);
+                    finish();
+                } else {
+                    mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
+                    Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
+                    inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+                    inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
+                    startActivity(inspectIntent);
+                }
             } else {
                 Toast.makeText(getApplicationContext(), "Please select a status", Toast.LENGTH_SHORT).show();
             }
@@ -296,6 +310,10 @@ public class DefectItemActivity extends AppCompatActivity {
             startActivity(inspectIntent);
         });
 
+        if (mInspectionDefectId > 0) {
+            InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
+            mDefectItemTextSpeech.setText(currentItem.comment);
+        }
         displayDefectDetails(mDefectItemDetails);
         fillSpinner(mSpinnerCannedComment);
     }

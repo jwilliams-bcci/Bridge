@@ -27,7 +27,7 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
         if (current.picture_path != null) {
             showThumbnail = true;
         }
-        holder.bind(current.item_number, current.item_description, current.comment, showThumbnail);
+        holder.bind(current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, showThumbnail);
     }
 
     public static class ReviewAndSubmitDiff extends DiffUtil.ItemCallback<ReviewAndSubmit_View> {

@@ -45,4 +45,12 @@ public class DefectItemViewModel extends AndroidViewModel {
     public LiveData<Inspection_Table> getInspection(int inspection_id) {
         return mInspectionRepository.getInspection(inspection_id);
     }
+
+    public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
+        return mInspectionDefectRepository.getInspectionDefect(inspectionDefectId);
+    }
+
+    public void updateInspectionDefect(InspectionDefect_Table inspectionDefect) {
+        mInspectionDefectRepository.updateInspectionDefect(inspectionDefect);
+    }
 }

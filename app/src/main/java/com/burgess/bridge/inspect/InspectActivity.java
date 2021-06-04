@@ -80,24 +80,20 @@ public class InspectActivity extends AppCompatActivity {
         displayAddress(textAddress);
         fillSpinner(mSpinnerDefectCategories);
 
+        mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
         if (mReinspection) {
             Log.i(TAG, "Going into reinspect list adapter...");
             mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.InspectDiff());
             mReinspectListAdapter.setInspectionId(mInspectionId);
             mReinspectListAdapter.setInspectionTypeId(mInspectionTypeId);
             mRecyclerDefectItems.setAdapter(mReinspectListAdapter);
+            displayReinspectItems("ALL");
         } else {
             Log.i(TAG, "Going into new inspection list adapter...");
             mInspectListAdapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
             mInspectListAdapter.setInspectionId(mInspectionId);
             mInspectListAdapter.setInspectionTypeId(mInspectionTypeId);
             mRecyclerDefectItems.setAdapter(mInspectListAdapter);
-        }
-        mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
-
-        if (mReinspection) {
-            displayReinspectItems("ALL");
-        } else {
             displayDefectItems("ALL");
         }
 

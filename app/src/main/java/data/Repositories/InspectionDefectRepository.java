@@ -44,4 +44,10 @@ public class InspectionDefectRepository {
             mInspectionDefectDao.insert(inspectionDefect);
         });
     }
+
+    public void updateInspectionDefect(InspectionDefect_Table inspectionDefect) {
+        BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mInspectionDefectDao.update(inspectionDefect);
+        });
+    }
 }

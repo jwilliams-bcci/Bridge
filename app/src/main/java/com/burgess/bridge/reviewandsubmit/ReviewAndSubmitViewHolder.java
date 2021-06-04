@@ -1,18 +1,23 @@
 package com.burgess.bridge.reviewandsubmit;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.bridge.R;
+import com.burgess.bridge.defectitem.DefectItemActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 public class ReviewAndSubmitViewHolder extends RecyclerView.ViewHolder {
     public int mInspectionDefectId;
+    public int mDefectItemId;
     private final TextView mTextDefectItemNumber;
     private final TextView mTextDefectItemDescription;
     private final TextView mTextInspectionDefectComment;
@@ -24,9 +29,18 @@ public class ReviewAndSubmitViewHolder extends RecyclerView.ViewHolder {
         mTextDefectItemDescription = itemView.findViewById(R.id.item_inspection_defect_text_defect_description);
         mTextInspectionDefectComment = itemView.findViewById(R.id.item_inspection_defect_text_comment);
         mImageViewShowThumbnail = itemView.findViewById(R.id.item_inspection_defect_imageview);
+
+        itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), DefectItemActivity.class);
+            intent.putExtra(DefectItemActivity.DEFECT_ID, mDefectItemId);
+            intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, mInspectionDefectId);
+            v.getContext().startActivity(intent);
+        });
     }
 
-    public void bind(int defectItemNumber, String defectItemDescription, String comment, boolean showThumbnail) {
+    public void bind(int inspectionDefectId, int defectItemId, int defectItemNumber, String defectItemDescription, String comment, boolean showThumbnail) {
+        mInspectionDefectId = inspectionDefectId;
+        mDefectItemId = defectItemId;
         mTextDefectItemNumber.setText(String.valueOf(defectItemNumber));
         mTextDefectItemDescription.setText(defectItemDescription);
         mTextInspectionDefectComment.setText(comment);

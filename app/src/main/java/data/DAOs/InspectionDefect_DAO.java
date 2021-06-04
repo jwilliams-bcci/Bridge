@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ import data.Tables.InspectionDefect_Table;
 public interface InspectionDefect_DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(InspectionDefect_Table inspectionDefect);
+
+    @Update
+    void update(InspectionDefect_Table inspectionDefect);
 
     @Query("DELETE FROM inspection_defect_table")
     void deleteAll();
