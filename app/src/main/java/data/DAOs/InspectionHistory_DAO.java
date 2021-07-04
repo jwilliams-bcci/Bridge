@@ -46,4 +46,7 @@ public interface InspectionHistory_DAO {
             "WHERE h.inspection_id = :inspection_id AND h.defect_category_name = :category_name " +
             "ORDER BY h.defect_category_id, h.defect_item_description ASC")
     LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredDescriptionSort(String category_name, int inspection_id);
+
+    @Query("SELECT comment FROM inspection_history_table WHERE id = :inspection_history_id")
+    String getComment(int inspection_history_id);
 }

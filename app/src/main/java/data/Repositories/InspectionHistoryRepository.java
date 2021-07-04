@@ -41,4 +41,8 @@ public class InspectionHistoryRepository {
             mInspectionHistoryDao.insert(inspectionHistory);
         });
     }
+
+    public String getComment(int inspectionHistoryId) {
+        return mInspectionHistoryDao.getComment(inspectionHistoryId);
+    }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import data.Repositories.CannedCommentRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
+import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
@@ -21,6 +22,7 @@ public class DefectItemViewModel extends AndroidViewModel {
     private CannedCommentRepository mCannedCommentRepository;
     private InspectionDefectRepository mInspectionDefectRepository;
     private InspectionRepository mInspectionRepository;
+    private InspectionHistoryRepository mInspectionHistoryRepository;
 
     public DefectItemViewModel(@NonNull Application application) {
         super(application);
@@ -28,6 +30,7 @@ public class DefectItemViewModel extends AndroidViewModel {
         mCannedCommentRepository = new CannedCommentRepository(application);
         mInspectionDefectRepository = new InspectionDefectRepository(application);
         mInspectionRepository = new InspectionRepository(application);
+        mInspectionHistoryRepository = new InspectionHistoryRepository(application);
     }
 
     public LiveData<DefectItem_Table> getDefectItem(int defect_item_id) {
@@ -52,5 +55,9 @@ public class DefectItemViewModel extends AndroidViewModel {
 
     public void updateInspectionDefect(InspectionDefect_Table inspectionDefect) {
         mInspectionDefectRepository.updateInspectionDefect(inspectionDefect);
+    }
+
+    public String getInspectionHistoryComment(int inspectionHistoryId) {
+        return mInspectionHistoryRepository.getComment(inspectionHistoryId);
     }
 }

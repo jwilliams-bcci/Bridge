@@ -47,7 +47,7 @@ public class InspectViewModel extends AndroidViewModel {
         if (category_name.equals("ALL")) {
             return mDefectItemRepository.getAllDefectItemsDescriptionSort(inspection_type_id);
         } else {
-            return mDefectItemRepository.getAllDefectItemsFilteredDescriptionSort(category_name, inspection_id);
+            return mDefectItemRepository.getAllDefectItemsFilteredDescriptionSort(category_name, inspection_type_id);
         }
     }
 

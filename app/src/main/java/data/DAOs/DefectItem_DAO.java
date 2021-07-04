@@ -63,7 +63,7 @@ public interface DefectItem_DAO {
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
             "INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id " +
-            "WHERE defect_category_name = :categoryName AND x.inspection_type_id = :inspection_type_id " +
+            "WHERE d.defect_category_name = :categoryName AND x.inspection_type_id = :inspection_type_id " +
             "ORDER BY d.item_description ASC")
     LiveData<List<DefectItem_Table>> getDefectItemsFilteredDescriptionSort(String categoryName, int inspection_type_id);
 

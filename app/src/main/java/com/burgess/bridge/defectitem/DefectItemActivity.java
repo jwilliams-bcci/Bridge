@@ -29,6 +29,7 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -42,9 +43,7 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.inspect.InspectActivity;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,6 +55,7 @@ import data.Tables.InspectionDefect_Table;
 import static com.burgess.bridge.Constants.PREF;
 
 public class DefectItemActivity extends AppCompatActivity {
+    private static final String TAG = "DEFECT_ITEM";
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     public static final String INSPECTION_TYPE_ID = "com.burgess.bridge.INSPECTION_TYPE_ID";
@@ -75,6 +75,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private int mInspectionTypeId;
     private int mDefectId;
     private int mInspectionDefectId;
+    private int mInspectionHistoryId;
     private DefectItemViewModel mDefectItemViewModel;
     private LiveData<DefectItem_Table> mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
@@ -84,7 +85,9 @@ public class DefectItemActivity extends AppCompatActivity {
     private TextView mDefectItemTextRoom;
     private TextView mDefectItemTextDirection;
     private TextView mDefectItemTextFault;
-    private TextView mDefectItemTextSpeech;
+    private TextView mDefectItemTextComment;
+    private TextView mDefectItemTextPreviousComment;
+    private TextView mDefectItemLabelPreviousComment;
     private Button mButtonCancel;
     private ImageView mImageViewThumbnail;
     private SharedPreferences mSharedPreferences;
@@ -112,8 +115,11 @@ public class DefectItemActivity extends AppCompatActivity {
         mInspectionTypeId = intent.getIntExtra(INSPECTION_TYPE_ID, INSPECTION_TYPE_ID_NOT_FOUND);
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mInspectionDefectId = intent.getIntExtra(INSPECTION_DEFECT_ID, INSPECTION_DEFECT_ID_NOT_FOUND);
+        mInspectionHistoryId = intent.getIntExtra(INSPECTION_HISTORY_ID, INSPECTION_HISTORY_ID_NOT_FOUND);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
-        mDefectItemTextSpeech = findViewById(R.id.defect_item_text_speech);
+        mDefectItemLabelPreviousComment = findViewById(R.id.defect_item_label_previous_comment);
+        mDefectItemTextPreviousComment = findViewById(R.id.defect_item_text_previous_comment);
+        mDefectItemTextComment = findViewById(R.id.defect_item_text_comment);
         mImageViewThumbnail = findViewById(R.id.defect_item_imageview_thumbnail);
         mRadioGroupDefectStatus = findViewById(R.id.defect_item_radio_group);
         mDefectItemTextLocation = findViewById(R.id.defect_item_text_location);
@@ -125,6 +131,8 @@ public class DefectItemActivity extends AppCompatActivity {
 
         mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         mDefectItem = mDefectItemViewModel.getDefectItem(mDefectId);
+
+        Log.i(TAG, "InspectionHistoryId = " + mInspectionHistoryId);
 
         // Voice to text
         final Intent mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -166,7 +174,7 @@ public class DefectItemActivity extends AppCompatActivity {
                 Log.d("SPEECH", "onResults");
                 ArrayList<String> matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if(matches != null) {
-                    mDefectItemTextSpeech.setText(matches.get(0));
+                    mDefectItemTextComment.setText(matches.get(0));
                 }
             }
 
@@ -231,8 +239,12 @@ public class DefectItemActivity extends AppCompatActivity {
                     buttonSelected = false;
             }
 
-            if (!mDefectItemTextSpeech.getText().toString().equals("")) {
-                comment = "" + mDefectItemTextSpeech.getText();
+            if (!mDefectItemTextPreviousComment.equals("")) {
+                comment += mDefectItemTextComment.getText();
+            }
+
+            if (!mDefectItemTextComment.getText().toString().equals("")) {
+                comment += "" + mDefectItemTextComment.getText();
             } else {
                 comment += mDefectItemTextLocation.getText().toString();
                 comment += mDefectItemTextRoom.getText().toString();
@@ -291,11 +303,11 @@ public class DefectItemActivity extends AppCompatActivity {
             switch(motionEvent.getAction()) {
                 case MotionEvent.ACTION_UP:
                     mSpeechRecognizer.stopListening();
-                    mDefectItemTextSpeech.setHint("");
+                    mDefectItemTextComment.setHint("");
                     break;
                 case MotionEvent.ACTION_DOWN:
                     mSpeechRecognizer.startListening(mSpeechRecognizerIntent);
-                    mDefectItemTextSpeech.setHint("Listening...");
+                    mDefectItemTextComment.setHint("Listening...");
                     break;
                 default:
                     break;
@@ -312,7 +324,13 @@ public class DefectItemActivity extends AppCompatActivity {
 
         if (mInspectionDefectId > 0) {
             InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
-            mDefectItemTextSpeech.setText(currentItem.comment);
+            mDefectItemTextComment.setText(currentItem.comment);
+        }
+
+        if (mInspectionHistoryId > 0) {
+            mDefectItemLabelPreviousComment.setVisibility(View.VISIBLE);
+            mDefectItemTextPreviousComment.setVisibility(View.VISIBLE);
+            mDefectItemTextPreviousComment.setText(mDefectItemViewModel.getInspectionHistoryComment(mInspectionHistoryId));
         }
         displayDefectDetails(mDefectItemDetails);
         fillSpinner(mSpinnerCannedComment);

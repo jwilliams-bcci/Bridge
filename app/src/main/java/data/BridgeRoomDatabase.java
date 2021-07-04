@@ -1,6 +1,7 @@
 package data;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -8,6 +9,15 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.login.LoginActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -77,8 +87,12 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+    private static final String roomUrl = "https://apistage.burgess-inc.com/api/Bridge/GetRooms";
+    private static final String TAG = "DATABASE";
+    private static RequestQueue queue;
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
+        queue = BridgeAPIQueue.getInstance(context).getRequestQueue();
         if (INSTANCE == null) {
             synchronized (BridgeRoomDatabase.class) {
                 if (INSTANCE == null) {
@@ -100,16 +114,25 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
 
             // If you want to keep data through app restarts, comment out the following block
             databaseWriteExecutor.execute(() -> {
-                // Populate the database in the background. If you want to start with more data, just add it!
-//                Location_DAO locationDao = INSTANCE.mLocationDao();
-//                locationDao.deleteAll();
-//                Location_Table newLocation = new Location_Table(1, "1111 One Avenue", 75068, "Dallas", "TX", "Two Tree Estates");
-//                locationDao.insert(newLocation);
-//
-//                Inspection_DAO inspectionDao = INSTANCE.mInspectionDao();
-//                inspectionDao.deleteAll();
-//                Inspection_Table newInspection = new Inspection_Table(1, 1001, new Date(System.currentTimeMillis()), 1, "Sup Williams", 1, "Pre-Drywall", "Notes go here", false, false);
-//                inspectionDao.insert(newInspection);
+                Room_DAO roomDao = INSTANCE.mRoomDao();
+                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, roomUrl, null, response -> {
+                    for (int i = 0; i < response.length(); i++) {
+                        try{
+                            JSONObject obj = response.getJSONObject(i);
+                            Room_Table room = new Room_Table();
+                            room.id = obj.optInt("RoomId");
+                            room.room_name = obj.optString("RoomName");
+
+                            roomDao.insert(room);
+                        } catch (JSONException e) {
+                            Log.i(TAG, "Error in parsing JSON in GetRooms - " + e.getMessage());
+                        }
+                    }
+                }, error -> {
+                    Log.i(TAG, "Error in GetRooms - " + error.getMessage());
+                });
+
+                queue.add(request);
             });
         }
     };

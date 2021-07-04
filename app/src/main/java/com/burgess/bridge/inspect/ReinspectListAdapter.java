@@ -39,7 +39,7 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
             }
         }
         holder.mDefectItemId = current.defect_item_id;
-        holder.bind(String.valueOf(current.defect_item_number), String.valueOf(current.defect_item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId);
+        holder.bind(String.valueOf(current.defect_item_number), String.valueOf(current.defect_item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, current.id);
     }
 
     public void setInspectionId(int inspectionId) {

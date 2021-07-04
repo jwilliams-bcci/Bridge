@@ -39,12 +39,13 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bind(String itemNumber, String itemDescription, String sectionName, boolean showSection, int inspectionId, int inspectionTypeId) {
+    public void bind(String itemNumber, String itemDescription, String sectionName, boolean showSection, int inspectionId, int inspectionTypeId, int inspectionHistoryId) {
         mTextDefectItemSection.setText(sectionName);
         mTextDefectItemNumber.setText(itemNumber);
         mTextDefectItemDescription.setText(itemDescription);
         mInspectionId = inspectionId;
         mInspectionTypeId = inspectionTypeId;
+        mInspectionHistoryId = inspectionHistoryId;
 
         if (showSection) {
             mTextDefectItemSection.setVisibility(View.VISIBLE);

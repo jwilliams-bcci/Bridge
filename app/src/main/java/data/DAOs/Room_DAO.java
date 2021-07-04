@@ -12,7 +12,7 @@ import data.Tables.Room_Table;
 
 @Dao
 public interface Room_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Room_Table room);
 
     @Query("DELETE FROM room_table")

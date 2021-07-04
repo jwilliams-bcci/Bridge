@@ -35,7 +35,7 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
             }
         }
         holder.mDefectItemId = current.id;
-        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId);
+        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, -1);
     }
 
     public void setInspectionId (int inspectionId) {

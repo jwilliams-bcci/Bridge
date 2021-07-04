@@ -151,11 +151,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="@+id/textView17"
-        app:layout_constraintTop_toBottomOf="@+id/textView17"
+        app:layout_constraintTop_toBottomOf="@+id/defect_item_label_previous_comment"
         app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
     <EditText
-        android:id="@+id/defect_item_text_speech"
+        android:id="@+id/defect_item_text_comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/text_border"
@@ -246,7 +246,7 @@
         android:autoSizeMinTextSize="12sp"
         android:text="Photo"
         app:layout_constraintStart_toStartOf="@+id/defect_item_button_microphone"
-        app:layout_constraintTop_toBottomOf="@+id/defect_item_text_speech" />
+        app:layout_constraintTop_toBottomOf="@+id/defect_item_text_comment" />
 
     <ImageButton
         android:id="@+id/defect_item_button_camera"
@@ -286,8 +286,29 @@
         android:id="@+id/defect_item_imageview_thumbnail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/defect_item_text_speech"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_text_comment"
         app:layout_constraintTop_toTopOf="@+id/textView18"
         app:srcCompat="@mipmap/ic_bridge_launcher" />
+
+    <TextView
+        android:id="@+id/defect_item_label_previous_comment"
+        android:layout_width="67dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="Previous Comment"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/textView17"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <TextView
+        android:id="@+id/defect_item_text_previous_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Previous Comment"
+        android:maxLines="2"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/defect_item_spinner_canned_comment"
+        app:layout_constraintStart_toStartOf="@+id/defect_item_spinner_canned_comment"
+        app:layout_constraintTop_toTopOf="@+id/defect_item_label_previous_comment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
