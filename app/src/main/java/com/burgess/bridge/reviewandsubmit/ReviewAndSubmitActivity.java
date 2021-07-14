@@ -166,38 +166,38 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("ImageData", null);
                 jObj.put("ImageFileName", null);
             }
-            mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL_STAGE, jObj, new ServerCallback() {
-                @Override
-                public void onSuccess() {
-                    Log.i(TAG, "Uploaded inspection detail!");
-                }
-
-                @Override
-                public void onFailure() {
-                    Log.i(TAG, "Error in uploadInspectionData");
-                    mProgressBar.setVisibility(View.GONE);
-                    mLockScreen.setVisibility(View.GONE);
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                }
-            });
-            mUploadInspectionDataRequest.setRetryPolicy(new RetryPolicy() {
-                @Override
-                public int getCurrentTimeout() {
-                    return 90 * 1000;
-                }
-
-                @Override
-                public int getCurrentRetryCount() {
-                    return 0;
-                }
-
-                @Override
-                public void retry(VolleyError error) throws VolleyError {
-
-                }
-            });
-
-            queue.add(mUploadInspectionDataRequest);
+            mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj);
+//            mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL_STAGE, jObj, new ServerCallback() {
+//                @Override
+//                public void onSuccess() {
+//                    Log.i(TAG, "Uploaded inspection detail!");
+//                }
+//
+//                @Override
+//                public void onFailure() {
+//                    Log.i(TAG, "Error in uploadInspectionData");
+//                    mProgressBar.setVisibility(View.GONE);
+//                    mLockScreen.setVisibility(View.GONE);
+//                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+//                }
+//            });
+//            mUploadInspectionDataRequest.setRetryPolicy(new RetryPolicy() {
+//                @Override
+//                public int getCurrentTimeout() {
+//                    return 90 * 1000;
+//                }
+//
+//                @Override
+//                public int getCurrentRetryCount() {
+//                    return 0;
+//                }
+//
+//                @Override
+//                public void retry(VolleyError error) throws VolleyError {
+//
+//                }
+//            });
+            BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
         }
 
         mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL_STAGE, mInspectionId, mInspectionStatusId), new ServerCallback() {
