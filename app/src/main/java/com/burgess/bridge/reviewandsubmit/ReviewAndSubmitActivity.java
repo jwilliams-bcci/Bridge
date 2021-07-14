@@ -220,22 +220,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
-//        mUpdateInspectionStatusRequest.setRetryPolicy(new RetryPolicy() {
-//            @Override
-//            public int getCurrentTimeout() {
-//                return 30 * 1000;
-//            }
-//
-//            @Override
-//            public int getCurrentRetryCount() {
-//                return 0;
-//            }
-//
-//            @Override
-//            public void retry(VolleyError error) throws VolleyError {
-//
-//            }
-//        });
 
         queue.add(mUploadInspectionDataRequest);
     }
