@@ -166,42 +166,41 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("ImageData", null);
                 jObj.put("ImageFileName", null);
             }
-            jArray.put(jObj);
+            mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL_STAGE, jObj, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    Log.i(TAG, "Uploaded inspection detail!");
+                }
+
+                @Override
+                public void onFailure() {
+                    Log.i(TAG, "Error in uploadInspectionData");
+                    mProgressBar.setVisibility(View.GONE);
+                    mLockScreen.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            });
+            mUploadInspectionDataRequest.setRetryPolicy(new RetryPolicy() {
+                @Override
+                public int getCurrentTimeout() {
+                    return 90 * 1000;
+                }
+
+                @Override
+                public int getCurrentRetryCount() {
+                    return 0;
+                }
+
+                @Override
+                public void retry(VolleyError error) throws VolleyError {
+
+                }
+            });
+
+            queue.add(mUploadInspectionDataRequest);
         }
 
-        mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL, jArray, new ServerCallback() {
-            @Override
-            public void onSuccess() {
-                Log.i(TAG, "Uploaded inspection details!");
-                queue.add(mUpdateInspectionStatusRequest);
-            }
-
-            @Override
-            public void onFailure() {
-                Log.i(TAG, "Error in uploadInspectionData");
-                mProgressBar.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-            }
-        });
-        mUploadInspectionDataRequest.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 90 * 1000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 0;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
-
-        mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL, mInspectionId, mInspectionStatusId), new ServerCallback() {
+        mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL_STAGE, mInspectionId, mInspectionStatusId), new ServerCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "Updated Inspection status!");
@@ -221,10 +220,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             }
         });
 
-        queue.add(mUploadInspectionDataRequest);
+        queue.add(mUpdateInspectionStatusRequest);
     }
 
-    private StringRequest uploadInspectionData(String url, JSONArray jArray, final ServerCallback callBack) {
+    private StringRequest uploadInspectionData(String url, JSONObject jObject, final ServerCallback callBack) {
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Uploaded " + response + " defects.");
             callBack.onSuccess();
@@ -241,7 +240,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
             @Override
             public byte[] getBody() {
-                return jArray.toString().getBytes();
+                return jObject.toString().getBytes();
             }
 
             @Override

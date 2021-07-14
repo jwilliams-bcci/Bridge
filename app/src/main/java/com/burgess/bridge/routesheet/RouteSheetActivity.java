@@ -75,7 +75,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         String inspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
 
         initializeDisplayContent();
-        mUpdateRouteSheetRequest = updateRouteSheet(String.format(ROUTE_SHEET_URL, inspectorId, formatter.format(LocalDateTime.now())), new ServerCallback() {
+        mUpdateRouteSheetRequest = updateRouteSheet(String.format(ROUTE_SHEET_URL_STAGE, inspectorId, formatter.format(LocalDateTime.now())), new ServerCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "updateRouteSheet returned success");
@@ -163,7 +163,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
                     inspection.route_sheet_order = obj.optInt("Order");
 
                     if (inspection.reinspect) {
-                        mInspectionHistoryRequests.add(updateInspectionHistory(String.format(INSPECTION_HISTORY_URL, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id), inspection.id, new ServerCallback() {
+                        mInspectionHistoryRequests.add(updateInspectionHistory(String.format(INSPECTION_HISTORY_URL_STAGE, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id), inspection.id, new ServerCallback() {
                             @Override
                             public void onSuccess() {
                                 Log.i(TAG, "Inspection History added");
