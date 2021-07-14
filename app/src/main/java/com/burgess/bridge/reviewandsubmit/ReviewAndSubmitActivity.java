@@ -169,7 +169,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             jArray.put(jObj);
         }
 
-        mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL_STAGE, jArray, new ServerCallback() {
+        mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL, jArray, new ServerCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "Uploaded inspection details!");
@@ -184,24 +184,24 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             }
         });
-//        mUploadInspectionDataRequest.setRetryPolicy(new RetryPolicy() {
-//            @Override
-//            public int getCurrentTimeout() {
-//                return 30 * 1000;
-//            }
-//
-//            @Override
-//            public int getCurrentRetryCount() {
-//                return 0;
-//            }
-//
-//            @Override
-//            public void retry(VolleyError error) throws VolleyError {
-//
-//            }
-//        });
+        mUploadInspectionDataRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 90 * 1000;
+            }
 
-        mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL_STAGE, mInspectionId, mInspectionStatusId), new ServerCallback() {
+            @Override
+            public int getCurrentRetryCount() {
+                return 0;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+
+        mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL, mInspectionId, mInspectionStatusId), new ServerCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "Updated Inspection status!");
