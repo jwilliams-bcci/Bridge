@@ -166,7 +166,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("ImageData", null);
                 jObj.put("ImageFileName", null);
             }
-            mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL_STAGE, jObj, new ServerCallback() {
+            mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL, jObj, new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     Log.i(TAG, "Uploaded inspection detail!");
@@ -200,7 +200,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             queue.add(mUploadInspectionDataRequest);
         }
 
-        mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL_STAGE, mInspectionId, mInspectionStatusId), new ServerCallback() {
+        mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL, mInspectionId, mInspectionStatusId), new ServerCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "Updated Inspection status!");
@@ -276,7 +276,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (image != null) {
-            image.compress(Bitmap.CompressFormat.JPEG, 5, stream);
+            image.compress(Bitmap.CompressFormat.JPEG, 50, stream);
             return stream.toByteArray();
         } else {
             return null;
