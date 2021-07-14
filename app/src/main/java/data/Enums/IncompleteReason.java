@@ -7,6 +7,7 @@ public enum IncompleteReason {
     CANCELLED_IN_FIELD_BY_BLDR("Cancelled in field by Bldr", 1),
     NOT_READY("Not Ready", 3),
     FAILED("Failed", 12),
+    PASSED("Passed", 11),
     CANCELLED_BEFORE_730("Cancelled Before 7:30", 15),
     BATCH("Batch", 21),
     DEFERRED_BY_CONSULTANT("Deferred by Consultant", 22),
@@ -17,7 +18,7 @@ public enum IncompleteReason {
     ;
 
     private String description;
-    private int code;
+    public int code;
 
     IncompleteReason(String description, int code) {
         this.description = description;

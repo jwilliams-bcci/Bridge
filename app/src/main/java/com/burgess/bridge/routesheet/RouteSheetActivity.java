@@ -52,8 +52,10 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
     private ArrayList<JsonArrayRequest> mInspectionHistoryRequests;
 
     private static final String TAG = "ROUTE_SHEET";
-    private static final String ROUTE_SHEET_URL = "https://apistage.burgess-inc.com/api/Bridge/GetInspections?inspectorid=%s&inspectiondate=%s";
-    private static final String INSPECTION_HISTORY_URL = "https://apistage.burgess-inc.com/api/Bridge/GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String ROUTE_SHEET_URL = "https://api.burgess-inc.com/api/Bridge/GetInspections?inspectorid=%s&inspectiondate=%s";
+    private static final String ROUTE_SHEET_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetInspections?inspectorid=%s&inspectiondate=%s";
+    private static final String INSPECTION_HISTORY_URL = "https://api.burgess-inc.com/api/Bridge/GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String INSPECTION_HISTORY_URL_STAGE = "https://api.burgess-inc.com/api/Bridge/GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private JsonArrayRequest mUpdateRouteSheetRequest;
     private JsonArrayRequest mUpdateInspectionHistoryRequest;
 
@@ -73,7 +75,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         String inspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
 
         initializeDisplayContent();
-        mUpdateRouteSheetRequest = updateRouteSheet(String.format(ROUTE_SHEET_URL, inspectorId, formatter.format(LocalDateTime.now())), new ServerCallback() {
+        mUpdateRouteSheetRequest = updateRouteSheet(String.format(ROUTE_SHEET_URL_STAGE, inspectorId, formatter.format(LocalDateTime.now())), new ServerCallback() {
             @Override
             public void onSuccess() {
                 Log.i(TAG, "updateRouteSheet returned success");
@@ -161,7 +163,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
                     inspection.route_sheet_order = obj.optInt("Order");
 
                     if (inspection.reinspect) {
-                        mInspectionHistoryRequests.add(updateInspectionHistory(String.format(INSPECTION_HISTORY_URL, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id), inspection.id, new ServerCallback() {
+                        mInspectionHistoryRequests.add(updateInspectionHistory(String.format(INSPECTION_HISTORY_URL_STAGE, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id), inspection.id, new ServerCallback() {
                             @Override
                             public void onSuccess() {
                                 Log.i(TAG, "Inspection History added");

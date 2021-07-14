@@ -1,7 +1,10 @@
 package data;
 
 import java.lang.reflect.Array;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -177,6 +180,7 @@ public class DataManager {
     }
 
     public List<Room> getRooms() {
+        Collections.sort(mRooms, (l, r) -> l.getRoomName().compareTo(r.getRoomName()));
         return mRooms;
     }
     public Room getRoom(int id) {
@@ -893,10 +897,10 @@ public class DataManager {
     private Room initializeRoom6() { return new Room(6, "Bath"); }
     private Room initializeRoom7() { return new Room(7, "Bath-Hall"); }
     private Room initializeRoom8() { return new Room(8, "Bath-J&J"); }
-    private Room initializeRoom9() { return new Room(9, "Bath-Mstr"); }
+    private Room initializeRoom9() { return new Room(9, "Bath-Primary"); }
     private Room initializeRoom10() { return new Room(10, "Bath-Powder"); }
     private Room initializeRoom11() { return new Room(11, "Bedroom"); }
-    private Room initializeRoom12() { return new Room(12, "Bedroom-Mstr"); }
+    private Room initializeRoom12() { return new Room(12, "Bedroom-Primary"); }
     private Room initializeRoom13() { return new Room(13, "Bonus Room"); }
     private Room initializeRoom14() { return new Room(14, "Breakfast Nook"); }
     private Room initializeRoom15() { return new Room(15, "Breezeway"); }
@@ -905,7 +909,7 @@ public class DataManager {
     private Room initializeRoom18() { return new Room(18, "Childrens Retreat"); }
     private Room initializeRoom19() { return new Room(19, "Closet"); }
     private Room initializeRoom20() { return new Room(20, "Closet-Linen"); }
-    private Room initializeRoom21() { return new Room(21, "Closet-Mstr"); }
+    private Room initializeRoom21() { return new Room(21, "Closet-Primary"); }
     private Room initializeRoom22() { return new Room(22, "Column"); }
     private Room initializeRoom23() { return new Room(23, "Crawl Space"); }
     private Room initializeRoom24() { return new Room(24, "Deck"); }
@@ -951,6 +955,7 @@ public class DataManager {
     private Room initializeRoom64() { return new Room(64, "Walkway"); }
     private Room initializeRoom65() { return new Room(65, "Wet Bar"); }
     private Room initializeRoom66() { return new Room(66, "Wine Cellar"); }
+    private Room initializeRoom67() { return new Room(67, "1x4"); }
     private Room initializeRoom68() { return new Room(68, "2x6"); }
     private Room initializeRoom69() { return new Room(69, "2x8"); }
     private Room initializeRoom70() { return new Room(70, "2x10"); }
@@ -960,13 +965,13 @@ public class DataManager {
     private Room initializeRoom74() { return new Room(74, "Closet-Bedroom"); }
     private Room initializeRoom75() { return new Room(75, "Laundry"); }
     private Room initializeRoom76() { return new Room(76, "Attic"); }
-    private Room initializeRoom77() { return new Room(77, "Bath-Mstr Commode Closet"); }
+    private Room initializeRoom77() { return new Room(77, "Bath-Pri Commode Closet"); }
     private Room initializeRoom78() { return new Room(78, "Front Door"); }
     private Room initializeRoom79() { return new Room(79, "Patio Door"); }
     private Room initializeRoom80() { return new Room(80, "Service Door"); }
     private Room initializeRoom81() { return new Room(81, "Overhead Door"); }
     private Room initializeRoom86() { return new Room(86, "Loft"); }
-    private Room initializeRoom67() { return new Room(67, "Bedroom bath"); }
+    private Room initializeRoom87() { return new Room(67, "Bedroom bath"); }
     private Room initializeRoom82() { return new Room(82, "Kitchen island"); }
     private Room initializeRoom83() { return new Room(83, "Kitchen pantry"); }
     private Room initializeRoom84() { return new Room(84, "Garage service door"); }

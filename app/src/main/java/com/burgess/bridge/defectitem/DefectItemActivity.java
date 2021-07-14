@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
@@ -44,6 +45,7 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.inspect.InspectActivity;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -367,9 +369,29 @@ public class DefectItemActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Bridge_" + mInspectionId + "_" + mDefectId + "_" + timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        File image = File.createTempFile(imageFileName, ".png", storageDir);
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    private void rotateImageFile(String filePath) throws IOException {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        Bitmap image;
+        try {
+            image = BitmapFactory.decodeFile(filePath, options);
+        } catch (OutOfMemoryError e) {
+            image = BitmapFactory.decodeFile(filePath, options);
+            Log.i(TAG, "Out of memory error when rotating image");
+        }
+        Bitmap outBmp;
+        float degrees = 90;
+        Matrix matrix = new Matrix();
+        matrix.setRotate(degrees);
+        outBmp = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
+        FileOutputStream stream = new FileOutputStream(filePath, false);
+        outBmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        stream.close();
     }
 
     @Override
@@ -377,7 +399,17 @@ public class DefectItemActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap imageThumbnailBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(currentPhotoPath), 128, 128);
-            mImageViewThumbnail.setImageBitmap(imageThumbnailBitmap);
+            Bitmap outBmp;
+            float degrees = 90;
+            Matrix matrix = new Matrix();
+            matrix.setRotate(degrees);
+            outBmp = Bitmap.createBitmap(imageThumbnailBitmap, 0, 0, imageThumbnailBitmap.getWidth(), imageThumbnailBitmap.getHeight(), matrix, true);
+            mImageViewThumbnail.setImageBitmap(outBmp);
+            try {
+                rotateImageFile(currentPhotoPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             pictureTaken = true;
         }
     }

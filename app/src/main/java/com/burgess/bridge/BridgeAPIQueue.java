@@ -15,6 +15,7 @@ public class BridgeAPIQueue {
     private static BridgeAPIQueue instance;
     private RequestQueue queue;
     private static Context ctx;
+    private static final String TAG = "BridgeAPIQueue";
 
     private BridgeAPIQueue(Context context) {
         ctx = context;
@@ -24,6 +25,13 @@ public class BridgeAPIQueue {
     public static synchronized BridgeAPIQueue getInstance(Context context) {
         if (instance == null) {
             instance = new BridgeAPIQueue(context);
+        }
+        return instance;
+    }
+
+    public static synchronized BridgeAPIQueue getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException(BridgeAPIQueue.class.getSimpleName() + " is not initialized, call getInstance(...) first");
         }
         return instance;
     }
@@ -38,7 +46,6 @@ public class BridgeAPIQueue {
         return queue;
     }
 
-    public void addToRequestQueue(Request req) {
-        getRequestQueue().add(req);
-    }
+
+
 }

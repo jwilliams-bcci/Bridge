@@ -55,10 +55,14 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
 
     private static final String TAG = "LOGIN";
-    private static final String LOGIN_URL = "https://apistage.burgess-inc.com/api/Bridge/Login?userName=%s&password=%s";
-    private static final String CANNED_COMMENTS_URL = "https://apistage.burgess-inc.com/api/Bridge/GetCannedComments";
-    private static final String DEFECT_ITEMS_URL = "https://apistage.burgess-inc.com/api/Bridge/GetDefectItems";
-    private static final String DEFECT_ITEM_INSPECTION_TYPE_XREF_URL = "https://apistage.burgess-inc.com/api/Bridge/GetDefectItem_InspectionType_XRef";
+    private static final String LOGIN_URL = "https://api.burgess-inc.com/api/Bridge/Login?userName=%s&password=%s";
+    private static final String LOGIN_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/Login?userName=%s&password=%s";
+    private static final String CANNED_COMMENTS_URL = "https://api.burgess-inc.com/api/Bridge/GetCannedComments";
+    private static final String CANNED_COMMENTS_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetCannedComments";
+    private static final String DEFECT_ITEMS_URL = "https://api.burgess-inc.com/api/Bridge/GetDefectItems";
+    private static final String DEFECT_ITEMS_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetDefectItems";
+    private static final String DEFECT_ITEM_INSPECTION_TYPE_XREF_URL = "https://api.burgess-inc.com/api/Bridge/GetDefectItem_InspectionType_XRef";
+    private static final String DEFECT_ITEM_INSPECTION_TYPE_XREF_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetDefectItem_InspectionType_XRef";
     private JsonObjectRequest mLoginRequest;
     private JsonArrayRequest mUpdateCannedCommentsRequest;
     private JsonArrayRequest mUpdateDefectItemsRequest;
@@ -99,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
 
             RequestQueue queue = BridgeAPIQueue.getInstance(LoginActivity.this).getRequestQueue();
 
-            mLoginRequest = loginUser(String.format(LOGIN_URL, userName, password), new ServerCallback() {
+            mLoginRequest = loginUser(String.format(LOGIN_URL_STAGE, userName, password), new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     Log.i(TAG, "loginRequest returned success");
@@ -119,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
-            mUpdateCannedCommentsRequest = updateCannedComments(CANNED_COMMENTS_URL, new ServerCallback() {
+            mUpdateCannedCommentsRequest = updateCannedComments(CANNED_COMMENTS_URL_STAGE, new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     Log.i(TAG, "updateCannedComments returned success");
@@ -134,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
-            mUpdateDefectItemsRequest = updateDefectItems(DEFECT_ITEMS_URL, new ServerCallback() {
+            mUpdateDefectItemsRequest = updateDefectItems(DEFECT_ITEMS_URL_STAGE, new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     Log.i(TAG, "updateDefectItems returned success");
@@ -149,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
-            mUpdateDIITReference = updateDefectItem_InspectionTypeXRef(DEFECT_ITEM_INSPECTION_TYPE_XREF_URL, new ServerCallback() {
+            mUpdateDIITReference = updateDefectItem_InspectionTypeXRef(DEFECT_ITEM_INSPECTION_TYPE_XREF_URL_STAGE, new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     Log.i(TAG, "updateDefectItem_InspectionTypeXRef returned success");
