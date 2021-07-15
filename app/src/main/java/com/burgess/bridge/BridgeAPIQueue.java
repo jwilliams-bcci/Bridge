@@ -30,6 +30,7 @@ public class BridgeAPIQueue {
 
     private static final String TAG = "API";
     private static final String UPLOAD_INSPECTION_DEFECT_URL = "InsertInspectionDetails/";
+    private static final String UPDATE_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s";
 
     private BridgeAPIQueue(Context context) {
         ctx = context;
@@ -62,16 +63,16 @@ public class BridgeAPIQueue {
         return queue;
     }
 
-    public StringRequest uploadInspectionDefect(JSONObject inspectionDefect) {
+    // Review & Submit
+    public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId) {
         String url = isProd ? Constants.API_PROD_URL : Constants.API_STAGE_URL;
         url += UPLOAD_INSPECTION_DEFECT_URL;
 
-        Log.i(TAG, "here boy-o");
-
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            Log.i(TAG, "Uploaded defect.");
+            Log.i(TAG, "Uploaded defect " + defectItemId + " for inspection " + inspectionId + ".");
         }, error -> {
-            Log.e(TAG, "uploadInspectionDefect: " + error.getMessage());
+            String errorMessage = new String(error.networkResponse.data);
+            Log.e(TAG, "ERROR - uploadInspectionDefect: " + errorMessage);
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -88,6 +89,27 @@ public class BridgeAPIQueue {
             @Override
             public String getBodyContentType() {
                 return "application/json";
+            }
+        };
+        return request;
+    }
+    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, final ServerCallback callback) {
+        String url = isProd ? Constants.API_PROD_URL : Constants.API_STAGE_URL;
+        url += String.format(UPDATE_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId);
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            Log.i(TAG, "Updated status for " + inspectionId + ".");
+            callback.onSuccess();
+        }, error -> {
+            String errorMessage = new String(error.networkResponse.data);
+            Log.e(TAG, "ERROR - updateInspectionStatus: " + errorMessage);
+            callback.onFailure();
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", "Bearer " + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
             }
         };
         return request;
