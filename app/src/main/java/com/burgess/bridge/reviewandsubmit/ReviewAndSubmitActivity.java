@@ -188,24 +188,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
     }
 
-//    private StringRequest updateInspectionStatus(String url, final ServerCallback callBack) {
-//        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-//            Log.i(TAG, "Updated inspection status");
-//            callBack.onSuccess();
-//        }, error -> {
-//            Log.i(TAG, error.getMessage());
-//            callBack.onFailure();
-//        }) {
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("Authorization", "Bearer " + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
-//                return params;
-//            }
-//        };
-//        return request;
-//    }
-
     private byte[] getPictureData(int inspectionDefectId) {
         InspectionDefect_Table defect = mReviewAndSubmitViewModel.getInspectionDefect(inspectionDefectId);
         Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
