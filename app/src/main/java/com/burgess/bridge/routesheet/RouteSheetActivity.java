@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 
@@ -55,7 +56,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
     private static final String ROUTE_SHEET_URL = "https://api.burgess-inc.com/api/Bridge/GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String ROUTE_SHEET_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String INSPECTION_HISTORY_URL = "https://api.burgess-inc.com/api/Bridge/GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
-    private static final String INSPECTION_HISTORY_URL_STAGE = "https://api.burgess-inc.com/api/Bridge/GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String INSPECTION_HISTORY_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private JsonArrayRequest mUpdateRouteSheetRequest;
     private JsonArrayRequest mUpdateInspectionHistoryRequest;
 
@@ -187,7 +188,9 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
             }
             callBack.onSuccess();
         }, error -> {
-            Log.i(TAG, "Error in updating route sheet: " + error.getMessage());
+            String errorMessage = new String(error.networkResponse.data);
+            Log.e(TAG, "ERROR - update route sheet: " + errorMessage);
+            Log.e(TAG, "AuthToken: " + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
             callBack.onFailure();
         }) {
             @Override
@@ -216,6 +219,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
                     hist.defect_item_description = obj.optString("ItemDescription");
                     hist.comment = obj.optString("Comment");
                     mRouteSheetViewModel.insertInspectionHistory(hist);
+                    Log.i(TAG, "Added id: " + hist.id);
                 } catch (JSONException e) {
                     Log.i(TAG, "Error in parsing JSON: " + e.getMessage());
                     callBack.onFailure();
