@@ -52,19 +52,13 @@ import data.Tables.Inspection_Table;
 import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
-    public static final String UPLOAD_URL = "https://api.burgess-inc.com/api/Bridge/InsertInspectionDetails/";
-    public static final String UPLOAD_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/InsertInspectionDetails/";
-    public static final String UPDATE_URL = "https://api.burgess-inc.com/api/Bridge/UpdateInspectionStatus?InspectionId=%s&StatusId=%s";
-    public static final String UPDATE_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/UpdateInspectionStatus?InspectionId=%s&StatusId=%s";
     private ReviewAndSubmitViewModel mReviewAndSubmitViewModel;
-    private SharedPreferences mSharedPreferences;
     private LiveData<Inspection_Table> mInspection;
 
     public static final String TAG = "REVIEW_AND_SUBMIT";
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     private int mInspectionId;
-    private int mLocationId;
     private int mInspectionStatusId;
     private boolean mSupervisorPresent;
     private boolean mStatusCorrect;
@@ -81,7 +75,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_and_submit);
         setSupportActionBar(findViewById(R.id.review_and_submit_toolbar));
-        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mReviewAndSubmitViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
 
         Intent intent = getIntent();
