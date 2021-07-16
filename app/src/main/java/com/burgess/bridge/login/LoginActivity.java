@@ -55,14 +55,6 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
 
     private static final String TAG = "LOGIN";
-    private static final String LOGIN_URL = "https://api.burgess-inc.com/api/Bridge/Login?userName=%s&password=%s";
-    private static final String LOGIN_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/Login?userName=%s&password=%s";
-    private static final String CANNED_COMMENTS_URL = "https://api.burgess-inc.com/api/Bridge/GetCannedComments";
-    private static final String CANNED_COMMENTS_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetCannedComments";
-    private static final String DEFECT_ITEMS_URL = "https://api.burgess-inc.com/api/Bridge/GetDefectItems";
-    private static final String DEFECT_ITEMS_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetDefectItems";
-    private static final String DEFECT_ITEM_INSPECTION_TYPE_XREF_URL = "https://api.burgess-inc.com/api/Bridge/GetDefectItem_InspectionType_XRef";
-    private static final String DEFECT_ITEM_INSPECTION_TYPE_XREF_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/GetDefectItem_InspectionType_XRef";
     private JsonObjectRequest mLoginRequest;
     private JsonArrayRequest mUpdateCannedCommentsRequest;
     private JsonArrayRequest mUpdateDefectItemsRequest;
