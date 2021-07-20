@@ -158,7 +158,17 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("ImageData", null);
                 jObj.put("ImageFileName", null);
             }
-            mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id);
+            InspectionDefect_Table finalDefect = defect;
+            mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
+                }
+
+                @Override
+                public void onFailure() {
+                }
+            });
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
         }
 

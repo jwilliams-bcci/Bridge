@@ -50,4 +50,8 @@ public class InspectionDefectRepository {
             mInspectionDefectDao.update(inspectionDefect);
         });
     }
+
+    public void markDefectUploaded(int inspectionDefectId) {
+        mInspectionDefectDao.markDefectUploaded(inspectionDefectId);
+    }
 }

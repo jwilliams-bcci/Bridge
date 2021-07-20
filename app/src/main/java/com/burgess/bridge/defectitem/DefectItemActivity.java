@@ -48,6 +48,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -242,18 +243,17 @@ public class DefectItemActivity extends AppCompatActivity {
                     buttonSelected = false;
             }
 
-            if (!mDefectItemTextPreviousComment.equals("")) {
-                comment += mDefectItemTextComment.getText();
-            }
-
-            if (!mDefectItemTextComment.getText().toString().equals("")) {
-                comment += "" + mDefectItemTextComment.getText();
-            } else {
-                comment += mDefectItemTextLocation.getText().toString();
-                comment += mDefectItemTextRoom.getText().toString();
-                comment += mDefectItemTextDirection.getText().toString();
-                comment += mDefectItemTextFault.getText().toString();
-                comment += mSpinnerCannedComment.getSelectedItem().toString();
+            comment += mDefectItemTextLocation.getText().toString();
+            comment += mDefectItemTextRoom.getText().toString();
+            comment += mDefectItemTextDirection.getText().toString();
+            comment += mDefectItemTextFault.getText().toString();
+            comment += mSpinnerCannedComment.getSelectedItem().toString();
+            comment += mDefectItemTextComment.getText();
+            if (!mDefectItemTextPreviousComment.getText().equals("") && !comment.equals("")) {
+                LocalDate currentDate = LocalDate.now();
+                comment = mDefectItemTextPreviousComment.getText() + "\n" + currentDate.getMonth().getValue() + "/" + currentDate.getDayOfMonth() + " - " + comment;
+            } else if (!mDefectItemTextPreviousComment.getText().equals("") && comment.equals("")) {
+                comment += mDefectItemTextPreviousComment.getText();
             }
 
             InspectionDefect_Table inspectionDefect;

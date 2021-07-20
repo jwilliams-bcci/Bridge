@@ -15,4 +15,5 @@ public class InspectionHistory_Table {
     public String defect_category_name;
     public String defect_item_description;
     public String comment;
+    public boolean is_reviewed;
 }
