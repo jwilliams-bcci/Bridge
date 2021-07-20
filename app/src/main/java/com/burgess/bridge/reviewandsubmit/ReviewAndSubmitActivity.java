@@ -2,6 +2,7 @@ package com.burgess.bridge.reviewandsubmit;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,19 +52,13 @@ import data.Tables.Inspection_Table;
 import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
-    public static final String UPLOAD_URL = "https://api.burgess-inc.com/api/Bridge/InsertInspectionDetails/";
-    public static final String UPLOAD_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/InsertInspectionDetails/";
-    public static final String UPDATE_URL = "https://api.burgess-inc.com/api/Bridge/UpdateInspectionStatus?InspectionId=%s&StatusId=%s";
-    public static final String UPDATE_URL_STAGE = "https://apistage.burgess-inc.com/api/Bridge/UpdateInspectionStatus?InspectionId=%s&StatusId=%s";
     private ReviewAndSubmitViewModel mReviewAndSubmitViewModel;
-    private SharedPreferences mSharedPreferences;
     private LiveData<Inspection_Table> mInspection;
 
     public static final String TAG = "REVIEW_AND_SUBMIT";
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     private int mInspectionId;
-    private int mLocationId;
     private int mInspectionStatusId;
     private boolean mSupervisorPresent;
     private boolean mStatusCorrect;
@@ -70,6 +66,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerInspectionDefects;
     private TextView mTextAddress;
+    private ConstraintLayout mConstraintLayout;
     private StringRequest mUploadInspectionDataRequest;
     private StringRequest mUpdateInspectionStatusRequest;
 
@@ -78,7 +75,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_and_submit);
         setSupportActionBar(findViewById(R.id.review_and_submit_toolbar));
-        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mReviewAndSubmitViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
 
         Intent intent = getIntent();
@@ -89,6 +85,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mSupervisorPresent = false;
         mStatusCorrect = false;
 
+        mConstraintLayout = findViewById(R.id.review_and_submit_constraint_layout);
         mLockScreen = findViewById(R.id.review_and_submit_lock_screen);
         mProgressBar = findViewById(R.id.review_and_submit_progress_bar);
         mRecyclerInspectionDefects = findViewById(R.id.review_and_submit_recycler_inspection_defects);
@@ -137,138 +134,61 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     }
 
     private void completeInspection() throws JSONException {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mLockScreen.setVisibility(View.VISIBLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-
-        RequestQueue queue = BridgeAPIQueue.getInstance(this).getRequestQueue();
+        showProgressSpinner();
         List<InspectionDefect_Table> inspectionDefects = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
 
-        JSONArray jArray = new JSONArray();
         JSONObject jObj;
-        InspectionDefect_Table inspection;
+        InspectionDefect_Table defect;
         for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
-            inspection = inspectionDefects.get(lcv);
+            defect = inspectionDefects.get(lcv);
             jObj = new JSONObject();
-            jObj.put("InspectionId", inspection.inspection_id);
-            jObj.put("DefectItemId", inspection.defect_item_id);
-            jObj.put("DefectStatusId", inspection.defect_status_id);
-            if (inspection.comment != null) {
-                jObj.put("Comment", inspection.comment);
+            jObj.put("InspectionId", defect.inspection_id);
+            jObj.put("DefectItemId", defect.defect_item_id);
+            jObj.put("DefectStatusId", defect.defect_status_id);
+            if (defect.comment != null) {
+                jObj.put("Comment", defect.comment);
             } else {
                 jObj.put("Comment", "");
             }
-            jObj.put("Comment", inspection.comment);
-            if (inspection.picture_path != null) {
-                jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspection.id)));
-                jObj.put("ImageFileName", inspection.picture_path.substring(inspection.picture_path.lastIndexOf("/")+1));
+            jObj.put("Comment", defect.comment);
+            if (defect.picture_path != null) {
+                jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(defect.id)));
+                jObj.put("ImageFileName", defect.picture_path.substring(defect.picture_path.lastIndexOf("/")+1));
             } else {
                 jObj.put("ImageData", null);
                 jObj.put("ImageFileName", null);
             }
-            mUploadInspectionDataRequest = uploadInspectionData(UPLOAD_URL, jObj, new ServerCallback() {
+            InspectionDefect_Table finalDefect = defect;
+            mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
                 @Override
                 public void onSuccess() {
-                    Log.i(TAG, "Uploaded inspection detail!");
+                    mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
                 }
 
                 @Override
                 public void onFailure() {
-                    Log.i(TAG, "Error in uploadInspectionData");
-                    mProgressBar.setVisibility(View.GONE);
-                    mLockScreen.setVisibility(View.GONE);
-                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
-            mUploadInspectionDataRequest.setRetryPolicy(new RetryPolicy() {
-                @Override
-                public int getCurrentTimeout() {
-                    return 90 * 1000;
-                }
-
-                @Override
-                public int getCurrentRetryCount() {
-                    return 0;
-                }
-
-                @Override
-                public void retry(VolleyError error) throws VolleyError {
-
-                }
-            });
-
-            queue.add(mUploadInspectionDataRequest);
+            BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
         }
 
-        mUpdateInspectionStatusRequest = updateInspectionStatus(String.format(UPDATE_URL, mInspectionId, mInspectionStatusId), new ServerCallback() {
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, new ServerCallback() {
             @Override
             public void onSuccess() {
-                Log.i(TAG, "Updated Inspection status!");
                 mReviewAndSubmitViewModel.completeInspection(mInspectionId);
                 returnToRouteSheet();
-                mProgressBar.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                hideProgressSpinner();
             }
 
             @Override
             public void onFailure() {
-                Log.i(TAG, "Error in updateInspectionStatus");
-                mProgressBar.setVisibility(View.GONE);
-                mLockScreen.setVisibility(View.GONE);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                Snackbar.make(mConstraintLayout, "Error in submission! Email support", Snackbar.LENGTH_LONG).show();
+                returnToRouteSheet();
+                hideProgressSpinner();
             }
         });
 
-        queue.add(mUpdateInspectionStatusRequest);
-    }
-
-    private StringRequest uploadInspectionData(String url, JSONObject jObject, final ServerCallback callBack) {
-        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            Log.i(TAG, "Uploaded " + response + " defects.");
-            callBack.onSuccess();
-        }, error -> {
-            Log.i(TAG, error.getMessage());
-            callBack.onFailure();
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer " + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
-                return params;
-            }
-
-            @Override
-            public byte[] getBody() {
-                return jObject.toString().getBytes();
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
-            }
-        };
-
-        return request;
-    }
-
-    private StringRequest updateInspectionStatus(String url, final ServerCallback callBack) {
-        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            Log.i(TAG, "Updated inspection status");
-            callBack.onSuccess();
-        }, error -> {
-            Log.i(TAG, error.getMessage());
-            callBack.onFailure();
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put("Authorization", "Bearer " + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
-                return params;
-            }
-        };
-
-        return request;
+        BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
     }
 
     private byte[] getPictureData(int inspectionDefectId) {
@@ -304,6 +224,17 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void showProgressSpinner() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mLockScreen.setVisibility(View.VISIBLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+    private void hideProgressSpinner() {
+        mProgressBar.setVisibility(View.GONE);
+        mLockScreen.setVisibility(View.GONE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     private void returnToRouteSheet() {

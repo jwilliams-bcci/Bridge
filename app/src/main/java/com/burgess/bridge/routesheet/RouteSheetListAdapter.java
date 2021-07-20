@@ -32,7 +32,7 @@ public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSh
         Inspection_Table current = getItem(position);
         holder.mInspectionId = current.id;
         holder.mInspectionTypeId = current.inspection_type_id;
-        holder.bind(current.community, current.address, current.inspection_type, current.notes);
+        holder.bind(current.community, current.address, current.inspection_type, current.notes, current.is_complete, "0", "0");
 
         holder.mReorderHandle.setOnTouchListener((v, event) -> {
             Log.d("DRAG", "Action is... " + event.toString());
