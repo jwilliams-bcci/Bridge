@@ -9,6 +9,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import data.Tables.Inspection_Table;
+import data.Views.RouteSheet_View;
 
 @Dao
 public interface Inspection_DAO {
@@ -20,6 +21,9 @@ public interface Inspection_DAO {
 
     @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
     LiveData<List<Inspection_Table>> getInspections(int inspector_id);
+
+    @Query("SELECT * FROM routesheet_view")
+    LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet();
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
     LiveData<Inspection_Table> getInspection(int inspection_id);

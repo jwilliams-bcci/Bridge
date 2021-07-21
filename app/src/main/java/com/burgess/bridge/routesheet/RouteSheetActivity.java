@@ -101,7 +101,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
 
         mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
-        mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString(PREF_INSPECTOR_ID, "0"))).observe(this, inspections -> {
+        mRouteSheetViewModel.getAllInspectionsForRouteSheet().observe(this, inspections -> {
             adapter.submitList(inspections);
             adapter.setCurrentList(inspections);
             adapter.notifyDataSetChanged();

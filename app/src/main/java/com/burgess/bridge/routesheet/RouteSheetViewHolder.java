@@ -55,14 +55,14 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bind(String community, String address, String inspectionType, String notes, boolean isComplete, String numberUploaded, String numberToUpload) {
+    public void bind(String community, String address, String inspectionType, String notes, boolean isComplete, int numberUploaded, int numberToUpload) {
         mTextInspectionCommunity.setText(community);
         mTextInspectionAddress.setText(address);
         mTextInspectionType.setText(inspectionType);
         mTextInspectionNotes.setText(notes);
         if (isComplete) {
             mTextInspectionUploaded.setVisibility(View.VISIBLE);
-            mTextInspectionUploaded.setText(String.format("Uploaded %s of %s defects.", numberUploaded, numberToUpload));
+            mTextInspectionUploaded.setText(String.format("Uploaded %d of %d defects.", numberUploaded, numberToUpload));
         }
     }
 

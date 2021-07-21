@@ -12,9 +12,10 @@ import java.util.Collections;
 import java.util.List;
 
 import data.Tables.Inspection_Table;
+import data.Views.RouteSheet_View;
 
-public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSheetViewHolder> implements ItemTouchHelperAdapter {
-    private List<Inspection_Table> currentList;
+public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter {
+    private List<RouteSheet_View> currentList;
     private OnStartDragListener mDragListener;
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
@@ -29,10 +30,10 @@ public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSh
 
     @Override
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
-        Inspection_Table current = getItem(position);
+        RouteSheet_View current = getItem(position);
         holder.mInspectionId = current.id;
         holder.mInspectionTypeId = current.inspection_type_id;
-        holder.bind(current.community, current.address, current.inspection_type, current.notes, current.is_complete, "0", "0");
+        holder.bind(current.community, current.address, current.inspection_type, current.notes, current.is_complete, current.num_uploaded, current.num_total);
 
         holder.mReorderHandle.setOnTouchListener((v, event) -> {
             Log.d("DRAG", "Action is... " + event.toString());
@@ -57,7 +58,7 @@ public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSh
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    public void setCurrentList(List<Inspection_Table> list) {
+    public void setCurrentList(List<RouteSheet_View> list) {
         currentList = list;
     }
 
@@ -65,14 +66,14 @@ public class RouteSheetListAdapter extends ListAdapter<Inspection_Table, RouteSh
         mDragListener = listener;
     }
 
-    public static class InspectionDiff extends DiffUtil.ItemCallback<Inspection_Table> {
+    public static class InspectionDiff extends DiffUtil.ItemCallback<RouteSheet_View> {
         @Override
-        public boolean areItemsTheSame(@NonNull Inspection_Table oldItem, @NonNull Inspection_Table newItem) {
+        public boolean areItemsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
             return oldItem == newItem;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Inspection_Table oldItem, @NonNull Inspection_Table newItem) {
+        public boolean areContentsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
             return oldItem.id == newItem.id;
         }
     }

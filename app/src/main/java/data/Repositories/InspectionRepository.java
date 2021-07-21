@@ -9,6 +9,7 @@ import java.util.List;
 import data.BridgeRoomDatabase;
 import data.DAOs.Inspection_DAO;
 import data.Tables.Inspection_Table;
+import data.Views.RouteSheet_View;
 
 public class InspectionRepository {
     private Inspection_DAO mInspectionDao;
@@ -22,7 +23,11 @@ public class InspectionRepository {
         return mInspectionDao.getInspection(inspection_id);
     }
 
-    public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet(int inspector_id) {
+    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet() {
+        return mInspectionDao.getInspectionsForRouteSheet();
+    }
+
+    public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet2(int inspector_id) {
         return mInspectionDao.getInspections(inspector_id);
     }
 
