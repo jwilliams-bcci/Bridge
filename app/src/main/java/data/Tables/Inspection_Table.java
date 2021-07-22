@@ -39,6 +39,10 @@ public class Inspection_Table {
     public String incomplete_reason;
     public int incomplete_reason_id;
     public String notes;
+    @TypeConverters({DateConverter.class})
+    public Date start_time;
+    @TypeConverters({DateConverter.class})
+    public Date end_time;
     public boolean is_complete;
     public boolean is_uploaded;
     public int route_sheet_order;
@@ -54,8 +58,8 @@ public class Inspection_Table {
                             boolean reinspect, int inspection_order, String address,
                             int inspection_status_id, String inspection_status, String super_phone,
                             String super_email, int super_present, String incomplete_reason,
-                            int incomplete_reason_id, String notes, boolean is_complete,
-                            boolean is_uploaded, int route_sheet_order) {
+                            int incomplete_reason_id, String notes, Date start_time, Date end_time,
+                            boolean is_complete, boolean is_uploaded, int route_sheet_order) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.builder_name = builder_name;
@@ -80,6 +84,8 @@ public class Inspection_Table {
         this.incomplete_reason = incomplete_reason;
         this.incomplete_reason_id = incomplete_reason_id;
         this.notes = notes;
+        this.start_time = start_time;
+        this.end_time = end_time;
         this.is_complete = is_complete;
         this.is_uploaded = is_uploaded;
         this.route_sheet_order = route_sheet_order;
