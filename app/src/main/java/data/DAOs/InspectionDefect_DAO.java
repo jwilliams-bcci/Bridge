@@ -40,4 +40,7 @@ public interface InspectionDefect_DAO {
 
     @Query("UPDATE inspection_defect_table SET is_uploaded = 1 WHERE id = :inspection_defect_id")
     void markDefectUploaded(int inspection_defect_id);
+
+    @Query("SELECT COUNT(CASE WHEN is_uploaded = 0 THEN 1 END) AS total_uploaded FROM inspection_defect_table WHERE inspection_id = :inspection_id")
+    int remainingToUpload(int inspection_id);
 }
