@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -187,6 +188,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
+                    if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
+                        Log.i(TAG, "All defects uploaded");
+                        mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
+                    }
                 }
 
                 @Override
@@ -196,24 +201,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
         }
 
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1:0), startTime, endTime,new ServerCallback() {
-            @Override
-            public void onSuccess() {
-                Date endTime = Calendar.getInstance().getTime();
-                mReviewAndSubmitViewModel.completeInspection(endTime, mInspectionId);
-                returnToRouteSheet();
-                hideProgressSpinner();
-            }
-
-            @Override
-            public void onFailure() {
-                Snackbar.make(mConstraintLayout, "Error in submission! Email support", Snackbar.LENGTH_LONG).show();
-                returnToRouteSheet();
-                hideProgressSpinner();
-            }
-        });
-
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), startTime, endTime);
         BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+
+        mReviewAndSubmitViewModel.completeInspection(mInspection.getValue().end_time, mInspectionId);
+        returnToRouteSheet();
+        hideProgressSpinner();
     }
 
     private byte[] getPictureData(int inspectionDefectId) {

@@ -360,17 +360,15 @@ public class BridgeAPIQueue {
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(45), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
-    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime, final ServerCallback callback) {
+    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Updated status for " + inspectionId + ".");
-            callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             Log.e(TAG, "ERROR - updateInspectionStatus: " + errorMessage);
-            callback.onFailure();
         }) {
             @Override
             public Map<String, String> getHeaders() {
