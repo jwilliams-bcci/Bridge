@@ -13,6 +13,7 @@ import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
+import data.Views.RouteSheet_View;
 
 public class RouteSheetViewModel extends AndroidViewModel {
     private InspectionRepository mInspectionRepository;
@@ -24,8 +25,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
     }
 
-    public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet(int inspector_id) {
-        return mInspectionRepository.getAllInspectionsForRouteSheet(inspector_id);
+    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet(int inspectorId) {
+        return mInspectionRepository.getAllInspectionsForRouteSheet(inspectorId);
     }
 
     public void insertInspection(Inspection_Table inspection) {

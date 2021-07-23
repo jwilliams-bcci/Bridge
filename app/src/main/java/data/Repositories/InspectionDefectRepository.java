@@ -54,4 +54,8 @@ public class InspectionDefectRepository {
     public void markDefectUploaded(int inspectionDefectId) {
         mInspectionDefectDao.markDefectUploaded(inspectionDefectId);
     }
+
+    public int remainingToUpload(int inspectionId) {
+        return mInspectionDefectDao.remainingToUpload(inspectionId);
+    }
 }

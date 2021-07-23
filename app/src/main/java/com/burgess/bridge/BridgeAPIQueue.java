@@ -60,7 +60,7 @@ public class BridgeAPIQueue {
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
-    private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s";
+    private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus2?InspectionId=%s&StatusId=%s";
 
     private BridgeAPIQueue(Context context) {
         ctx = context;
@@ -353,21 +353,18 @@ public class BridgeAPIQueue {
                 return "application/json";
             }
         };
-
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(45), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
-    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, final ServerCallback callback) {
+    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Updated status for " + inspectionId + ".");
-            callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             Log.e(TAG, "ERROR - updateInspectionStatus: " + errorMessage);
-            callback.onFailure();
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -376,6 +373,7 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(45), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
 }
