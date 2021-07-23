@@ -218,6 +218,7 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateRouteSheet(RouteSheetViewModel vm, String inspectorId, String inspectionDate, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_INSPECTIONS_URL, inspectorId, inspectionDate);
+        Log.i(TAG, "Url for updateRouteSheet: " + url);
 
         ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
         DateFormat format = new SimpleDateFormat("MM-dd-YYYY", Locale.ENGLISH);
@@ -258,7 +259,7 @@ public class BridgeAPIQueue {
                     inspection.route_sheet_order = obj.optInt("Order");
 
                     if (inspection.reinspect) {
-                        inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
+                        inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order + 1, inspection.inspection_type_id, inspection.location_id));
                     }
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {
@@ -290,6 +291,7 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateInspectionHistory(RouteSheetViewModel vm, int inspectionId, int inspectionOrder, int inspectionTypeId, int locationId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_INSPECTION_HISTORY_URL, inspectionOrder, inspectionTypeId, locationId);
+        Log.i(TAG, "Url for updateInspectionHistory: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {
