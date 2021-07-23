@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,6 +31,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
@@ -41,7 +42,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +76,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private StringRequest mUploadInspectionDataRequest;
     private StringRequest mUpdateInspectionStatusRequest;
+    private String startTime;
+    private String endTime;
+    private SharedPreferences mSharedPreferences;
+    private String mSecurityUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +95,19 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mTextAddress = findViewById(R.id.review_and_submit_text_address);
         mSupervisorPresent = false;
         mStatusCorrect = false;
+
+        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
+        mSecurityUserId = mSharedPreferences.getString(Constants.PREF_SECURITY_USER_ID, "NULL");
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        try {
+            startTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
+            endTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            Log.e(TAG, "Problem formatting date, yo");
+            e.printStackTrace();
+        }
+
 
         mConstraintLayout = findViewById(R.id.review_and_submit_constraint_layout);
         mLockScreen = findViewById(R.id.review_and_submit_lock_screen);
@@ -164,10 +187,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess() {
                     mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
-                    if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
-                        Log.i(TAG, "All defects uploaded");
-                        mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
-                    }
                 }
 
                 @Override
@@ -177,12 +196,24 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
         }
 
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId);
-        BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1:0), startTime, endTime,new ServerCallback() {
+            @Override
+            public void onSuccess() {
+                Date endTime = Calendar.getInstance().getTime();
+                mReviewAndSubmitViewModel.completeInspection(endTime, mInspectionId);
+                returnToRouteSheet();
+                hideProgressSpinner();
+            }
 
-        mReviewAndSubmitViewModel.completeInspection(mInspectionId);
-        returnToRouteSheet();
-        hideProgressSpinner();
+            @Override
+            public void onFailure() {
+                Snackbar.make(mConstraintLayout, "Error in submission! Email support", Snackbar.LENGTH_LONG).show();
+                returnToRouteSheet();
+                hideProgressSpinner();
+            }
+        });
+
+        BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
     }
 
     private byte[] getPictureData(int inspectionDefectId) {

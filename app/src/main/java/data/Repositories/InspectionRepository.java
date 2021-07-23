@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.util.Date;
 import java.util.List;
 
 import data.BridgeRoomDatabase;
@@ -45,8 +46,8 @@ public class InspectionRepository {
         });
     }
 
-    public void completeInspection(int inspection_id) {
-        mInspectionDao.completeInspection(inspection_id);
+    public void completeInspection(Date end_time, int inspection_id) {
+        mInspectionDao.completeInspection(end_time, inspection_id);
     }
 
     public void uploadInspection(int inspection_id) {
@@ -55,5 +56,9 @@ public class InspectionRepository {
 
     public void swapOrder(int inspection_id, int new_order) {
         mInspectionDao.swapOrder(inspection_id, new_order);
+    }
+
+    public void startInspection(Date start_time, int inspection_id) {
+        mInspectionDao.startInspection(start_time, inspection_id);
     }
 }

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.util.Date;
 import java.util.List;
 
 import data.Repositories.DefectItemRepository;
@@ -51,8 +52,8 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         return mInspectionRepository.getInspection(inspectionId);
     }
 
-    public void completeInspection(int inspectionId) {
-        mInspectionRepository.completeInspection(inspectionId);
+    public void completeInspection(Date endTime, int inspectionId) {
+        mInspectionRepository.completeInspection(endTime, inspectionId);
     }
 
     public void uploadInspection(int inspectionId) {

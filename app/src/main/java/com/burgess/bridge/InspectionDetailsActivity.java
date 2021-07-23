@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.DateTimeKeyListener;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,6 +13,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.burgess.bridge.inspect.InspectActivity;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import data.Tables.Inspection_Table;
 
@@ -53,6 +58,9 @@ public class InspectionDetailsActivity extends AppCompatActivity {
 
         Button inspectButton = findViewById(R.id.inspection_details_button_inspect);
         inspectButton.setOnClickListener(view -> {
+            Date startTime = Calendar.getInstance().getTime();
+            mInspectionDetailsViewModel.startInspection(startTime, mInspectionId);
+
             Intent inspectIntent = new Intent(InspectionDetailsActivity.this, InspectActivity.class);
             inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
             inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);

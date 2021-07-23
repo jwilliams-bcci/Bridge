@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class BridgeAPIQueue {
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
-    private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus2?InspectionId=%s&StatusId=%s";
+    private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s&UserId=%s&InspectionTotal=%s&SuperPresent=%s&StartTime=%s&EndTime=%s";
 
     private BridgeAPIQueue(Context context) {
         ctx = context;
@@ -250,6 +251,8 @@ public class BridgeAPIQueue {
                     inspection.incomplete_reason = obj.getString("IncompleteReason");
                     inspection.incomplete_reason_id = obj.optInt("IncompleteReasonID");
                     inspection.notes = obj.getString("Comment");
+                    inspection.start_time = null;
+                    inspection.end_time = null;
                     inspection.is_complete = false;
                     inspection.is_uploaded = false;
                     inspection.route_sheet_order = obj.optInt("Order");
@@ -353,18 +356,21 @@ public class BridgeAPIQueue {
                 return "application/json";
             }
         };
+
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(45), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
-    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId) {
+    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId);
+        url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Updated status for " + inspectionId + ".");
+            callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             Log.e(TAG, "ERROR - updateInspectionStatus: " + errorMessage);
+            callback.onFailure();
         }) {
             @Override
             public Map<String, String> getHeaders() {
