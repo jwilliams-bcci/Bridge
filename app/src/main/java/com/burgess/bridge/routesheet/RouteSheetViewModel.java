@@ -25,8 +25,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
     }
 
-    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet() {
-        return mInspectionRepository.getAllInspectionsForRouteSheet();
+    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet(int inspectorId) {
+        return mInspectionRepository.getAllInspectionsForRouteSheet(inspectorId);
     }
 
     public void insertInspection(Inspection_Table inspection) {

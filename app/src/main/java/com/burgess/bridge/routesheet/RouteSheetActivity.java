@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -99,12 +100,14 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         recyclerInspections.setAdapter(adapter);
         adapter.setDragListener(this);
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
+        //((SimpleItemAnimator) recyclerInspections.getItemAnimator()).setSupportsChangeAnimations(false);
+        recyclerInspections.getItemAnimator().setChangeDuration(0);
 
         mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
-        mRouteSheetViewModel.getAllInspectionsForRouteSheet().observe(this, inspections -> {
+        mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL"))).observe(this, inspections -> {
             adapter.submitList(inspections);
             adapter.setCurrentList(inspections);
-            adapter.notifyDataSetChanged();
+            //adapter.notifyDataSetChanged();
         });
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);

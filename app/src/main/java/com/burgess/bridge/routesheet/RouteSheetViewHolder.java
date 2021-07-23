@@ -21,6 +21,9 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public int mInspectionTypeId;
     public int mBuilderName;
     public String mInspectionAddress;
+    public boolean isComplete;
+    public int numberUploaded;
+    public int numberToUpload;
 
     private final TextView mTextInspectionCommunity;
     private final TextView mTextInspectionAddress;
@@ -55,11 +58,11 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void bind(String community, String address, String inspectionType, String notes, boolean isComplete, int numberUploaded, int numberToUpload) {
+    public void bind(String community, String address, String inspectionType, String notes) {
         mTextInspectionCommunity.setText(community);
         mTextInspectionAddress.setText(address);
         mTextInspectionType.setText(inspectionType);
-        mTextInspectionNotes.setText(notes);
+        mTextInspectionNotes.setText(notes.equalsIgnoreCase("null") ? "No additional notes" : notes);
         if (isComplete) {
             mTextInspectionUploaded.setVisibility(View.VISIBLE);
             mTextInspectionUploaded.setText(String.format("Uploaded %d of %d defects.", numberUploaded, numberToUpload));
