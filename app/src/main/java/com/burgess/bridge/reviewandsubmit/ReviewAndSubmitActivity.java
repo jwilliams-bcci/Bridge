@@ -256,7 +256,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     }
 
     private void returnToRouteSheet() {
+        finish();
         Intent routeSheetIntent = new Intent(ReviewAndSubmitActivity.this, RouteSheetActivity.class);
+        routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(routeSheetIntent);
     }
 }
