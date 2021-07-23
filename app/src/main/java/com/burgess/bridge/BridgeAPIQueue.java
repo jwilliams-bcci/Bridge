@@ -215,7 +215,7 @@ public class BridgeAPIQueue {
     }
 
     // Route Sheet
-    public JsonArrayRequest updateRouteSheet(RouteSheetViewModel vm, String inspectorId, String inspectionDate, final ServerCallback callback) {
+    public JsonArrayRequest updateRouteSheet(RouteSheetViewModel vm, String inspectorId, String inspectionDate) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_INSPECTIONS_URL, inspectorId, inspectionDate);
         Log.i(TAG, "Url for updateRouteSheet: " + url);
@@ -264,20 +264,16 @@ public class BridgeAPIQueue {
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {
                     Log.e(TAG, "ERROR - updateRouteSheet: " + e.getMessage());
-                    callback.onFailure();
                 } catch (ParseException e) {
                     Log.e(TAG, "ERROR - updateRouteSheet: " + e.getMessage());
-                    callback.onFailure();
                 }
             }
             for (int lcv = 0; lcv < inspectionHistoryRequests.size(); lcv++) {
                 getRequestQueue().add(inspectionHistoryRequests.get(lcv));
             }
-            callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             Log.e(TAG, "ERROR - updateRouteSheet: " + errorMessage);
-            callback.onFailure();
         }) {
             @Override
             public Map<String, String> getHeaders() {

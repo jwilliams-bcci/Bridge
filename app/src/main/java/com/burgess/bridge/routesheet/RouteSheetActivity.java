@@ -67,17 +67,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         String inspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
 
         initializeDisplayContent();
-        mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, inspectorId, formatter.format(LocalDateTime.now()), new ServerCallback() {
-            @Override
-            public void onSuccess() {
-                Log.i(TAG, "updateRouteSheet returned success");
-            }
-
-            @Override
-            public void onFailure() {
-                Log.e(TAG, "ERROR - updateRouteSheet returned failure");
-            }
-        });
+        mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, inspectorId, formatter.format(LocalDateTime.now()));
         queue.add(mUpdateRouteSheetRequest);
 
         Button buttonOrderRouteSheet = findViewById(R.id.route_sheet_button_order_route_sheet);
@@ -100,7 +90,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         recyclerInspections.setAdapter(adapter);
         adapter.setDragListener(this);
         recyclerInspections.setLayoutManager(new LinearLayoutManager(this));
-        //((SimpleItemAnimator) recyclerInspections.getItemAnimator()).setSupportsChangeAnimations(false);
         recyclerInspections.getItemAnimator().setChangeDuration(0);
 
         mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
