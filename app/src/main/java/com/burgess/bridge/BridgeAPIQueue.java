@@ -66,7 +66,7 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = false;
+        isProd = true;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }

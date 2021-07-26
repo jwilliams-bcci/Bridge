@@ -184,6 +184,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("ImageFileName", null);
             }
             InspectionDefect_Table finalDefect = defect;
+            mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), startTime, endTime);
             mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
                 @Override
                 public void onSuccess() {
@@ -191,6 +192,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
                         Log.i(TAG, "All defects uploaded");
                         mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
+                        BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
                     }
                 }
 
@@ -200,9 +202,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             });
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
         }
-
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), startTime, endTime);
-        BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
 
         mReviewAndSubmitViewModel.completeInspection(mInspection.getValue().end_time, mInspectionId);
         returnToRouteSheet();
