@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -80,7 +81,6 @@ public class InspectActivity extends AppCompatActivity {
         displayAddress(textAddress);
         fillSpinner(mSpinnerDefectCategories);
 
-        mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
         if (mReinspection) {
             Log.i(TAG, "Going into reinspect list adapter...");
             mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.InspectDiff());
@@ -96,12 +96,25 @@ public class InspectActivity extends AppCompatActivity {
             mRecyclerDefectItems.setAdapter(mInspectListAdapter);
             displayDefectItems("ALL");
         }
+        mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
 
         Button buttonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
         buttonReviewAndSubmit.setOnClickListener(v -> {
-            Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
-            reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
-            startActivity(reviewAndSubmitIntent);
+            boolean allGood;
+            int numberToReview = mInspectViewModel.getItemsToReview(mInspectionId);
+            if (mReinspection) {
+                allGood = numberToReview < 1 ? true : false;
+            } else {
+                allGood = true;
+            }
+
+            if (allGood) {
+                Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
+                reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+                startActivity(reviewAndSubmitIntent);
+            } else {
+                Toast.makeText(this, "Please review all items.", Toast.LENGTH_LONG).show();
+            }
         });
 
         mButtonSaveAndExit.setOnClickListener(v -> {

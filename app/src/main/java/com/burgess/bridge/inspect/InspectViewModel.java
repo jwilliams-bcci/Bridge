@@ -74,4 +74,8 @@ public class InspectViewModel extends AndroidViewModel {
     public LiveData<Integer> getInspectionTypeId(int inspection_id) {
         return mInspectionRepository.getInspectionTypeId(inspection_id);
     }
+
+    public int getItemsToReview(int inspectionId) {
+        return mInspectionHistoryRepository.getItemsToReview(inspectionId);
+    }
 }

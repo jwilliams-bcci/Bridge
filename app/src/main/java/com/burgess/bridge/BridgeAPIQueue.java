@@ -259,7 +259,7 @@ public class BridgeAPIQueue {
                     inspection.route_sheet_order = obj.optInt("Order");
 
                     if (inspection.reinspect) {
-                        inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order + 1, inspection.inspection_type_id, inspection.location_id));
+                        inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
                     }
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {

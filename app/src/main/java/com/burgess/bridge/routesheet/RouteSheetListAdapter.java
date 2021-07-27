@@ -16,7 +16,6 @@ import com.burgess.bridge.R;
 import java.util.Collections;
 import java.util.List;
 
-import data.Tables.Inspection_Table;
 import data.Views.RouteSheet_View;
 
 public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter {

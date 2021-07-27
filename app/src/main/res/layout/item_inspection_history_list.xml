@@ -7,10 +7,12 @@
     android:paddingVertical="8dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/inspection_history_list_item_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/inspection_history_list_item_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

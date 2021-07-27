@@ -203,6 +203,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("ImageData", null);
                 jObj.put("ImageFileName", null);
             }
+            jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
             InspectionDefect_Table finalDefect = defect;
             mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), startTime, endTime);
             mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {

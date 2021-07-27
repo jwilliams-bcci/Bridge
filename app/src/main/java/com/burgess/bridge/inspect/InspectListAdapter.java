@@ -3,8 +3,11 @@ package com.burgess.bridge.inspect;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+
+import com.burgess.bridge.R;
 
 import data.Tables.DefectItem_Table;
 

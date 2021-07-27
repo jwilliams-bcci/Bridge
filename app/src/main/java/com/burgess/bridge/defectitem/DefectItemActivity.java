@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.util.DBUtil;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -257,11 +258,12 @@ public class DefectItemActivity extends AppCompatActivity {
             }
 
             InspectionDefect_Table inspectionDefect;
+            int priorInspectionDetailId = mInspectionHistoryId == -1 ? null : mInspectionHistoryId;
 
             if (pictureTaken) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, currentPhotoPath);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, currentPhotoPath);
             } else {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, null);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, null);
             }
 
             if (buttonSelected) {
@@ -273,6 +275,9 @@ public class DefectItemActivity extends AppCompatActivity {
                     finish();
                 } else {
                     mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
+                    if (mInspectionHistoryId > 0) {
+                        mDefectItemViewModel.updateIsReviewed(mInspectionHistoryId);
+                    }
                     Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
                     inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
                     inspectIntent.putExtra(InspectActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
