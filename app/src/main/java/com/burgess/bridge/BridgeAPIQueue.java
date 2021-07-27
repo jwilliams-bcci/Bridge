@@ -66,7 +66,7 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = true;
+        isProd = false;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -259,7 +259,7 @@ public class BridgeAPIQueue {
                     inspection.route_sheet_order = obj.optInt("Order");
 
                     if (inspection.reinspect) {
-                        inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order + 1, inspection.inspection_type_id, inspection.location_id));
+                        inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
                     }
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {

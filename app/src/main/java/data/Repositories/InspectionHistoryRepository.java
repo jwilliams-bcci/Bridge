@@ -45,4 +45,12 @@ public class InspectionHistoryRepository {
     public String getComment(int inspectionHistoryId) {
         return mInspectionHistoryDao.getComment(inspectionHistoryId);
     }
+
+    public void updateIsReviewed(int inspectionHistoryId) {
+        mInspectionHistoryDao.updateIsReviewed(inspectionHistoryId);
+    }
+
+    public int getItemsToReview(int inspectionId) {
+        return mInspectionHistoryDao.getItemsToReview(inspectionId);
+    }
 }

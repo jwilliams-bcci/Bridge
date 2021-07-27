@@ -8,4 +8,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGray">#797272</color>
     <color name="colorLockScreen">#B0000000</color>
+    <color name="colorLightRed">#FF0000</color>
 </resources>

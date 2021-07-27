@@ -60,4 +60,8 @@ public class DefectItemViewModel extends AndroidViewModel {
     public String getInspectionHistoryComment(int inspectionHistoryId) {
         return mInspectionHistoryRepository.getComment(inspectionHistoryId);
     }
+
+    public void updateIsReviewed (int inspectionHistoryId) {
+        mInspectionHistoryRepository.updateIsReviewed(inspectionHistoryId);
+    }
 }
