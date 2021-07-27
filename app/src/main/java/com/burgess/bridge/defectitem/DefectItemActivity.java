@@ -258,7 +258,7 @@ public class DefectItemActivity extends AppCompatActivity {
             }
 
             InspectionDefect_Table inspectionDefect;
-            int priorInspectionDetailId = mInspectionHistoryId == -1 ? null : mInspectionHistoryId;
+            int priorInspectionDetailId = mInspectionHistoryId == -1 ? 0 : mInspectionHistoryId;
 
             if (pictureTaken) {
                 inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, currentPhotoPath);
