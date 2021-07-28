@@ -43,4 +43,7 @@ public interface InspectionDefect_DAO {
 
     @Query("SELECT COUNT(CASE WHEN is_uploaded = 0 THEN 1 END) AS total_uploaded FROM inspection_defect_table WHERE inspection_id = :inspection_id")
     int remainingToUpload(int inspection_id);
+
+    @Query("DELETE FROM inspection_defect_table WHERE id = :inspection_defect_id")
+    void deleteInspectionDefect(int inspection_defect_id);
 }

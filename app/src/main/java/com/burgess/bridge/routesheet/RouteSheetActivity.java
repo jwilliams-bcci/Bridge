@@ -96,7 +96,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL"))).observe(this, inspections -> {
             adapter.submitList(inspections);
             adapter.setCurrentList(inspections);
-            //adapter.notifyDataSetChanged();
         });
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);

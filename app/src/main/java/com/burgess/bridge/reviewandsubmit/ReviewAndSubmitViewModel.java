@@ -67,4 +67,8 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
     public int remainingToUpload(int inspectionId) {
         return mInspectionDefectRepository.remainingToUpload(inspectionId);
     }
+
+    public void deleteInspectionDefect(int inspectionDefectId) {
+        mInspectionDefectRepository.deleteInspectionDefect(inspectionDefectId);
+    }
 }
