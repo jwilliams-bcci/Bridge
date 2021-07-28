@@ -30,7 +30,7 @@
         app:titleTextColor="#FFFFFF" />
 
     <Button
-        android:id="@+id/route_sheet_button_order_route_sheet"
+        android:id="@+id/route_sheet_button_send_log"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
         app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_address"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_order_route_sheet" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_send_log" />
 
     <EditText
         android:id="@+id/route_sheet_text_search_inspection_number"
@@ -117,7 +117,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/route_sheet_button_order_route_sheet"
+        app:layout_constraintStart_toEndOf="@+id/route_sheet_button_send_log"
         app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_update_route_sheet" />
 
     <androidx.recyclerview.widget.RecyclerView

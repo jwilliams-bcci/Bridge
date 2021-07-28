@@ -1,48 +1,33 @@
 package com.burgess.bridge.routesheet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.burgess.bridge.BridgeAPIQueue;
-import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
-import com.burgess.bridge.ServerCallback;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
-import data.Tables.InspectionHistory_Table;
-import data.Tables.Inspection_Table;
-
-import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
 
 public class RouteSheetActivity extends AppCompatActivity implements OnStartDragListener {
@@ -70,9 +55,14 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, inspectorId, formatter.format(LocalDateTime.now()));
         queue.add(mUpdateRouteSheetRequest);
 
-        Button buttonOrderRouteSheet = findViewById(R.id.route_sheet_button_order_route_sheet);
+        Button buttonOrderRouteSheet = findViewById(R.id.route_sheet_button_send_log);
         buttonOrderRouteSheet.setOnClickListener(v -> {
-            Toast.makeText(getApplicationContext(), "Order route sheet", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Sending error log (beta)", Toast.LENGTH_LONG).show();
+            sendLogcatEmail();
+        });
+
+        Button buttonPrintRouteSheet = findViewById(R.id.route_sheet_button_print_route_sheet);
+        buttonPrintRouteSheet.setOnClickListener(v -> {
         });
 
         Button buttonUpdateRouteSheet = findViewById(R.id.route_sheet_button_update_route_sheet);
@@ -82,6 +72,27 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         });
     }
 
+    private void sendLogcatEmail() {
+        try {
+            String logFileName = "BridgeLogcatFile.txt";
+            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            File logFile = new File(storageDir, logFileName);
+            logFile.delete();
+            logFile.createNewFile();
+            Uri logFileUri = FileProvider.getUriForFile(this, "com.burgess.bridge", logFile);
+            Runtime.getRuntime().exec("logcat *:E -f " + logFile.getAbsolutePath());
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("vnd.android.cursor.dir/email");
+            String to[] = {"jwilliams@burgess-inc.com"};
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Error log from Bridge");
+            Runtime.getRuntime().exec("logcat -c");
+            startActivity(Intent.createChooser(emailIntent, "Send email..."));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private void initializeDisplayContent() {
