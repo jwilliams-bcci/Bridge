@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.bridge.R;
+import com.burgess.bridge.defectitem.DefectItemActivity;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 
@@ -135,8 +136,11 @@ public class InspectActivity extends AppCompatActivity {
         });
 
         mButtonAddNote.setOnClickListener(v -> {
-            mAddNoteFragment = AddNoteFragment.newInstance();
-            mAddNoteFragment.show(getSupportFragmentManager(), "TAG");
+            Intent defectItemIntent = new Intent(this, DefectItemActivity.class);
+            defectItemIntent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
+            defectItemIntent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
+            defectItemIntent.putExtra(DefectItemActivity.DEFECT_ID, 1);
+            startActivity(defectItemIntent);
         });
     }
 

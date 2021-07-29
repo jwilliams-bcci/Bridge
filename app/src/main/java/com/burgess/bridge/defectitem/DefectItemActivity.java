@@ -134,6 +134,10 @@ public class DefectItemActivity extends AppCompatActivity {
         mSaveInspectionDefect = findViewById(R.id.defect_item_button_save);
         mButtonCancel = findViewById(R.id.defect_item_button_cancel);
 
+        if (mDefectId == 1) {
+            mRadioGroupDefectStatus.setVisibility(View.INVISIBLE);
+        }
+
         mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         mDefectItem = mDefectItemViewModel.getDefectItem(mDefectId);
 
@@ -227,21 +231,26 @@ public class DefectItemActivity extends AppCompatActivity {
             int defectStatusId = 0;
             boolean buttonSelected = true;
             String comment = "";
-            switch (selectedRadioId) {
-                case R.id.defect_item_radio_nc:
-                    defectStatusId = 2;
-                    break;
-                case R.id.defect_item_radio_c:
-                    defectStatusId = 3;
-                    break;
-                case R.id.defect_item_radio_r:
-                    defectStatusId = 6;
-                    break;
-                case R.id.defect_item_radio_na:
-                    defectStatusId = 4;
-                    break;
-                default:
-                    buttonSelected = false;
+            if (mDefectId == 1) {
+                defectStatusId = 7;
+                buttonSelected = true;
+            } else {
+                switch (selectedRadioId) {
+                    case R.id.defect_item_radio_nc:
+                        defectStatusId = 2;
+                        break;
+                    case R.id.defect_item_radio_c:
+                        defectStatusId = 3;
+                        break;
+                    case R.id.defect_item_radio_r:
+                        defectStatusId = 6;
+                        break;
+                    case R.id.defect_item_radio_na:
+                        defectStatusId = 4;
+                        break;
+                    default:
+                        buttonSelected = false;
+                }
             }
 
             comment += mDefectItemTextLocation.getText().toString();

@@ -34,7 +34,6 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
             intent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
             intent.putExtra(DefectItemActivity.DEFECT_ID, mDefectItemId);
             intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, mInspectionHistoryId);
-            Toast.makeText(v.getContext(), mTextDefectItemDescription.getText() + " selected", Toast.LENGTH_SHORT).show();
             v.getContext().startActivity(intent);
         });
     }
