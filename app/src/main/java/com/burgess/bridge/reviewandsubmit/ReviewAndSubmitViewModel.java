@@ -52,6 +52,10 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         return mInspectionRepository.getInspection(inspectionId);
     }
 
+    public Inspection_Table getInspectionSync(int inspectionId) {
+        return mInspectionRepository.getInspectionSync(inspectionId);
+    }
+
     public void completeInspection(Date endTime, int inspectionId) {
         mInspectionRepository.completeInspection(endTime, inspectionId);
     }

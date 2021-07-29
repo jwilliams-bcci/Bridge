@@ -43,10 +43,14 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mReorderHandle = itemView.findViewById(R.id.item_inspection_list_imageview_reorder_handle);
 
         itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
-            intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
-            intent.putExtra(InspectionDetailsActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
-            v.getContext().startActivity(intent);
+            if (!isComplete) {
+                Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
+                intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
+                intent.putExtra(InspectionDetailsActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
+                v.getContext().startActivity(intent);
+            } else {
+                Toast.makeText(itemView.getContext(), "Cannot edit inspetions while uploading!", Toast.LENGTH_LONG).show();
+            }
         });
 
         mReorderHandle.setOnTouchListener((v, event) -> {

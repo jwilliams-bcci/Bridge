@@ -24,6 +24,10 @@ public class InspectionRepository {
         return mInspectionDao.getInspection(inspection_id);
     }
 
+    public Inspection_Table getInspectionSync(int inspectionId) {
+        return mInspectionDao.getInspectionSync(inspectionId);
+    }
+
     public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet(int inspector_id) {
         return mInspectionDao.getInspectionsForRouteSheet(inspector_id);
     }

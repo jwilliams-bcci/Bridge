@@ -64,7 +64,7 @@ import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
     private ReviewAndSubmitViewModel mReviewAndSubmitViewModel;
-    private LiveData<Inspection_Table> mInspection;
+    private Inspection_Table mInspection;
 
     public static final String TAG = "REVIEW_AND_SUBMIT";
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
@@ -73,6 +73,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private int mInspectionStatusId;
     private boolean mSupervisorPresent;
     private boolean mStatusCorrect;
+    private boolean mIsReinspection;
     private LinearLayout mLockScreen;
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerInspectionDefects;
@@ -96,7 +97,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
         mInspectionStatusId = 12;
-        mInspection = mReviewAndSubmitViewModel.getInspection(mInspectionId);
+        mInspection = mReviewAndSubmitViewModel.getInspectionSync(mInspectionId);
+        mIsReinspection = mInspection.reinspect;
         mTextAddress = findViewById(R.id.review_and_submit_text_address);
         mSupervisorPresent = false;
         mStatusCorrect = false;
@@ -124,23 +126,25 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         List<InspectionDefect_Table> list = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
         adapter.submitList(mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId));
 
-        ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
-            @Override
-            public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
-                mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
-            }
-        };
-        ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
-        touchHelper.attachToRecyclerView(mRecyclerInspectionDefects);
-
         displayAddress(mTextAddress);
+
+        if (!mIsReinspection) {
+            ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                @Override
+                public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
+                    mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
+                }
+            };
+            ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
+            touchHelper.attachToRecyclerView(mRecyclerInspectionDefects);
+        }
 
         Button buttonSubmit = findViewById(R.id.review_and_submit_button_submit);
         buttonSubmit.setOnClickListener(v -> {
@@ -171,11 +175,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
     private void displayAddress(TextView textAddress) {
         textAddress.setText("");
-        mInspection.observe(this, inspection -> {
-            textAddress.append(inspection.community + "\n");
-            textAddress.append(inspection.address + "\n");
-            textAddress.append(inspection.inspection_type);
-        });
+        textAddress.append(mInspection.community + "\n");
+        textAddress.append(mInspection.address + "\n");
+        textAddress.append(mInspection.inspection_type);
     }
 
     private void completeInspection() throws JSONException {
@@ -225,7 +227,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
         }
 
-        mReviewAndSubmitViewModel.completeInspection(mInspection.getValue().end_time, mInspectionId);
+        mReviewAndSubmitViewModel.completeInspection(mInspection.end_time, mInspectionId);
         returnToRouteSheet();
         hideProgressSpinner();
     }

@@ -29,6 +29,9 @@ public interface Inspection_DAO {
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
     LiveData<Inspection_Table> getInspection(int inspection_id);
 
+    @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
+    Inspection_Table getInspectionSync(int inspection_id);
+
     @Query("SELECT inspection_type_id FROM inspection_table WHERE id = :inspection_id")
     LiveData<Integer> getInspectionTypeId(int inspection_id);
 
