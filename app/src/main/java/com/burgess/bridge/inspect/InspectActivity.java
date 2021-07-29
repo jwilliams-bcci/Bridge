@@ -118,7 +118,9 @@ public class InspectActivity extends AppCompatActivity {
         });
 
         mButtonSaveAndExit.setOnClickListener(v -> {
+            finish();
             Intent routeSheetIntent = new Intent(InspectActivity.this, RouteSheetActivity.class);
+            routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(routeSheetIntent);
         });
 
