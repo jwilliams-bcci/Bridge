@@ -10,7 +10,7 @@
     <string name="route_sheet_text_search_address_hint">Address</string>
     <string name="route_sheet_text_search_community_hint">Community</string>
     <string name="route_sheet_button_print_route_sheet_text">Print Route Sheet</string>
-    <string name="route_sheet_button_order_route_sheet_text">Send Error Log</string>
+    <string name="route_sheet_button_order_route_sheet_text">Send Activity Log</string>
     <string name="inspection_details_text_builder_label">Builder:</string>
     <string name="inspection_details_text_superintendent_label">Superintendent:</string>
     <string name="inspection_details_text_notes_label">Notes:</string>

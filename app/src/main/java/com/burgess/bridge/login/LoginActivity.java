@@ -3,6 +3,8 @@ package com.burgess.bridge.login;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor mEditor;
     private TextView mTextUserName;
     private TextView mTextPassword;
+    private TextView mTextVersionName;
     private Button mButtonLogin;
     private CheckBox mCheckBoxKeepMeLoggedIn;
     private ConstraintLayout mConstraintLayout;
@@ -60,6 +63,8 @@ public class LoginActivity extends AppCompatActivity {
     private JsonArrayRequest mUpdateDefectItemsRequest;
     private JsonArrayRequest mUpdateDIITReference;
 
+    private String mVersionName;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -67,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mTextUserName = findViewById(R.id.login_text_username);
         mTextPassword = findViewById(R.id.login_text_password);
+        mTextVersionName = findViewById(R.id.login_text_version_name);
         mButtonLogin = findViewById(R.id.login_button_login);
         mCheckBoxKeepMeLoggedIn = findViewById(R.id.login_checkbox_keep_me_logged_in);
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -78,6 +84,15 @@ public class LoginActivity extends AppCompatActivity {
         // Set the text boxes to respond to "Return" on keyboard
         mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
         mTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        mVersionName = pInfo.versionName;
+        mTextVersionName.setText("Version " + mVersionName);
 
         if (mSharedPreferences.getBoolean(PREF_STAY_LOGGED_IN, false)) {
             Log.i(TAG, "KeepMeLoggedIn is true");

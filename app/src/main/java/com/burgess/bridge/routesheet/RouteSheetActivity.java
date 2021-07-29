@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,6 +40,8 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
 
     private static final String TAG = "ROUTE_SHEET";
     private JsonArrayRequest mUpdateRouteSheetRequest;
+    private String mInspectorId;
+    private String mVersionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +52,19 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         mReorderHandle = findViewById(R.id.item_inspection_list_imageview_reorder_handle);
         RequestQueue queue = BridgeAPIQueue.getInstance(RouteSheetActivity.this).getRequestQueue();
 
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        mVersionName = pInfo.versionName;
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
-        String inspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
+        mInspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
 
         initializeDisplayContent();
-        mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, inspectorId, formatter.format(LocalDateTime.now()));
+        mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(LocalDateTime.now()));
         queue.add(mUpdateRouteSheetRequest);
 
         Button buttonOrderRouteSheet = findViewById(R.id.route_sheet_button_send_log);
@@ -80,13 +92,14 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
             logFile.delete();
             logFile.createNewFile();
             Uri logFileUri = FileProvider.getUriForFile(this, "com.burgess.bridge", logFile);
-            Runtime.getRuntime().exec("logcat *:E -f " + logFile.getAbsolutePath());
+            Runtime.getRuntime().exec("logcat API:I REVIEW_AND_SUBMIT:I *:S -f " + logFile.getAbsolutePath());
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("vnd.android.cursor.dir/email");
             String to[] = {"jwilliams@burgess-inc.com"};
             emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
             emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Error log from Bridge");
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + mInspectorId);
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Bridge version: " + mVersionName);
             Runtime.getRuntime().exec("logcat -c");
             startActivity(Intent.createChooser(emailIntent, "Send email..."));
         } catch (IOException e) {

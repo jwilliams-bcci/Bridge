@@ -99,12 +99,16 @@ public class BridgeAPIQueue {
     public JsonObjectRequest loginUser(String userName, String password, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url +=  String.format(LOGIN_URL, userName, password);
+        Log.i(TAG, "Url for loginUser: " + url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             mEditor.putString(PREF_AUTH_TOKEN, response.optString("AuthorizationToken"));
             mEditor.putString(PREF_SECURITY_USER_ID, response.optString("SecurityUserId"));
             mEditor.putString(PREF_INSPECTOR_ID, response.optString("InspectorId"));
             mEditor.apply();
+            Log.i(TAG, "PREF_AUTH_TOKEN set to: " + response.optString("AuthorizationToken"));
+            Log.i(TAG, "PREF_SECURITY_USER_ID set to: " + response.optString("SecurityUserId"));
+            Log.i(TAG, "PREF_INSPECTOR_ID set to: " + response.optString("InspectorId"));
             callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
@@ -116,6 +120,7 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateCannedComments(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_CANNED_COMMENTS_URL;
+        Log.i(TAG, "Url for updateCannedComments: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
@@ -129,6 +134,7 @@ public class BridgeAPIQueue {
                     Log.e(TAG, "ERROR - updateCannedComments: " + e.getMessage());
                 }
             }
+            Log.i(TAG, "Canned comments downloaded");
             callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
@@ -147,6 +153,7 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateDefectItems(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_DEFECT_ITEMS_URL;
+        Log.i(TAG, "Url for updateDefectItems: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
@@ -166,6 +173,7 @@ public class BridgeAPIQueue {
                     Log.e(TAG, "ERROR - updateDefectItems: " + e.getMessage());
                 }
             }
+            Log.i(TAG, "Defect Items downloaded");
             callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
@@ -184,6 +192,7 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateDefectItem_InspectionTypeXRef(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_URL;
+        Log.i(TAG, "Url for updateDefectItem_InspectionTypeXRef: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
@@ -198,6 +207,7 @@ public class BridgeAPIQueue {
                     Log.e(TAG, "ERROR - updateDIIT: " + e.getMessage());
                 }
             }
+            Log.i(TAG, "DefectItem_InspectionType references downloaded");
             callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
@@ -268,6 +278,7 @@ public class BridgeAPIQueue {
                     Log.e(TAG, "ERROR - updateRouteSheet: " + e.getMessage());
                 }
             }
+            Log.i(TAG, "Inspections downloaded");
             for (int lcv = 0; lcv < inspectionHistoryRequests.size(); lcv++) {
                 getRequestQueue().add(inspectionHistoryRequests.get(lcv));
             }
@@ -305,11 +316,11 @@ public class BridgeAPIQueue {
                     hist.comment = obj.optString("Comment");
                     hist.is_reviewed = false;
                     vm.insertInspectionHistory(hist);
-                    Log.i(TAG, "Added id: " + hist.id);
                 } catch (JSONException e) {
                     Log.e(TAG, "ERROR - updateInspectionHistory: " + e.getMessage());
                 }
             }
+            Log.i(TAG, "Inspection Histories downloaded");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             Log.e(TAG, "ERROR - updateInspectionHistory: " + errorMessage);
@@ -328,6 +339,7 @@ public class BridgeAPIQueue {
     public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += POST_INSPECTION_DEFECT_URL;
+        Log.i(TAG, "Url for uploadInspectionDefect: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Uploaded defect " + defectItemId + " for inspection " + inspectionId + ".");
@@ -361,6 +373,7 @@ public class BridgeAPIQueue {
     public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime);
+        Log.i(TAG, "Url for updateInspectionStatus: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Updated status for " + inspectionId + ".");
