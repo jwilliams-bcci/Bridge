@@ -70,6 +70,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_reorder_24" />
 
+            <ImageView
+                android:id="@+id/item_inspection_list_imageview_reinspection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_rounded_orange"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@+id/item_inspection_list_imageview_reorder_handle"
+                app:layout_constraintStart_toStartOf="@+id/item_inspection_list_imageview_reorder_handle"
+                app:layout_constraintTop_toBottomOf="@+id/item_inspection_list_imageview_reorder_handle"
+                app:srcCompat="@android:drawable/stat_notify_sync_noanim" />
+
             <TextView
                 android:id="@+id/text_recycler_uploaded"
                 android:layout_width="wrap_content"

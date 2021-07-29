@@ -22,6 +22,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public int mBuilderName;
     public String mInspectionAddress;
     public boolean isComplete;
+    public boolean isReinspection;
     public int numberUploaded;
     public int numberToUpload;
 

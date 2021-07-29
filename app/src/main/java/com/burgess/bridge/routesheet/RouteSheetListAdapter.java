@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -36,13 +38,18 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
         RouteSheet_View current = getItem(position);
         CardView view = holder.itemView.findViewById(R.id.item_inspection_list_card_view);
+        ImageView imageReinspect = holder.itemView.findViewById(R.id.item_inspection_list_imageview_reinspection);
         holder.mInspectionId = current.id;
         holder.mInspectionTypeId = current.inspection_type_id;
         holder.isComplete = current.is_complete;
+        holder.isReinspection = current.reinspect;
         holder.numberUploaded = current.num_uploaded;
         holder.numberToUpload = current.num_total;
         if (current.is_complete) {
             view.setCardBackgroundColor(Color.YELLOW);
+        }
+        if (current.reinspect) {
+            imageReinspect.setVisibility(View.VISIBLE);
         }
         holder.bind(current.community, current.address, current.inspection_type, current.notes);
 
