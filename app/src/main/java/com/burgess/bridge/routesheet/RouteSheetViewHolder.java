@@ -15,6 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.bridge.InspectionDetailsActivity;
 import com.burgess.bridge.R;
+import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
+
+import java.util.List;
+
+import data.Repositories.InspectionDefectRepository;
+import data.Tables.InspectionDefect_Table;
 
 public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public int mInspectionId;
@@ -32,6 +38,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextInspectionNotes;
     private final TextView mTextInspectionUploaded;
     public final ImageView mReorderHandle;
+    public final ImageView mReupload;
 
     public RouteSheetViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -41,6 +48,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
         mTextInspectionUploaded = itemView.findViewById(R.id.text_recycler_uploaded);
         mReorderHandle = itemView.findViewById(R.id.item_inspection_list_imageview_reorder_handle);
+        mReupload = itemView.findViewById(R.id.item_inspection_list_imageview_reupload);
 
         itemView.setOnClickListener(v -> {
             if (!isComplete) {
@@ -49,8 +57,14 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
                 intent.putExtra(InspectionDetailsActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
                 v.getContext().startActivity(intent);
             } else {
-                Toast.makeText(itemView.getContext(), "Cannot edit inspetions while uploading!", Toast.LENGTH_LONG).show();
+                Toast.makeText(itemView.getContext(), "Cannot edit inspections while uploading!", Toast.LENGTH_LONG).show();
             }
+        });
+
+        mReupload.setOnClickListener(v -> {
+            Intent reviewAndSubmitIntent = new Intent(v.getContext(), ReviewAndSubmitActivity.class);
+            reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+            v.getContext().startActivity(reviewAndSubmitIntent);
         });
 
         mReorderHandle.setOnTouchListener((v, event) -> {

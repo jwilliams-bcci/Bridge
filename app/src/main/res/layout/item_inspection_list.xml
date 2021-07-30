@@ -93,6 +93,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <ImageView
+                android:id="@+id/item_inspection_list_imageview_reupload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/item_inspection_list_imageview_reorder_handle"
+                app:layout_constraintEnd_toEndOf="@+id/item_inspection_list_imageview_reorder_handle"
+                app:layout_constraintStart_toStartOf="@+id/item_inspection_list_imageview_reorder_handle"
+                app:srcCompat="@android:drawable/ic_menu_upload" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

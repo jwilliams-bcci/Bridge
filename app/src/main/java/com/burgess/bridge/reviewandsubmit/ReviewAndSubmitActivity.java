@@ -128,7 +128,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
         displayAddress(mTextAddress);
 
-        if (!mIsReinspection) {
+        if (!mIsReinspection || !mInspection.is_complete) {
             ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
                 @Override
@@ -208,23 +208,25 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             }
             jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
             InspectionDefect_Table finalDefect = defect;
-            mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
-                @Override
-                public void onSuccess() {
-                    mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
-                    Log.i(TAG,"Defect ID " + finalDefect.id + " uploaded.");
-                    if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
-                        Log.i(TAG, "All defects uploaded");
-                        mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
-                        BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+            if (!defect.is_uploaded) {
+                mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
+                    @Override
+                    public void onSuccess() {
+                        mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
+                        Log.i(TAG, "Defect ID " + finalDefect.id + " uploaded.");
+                        if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
+                            Log.i(TAG, "All defects uploaded");
+                            mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
+                            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure() {
-                }
-            });
-            BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+                BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
+            }
         }
 
         mReviewAndSubmitViewModel.completeInspection(mInspection.end_time, mInspectionId);

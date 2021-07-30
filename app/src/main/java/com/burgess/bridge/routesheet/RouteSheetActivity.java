@@ -29,6 +29,9 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import data.Tables.InspectionDefect_Table;
 
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
 
@@ -36,6 +39,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
     private RouteSheetViewModel mRouteSheetViewModel;
     private SharedPreferences mSharedPreferences;
     private ImageView mReorderHandle;
+    private ImageView mReupload;
     private ItemTouchHelper mItemTouchHelper;
 
     private static final String TAG = "ROUTE_SHEET";
@@ -50,6 +54,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         setSupportActionBar(findViewById(R.id.route_sheet_toolbar));
         mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mReorderHandle = findViewById(R.id.item_inspection_list_imageview_reorder_handle);
+        mReupload = findViewById(R.id.item_inspection_list_imageview_reupload);
         RequestQueue queue = BridgeAPIQueue.getInstance(RouteSheetActivity.this).getRequestQueue();
 
         PackageInfo pInfo = null;
@@ -131,12 +136,10 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
         int pos = viewHolder.getAdapterPosition() + 1;
-        Log.d(TAG, "Position of drag is " + pos);
     }
 
     @Override
     public void onEndDrag(RecyclerView.ViewHolder viewHolder) {
         int pos = viewHolder.getAdapterPosition() + 1;
-        Log.d(TAG, "Position of drag is " + pos);
     }
 }

@@ -9,8 +9,10 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import data.InspectionHistory;
+import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
+import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
 import data.Views.RouteSheet_View;
@@ -18,11 +20,13 @@ import data.Views.RouteSheet_View;
 public class RouteSheetViewModel extends AndroidViewModel {
     private InspectionRepository mInspectionRepository;
     private InspectionHistoryRepository mInspectionHistoryRepository;
+    private InspectionDefectRepository mInspectionDefectRepository;
 
     public RouteSheetViewModel(@NonNull Application application) {
         super(application);
         mInspectionRepository = new InspectionRepository(application);
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
+        mInspectionDefectRepository = new InspectionDefectRepository(application);
     }
 
     public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet(int inspectorId) {
@@ -35,6 +39,10 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public void insertInspectionHistory(InspectionHistory_Table inspectionHistory) {
         mInspectionHistoryRepository.insert(inspectionHistory);
+    }
+
+    public List<InspectionDefect_Table> getAllInspectionDefectsSync(int inspectionId) {
+        return mInspectionDefectRepository.getAllInspectionDefectsSync(inspectionId);
     }
 
     public void swapOrder(int inspection_id, int new_order) {
