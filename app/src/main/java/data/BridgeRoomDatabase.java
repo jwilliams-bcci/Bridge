@@ -48,6 +48,7 @@ import data.Tables.InspectionResolution_Table;
 import data.Tables.Inspection_Table;
 import data.Tables.Location_Table;
 import data.Tables.Room_Table;
+import data.Views.ReinspectDefectList_View;
 import data.Views.ReviewAndSubmit_View;
 import data.Views.RouteSheet_View;
 
@@ -68,7 +69,7 @@ import data.Views.RouteSheet_View;
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 22, exportSchema = false)
+        }, version = 24, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();

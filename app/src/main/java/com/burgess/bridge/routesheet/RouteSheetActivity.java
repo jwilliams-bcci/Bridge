@@ -135,11 +135,9 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
-        int pos = viewHolder.getAdapterPosition() + 1;
     }
 
     @Override
     public void onEndDrag(RecyclerView.ViewHolder viewHolder) {
-        int pos = viewHolder.getAdapterPosition() + 1;
     }
 }

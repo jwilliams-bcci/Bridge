@@ -22,20 +22,6 @@ public class InspectionHistoryRepository {
         return mInspectionHistoryDao.getInspectionHistory(inspection_id);
     }
 
-    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryNumberSort(int inspection_id) {
-        return mInspectionHistoryDao.getInspectionHistoryNumberSort(inspection_id);
-    }
-    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryDescriptionSort(int inspection_id) {
-        return mInspectionHistoryDao.getInspectionHistoryDescriptionSort(inspection_id);
-    }
-
-    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredNumberSort(String category_name, int inspection_id) {
-        return mInspectionHistoryDao.getInspectionHistoryFilteredNumberSort(category_name, inspection_id);
-    }
-    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredDescriptionSort(String category_name, int inspection_id) {
-        return mInspectionHistoryDao.getInspectionHistoryFilteredDescriptionSort(category_name, inspection_id);
-    }
-
     public void insert(InspectionHistory_Table inspectionHistory) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
             mInspectionHistoryDao.insert(inspectionHistory);

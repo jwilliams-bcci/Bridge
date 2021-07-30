@@ -35,14 +35,6 @@ public class InspectViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredNumberSort(String category_name, int inspection_type_id, int inspection_id) {
-        if (category_name.equals("ALL")) {
-            return mInspectionHistoryRepository.getInspectionHistoryNumberSort(inspection_id);
-        } else {
-            return mInspectionHistoryRepository.getInspectionHistoryFilteredNumberSort(category_name, inspection_id);
-        }
-    }
-
     public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredDescriptionSort(String category_name, int inspection_type_id, int inspection_id) {
         if (category_name.equals("ALL")) {
             return mDefectItemRepository.getAllDefectItemsDescriptionSort(inspection_type_id);
@@ -51,12 +43,8 @@ public class InspectViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<List<InspectionHistory_Table>> getInspectionHistoryFilteredDescriptionSort(String category_name, int inspection_type_id, int inspection_id) {
-        if (category_name.equals("ALL")) {
-            return mInspectionHistoryRepository.getInspectionHistoryDescriptionSort(inspection_id);
-        } else {
-            return mInspectionHistoryRepository.getInspectionHistoryFilteredDescriptionSort(category_name, inspection_id);
-        }
+    public LiveData<List<InspectionHistory_Table>> getInspectionHistory(int inspection_id) {
+        return mInspectionHistoryRepository.getInspectionHistory(inspection_id);
     }
 
     public LiveData<List<String>> getDefectCategories(int inspection_type_id) {

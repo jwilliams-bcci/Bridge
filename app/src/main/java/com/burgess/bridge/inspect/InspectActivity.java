@@ -125,6 +125,10 @@ public class InspectActivity extends AppCompatActivity {
             startActivity(routeSheetIntent);
         });
 
+        if (mReinspection) {
+            mButtonSortDescription.setVisibility(View.INVISIBLE);
+            mButtonSortItemNumber.setVisibility(View.INVISIBLE);
+        }
         mButtonSortItemNumber.setOnClickListener(v -> {
             mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
                     mInspectListAdapter.submitList(defectItems));
@@ -183,7 +187,7 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void displayReinspectItems(String filter) {
-        mInspectViewModel.getInspectionHistoryFilteredNumberSort(filter, mInspectionTypeId, mInspectionId).observe(this, defectItems ->
+        mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems ->
                 mReinspectListAdapter.submitList(defectItems));
     }
 }

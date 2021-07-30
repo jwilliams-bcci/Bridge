@@ -41,22 +41,14 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         Group group = holder.itemView.findViewById(R.id.item_defect_item_group);
         TextView textDescription = holder.itemView.findViewById(R.id.item_defect_item_text_description);
         TextView textNumber = holder.itemView.findViewById(R.id.item_defect_item_text_number);
-        boolean showSection = true;
-        if (position > 0) {
-            InspectionHistory_Table previous = getItem(position - 1);
-            if (previous.defect_category_name.equals(current.defect_category_name)) {
-                showSection = false;
-            } else {
-                showSection = true;
-            }
-        }
+        boolean showSection = false;
         if (!current.is_reviewed) {
             textNumber.setTextColor(Color.WHITE);
             textDescription.setTextColor(Color.WHITE);
             group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_not_reviewed));
         }
         holder.mDefectItemId = current.defect_item_id;
-        holder.bind(String.valueOf(current.defect_item_number), String.valueOf(current.defect_item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, current.id);
+        holder.bind(String.valueOf(current.defect_item_number), current.defect_item_description + "\n" + current.comment, String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, current.id);
     }
 
     public void setInspectionId(int inspectionId) {

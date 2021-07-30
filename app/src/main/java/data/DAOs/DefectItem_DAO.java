@@ -9,6 +9,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import data.Tables.DefectItem_Table;
+import data.Views.ReinspectDefectList_View;
 
 @Dao
 public interface DefectItem_DAO {
