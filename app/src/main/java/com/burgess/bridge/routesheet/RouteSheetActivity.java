@@ -97,7 +97,8 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
             logFile.delete();
             logFile.createNewFile();
             Uri logFileUri = FileProvider.getUriForFile(this, "com.burgess.bridge", logFile);
-            Runtime.getRuntime().exec("logcat -f " + logFile.getAbsolutePath());
+            Process process = Runtime.getRuntime().exec("logcat -f -e API|LOGIN " + logFile.getAbsolutePath());
+            process.waitFor();
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("vnd.android.cursor.dir/email");
             String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com"};
@@ -106,8 +107,9 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + mInspectorId);
             emailIntent.putExtra(Intent.EXTRA_TEXT, "Bridge version: " + mVersionName);
             Runtime.getRuntime().exec("logcat -c");
+            process.waitFor();
             startActivity(Intent.createChooser(emailIntent, "Send email..."));
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
