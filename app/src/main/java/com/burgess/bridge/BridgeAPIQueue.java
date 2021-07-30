@@ -67,7 +67,7 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = false;
+        isProd = true;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -337,14 +337,13 @@ public class BridgeAPIQueue {
     }
 
     // Review & Submit
-    public StringRequest uploadInspectionDefect(ReviewAndSubmitViewModel vm, JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
+    public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += POST_INSPECTION_DEFECT_URL;
         Log.i(TAG, "Url for uploadInspectionDefect: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Uploaded defect " + defectItemId + " for inspection " + inspectionId + ".");
-            vm.markDefectUploaded(defectItemId);
             callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
