@@ -92,7 +92,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
             logFile.delete();
             logFile.createNewFile();
             Uri logFileUri = FileProvider.getUriForFile(this, "com.burgess.bridge", logFile);
-            Runtime.getRuntime().exec("logcat API:I REVIEW_AND_SUBMIT:I *:S -f " + logFile.getAbsolutePath());
+            Runtime.getRuntime().exec("logcat -f " + logFile.getAbsolutePath());
             Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("vnd.android.cursor.dir/email");
             String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com"};
