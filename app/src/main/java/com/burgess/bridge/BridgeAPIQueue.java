@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.login.LoginViewModel;
+import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitViewModel;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 
 import org.json.JSONException;
@@ -336,13 +337,14 @@ public class BridgeAPIQueue {
     }
 
     // Review & Submit
-    public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
+    public StringRequest uploadInspectionDefect(ReviewAndSubmitViewModel vm, JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += POST_INSPECTION_DEFECT_URL;
         Log.i(TAG, "Url for uploadInspectionDefect: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             Log.i(TAG, "Uploaded defect " + defectItemId + " for inspection " + inspectionId + ".");
+            vm.markDefectUploaded(defectItemId);
             callback.onSuccess();
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);

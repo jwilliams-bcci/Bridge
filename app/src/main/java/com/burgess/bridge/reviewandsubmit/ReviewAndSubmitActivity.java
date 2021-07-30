@@ -209,11 +209,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
             InspectionDefect_Table finalDefect = defect;
             if (!defect.is_uploaded) {
-                mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
+                mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(mReviewAndSubmitViewModel, jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
                     @Override
                     public void onSuccess() {
-                        mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
-                        Log.i(TAG, "Defect ID " + finalDefect.id + " uploaded.");
                         if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
                             Log.i(TAG, "All defects uploaded");
                             mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
