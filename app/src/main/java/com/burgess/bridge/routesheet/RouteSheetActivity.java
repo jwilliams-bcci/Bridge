@@ -90,28 +90,18 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
     }
 
     private void sendLogcatEmail() {
-        try {
-            String logFileName = "BridgeLogcatFile.txt";
-            File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            File logFile = new File(storageDir, logFileName);
-            logFile.delete();
-            logFile.createNewFile();
-            Uri logFileUri = FileProvider.getUriForFile(this, "com.burgess.bridge", logFile);
-            Process process = Runtime.getRuntime().exec("logcat -f -e API|LOGIN " + logFile.getAbsolutePath());
-            process.waitFor();
-            Intent emailIntent = new Intent(Intent.ACTION_SEND);
-            emailIntent.setType("vnd.android.cursor.dir/email");
-            String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com"};
-            emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-            emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
-            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + mInspectorId);
-            emailIntent.putExtra(Intent.EXTRA_TEXT, "Bridge version: " + mVersionName);
-            Runtime.getRuntime().exec("logcat -c");
-            process.waitFor();
-            startActivity(Intent.createChooser(emailIntent, "Send email..."));
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        String logFileName = "BridgeLogFile.txt";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File logFile = new File(storageDir, logFileName);
+        Uri logFileUri = FileProvider.getUriForFile(this, "com.burgess.bridge", logFile);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com"};
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + mInspectorId);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Bridge version: " + mVersionName);
+        startActivity(Intent.createChooser(emailIntent, "Send email..."));
     }
 
 
