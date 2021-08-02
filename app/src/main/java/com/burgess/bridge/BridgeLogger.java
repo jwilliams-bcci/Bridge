@@ -11,22 +11,47 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class BridgeLogger {
+    private static BridgeLogger instance;
+    private static Context ctx;
+    private static File logFile;
+
+    public static final String TAG = "BRIDGE_LOGGER";
+
+    private BridgeLogger(Context context) {
+        ctx = context;
+        logFile = new File(ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "BridgeLogFile.txt");
+    }
+
+    public static synchronized BridgeLogger getInstance(Context context) {
+        if (instance == null) {
+            instance = new BridgeLogger(context);
+        }
+        return instance;
+    }
+
+    public static synchronized  BridgeLogger getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException(BridgeLogger.class.getSimpleName() + " is not initialized, call getInstance(...) first");
+        }
+        return instance;
+    }
+
     public static void createLogFile(File logFile) {
         try {
             File newLogFile = new File(logFile.getAbsolutePath());
             newLogFile.createNewFile();
-            Log.i("BRIDGE_LOGGER", "New file created.");
+            Log.i(TAG, "New file created.");
         } catch (IOException e) {
-            Log.e("BRIDGE_LOGGER", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 
-    public static void log(String flag, File logFile, String tag, String message) {
+    public static void log(char flag, String tag, String message) {
         switch(flag) {
-            case "E":
+            case 'E':
                 Log.e(tag, message);
                 break;
-            case "I":
+            case 'I':
                 Log.i(tag, message);
                 break;
             default:
@@ -38,12 +63,12 @@ public class BridgeLogger {
                 createLogFile(logFile);
             } else {
                 FileWriter writer = new FileWriter(logFile, true);
-                writer.append(LocalDateTime.now().toString() + "-" + flag + "-" + tag + "-" + message + "\n");
+                writer.append(String.format("%s - %s - %s - %s\n", LocalDateTime.now().toString(), flag, tag, message));
                 writer.flush();
                 writer.close();
             }
         } catch (IOException e) {
-            Log.e("BRIDGE_LOGGER", e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 }
