@@ -84,6 +84,7 @@ public class InspectActivity extends AppCompatActivity {
 
         if (mReinspection) {
             Log.i(TAG, "Going into reinspect list adapter...");
+            mRecyclerDefectItems.setItemViewCacheSize(300);
             mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.InspectDiff());
             mReinspectListAdapter.setInspectionId(mInspectionId);
             mReinspectListAdapter.setInspectionTypeId(mInspectionTypeId);

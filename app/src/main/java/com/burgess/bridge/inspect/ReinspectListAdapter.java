@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -46,6 +47,10 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
             textNumber.setTextColor(Color.WHITE);
             textDescription.setTextColor(Color.WHITE);
             group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_not_reviewed));
+        } else {
+            holder.itemView.setOnClickListener(v -> {
+                Toast.makeText(v.getContext(), "Please edit in Review & Submit screen", Toast.LENGTH_LONG).show();
+            });
         }
         holder.mDefectItemId = current.defect_item_id;
         holder.bind(String.valueOf(current.defect_item_number), current.defect_item_description + "\n" + current.comment, String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, current.id);
