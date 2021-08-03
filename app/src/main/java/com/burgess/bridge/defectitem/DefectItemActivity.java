@@ -141,6 +141,24 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         mDefectItem = mDefectItemViewModel.getDefectItem(mDefectId);
 
+        if (mInspectionDefectId > 0) {
+            InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
+            switch (currentItem.defect_status_id) {
+                case 2:
+                    mRadioGroupDefectStatus.check(R.id.defect_item_radio_nc);
+                    break;
+                case 3:
+                    mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
+                    break;
+                case 6:
+                    mRadioGroupDefectStatus.check(R.id.defect_item_radio_r);
+                    break;
+                case 4:
+                    mRadioGroupDefectStatus.check(R.id.defect_item_radio_na);
+                    break;
+            }
+        }
+
         Log.i(TAG, "InspectionHistoryId = " + mInspectionHistoryId);
 
         // Voice to text
