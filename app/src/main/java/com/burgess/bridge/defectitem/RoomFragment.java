@@ -61,8 +61,8 @@ public class RoomFragment extends DialogFragment implements OnButtonClickListene
         mRoomResultsDialog = mView.findViewById(R.id.room_text_result);
         TextView roomResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_room);
 
-        RecyclerView recyclerRooms = (RecyclerView) mView.findViewById(R.id.room_recycler_buttons);
-        recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        RecyclerView recyclerRooms = mView.findViewById(R.id.room_recycler_buttons);
+        recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), rooms, this));
 
         Button saveAndExit = mView.findViewById(R.id.room_button_save_and_exit);
