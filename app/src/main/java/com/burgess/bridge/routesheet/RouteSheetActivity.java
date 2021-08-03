@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 
 import java.io.File;
@@ -72,10 +73,11 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
         mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(LocalDateTime.now()));
         queue.add(mUpdateRouteSheetRequest);
 
-        Button buttonOrderRouteSheet = findViewById(R.id.route_sheet_button_send_log);
-        buttonOrderRouteSheet.setOnClickListener(v -> {
-            Toast.makeText(getApplicationContext(), "Sending error log (beta)", Toast.LENGTH_LONG).show();
-            sendLogcatEmail();
+        Button buttonSendActivityLog = findViewById(R.id.route_sheet_button_send_log);
+        buttonSendActivityLog.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "Sending activity log", Toast.LENGTH_LONG).show();
+            Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, mVersionName);
+            startActivity(Intent.createChooser(emailIntent, "Send email..."));
         });
 
         Button buttonPrintRouteSheet = findViewById(R.id.route_sheet_button_print_route_sheet);
@@ -88,22 +90,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnStartDrag
             Toast.makeText(getApplicationContext(), "Route sheet updated.", Toast.LENGTH_SHORT).show();
         });
     }
-
-    private void sendLogcatEmail() {
-        String logFileName = "BridgeLogFile.txt";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File logFile = new File(storageDir, logFileName);
-        Uri logFileUri = FileProvider.getUriForFile(this, "com.burgess.bridge", logFile);
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.setType("vnd.android.cursor.dir/email");
-        String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com"};
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
-        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + mInspectorId);
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Bridge version: " + mVersionName);
-        startActivity(Intent.createChooser(emailIntent, "Send email..."));
-    }
-
 
     private void initializeDisplayContent() {
         RecyclerView recyclerInspections = findViewById(R.id.route_sheet_list_inspections);

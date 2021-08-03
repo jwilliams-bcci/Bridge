@@ -70,21 +70,17 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mLoginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
 
-        mTextUserName = findViewById(R.id.login_text_username);
-        mTextPassword = findViewById(R.id.login_text_password);
-        mTextVersionName = findViewById(R.id.login_text_version_name);
-        mButtonLogin = findViewById(R.id.login_button_login);
-        mCheckBoxKeepMeLoggedIn = findViewById(R.id.login_checkbox_keep_me_logged_in);
+        initializeViews();
+
+        // Prepare Shared Preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
-        mConstraintLayout = findViewById(R.id.login_constraint_layout);
-        mLockScreen = findViewById(R.id.login_lock_screen);
-        mProgressBar = findViewById(R.id.login_progress_bar);
 
-        // Set the text boxes to respond to "Return" on keyboard
+        // Set the text boxes to respond to "Return" on keyboard...
         mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
         mTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
 
+        // Set the version label to display the version number...
         PackageInfo pInfo = null;
         try {
             pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
@@ -94,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
         mVersionName = pInfo.versionName;
         mTextVersionName.setText("Version " + mVersionName);
 
+        // Not currently being used - logic to check if "Keep Me Logged In" is checked
         if (mSharedPreferences.getBoolean(PREF_STAY_LOGGED_IN, false)) {
             Log.i(TAG, "KeepMeLoggedIn is true");
             Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
@@ -184,5 +181,16 @@ public class LoginActivity extends AppCompatActivity {
 
             queue.add(mLoginRequest);
         });
+    }
+
+    private void initializeViews() {
+        mTextUserName = findViewById(R.id.login_text_username);
+        mTextPassword = findViewById(R.id.login_text_password);
+        mTextVersionName = findViewById(R.id.login_text_version_name);
+        mButtonLogin = findViewById(R.id.login_button_login);
+        mCheckBoxKeepMeLoggedIn = findViewById(R.id.login_checkbox_keep_me_logged_in);
+        mConstraintLayout = findViewById(R.id.login_constraint_layout);
+        mLockScreen = findViewById(R.id.login_lock_screen);
+        mProgressBar = findViewById(R.id.login_progress_bar);
     }
 }

@@ -1,9 +1,12 @@
 package com.burgess.bridge;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +22,7 @@ public class BridgeLogger {
 
     private BridgeLogger(Context context) {
         ctx = context;
-        logFile = new File(ctx.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "BridgeLogFile.txt");
+        logFile = new File(ctx.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "BridgeLogFile.txt");
     }
 
     public static synchronized BridgeLogger getInstance(Context context) {
@@ -28,7 +31,6 @@ public class BridgeLogger {
         }
         return instance;
     }
-
     public static synchronized  BridgeLogger getInstance() {
         if (instance == null) {
             throw new IllegalStateException(BridgeLogger.class.getSimpleName() + " is not initialized, call getInstance(...) first");
@@ -70,5 +72,17 @@ public class BridgeLogger {
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    public static Intent sendLogFile(String inspectorId, String versionName) {
+        Uri logFileUri = FileProvider.getUriForFile(ctx, "com.burgess.bridge", logFile);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com"};
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + inspectorId);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Bridge version: " + versionName);
+        return emailIntent;
     }
 }
