@@ -115,25 +115,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
 
             // If you want to keep data through app restarts, comment out the following block
             databaseWriteExecutor.execute(() -> {
-                Room_DAO roomDao = INSTANCE.mRoomDao();
-                JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, roomUrl, null, response -> {
-                    for (int i = 0; i < response.length(); i++) {
-                        try{
-                            JSONObject obj = response.getJSONObject(i);
-                            Room_Table room = new Room_Table();
-                            room.id = obj.optInt("RoomId");
-                            room.room_name = obj.optString("RoomName");
-
-                            roomDao.insert(room);
-                        } catch (JSONException e) {
-                            Log.i(TAG, "Error in parsing JSON in GetRooms - " + e.getMessage());
-                        }
-                    }
-                }, error -> {
-                    Log.i(TAG, "Error in GetRooms - " + error.getMessage());
-                });
-
-                queue.add(request);
+                Direction_DAO directionDao = INSTANCE.mDirectionDao();
             });
         }
     };

@@ -322,22 +322,32 @@ public class DataManager {
     }
 
     private void initializeDirections() {
-        mDirections.add(initializeDirection17());
-        mDirections.add(initializeDirection18());
-        mDirections.add(initializeDirection20());
-        mDirections.add(initializeDirection16());
-        mDirections.add(initializeDirection6());
-        mDirections.add(initializeDirection2());
         mDirections.add(initializeDirection14());
-        mDirections.add(initializeDirection7());
         mDirections.add(initializeDirection15());
-        mDirections.add(initializeDirection19());
-        mDirections.add(initializeDirection8());
-        mDirections.add(initializeDirection13());
-        mDirections.add(initializeDirection21());
-        mDirections.add(initializeDirection12());
-        mDirections.add(initializeDirection10());
+        mDirections.add(initializeDirection103());
+        mDirections.add(initializeDirection20());
         mDirections.add(initializeDirection11());
+        mDirections.add(initializeDirection10());
+        mDirections.add(initializeDirection12());
+        mDirections.add(initializeDirection19());
+        mDirections.add(initializeDirection18());
+        mDirections.add(initializeDirection17());
+        mDirections.add(initializeDirection21());
+        mDirections.add(initializeDirection6());
+        mDirections.add(initializeDirection131());
+        mDirections.add(initializeDirection55());
+        mDirections.add(initializeDirection7());
+        mDirections.add(initializeDirection13());
+        mDirections.add(initializeDirection92());
+        mDirections.add(initializeDirection8());
+        mDirections.add(initializeDirection133());
+        mDirections.add(initializeDirection143());
+        mDirections.add(initializeDirection16());
+        mDirections.add(initializeDirection30());
+        mDirections.add(initializeDirection128());
+        mDirections.add(initializeDirection129());
+        mDirections.add(initializeDirection130());
+        mDirections.add(initializeDirection2());
         mDirections.add(initializeDirection5());
         mDirections.add(initializeDirection3());
         mDirections.add(initializeDirection9());
@@ -351,7 +361,6 @@ public class DataManager {
         mDirections.add(initializeDirection27());
         mDirections.add(initializeDirection28());
         mDirections.add(initializeDirection29());
-        mDirections.add(initializeDirection30());
         mDirections.add(initializeDirection31());
         mDirections.add(initializeDirection32());
         mDirections.add(initializeDirection33());
@@ -376,7 +385,6 @@ public class DataManager {
         mDirections.add(initializeDirection52());
         mDirections.add(initializeDirection53());
         mDirections.add(initializeDirection54());
-        mDirections.add(initializeDirection55());
         mDirections.add(initializeDirection56());
         mDirections.add(initializeDirection57());
         mDirections.add(initializeDirection58());
@@ -413,7 +421,6 @@ public class DataManager {
         mDirections.add(initializeDirection89());
         mDirections.add(initializeDirection90());
         mDirections.add(initializeDirection91());
-        mDirections.add(initializeDirection92());
         mDirections.add(initializeDirection93());
         mDirections.add(initializeDirection94());
         mDirections.add(initializeDirection95());
@@ -424,7 +431,6 @@ public class DataManager {
         mDirections.add(initializeDirection100());
         mDirections.add(initializeDirection101());
         mDirections.add(initializeDirection102());
-        mDirections.add(initializeDirection103());
         mDirections.add(initializeDirection104());
         mDirections.add(initializeDirection105());
         mDirections.add(initializeDirection106());
@@ -449,12 +455,7 @@ public class DataManager {
         mDirections.add(initializeDirection125());
         mDirections.add(initializeDirection126());
         mDirections.add(initializeDirection127());
-        mDirections.add(initializeDirection128());
-        mDirections.add(initializeDirection129());
-        mDirections.add(initializeDirection130());
-        mDirections.add(initializeDirection131());
         mDirections.add(initializeDirection132());
-        mDirections.add(initializeDirection133());
         mDirections.add(initializeDirection134());
         mDirections.add(initializeDirection135());
         mDirections.add(initializeDirection136());
@@ -739,148 +740,150 @@ public class DataManager {
     //endregion
 
     //region Direction Initializations
-    private Direction initializeDirection17() { return new Direction(16, "Over",1); }
-    private Direction initializeDirection18() { return new Direction(8, "Rear",2); }
-    private Direction initializeDirection20() { return new Direction(13, "Top",3); }
-    private Direction initializeDirection16() { return new Direction(24, "of",4); }
-    private Direction initializeDirection6() { return new Direction(3, "and",5); }
-    private Direction initializeDirection2() { return new Direction(2, "Above",6); }
-    private Direction initializeDirection14() { return new Direction(4, "Left",7); }
-    private Direction initializeDirection7() { return new Direction(25, "at",8); }
-    private Direction initializeDirection15() { return new Direction(12, "Middle",9); }
-    private Direction initializeDirection19() { return new Direction(19, "Side",10); }
-    private Direction initializeDirection8() { return new Direction(26, "at 45°",11); }
-    private Direction initializeDirection13() { return new Direction(20, "Inside",12); }
-    private Direction initializeDirection21() { return new Direction(17, "Under",13); }
-    private Direction initializeDirection12() { return new Direction(7, "Front",14); }
-    private Direction initializeDirection10() { return new Direction(14, "Bottom",15); }
-    private Direction initializeDirection11() { return new Direction(15, "Center",16); }
-    private Direction initializeDirection5() { return new Direction(21, "All",17); }
-    private Direction initializeDirection3() { return new Direction(22, "Adjacent",18); }
-    private Direction initializeDirection9() { return new Direction(27, "between",19); }
-    private Direction initializeDirection1() { return new Direction(28, "A/C",20); }
-    private Direction initializeDirection4() { return new Direction(29, "Air Barrier",21); }
-    private Direction initializeDirection22() { return new Direction(30, "Access Cover",22); }
-    private Direction initializeDirection23() { return new Direction(31, "Arch Window",23); }
-    private Direction initializeDirection24() { return new Direction(32, "Art Niche",24); }
-    private Direction initializeDirection25() { return new Direction(33, "Attic Access",25); }
-    private Direction initializeDirection26() { return new Direction(34, "Backside",26); }
-    private Direction initializeDirection27() { return new Direction(35, "Backsplash",27); }
-    private Direction initializeDirection28() { return new Direction(36, "Balcony",28); }
-    private Direction initializeDirection29() { return new Direction(37, "Base",29); }
-    private Direction initializeDirection30() { return new Direction(38, "Behind",30); }
-    private Direction initializeDirection31() { return new Direction(39, "Box",31); }
-    private Direction initializeDirection32() { return new Direction(40, "Brick",32); }
-    private Direction initializeDirection33() { return new Direction(41, "Brick Pocket",33); }
-    private Direction initializeDirection34() { return new Direction(42, "Cabinet",34); }
-    private Direction initializeDirection35() { return new Direction(43, "Casing",35); }
-    private Direction initializeDirection36() { return new Direction(44, "Catwalk",36); }
-    private Direction initializeDirection37() { return new Direction(45, "Ceiling",37); }
-    private Direction initializeDirection38() { return new Direction(46, "Chase",38); }
-    private Direction initializeDirection39() { return new Direction(47, "Chimney",39); }
-    private Direction initializeDirection40() { return new Direction(48, "Chimney Cap",40); }
-    private Direction initializeDirection41() { return new Direction(49, "City walk",41); }
-    private Direction initializeDirection42() { return new Direction(50, "Clean-out",42); }
-    private Direction initializeDirection43() { return new Direction(51, "Coach Light",43); }
-    private Direction initializeDirection44() { return new Direction(52, "Cold",44); }
-    private Direction initializeDirection45() { return new Direction(53, "Commode",45); }
-    private Direction initializeDirection46() { return new Direction(54, "Condenser",46); }
-    private Direction initializeDirection47() { return new Direction(55, "Cooktop",47); }
-    private Direction initializeDirection48() { return new Direction(56, "Corner",48); }
-    private Direction initializeDirection49() { return new Direction(57, "Counter",49); }
-    private Direction initializeDirection50() { return new Direction(58, "Crown",50); }
-    private Direction initializeDirection51() { return new Direction(59, "Dishwasher",51); }
-    private Direction initializeDirection52() { return new Direction(60, "Door",52); }
-    private Direction initializeDirection53() { return new Direction(143, "Doorbell",53); }
-    private Direction initializeDirection54() { return new Direction(61, "Dormer",54); }
-    private Direction initializeDirection55() { return new Direction(11, "Down",55); }
-    private Direction initializeDirection56() { return new Direction(62, "Drain",56); }
-    private Direction initializeDirection57() { return new Direction(63, "East",57); }
-    private Direction initializeDirection58() { return new Direction(64, "Electrical Panel",58); }
-    private Direction initializeDirection59() { return new Direction(65, "Entertainment Center",59); }
-    private Direction initializeDirection60() { return new Direction(66, "Exterior",60); }
-    private Direction initializeDirection61() { return new Direction(67, "Faucet",61); }
-    private Direction initializeDirection62() { return new Direction(68, "Fireplace",62); }
-    private Direction initializeDirection63() { return new Direction(69, "Framing Material",63); }
-    private Direction initializeDirection64() { return new Direction(9, "Front & Rear",64); }
-    private Direction initializeDirection65() { return new Direction(70, "Furnace",65); }
-    private Direction initializeDirection66() { return new Direction(71, "Furr Out",66); }
-    private Direction initializeDirection67() { return new Direction(72, "Gable",67); }
-    private Direction initializeDirection68() { return new Direction(73, "Gusset Plate",68); }
-    private Direction initializeDirection69() { return new Direction(74, "Hall",69); }
-    private Direction initializeDirection70() { return new Direction(75, "Head Wall",70); }
-    private Direction initializeDirection71() { return new Direction(76, "Header",71); }
-    private Direction initializeDirection72() { return new Direction(77, "Hers",72); }
-    private Direction initializeDirection73() { return new Direction(78, "Hip",73); }
-    private Direction initializeDirection74() { return new Direction(79, "His",74); }
-    private Direction initializeDirection75() { return new Direction(80, "Hose bib",75); }
-    private Direction initializeDirection76() { return new Direction(81, "Hot",76); }
-    private Direction initializeDirection77() { return new Direction(82, "House Wrap",77); }
-    private Direction initializeDirection78() { return new Direction(83, "Jump walk",78); }
-    private Direction initializeDirection79() { return new Direction(84, "Lead walk",79); }
-    private Direction initializeDirection80() { return new Direction(6, "Left & Right",80); }
-    private Direction initializeDirection81() { return new Direction(85, "Light",81); }
-    private Direction initializeDirection82() { return new Direction(86, "Linen",82); }
-    private Direction initializeDirection83() { return new Direction(87, "Lintel",83); }
-    private Direction initializeDirection84() { return new Direction(88, "Lock",84); }
-    private Direction initializeDirection85() { return new Direction(89, "Log Lighter",85); }
-    private Direction initializeDirection86() { return new Direction(90, "Main",86); }
-    private Direction initializeDirection87() { return new Direction(91, "Manifold",87); }
-    private Direction initializeDirection88() { return new Direction(92, "Microwave",88); }
-    private Direction initializeDirection89() { return new Direction(93, "Mirror",89); }
-    private Direction initializeDirection90() { return new Direction(94, "Near",90); }
-    private Direction initializeDirection91() { return new Direction(95, "North",91); }
-    private Direction initializeDirection92() { return new Direction(23, "Outside",92); }
-    private Direction initializeDirection93() { return new Direction(96, "Overflow Drain",93); }
-    private Direction initializeDirection94() { return new Direction(97, "Parallel",94); }
-    private Direction initializeDirection95() { return new Direction(98, "Phone Jack",95); }
-    private Direction initializeDirection96() { return new Direction(138, "PVC",96); }
-    private Direction initializeDirection97() { return new Direction(99, "Rake",97); }
-    private Direction initializeDirection98() { return new Direction(100, "Recessed Can",98); }
-    private Direction initializeDirection99() { return new Direction(101, "Refrigerator",99); }
-    private Direction initializeDirection100() { return new Direction(102, "Return",100); }
-    private Direction initializeDirection101() { return new Direction(103, "Return Air",101); }
-    private Direction initializeDirection102() { return new Direction(104, "Ridge",102); }
-    private Direction initializeDirection103() { return new Direction(5, "Right",103); }
-    private Direction initializeDirection104() { return new Direction(105, "Rim Board",104); }
-    private Direction initializeDirection105() { return new Direction(106, "Roof",105); }
-    private Direction initializeDirection106() { return new Direction(107, "Screws",106); }
-    private Direction initializeDirection107() { return new Direction(108, "Shingles",107); }
-    private Direction initializeDirection108() { return new Direction(109, "Shoe Moulding",108); }
-    private Direction initializeDirection109() { return new Direction(110, "Shower",109); }
-    private Direction initializeDirection110() { return new Direction(111, "Shower pan",110); }
-    private Direction initializeDirection111() { return new Direction(112, "Sink",111); }
-    private Direction initializeDirection112() { return new Direction(142, "Smoke Detector",112); }
-    private Direction initializeDirection113() { return new Direction(113, "South",113); }
-    private Direction initializeDirection114() { return new Direction(114, "Splice",114); }
-    private Direction initializeDirection115() { return new Direction(115, "Step",115); }
-    private Direction initializeDirection116() { return new Direction(116, "Stringer",116); }
-    private Direction initializeDirection117() { return new Direction(117, "Supply",117); }
-    private Direction initializeDirection118() { return new Direction(118, "Switch Plate",118); }
-    private Direction initializeDirection119() { return new Direction(139, "T&P",119); }
-    private Direction initializeDirection120() { return new Direction(119, "Third Floor",120); }
-    private Direction initializeDirection121() { return new Direction(120, "Throughout",121); }
-    private Direction initializeDirection122() { return new Direction(121, "Toilet Paper",122); }
-    private Direction initializeDirection123() { return new Direction(122, "Towel Bar",123); }
-    private Direction initializeDirection124() { return new Direction(123, "Tread",124); }
-    private Direction initializeDirection125() { return new Direction(124, "Trim",125); }
-    private Direction initializeDirection126() { return new Direction(125, "Tub",126); }
-    private Direction initializeDirection127() { return new Direction(126, "Under Cabinet",127); }
-    private Direction initializeDirection128() { return new Direction(127, "Unit 1",128); }
-    private Direction initializeDirection129() { return new Direction(128, "Unit 2",129); }
-    private Direction initializeDirection130() { return new Direction(129, "Unit 3",130); }
-    private Direction initializeDirection131() { return new Direction(10, "Up",131); }
-    private Direction initializeDirection132() { return new Direction(1, "Up & Down",132); }
-    private Direction initializeDirection133() { return new Direction(18, "Upper",133); }
-    private Direction initializeDirection134() { return new Direction(140, "Vacuum Breaker",134); }
-    private Direction initializeDirection135() { return new Direction(130, "Valley",135); }
-    private Direction initializeDirection136() { return new Direction(131, "Vanity",136); }
-    private Direction initializeDirection137() { return new Direction(132, "Vent",137); }
-    private Direction initializeDirection138() { return new Direction(133, "Wall",138); }
-    private Direction initializeDirection139() { return new Direction(134, "Washer Box",139); }
-    private Direction initializeDirection140() { return new Direction(135, "Water Heater",140); }
-    private Direction initializeDirection141() { return new Direction(136, "West",141); }
-    private Direction initializeDirection142() { return new Direction(137, "Window",142); }
+    private Direction initializeDirection14() { return new Direction(4, "Left",1); }
+    private Direction initializeDirection15() { return new Direction(12, "Middle",2); }
+    private Direction initializeDirection103() { return new Direction(5, "Right",3); }
+    private Direction initializeDirection20() { return new Direction(13, "Top",4); }
+    private Direction initializeDirection11() { return new Direction(15, "Center",5); }
+    private Direction initializeDirection10() { return new Direction(14, "Bottom",6); }
+    private Direction initializeDirection12() { return new Direction(7, "Front", 7); }
+    private Direction initializeDirection19() { return new Direction(19, "Side",8); }
+    private Direction initializeDirection18() { return new Direction(8, "Rear",9); }
+    private Direction initializeDirection17() { return new Direction(16, "Over",10); }
+    private Direction initializeDirection21() { return new Direction(17, "Under",11); }
+    private Direction initializeDirection6() { return new Direction(3, "and",12); }
+    private Direction initializeDirection131() { return new Direction(10, "Up",13); }
+    private Direction initializeDirection55() { return new Direction(11, "Down",14); }
+    private Direction initializeDirection7() { return new Direction(25, "at",15); }
+    private Direction initializeDirection13() { return new Direction(20, "Inside",16); }
+    private Direction initializeDirection92() { return new Direction(23, "Outside",17); }
+    private Direction initializeDirection8() { return new Direction(26, "at 45°",18); }
+    private Direction initializeDirection133() { return new Direction(18, "Upper",19); }
+    private Direction initializeDirection143() { return new Direction(138, "Lower", 20); }
+    private Direction initializeDirection16() { return new Direction(24, "of",21); }
+    private Direction initializeDirection30() { return new Direction(38, "Behind",22); }
+    private Direction initializeDirection128() { return new Direction(127, "Unit 1",23); }
+    private Direction initializeDirection129() { return new Direction(128, "Unit 2",24); }
+    private Direction initializeDirection130() { return new Direction(129, "Unit 3",25); }
+
+    private Direction initializeDirection2() { return new Direction(2, "Above",26); }
+    private Direction initializeDirection5() { return new Direction(21, "All",27); }
+    private Direction initializeDirection3() { return new Direction(22, "Adjacent",28); }
+    private Direction initializeDirection9() { return new Direction(27, "between",29); }
+    private Direction initializeDirection1() { return new Direction(28, "A/C",30); }
+    private Direction initializeDirection4() { return new Direction(29, "Air Barrier",31); }
+    private Direction initializeDirection22() { return new Direction(30, "Access Cover",32); }
+    private Direction initializeDirection23() { return new Direction(31, "Arch Window",33); }
+    private Direction initializeDirection24() { return new Direction(32, "Art Niche",34); }
+    private Direction initializeDirection25() { return new Direction(33, "Attic Access",35); }
+    private Direction initializeDirection26() { return new Direction(34, "Backside",36); }
+    private Direction initializeDirection27() { return new Direction(35, "Backsplash",37); }
+    private Direction initializeDirection28() { return new Direction(36, "Balcony",38); }
+    private Direction initializeDirection29() { return new Direction(37, "Base",39); }
+    private Direction initializeDirection31() { return new Direction(39, "Box",40); }
+    private Direction initializeDirection32() { return new Direction(40, "Brick",41); }
+    private Direction initializeDirection33() { return new Direction(41, "Brick Pocket",42); }
+    private Direction initializeDirection34() { return new Direction(42, "Cabinet",43); }
+    private Direction initializeDirection35() { return new Direction(43, "Casing",44); }
+    private Direction initializeDirection36() { return new Direction(44, "Catwalk", 45); }
+    private Direction initializeDirection37() { return new Direction(45, "Ceiling",46); }
+    private Direction initializeDirection38() { return new Direction(46, "Chase",47); }
+    private Direction initializeDirection39() { return new Direction(47, "Chimney",48); }
+    private Direction initializeDirection40() { return new Direction(48, "Chimney Cap",49); }
+    private Direction initializeDirection41() { return new Direction(49, "City walk",50); }
+    private Direction initializeDirection42() { return new Direction(50, "Clean-out",51); }
+    private Direction initializeDirection43() { return new Direction(51, "Coach Light",52); }
+    private Direction initializeDirection44() { return new Direction(52, "Cold",53); }
+    private Direction initializeDirection45() { return new Direction(53, "Commode",54); }
+    private Direction initializeDirection46() { return new Direction(54, "Condenser",55); }
+    private Direction initializeDirection47() { return new Direction(55, "Cooktop",56); }
+    private Direction initializeDirection48() { return new Direction(56, "Corner",57); }
+    private Direction initializeDirection49() { return new Direction(57, "Counter",58); }
+    private Direction initializeDirection50() { return new Direction(58, "Crown",59); }
+    private Direction initializeDirection51() { return new Direction(59, "Dishwasher",60); }
+    private Direction initializeDirection52() { return new Direction(60, "Door",61); }
+    private Direction initializeDirection53() { return new Direction(143, "Doorbell",62); }
+    private Direction initializeDirection54() { return new Direction(61, "Dormer",63); }
+    private Direction initializeDirection56() { return new Direction(62, "Drain",64); }
+    private Direction initializeDirection57() { return new Direction(63, "East",65); }
+    private Direction initializeDirection58() { return new Direction(64, "Electrical Panel",66); }
+    private Direction initializeDirection59() { return new Direction(65, "Entertainment Center",67); }
+    private Direction initializeDirection60() { return new Direction(66, "Exterior",68); }
+    private Direction initializeDirection61() { return new Direction(67, "Faucet",69); }
+    private Direction initializeDirection62() { return new Direction(68, "Fireplace",70); }
+    private Direction initializeDirection63() { return new Direction(69, "Framing Material",71); }
+    private Direction initializeDirection64() { return new Direction(9, "Front & Rear",72); }
+    private Direction initializeDirection65() { return new Direction(70, "Furnace",73); }
+    private Direction initializeDirection66() { return new Direction(71, "Furr Out",74); }
+    private Direction initializeDirection67() { return new Direction(72, "Gable",75); }
+    private Direction initializeDirection68() { return new Direction(73, "Gusset Plate",76); }
+    private Direction initializeDirection69() { return new Direction(74, "Hall",77); }
+    private Direction initializeDirection70() { return new Direction(75, "Head Wall",78); }
+    private Direction initializeDirection71() { return new Direction(76, "Header",79); }
+    private Direction initializeDirection72() { return new Direction(77, "Hers",80); }
+    private Direction initializeDirection73() { return new Direction(78, "Hip",81); }
+    private Direction initializeDirection74() { return new Direction(79, "His",82); }
+    private Direction initializeDirection75() { return new Direction(80, "Hose bib",83); }
+    private Direction initializeDirection76() { return new Direction(81, "Hot",84); }
+    private Direction initializeDirection77() { return new Direction(82, "House Wrap",85); }
+    private Direction initializeDirection78() { return new Direction(83, "Jump walk",86); }
+    private Direction initializeDirection79() { return new Direction(84, "Lead walk",87); }
+    private Direction initializeDirection80() { return new Direction(6, "Left & Right",88); }
+    private Direction initializeDirection81() { return new Direction(85, "Light",89); }
+    private Direction initializeDirection82() { return new Direction(86, "Linen",90); }
+    private Direction initializeDirection83() { return new Direction(87, "Lintel",91); }
+    private Direction initializeDirection84() { return new Direction(88, "Lock",92); }
+    private Direction initializeDirection85() { return new Direction(89, "Log Lighter",93); }
+    private Direction initializeDirection86() { return new Direction(90, "Main",94); }
+    private Direction initializeDirection87() { return new Direction(91, "Manifold",95); }
+    private Direction initializeDirection88() { return new Direction(92, "Microwave",96); }
+    private Direction initializeDirection89() { return new Direction(93, "Mirror",97); }
+    private Direction initializeDirection90() { return new Direction(94, "Near",98); }
+    private Direction initializeDirection91() { return new Direction(95, "North",99); }
+    private Direction initializeDirection93() { return new Direction(96, "Overflow Drain",100); }
+    private Direction initializeDirection94() { return new Direction(97, "Parallel",101); }
+    private Direction initializeDirection95() { return new Direction(98, "Phone Jack",102); }
+    private Direction initializeDirection96() { return new Direction(138, "PVC",103); }
+    private Direction initializeDirection97() { return new Direction(99, "Rake",104); }
+    private Direction initializeDirection98() { return new Direction(100, "Recessed Can",105); }
+    private Direction initializeDirection99() { return new Direction(101, "Refrigerator",106); }
+    private Direction initializeDirection100() { return new Direction(102, "Return",107); }
+    private Direction initializeDirection101() { return new Direction(103, "Return Air",108); }
+    private Direction initializeDirection102() { return new Direction(104, "Ridge",109); }
+    private Direction initializeDirection104() { return new Direction(105, "Rim Board",110); }
+    private Direction initializeDirection105() { return new Direction(106, "Roof",111); }
+    private Direction initializeDirection106() { return new Direction(107, "Screws",112); }
+    private Direction initializeDirection107() { return new Direction(108, "Shingles",113); }
+    private Direction initializeDirection108() { return new Direction(109, "Shoe Moulding",114); }
+    private Direction initializeDirection109() { return new Direction(110, "Shower",115); }
+    private Direction initializeDirection110() { return new Direction(111, "Shower pan",116); }
+    private Direction initializeDirection111() { return new Direction(112, "Sink",117); }
+    private Direction initializeDirection112() { return new Direction(142, "Smoke Detector",118); }
+    private Direction initializeDirection113() { return new Direction(113, "South",119); }
+    private Direction initializeDirection114() { return new Direction(114, "Splice",120); }
+    private Direction initializeDirection115() { return new Direction(115, "Step",121); }
+    private Direction initializeDirection116() { return new Direction(116, "Stringer",122); }
+    private Direction initializeDirection117() { return new Direction(117, "Supply",123); }
+    private Direction initializeDirection118() { return new Direction(118, "Switch Plate",124); }
+    private Direction initializeDirection119() { return new Direction(139, "T&P",125); }
+    private Direction initializeDirection120() { return new Direction(119, "Third Floor",126); }
+    private Direction initializeDirection121() { return new Direction(120, "Throughout",127); }
+    private Direction initializeDirection122() { return new Direction(121, "Toilet Paper",128); }
+    private Direction initializeDirection123() { return new Direction(122, "Towel Bar",129); }
+    private Direction initializeDirection124() { return new Direction(123, "Tread",130); }
+    private Direction initializeDirection125() { return new Direction(124, "Trim",131); }
+    private Direction initializeDirection126() { return new Direction(125, "Tub",132); }
+    private Direction initializeDirection127() { return new Direction(126, "Under Cabinet",133); }
+    private Direction initializeDirection132() { return new Direction(1, "Up & Down",134); }
+    private Direction initializeDirection134() { return new Direction(140, "Vacuum Breaker",135); }
+    private Direction initializeDirection135() { return new Direction(130, "Valley",136); }
+    private Direction initializeDirection136() { return new Direction(131, "Vanity",137); }
+    private Direction initializeDirection137() { return new Direction(132, "Vent",138); }
+    private Direction initializeDirection138() { return new Direction(133, "Wall",139); }
+    private Direction initializeDirection139() { return new Direction(134, "Washer Box",140); }
+    private Direction initializeDirection140() { return new Direction(135, "Water Heater",141); }
+    private Direction initializeDirection141() { return new Direction(136, "West",142); }
+    private Direction initializeDirection142() { return new Direction(137, "Window",143); }
     //endregion
 
     //region Fault Initializations
