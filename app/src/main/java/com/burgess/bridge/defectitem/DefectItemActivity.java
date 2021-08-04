@@ -82,7 +82,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private int mInspectionDefectId;
     private int mInspectionHistoryId;
     private DefectItemViewModel mDefectItemViewModel;
-    private LiveData<DefectItem_Table> mDefectItem;
+    private DefectItem_Table mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
     private Spinner mSpinnerCannedComment;
     private TextView mDefectItemDetails;
@@ -139,7 +139,7 @@ public class DefectItemActivity extends AppCompatActivity {
         }
 
         mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
-        mDefectItem = mDefectItemViewModel.getDefectItem(mDefectId);
+        mDefectItem = mDefectItemViewModel.getDefectItemSync(mDefectId);
 
         if (mInspectionDefectId > 0) {
             InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
@@ -288,9 +288,9 @@ public class DefectItemActivity extends AppCompatActivity {
             int priorInspectionDetailId = mInspectionHistoryId == -1 ? 0 : mInspectionHistoryId;
 
             if (pictureTaken) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, currentPhotoPath);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, mDefectItem.reinspection_required, currentPhotoPath);
             } else {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, null);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, mDefectItem.reinspection_required, null);
             }
 
             if (buttonSelected) {
@@ -372,11 +372,9 @@ public class DefectItemActivity extends AppCompatActivity {
     }
 
     private void displayDefectDetails(TextView textDefectItemDetails) {
-        mDefectItem.observe(this, defectItem -> {
-            textDefectItemDetails.append(Integer.toString(defectItem.item_number));
-            textDefectItemDetails.append(" - ");
-            textDefectItemDetails.append(defectItem.item_description);
-        });
+        textDefectItemDetails.append(Integer.toString(mDefectItem.item_number));
+        textDefectItemDetails.append(" - ");
+        textDefectItemDetails.append(mDefectItem.item_description);
     }
 
     private void fillSpinner(Spinner spinnerCannedComments) {

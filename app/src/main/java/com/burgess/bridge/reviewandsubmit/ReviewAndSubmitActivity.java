@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +14,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,22 +24,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,16 +42,14 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import data.Enums.IncompleteReason;
+import data.Tables.Builder_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
-
-import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
+import data.Views.ReviewAndSubmit_View;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
     private ReviewAndSubmitViewModel mReviewAndSubmitViewModel;
@@ -86,6 +75,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
     private String mSecurityUserId;
     private ItemTouchHelper mItemTouchHelper;
+    private List<ReviewAndSubmit_View> mInspectionDefectList;
+    private List<InspectionDefect_Table> mReinspectionRequiredDefectList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +114,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         final ReviewAndSubmitListAdapter adapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
         mRecyclerInspectionDefects.setAdapter(adapter);
         mRecyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
-        List<InspectionDefect_Table> list = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
-        adapter.submitList(mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId));
+        mInspectionDefectList = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
+        adapter.submitList(mInspectionDefectList);
 
         displayAddress(mTextAddress);
 
@@ -148,10 +139,23 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
         Button buttonSubmit = findViewById(R.id.review_and_submit_button_submit);
         buttonSubmit.setOnClickListener(v -> {
-            Log.d("SUBMIT", "Submit clicked, show dialog");
+            mInspectionStatusId = getInspectionStatusId();
+            String statusMessage;
+            switch (mInspectionStatusId) {
+                case 11:
+                    statusMessage = "PASSED";
+                    break;
+                case 12:
+                    statusMessage = "FAILED";
+                    break;
+                default:
+                    statusMessage = "NA";
+                    break;
+            }
+
             new AlertDialog.Builder(this)
                     .setTitle("Is the following resolution accurate?")
-                    .setMessage("FAILED")
+                    .setMessage(statusMessage)
                     .setPositiveButton("Yes", (dialogInterface, i) -> {
                         mStatusCorrect = true;
                         try {
@@ -178,6 +182,30 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         textAddress.append(mInspection.community + "\n");
         textAddress.append(mInspection.address + "\n");
         textAddress.append(mInspection.inspection_type);
+    }
+
+    private int getInspectionStatusId() {
+        int status;
+        int builderId = mInspection.builder_id;
+        Builder_Table builder = mReviewAndSubmitViewModel.getBuilder(builderId);
+        boolean builderConditionalReinspect = builder.reinspection_required;
+
+        if (mInspectionDefectList.isEmpty()) {
+            status = 11;
+        } else {
+            List<ReviewAndSubmit_View> notAllCs = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
+            if (notAllCs.isEmpty()) {
+                status = 11;
+            } else {
+                List<ReviewAndSubmit_View> reinspectionRequired = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
+                if (builderConditionalReinspect && reinspectionRequired.isEmpty()) {
+                    status = 11;
+                } else {
+                    status = 12;
+                }
+            }
+        }
+        return status;
     }
 
     private void completeInspection() throws JSONException {

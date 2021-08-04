@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
@@ -61,6 +62,7 @@ public class BridgeAPIQueue {
     private static final String GET_CANNED_COMMENTS_URL = "GetCannedComments";
     private static final String GET_DEFECT_ITEMS_URL = "GetDefectItems";
     private static final String GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_URL = "GetDefectItem_InspectionType_XRef";
+    private static final String GET_BUILDERS_URL = "GetBuilders";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
@@ -69,7 +71,7 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = true;
+        isProd = false;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -170,6 +172,7 @@ public class BridgeAPIQueue {
                     defectItem.inspection_type_id = obj.optInt("InspectionTypeID");
                     defectItem.item_description = obj.optString("ItemDescription");
                     defectItem.spanish_item_description = obj.optString("SpanishItemDescription");
+                    defectItem.reinspection_required = obj.optBoolean("ReInspectionRequired");
 
                     vm.insertDefectItem(defectItem);
                 } catch (JSONException e) {
@@ -216,6 +219,41 @@ public class BridgeAPIQueue {
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateDIIT: " + errorMessage);
+            callback.onFailure();
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest updateBuilders(LoginViewModel vm, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += GET_BUILDERS_URL;
+        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateBuilders: " + url);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    Builder_Table builder = new Builder_Table();
+                    builder.id = obj.optInt("BuilderID");
+                    builder.builder_name = obj.optString("BuilderName");
+                    builder.reinspection_required = obj.optBoolean("ConditionalReInspects");
+
+                    vm.insertBuilder(builder);
+                } catch (JSONException e) {
+                    BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateBuilders: " + e.getMessage());
+                }
+            }
+            Log.i(TAG, "Builders downloaded");
+            callback.onSuccess();
+        }, error -> {
+            String errorMessage = new String(error.networkResponse.data);
+            BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateBuilders: " + errorMessage);
             callback.onFailure();
         }) {
             @Override

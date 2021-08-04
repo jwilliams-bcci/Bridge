@@ -49,4 +49,8 @@ public class DefectItemRepository {
             mDefectItemDao.insert(defectItem);
         });
     }
+
+    public DefectItem_Table getDefectItemSync(int defect_item_id) {
+        return mDefectItemDao.getDefectItemSync(defect_item_id);
+    }
 }

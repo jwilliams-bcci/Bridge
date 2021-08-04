@@ -20,4 +20,7 @@ public interface Builder_DAO {
 
     @Query("SELECT * FROM builder_table ORDER BY id ASC")
     LiveData<List<Builder_Table>> getBuilders();
+
+    @Query("SELECT * FROM builder_table WHERE id = :builder_id")
+    Builder_Table getBuilder(int builder_id);
 }

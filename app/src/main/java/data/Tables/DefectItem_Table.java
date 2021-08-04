@@ -13,4 +13,5 @@ public class DefectItem_Table {
     public int inspection_type_id;
     public String item_description;
     public String spanish_item_description;
+    public boolean reinspection_required;
 }

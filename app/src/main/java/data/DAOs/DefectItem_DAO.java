@@ -80,4 +80,7 @@ public interface DefectItem_DAO {
 
     @Query("SELECT * FROM defect_item_table WHERE id = :defect_item_id")
     LiveData<DefectItem_Table> getDefectItem(int defect_item_id);
+
+    @Query("SELECT * FROM defect_item_table WHERE id = :defect_item_id")
+    DefectItem_Table getDefectItemSync(int defect_item_id);
 }

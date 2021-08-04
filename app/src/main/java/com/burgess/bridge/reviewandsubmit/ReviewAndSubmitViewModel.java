@@ -9,9 +9,11 @@ import androidx.lifecycle.LiveData;
 import java.util.Date;
 import java.util.List;
 
+import data.Repositories.BuilderRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionRepository;
+import data.Tables.Builder_Table;
 import data.Views.ReviewAndSubmit_View;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
@@ -20,12 +22,14 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
     private DefectItemRepository mDefectItemRepository;
     private InspectionDefectRepository mInspectionDefectRepository;
     private InspectionRepository mInspectionRepository;
+    private BuilderRepository mBuilderRepository;
 
     public ReviewAndSubmitViewModel(@NonNull Application application) {
         super(application);
         mDefectItemRepository = new DefectItemRepository(application);
         mInspectionDefectRepository = new InspectionDefectRepository(application);
         mInspectionRepository = new InspectionRepository(application);
+        mBuilderRepository = new BuilderRepository(application);
     }
 
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
@@ -38,6 +42,10 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public List<InspectionDefect_Table> getAllInspectionDefectsSync(int inspectionId) {
         return mInspectionDefectRepository.getAllInspectionDefectsSync(inspectionId);
+    }
+
+    public List<InspectionDefect_Table> getReinspectionRequiredDefects(int inspectionId) {
+        return mInspectionDefectRepository.getReinspectionRequiredDefects(inspectionId);
     }
 
     public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReview(int inspectionId) {
@@ -74,5 +82,9 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public void deleteInspectionDefect(int inspectionDefectId) {
         mInspectionDefectRepository.deleteInspectionDefect(inspectionDefectId);
+    }
+
+    public Builder_Table getBuilder(int builderId) {
+        return mBuilderRepository.getBuilder(builderId);
     }
 }

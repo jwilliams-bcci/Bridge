@@ -39,6 +39,10 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefectsForReviewSync(inspection_id);
     }
 
+    public List<InspectionDefect_Table> getReinspectionRequiredDefects(int inspection_id) {
+        return mInspectionDefectDao.getReinspectionRequiredDefects(inspection_id);
+    }
+
     public void insert(InspectionDefect_Table inspectionDefect) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
             mInspectionDefectDao.insert(inspectionDefect);

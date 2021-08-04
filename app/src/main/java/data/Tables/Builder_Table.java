@@ -8,4 +8,5 @@ public class Builder_Table {
     @PrimaryKey
     public int id;
     public String builder_name;
+    public boolean reinspection_required;
 }

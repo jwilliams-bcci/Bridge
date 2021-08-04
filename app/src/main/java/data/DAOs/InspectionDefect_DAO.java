@@ -38,6 +38,9 @@ public interface InspectionDefect_DAO {
     @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id")
     List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspection_id);
 
+    @Query("SELECT * FROM inspection_defect_table WHERE inspection_id = :inspection_id AND reinspection_required = 1")
+    List<InspectionDefect_Table> getReinspectionRequiredDefects(int inspection_id);
+
     @Query("UPDATE inspection_defect_table SET is_uploaded = 1 WHERE id = :inspection_defect_id")
     void markDefectUploaded(int inspection_defect_id);
 

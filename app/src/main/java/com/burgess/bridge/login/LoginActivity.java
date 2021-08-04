@@ -20,9 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -31,16 +28,6 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import data.Tables.CannedComment_Table;
-import data.Tables.DefectItem_InspectionType_XRef;
-import data.Tables.DefectItem_Table;
 
 import static com.burgess.bridge.Constants.*;
 
@@ -61,7 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     private JsonObjectRequest mLoginRequest;
     private JsonArrayRequest mUpdateCannedCommentsRequest;
     private JsonArrayRequest mUpdateDefectItemsRequest;
-    private JsonArrayRequest mUpdateDIITReference;
+    private JsonArrayRequest mUpdateDIITReferenceRequest;
+    private JsonArrayRequest mUpdateBuildersRequest;
 
     private String mVersionName;
 
@@ -148,7 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess() {
                     Log.i(TAG, "updateDefectItems returned success");
                     Log.i(TAG, "Sending request for DIIT...");
-                    queue.add(mUpdateDIITReference);
+                    queue.add(mUpdateDIITReferenceRequest);
                 }
 
                 @Override
@@ -159,10 +147,25 @@ public class LoginActivity extends AppCompatActivity {
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
-            mUpdateDIITReference = BridgeAPIQueue.getInstance().updateDefectItem_InspectionTypeXRef(mLoginViewModel, new ServerCallback() {
+            mUpdateDIITReferenceRequest = BridgeAPIQueue.getInstance().updateDefectItem_InspectionTypeXRef(mLoginViewModel, new ServerCallback() {
                 @Override
                 public void onSuccess() {
                     Log.i(TAG, "updateDefectItem_InspectionTypeXRef returned success");
+                    queue.add(mUpdateBuildersRequest);
+                }
+
+                @Override
+                public void onFailure() {
+                    Log.i(TAG, "updateDefectItem_InspectionTypeXRef returned failure");
+                    mProgressBar.setVisibility(View.GONE);
+                    mLockScreen.setVisibility(View.GONE);
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                }
+            });
+            mUpdateBuildersRequest = BridgeAPIQueue.getInstance().updateBuilders(mLoginViewModel, new ServerCallback() {
+                @Override
+                public void onSuccess() {
+                    Log.i(TAG, "updateBuilders returned success");
                     Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
                     startActivity(routeSheetIntent);
                     mProgressBar.setVisibility(View.GONE);
@@ -172,7 +175,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure() {
-                    Log.i(TAG, "updateDefectItem_InspectionTypeXRef returned failure");
+                    Log.i(TAG, "updateBuilders returned failure");
                     mProgressBar.setVisibility(View.GONE);
                     mLockScreen.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);

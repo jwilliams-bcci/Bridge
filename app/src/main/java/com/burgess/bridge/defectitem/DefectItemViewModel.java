@@ -37,6 +37,10 @@ public class DefectItemViewModel extends AndroidViewModel {
         return mDefectItemRepository.getDefectItem(defect_item_id);
     }
 
+    public DefectItem_Table getDefectItemSync(int defect_item_id) {
+        return mDefectItemRepository.getDefectItemSync(defect_item_id);
+    }
+
     public LiveData<List<String>> getCannedComments() {
         return mCannedCommentRepository.getCannedComments();
     }
