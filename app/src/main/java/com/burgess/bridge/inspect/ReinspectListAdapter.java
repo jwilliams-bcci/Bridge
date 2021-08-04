@@ -1,6 +1,7 @@
 package com.burgess.bridge.inspect;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.burgess.bridge.R;
+import com.burgess.bridge.defectitem.DefectItemActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -47,9 +49,18 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
             textNumber.setTextColor(Color.WHITE);
             textDescription.setTextColor(Color.WHITE);
             group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_not_reviewed));
+
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(holder.itemView.getContext(), DefectItemActivity.class);
+                intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
+                intent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, holder.mInspectionTypeId);
+                intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
+                intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, holder.mInspectionHistoryId);
+                holder.itemView.getContext().startActivity(intent);
+            });
         } else {
             holder.itemView.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "Please edit in Review & Submit screen", Toast.LENGTH_LONG).show();
+                Toast.makeText(v.getContext(), "Please edit in Review & Submit screen, id: " + current.id, Toast.LENGTH_LONG).show();
             });
         }
         holder.mDefectItemId = current.defect_item_id;

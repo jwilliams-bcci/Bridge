@@ -1,5 +1,6 @@
 package com.burgess.bridge.inspect;
 
+import android.content.Intent;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.burgess.bridge.R;
+import com.burgess.bridge.defectitem.DefectItemActivity;
 
 import data.Tables.DefectItem_Table;
 
@@ -37,6 +39,15 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
                 showSection = true;
             }
         }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(holder.itemView.getContext(), DefectItemActivity.class);
+            intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
+            intent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, holder.mInspectionTypeId);
+            intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
+            intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, holder.mInspectionHistoryId);
+            holder.itemView.getContext().startActivity(intent);
+        });
+
         holder.mDefectItemId = current.id;
         holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, -1);
     }
