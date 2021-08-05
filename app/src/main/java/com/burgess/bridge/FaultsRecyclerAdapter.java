@@ -41,13 +41,14 @@ public class FaultsRecyclerAdapter extends RecyclerView.Adapter<FaultsRecyclerAd
         Fault fault = mFaults.get(position);
         holder.mFaultId = fault.getFaultId();
         holder.mFault = fault.getFault();
+        holder.mFaultPrint = fault.getFaultPrint();
         holder.mFaultButton.setText(fault.getFault());
         holder.mFaultButton.setOnClickListener(v -> {
             TextView result = v.findViewById(R.id.fault_text_result);
             Button buttonClicked = (Button) v;
             Log.d("FAULT", "Button clicked - " + buttonClicked.getText());
             try {
-                mOnButtonClickListener.onButtonClick((String) buttonClicked.getText());
+                mOnButtonClickListener.onButtonClick(holder.mFaultPrint);
             } catch (Exception e) {
                 Log.d("FAULT", e.getMessage());
             }
@@ -62,6 +63,7 @@ public class FaultsRecyclerAdapter extends RecyclerView.Adapter<FaultsRecyclerAd
     public class ViewHolder extends RecyclerView.ViewHolder {
         public int mFaultId;
         public String mFault;
+        public String mFaultPrint;
         public final Button mFaultButton;
 
         public ViewHolder(@NonNull View itemView) {

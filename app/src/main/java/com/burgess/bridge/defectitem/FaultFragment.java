@@ -61,7 +61,7 @@ public class FaultFragment extends DialogFragment implements OnButtonClickListen
         TextView faultResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_fault);
 
         RecyclerView recyclerFaults = (RecyclerView) mView.findViewById(R.id.fault_recycler_buttons);
-        recyclerFaults.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        recyclerFaults.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerFaults.setAdapter(new FaultsRecyclerAdapter(getActivity(), faults, this));
 
         Button saveAndExit = mView.findViewById(R.id.fault_button_save_and_exit);

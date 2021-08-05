@@ -887,178 +887,180 @@ public class DataManager {
     //endregion
 
     //region Fault Initializations
-    private Fault initializeFault1() { return new Fault(1, "-Access panel missing"); }
-    private Fault initializeFault2() { return new Fault(2, "-Not Accessible"); }
-    private Fault initializeFault3() { return new Fault(3, "-Not aligned"); }
-    private Fault initializeFault4() { return new Fault(4, "-Anti-Tip Device"); }
-    private Fault initializeFault5() { return new Fault(5, "-Not Balanced"); }
-    private Fault initializeFault6() { return new Fault(6, "-Battery low"); }
-    private Fault initializeFault7() { return new Fault(7, "-Bent"); }
-    private Fault initializeFault8() { return new Fault(8, "-Binds"); }
-    private Fault initializeFault9() { return new Fault(9, "-Not blocked"); }
-    private Fault initializeFault10() { return new Fault(10, "-Bowed"); }
-    private Fault initializeFault11() { return new Fault(11, "-Not Braced"); }
-    private Fault initializeFault12() { return new Fault(12, "-Broken"); }
-    private Fault initializeFault13() { return new Fault(13, "-Bulb out"); }
-    private Fault initializeFault14() { return new Fault(14, "-Not Calibrated"); }
-    private Fault initializeFault15() { return new Fault(15, "-Cap Nuts"); }
-    private Fault initializeFault16() { return new Fault(16, "-Caulk corners"); }
-    private Fault initializeFault17() { return new Fault(17, "-Not Caulked"); }
-    private Fault initializeFault18() { return new Fault(18, "-Not Centered"); }
-    private Fault initializeFault19() { return new Fault(19, "-Check all"); }
-    private Fault initializeFault20() { return new Fault(20, "-Chipped"); }
-    private Fault initializeFault21() { return new Fault(21, "-Clearance Insufficient"); }
-    private Fault initializeFault22() { return new Fault(22, "-Not Connected"); }
-    private Fault initializeFault23() { return new Fault(23, "-Not Continuous"); }
-    private Fault initializeFault24() { return new Fault(24, "-Covered"); }
-    private Fault initializeFault25() { return new Fault(25, "-Cracked"); }
-    private Fault initializeFault26() { return new Fault(26, "-Crooked"); }
-    private Fault initializeFault27() { return new Fault(27, "-Crown"); }
-    private Fault initializeFault28() { return new Fault(28, "-Damaged"); }
-    private Fault initializeFault29() { return new Fault(29, "-Debris"); }
-    private Fault initializeFault30() { return new Fault(30, "-Deflected"); }
-    private Fault initializeFault31() { return new Fault(31, "-Dips"); }
-    private Fault initializeFault32() { return new Fault(32, "-Dirty"); }
-    private Fault initializeFault33() { return new Fault(33, "-Drags Carpet"); }
-    private Fault initializeFault34() { return new Fault(34, "-Failed"); }
-    private Fault initializeFault35() { return new Fault(35, "-No Fall"); }
-    private Fault initializeFault36() { return new Fault(36, "-Fill Valve Leaks"); }
-    private Fault initializeFault37() { return new Fault(37, "-Not Flashed"); }
-    private Fault initializeFault38() { return new Fault(38, "-Not Flush"); }
-    private Fault initializeFault39() { return new Fault(39, "-Proper flush"); }
-    private Fault initializeFault40() { return new Fault(40, "-Not full-bearing"); }
-    private Fault initializeFault41() { return new Fault(41, "-Not full throw"); }
-    private Fault initializeFault42() { return new Fault(42, "-No gaps"); }
-    private Fault initializeFault43() { return new Fault(43, "-Gaps"); }
-    private Fault initializeFault44() { return new Fault(44, "-Gas off"); }
-    private Fault initializeFault45() { return new Fault(45, "-Ground"); }
-    private Fault initializeFault46() { return new Fault(46, "-Not Grounded"); }
-    private Fault initializeFault47() { return new Fault(47, "-Grout incomplete"); }
-    private Fault initializeFault48() { return new Fault(48, "-Hanging"); }
-    private Fault initializeFault49() { return new Fault(49, "-High"); }
-    private Fault initializeFault50() { return new Fault(50, "-Holes"); }
-    private Fault initializeFault51() { return new Fault(51, "-Inadequate"); }
-    private Fault initializeFault52() { return new Fault(52, "-Incomplete"); }
-    private Fault initializeFault53() { return new Fault(53, "-Inoperative"); }
-    private Fault initializeFault54() { return new Fault(54, "-Not Inspected"); }
-    private Fault initializeFault55() { return new Fault(55, "-Not installed"); }
-    private Fault initializeFault56() { return new Fault(56, "-Not labeled"); }
-    private Fault initializeFault57() { return new Fault(57, "-Improper lap"); }
-    private Fault initializeFault58() { return new Fault(58, "-Will not latch"); }
-    private Fault initializeFault59() { return new Fault(59, "-Leaks"); }
-    private Fault initializeFault60() { return new Fault(60, "-Not level"); }
-    private Fault initializeFault61() { return new Fault(61, "-Too long"); }
-    private Fault initializeFault62() { return new Fault(62, "-Loose"); }
-    private Fault initializeFault63() { return new Fault(63, "-Low"); }
-    private Fault initializeFault64() { return new Fault(64, "-Low Pressure"); }
-    private Fault initializeFault65() { return new Fault(65, "-Missing"); }
-    private Fault initializeFault66() { return new Fault(66, "-Mutilated"); }
-    private Fault initializeFault67() { return new Fault(67, "-Nail Pops"); }
-    private Fault initializeFault68() { return new Fault(68, "-Not nailed properly"); }
-    private Fault initializeFault69() { return new Fault(69, "-Too narrow"); }
-    private Fault initializeFault70() { return new Fault(70, "-Noisy"); }
-    private Fault initializeFault71() { return new Fault(71, "-Non-Corrosive Screws"); }
-    private Fault initializeFault72() { return new Fault(72, "-Not notched"); }
-    private Fault initializeFault73() { return new Fault(73, "-Obstructed"); }
-    private Fault initializeFault74() { return new Fault(74, "-Overcut"); }
-    private Fault initializeFault75() { return new Fault(75, "-Not Overlapped"); }
-    private Fault initializeFault76() { return new Fault(76, "-Overspanned"); }
-    private Fault initializeFault77() { return new Fault(77, "-Not Painted"); }
-    private Fault initializeFault78() { return new Fault(78, "-Not plumb"); }
-    private Fault initializeFault79() { return new Fault(79, "-Pops"); }
-    private Fault initializeFault80() { return new Fault(80, "-No power"); }
-    private Fault initializeFault81() { return new Fault(81, "-Not Primed"); }
-    private Fault initializeFault82() { return new Fault(82, "-Not removed"); }
-    private Fault initializeFault83() { return new Fault(83, "-Required"); }
-    private Fault initializeFault84() { return new Fault(84, "-Not responding"); }
-    private Fault initializeFault85() { return new Fault(85, "-Reversed"); }
-    private Fault initializeFault86() { return new Fault(86, "-Safety Lines"); }
-    private Fault initializeFault87() { return new Fault(87, "-Sag"); }
-    private Fault initializeFault88() { return new Fault(88, "-Scratched"); }
-    private Fault initializeFault89() { return new Fault(89, "-Not Sealed"); }
-    private Fault initializeFault90() { return new Fault(90, "-Not Secured"); }
-    private Fault initializeFault91() { return new Fault(91, "-Not Shimmed"); }
-    private Fault initializeFault92() { return new Fault(92, "-Short"); }
-    private Fault initializeFault93() { return new Fault(93, "-Should be"); }
-    private Fault initializeFault94() { return new Fault(94, "-Oversized"); }
-    private Fault initializeFault95() { return new Fault(95, "-Undersized"); }
-    private Fault initializeFault96() { return new Fault(96, "-Not Sleeved"); }
-    private Fault initializeFault97() { return new Fault(97, "-Not spaced properly"); }
-    private Fault initializeFault98() { return new Fault(98, "-Squeaks"); }
-    private Fault initializeFault99() { return new Fault(99, "-Stained"); }
-    private Fault initializeFault100() { return new Fault(100, "-No startup"); }
-    private Fault initializeFault101() { return new Fault(101, "-Double studs needed"); }
-    private Fault initializeFault102() { return new Fault(102, "-Not Supported"); }
-    private Fault initializeFault103() { return new Fault(103, "Tab(s) missing"); }
-    private Fault initializeFault104() { return new Fault(104, "-Not teed"); }
-    private Fault initializeFault105() { return new Fault(105, "-Not Tested"); }
-    private Fault initializeFault106() { return new Fault(106, "Too tight"); }
-    private Fault initializeFault107() { return new Fault(107, "-Needs touch-up"); }
-    private Fault initializeFault108() { return new Fault(108, "-Twisted"); }
-    private Fault initializeFault109() { return new Fault(109, "-Uneven"); }
-    private Fault initializeFault110() { return new Fault(110, "-Not unpacked"); }
-    private Fault initializeFault111() { return new Fault(111, "-Not Verified"); }
-    private Fault initializeFault112() { return new Fault(112, "-Verify"); }
-    private Fault initializeFault113() { return new Fault(113, "-Not Visible"); }
-    private Fault initializeFault114() { return new Fault(114, "-No water"); }
-    private Fault initializeFault115() { return new Fault(115, "-Water Pressure test, PSI held at: "); }
-    private Fault initializeFault116() { return new Fault(116, "-Wavy"); }
-    private Fault initializeFault117() { return new Fault(117, "-Too wide"); }
-    private Fault initializeFault118() { return new Fault(118, "-Wired Incorrectly"); }
-    private Fault initializeFault119() { return new Fault(119, "-Workers present"); }
-    private Fault initializeFault120() { return new Fault(120, "-<60°, Not Tested"); }
-    private Fault initializeFault121() { return new Fault(121, "-Voids"); }
-    private Fault initializeFault122() { return new Fault(122, "-Compressed"); }
-    private Fault initializeFault123() { return new Fault(123, "-Not in contact"); }
-    private Fault initializeFault124() { return new Fault(124, "-Not fitted properly"); }
-    private Fault initializeFault125() { return new Fault(125, "-Pre-Cornice not passed"); }
-    private Fault initializeFault127() { return new Fault(127, "-Overshot"); }
-    private Fault initializeFault128() { return new Fault(128, "-Undershot"); }
-    private Fault initializeFault129() { return new Fault(129, "-Improper"); }
-    private Fault initializeFault130() { return new Fault(130, "-Not Covered"); }
-    private Fault initializeFault159() { return new Fault(159, "Not squared"); }
-    private Fault initializeFault134() { return new Fault(134, "-Adjust"); }
-    private Fault initializeFault135() { return new Fault(135, "-Not Insulated"); }
-    private Fault initializeFault136() { return new Fault(136, "-Not Protected"); }
-    private Fault initializeFault137() { return new Fault(137, "-Furnace Model Number: "); }
-    private Fault initializeFault138() { return new Fault(138, "-Compressor Model Number: "); }
-    private Fault initializeFault139() { return new Fault(139, "-Water Heater Model Number: "); }
-    private Fault initializeFault140() { return new Fault(140, "within 18 in."); }
-    private Fault initializeFault141() { return new Fault(141, "within 20 in."); }
-    private Fault initializeFault142() { return new Fault(142, "-Will be verified at Final"); }
-    private Fault initializeFault143() { return new Fault(143, "-Steel splice plate missing"); }
-    private Fault initializeFault144() { return new Fault(144, "-Splice block"); }
-    private Fault initializeFault145() { return new Fault(145, "2 wires max per staple"); }
-    private Fault initializeFault146() { return new Fault(146, "Wires too close to nailing surface"); }
-    private Fault initializeFault147() { return new Fault(147, "Tape failing to adhere"); }
-    private Fault initializeFault148() { return new Fault(148, "Improper material"); }
-    private Fault initializeFault149() { return new Fault(149, "HVAC Contractor Checklist Defects:"); }
-    private Fault initializeFault150() { return new Fault(150, "-Slow"); }
-    private Fault initializeFault151() { return new Fault(151, "Unit 1, to Outside, Failed @: , Should be: "); }
-    private Fault initializeFault152() { return new Fault(152, "Unit 2, to Outside, Failed @: , Should be: "); }
-    private Fault initializeFault153() { return new Fault(153, "Unit 3, to Outside, Failed @: , Should be: "); }
-    private Fault initializeFault154() { return new Fault(154, "Unit 1, Total, Failed @: , Should be: "); }
-    private Fault initializeFault155() { return new Fault(155, "Unit 2, Total, Failed @: , Should be: "); }
-    private Fault initializeFault156() { return new Fault(156, "Unit 3, Total, Failed @: , Should be: "); }
-    private Fault initializeFault157() { return new Fault(157, "Failed @: , Should be:"); }
-    private Fault initializeFault158() { return new Fault(158, "Not Blocked or Sealed"); }
-    private Fault initializeFault160() { return new Fault(160, "Inconsistent"); }
-    private Fault initializeFault161() { return new Fault(161, "Firestop chase tops"); }
-    private Fault initializeFault162() { return new Fault(162, "Firestop top plate penetrations"); }
-    private Fault initializeFault163() { return new Fault(163, "Firestop dropped ceiling"); }
-    private Fault initializeFault164() { return new Fault(164, "Firestop horizontal chase"); }
-    private Fault initializeFault165() { return new Fault(165, "Firestop rake walls"); }
-    private Fault initializeFault166() { return new Fault(166, "Firestop stairway"); }
-    private Fault initializeFault167() { return new Fault(167, "-Compressed by electrical"); }
-    private Fault initializeFault168() { return new Fault(168, "-Compressed by low voltage"); }
-    private Fault initializeFault169() { return new Fault(169, "-Compressed by plumbing"); }
-    private Fault initializeFault170() { return new Fault(170, "-Compressed by framing"); }
-    private Fault initializeFault171() { return new Fault(171, "-Roof Decking not gapped properly"); }
-    private Fault initializeFault172() { return new Fault(172, "-Not filled to overflow"); }
-    private Fault initializeFault173() { return new Fault(173, "Not vented"); }
-    private Fault initializeFault174() { return new Fault(174, "Secure and Seal"); }
-    private Fault initializeFault175() { return new Fault(175, "Not Poly sealed"); }
-    private Fault initializeFault176() { return new Fault(176, "Not per Builder's Specifications"); }
-    private Fault initializeFault177() { return new Fault(177, "ZIP System Tape is not properly rolled"); }
+    private Fault initializeFault1() { return new Fault(1,"Access Panel Missing","-Access panel missing"); }
+    private Fault initializeFault2() { return new Fault(2,"Accessible-Not","-Not Accessible"); }
+    private Fault initializeFault3() { return new Fault(3,"Aligned-Not","-Not aligned"); }
+    private Fault initializeFault4() { return new Fault(4,"Anti-Tip Device","-Anti-Tip Device"); }
+    private Fault initializeFault5() { return new Fault(5,"Balanced-Not","-Not Balanced"); }
+    private Fault initializeFault6() { return new Fault(6,"Battery low","-Battery low"); }
+    private Fault initializeFault7() { return new Fault(7,"Bent","-Bent"); }
+    private Fault initializeFault8() { return new Fault(8,"Binds","-Binds"); }
+    private Fault initializeFault9() { return new Fault(9,"Blocked-Not","-Not blocked"); }
+    private Fault initializeFault10() { return new Fault(10,"Bowed","-Bowed"); }
+    private Fault initializeFault11() { return new Fault(11,"Braced-Not","-Not Braced"); }
+    private Fault initializeFault12() { return new Fault(12,"Broken","-Broken"); }
+    private Fault initializeFault13() { return new Fault(13,"Bulbs out","-Bulb out"); }
+    private Fault initializeFault14() { return new Fault(14,"Calibration","-Not Calibrated"); }
+    private Fault initializeFault15() { return new Fault(15,"Cap Nuts","-Cap Nuts"); }
+    private Fault initializeFault16() { return new Fault(16,"Caulk corners","-Caulk corners"); }
+    private Fault initializeFault17() { return new Fault(17,"Caulked-Not","-Not Caulked"); }
+    private Fault initializeFault18() { return new Fault(18,"Centered, Not","-Not Centered"); }
+    private Fault initializeFault19() { return new Fault(19,"Check all","-Check all"); }
+    private Fault initializeFault20() { return new Fault(20,"Chipped","-Chipped"); }
+    private Fault initializeFault21() { return new Fault(21,"Clearance Insufficient","-Clearance Insufficient"); }
+    private Fault initializeFault22() { return new Fault(22,"Connected-Not","-Not Connected"); }
+    private Fault initializeFault23() { return new Fault(23,"Continuous-not","-Not Continuous"); }
+    private Fault initializeFault24() { return new Fault(24,"Covered","-Covered"); }
+    private Fault initializeFault25() { return new Fault(25,"Cracked","-Cracked"); }
+    private Fault initializeFault26() { return new Fault(26,"Crooked","-Crooked"); }
+    private Fault initializeFault27() { return new Fault(27,"Crown","-Crown"); }
+    private Fault initializeFault28() { return new Fault(28,"Damaged","-Damaged"); }
+    private Fault initializeFault29() { return new Fault(29,"Debris","-Debris"); }
+    private Fault initializeFault30() { return new Fault(30,"Deflected","-Deflected"); }
+    private Fault initializeFault31() { return new Fault(31,"Dips","-Dips"); }
+    private Fault initializeFault32() { return new Fault(32,"Dirty","-Dirty"); }
+    private Fault initializeFault33() { return new Fault(33,"Drags Carpet","-Drags Carpet"); }
+    private Fault initializeFault34() { return new Fault(34,"Failed","-Failed"); }
+    private Fault initializeFault35() { return new Fault(35,"Fall-no","-No Fall"); }
+    private Fault initializeFault36() { return new Fault(36,"Fill Valve Leaks","-Fill Valve Leaks"); }
+    private Fault initializeFault37() { return new Fault(37,"Flashed-Not","-Not Flashed"); }
+    private Fault initializeFault38() { return new Fault(38,"Flush-Not","-Not Flush"); }
+    private Fault initializeFault39() { return new Fault(39,"Flush-Not properly","-Proper flush"); }
+    private Fault initializeFault40() { return new Fault(40,"Full Bearing-Not","-Not full-bearing"); }
+    private Fault initializeFault41() { return new Fault(41,"Full throw-Not","-Not full throw"); }
+    private Fault initializeFault42() { return new Fault(42,"Gap, no","-No gaps"); }
+    private Fault initializeFault43() { return new Fault(43,"Gaps","-Gaps"); }
+    private Fault initializeFault44() { return new Fault(44,"Gas off","-Gas off"); }
+    private Fault initializeFault45() { return new Fault(45,"Ground","-Ground"); }
+    private Fault initializeFault46() { return new Fault(46,"Grounded-Not","-Not Grounded"); }
+    private Fault initializeFault47() { return new Fault(47,"Grout incomplete","-Grout incomplete"); }
+    private Fault initializeFault48() { return new Fault(48,"Hanging","-Hanging"); }
+    private Fault initializeFault49() { return new Fault(49,"High","-High"); }
+    private Fault initializeFault50() { return new Fault(50,"Holes","-Holes"); }
+    private Fault initializeFault51() { return new Fault(51,"Inadequate","-Inadequate"); }
+    private Fault initializeFault52() { return new Fault(52,"Incomplete","-Incomplete"); }
+    private Fault initializeFault53() { return new Fault(53,"Inoperative","-Inoperative"); }
+    private Fault initializeFault54() { return new Fault(54,"Inspected-Not","-Not Inspected"); }
+    private Fault initializeFault55() { return new Fault(55,"Installed-Not","-Not installed"); }
+    private Fault initializeFault56() { return new Fault(56,"Labeled-Not","-Not labeled"); }
+    private Fault initializeFault57() { return new Fault(57,"Lap Improper","-Improper lap"); }
+    private Fault initializeFault58() { return new Fault(58,"Latch-won't","-Will not latch"); }
+    private Fault initializeFault59() { return new Fault(59,"Leaks","-Leaks"); }
+    private Fault initializeFault60() { return new Fault(60,"Level-Not","-Not level"); }
+    private Fault initializeFault61() { return new Fault(61,"Long","-Too long"); }
+    private Fault initializeFault62() { return new Fault(62,"Loose","-Loose"); }
+    private Fault initializeFault63() { return new Fault(63,"Low","-Low"); }
+    private Fault initializeFault64() { return new Fault(64,"Low Pressure","-Low Pressure"); }
+    private Fault initializeFault65() { return new Fault(65,"Missing","-Missing"); }
+    private Fault initializeFault66() { return new Fault(66,"Mutilated","-Mutilated"); }
+    private Fault initializeFault67() { return new Fault(67,"Nail Pops","-Nail Pops"); }
+    private Fault initializeFault68() { return new Fault(68,"Nailed Properly-Not","-Not nailed properly"); }
+    private Fault initializeFault69() { return new Fault(69,"Narrow, too","-Too narrow"); }
+    private Fault initializeFault70() { return new Fault(70,"Noisy","-Noisy"); }
+    private Fault initializeFault71() { return new Fault(71,"Non-Corrosive Screws","-Non-Corrosive Screws"); }
+    private Fault initializeFault72() { return new Fault(72,"Notched-Not","-Not notched"); }
+    private Fault initializeFault73() { return new Fault(73,"Obstructed","-Obstructed"); }
+    private Fault initializeFault74() { return new Fault(74,"Overcut","-Overcut"); }
+    private Fault initializeFault75() { return new Fault(75,"Overlapped-Not","-Not Overlapped"); }
+    private Fault initializeFault76() { return new Fault(76,"Overspanned","-Overspanned"); }
+    private Fault initializeFault77() { return new Fault(77,"Painted-Not","-Not Painted"); }
+    private Fault initializeFault78() { return new Fault(78,"Plumb-Not","-Not plumb"); }
+    private Fault initializeFault79() { return new Fault(79,"Pops","-Pops"); }
+    private Fault initializeFault80() { return new Fault(80,"Power-No","-No power"); }
+    private Fault initializeFault81() { return new Fault(81,"Primed-Not","-Not Primed"); }
+    private Fault initializeFault82() { return new Fault(82,"Removed-Not","-Not removed"); }
+    private Fault initializeFault83() { return new Fault(83,"Required","-Required"); }
+    private Fault initializeFault84() { return new Fault(84,"Responding-Not","-Not responding"); }
+    private Fault initializeFault85() { return new Fault(85,"Reversed","-Reversed"); }
+    private Fault initializeFault86() { return new Fault(86,"Safety Lines","-Safety Lines"); }
+    private Fault initializeFault87() { return new Fault(87,"Sag","-Sag"); }
+    private Fault initializeFault88() { return new Fault(88,"Scratched","-Scratched"); }
+    private Fault initializeFault89() { return new Fault(89,"Sealed, Not","-Not Sealed"); }
+    private Fault initializeFault90() { return new Fault(90,"Secured-Not","-Not Secured"); }
+    private Fault initializeFault91() { return new Fault(91,"Shimmed-Not","-Not Shimmed"); }
+    private Fault initializeFault92() { return new Fault(92,"Short","-Short"); }
+    private Fault initializeFault93() { return new Fault(93,"Should be","-Should be"); }
+    private Fault initializeFault94() { return new Fault(94,"Sized-Oversized","-Oversized"); }
+    private Fault initializeFault95() { return new Fault(95,"Sized-Undersized","-Undersized"); }
+    private Fault initializeFault96() { return new Fault(96,"Sleeved-Not","-Not Sleeved"); }
+    private Fault initializeFault97() { return new Fault(97,"Spaced Properly-Not","-Not spaced properly"); }
+    private Fault initializeFault98() { return new Fault(98,"Squeaks","-Squeaks"); }
+    private Fault initializeFault99() { return new Fault(99,"Stained","-Stained"); }
+    private Fault initializeFault100() { return new Fault(100,"Startup-Not","-No startup"); }
+    private Fault initializeFault101() { return new Fault(101,"Studs- doubles needed","-Double studs needed"); }
+    private Fault initializeFault102() { return new Fault(102,"Supported-Not","-Not Supported"); }
+    private Fault initializeFault103() { return new Fault(103,"Tab(s) missing","Tab(s) missing"); }
+    private Fault initializeFault104() { return new Fault(104,"Teed-Not","-Not teed"); }
+    private Fault initializeFault105() { return new Fault(105,"Tested-Not","-Not Tested"); }
+    private Fault initializeFault106() { return new Fault(106,"Tight, too","Too tight"); }
+    private Fault initializeFault107() { return new Fault(107,"Touch-up-Needs","-Needs touch-up"); }
+    private Fault initializeFault108() { return new Fault(108,"Twisted","-Twisted"); }
+    private Fault initializeFault109() { return new Fault(109,"Uneven","-Uneven"); }
+    private Fault initializeFault110() { return new Fault(110,"Unpacked-Not","-Not unpacked"); }
+    private Fault initializeFault111() { return new Fault(111,"Verified-Not","-Not Verified"); }
+    private Fault initializeFault112() { return new Fault(112,"Verify","-Verify"); }
+    private Fault initializeFault113() { return new Fault(113,"Visible-Not","-Not Visible"); }
+    private Fault initializeFault114() { return new Fault(114,"Water-No","-No water"); }
+    private Fault initializeFault115() { return new Fault(115,"Water pressure held at","-Water Pressure test, PSI held at: "); }
+    private Fault initializeFault116() { return new Fault(116,"Wavy","-Wavy"); }
+    private Fault initializeFault117() { return new Fault(117,"Wide, too","-Too wide"); }
+    private Fault initializeFault118() { return new Fault(118,"Wired Incorrectly","-Wired Incorrectly"); }
+    private Fault initializeFault119() { return new Fault(119,"Workers present","-Workers present"); }
+    private Fault initializeFault120() { return new Fault(120,"<60°, Not Tested","-<60°, Not Tested"); }
+    private Fault initializeFault121() { return new Fault(121,"Voids","-Voids"); }
+    private Fault initializeFault122() { return new Fault(122,"Compressed","-Compressed"); }
+    private Fault initializeFault123() { return new Fault(123,"Contact, Not in","-Not in contact"); }
+    private Fault initializeFault124() { return new Fault(124,"Fitted, Not","-Not fitted properly"); }
+    private Fault initializeFault125() { return new Fault(125,"Pre-Cornice not passed","-Pre-Cornice not passed"); }
+    private Fault initializeFault127() { return new Fault(127,"Overshot","-Overshot"); }
+    private Fault initializeFault128() { return new Fault(128,"Undershot","-Undershot"); }
+    private Fault initializeFault129() { return new Fault(129,"Improper","-Improper"); }
+    private Fault initializeFault130() { return new Fault(130,"Covered, Not","-Not Covered"); }
+    private Fault initializeFault131() { return new Fault(131,"Blower Door Results","-Blower Door Test results: CFM @ 50Pa"); }
+    private Fault initializeFault159() { return new Fault(159,"Square, Not","Not squared"); }
+    private Fault initializeFault133() { return new Fault(133,"Unable to fully inspect","-Unable to fully inspect"); }
+    private Fault initializeFault134() { return new Fault(134,"Adjust","-Adjust"); }
+    private Fault initializeFault135() { return new Fault(135,"Insulated, Not","-Not Insulated"); }
+    private Fault initializeFault136() { return new Fault(136,"Protected, Not","-Not Protected"); }
+    private Fault initializeFault137() { return new Fault(137,"Furnace Model Number","-Furnace Model Number: "); }
+    private Fault initializeFault138() { return new Fault(138,"Compressor Model Number","-Compressor Model Number: "); }
+    private Fault initializeFault139() { return new Fault(139,"Water Heater Model Number","-Water Heater Model Number: "); }
+    private Fault initializeFault140() { return new Fault(140,"Within 18 in.","within 18 in."); }
+    private Fault initializeFault141() { return new Fault(141,"Within 20 in.","within 20 in."); }
+    private Fault initializeFault142() { return new Fault(142,"Verify at Final","-Will be verified at Final"); }
+    private Fault initializeFault143() { return new Fault(143,"Steel splice plate missing","-Steel splice plate missing"); }
+    private Fault initializeFault144() { return new Fault(144,"Splice block","-Splice block"); }
+    private Fault initializeFault145() { return new Fault(145,"Wires, max 2 per staple","2 wires max per staple"); }
+    private Fault initializeFault146() { return new Fault(146,"Wires, too close to nailing surface","Wires too close to nailing surface"); }
+    private Fault initializeFault147() { return new Fault(147,"Tape Failing to adhere","Tape failing to adhere"); }
+    private Fault initializeFault148() { return new Fault(148,"Material, improper","Improper material"); }
+    private Fault initializeFault149() { return new Fault(149,"HVAC Contractor Checklist Defects:","HVAC Contractor Checklist Defects:"); }
+    private Fault initializeFault150() { return new Fault(150,"Slow","-Slow"); }
+    private Fault initializeFault151() { return new Fault(151,"Duct Lkg Unit 1 Outside Failed","Unit 1, to Outside, Failed @: , Should be: "); }
+    private Fault initializeFault152() { return new Fault(152,"Duct Lkg Unit 2 Outside Failed","Unit 2, to Outside, Failed @: , Should be: "); }
+    private Fault initializeFault153() { return new Fault(153,"Duct Lkg Unit 3 Outside Failed","Unit 3, to Outside, Failed @: , Should be: "); }
+    private Fault initializeFault154() { return new Fault(154,"Duct Lkg Unit 1Total Failed","Unit 1, Total, Failed @: , Should be: "); }
+    private Fault initializeFault155() { return new Fault(155,"Duct Lkg Unit 2 Total Failed","Unit 2, Total, Failed @: , Should be: "); }
+    private Fault initializeFault156() { return new Fault(156,"Duct Lkg Unit 3 Total Failed","Unit 3, Total, Failed @: , Should be: "); }
+    private Fault initializeFault157() { return new Fault(157,"Blower Door Failed","Failed @: , Should be:"); }
+    private Fault initializeFault158() { return new Fault(158,"Blocked & Sealed, Not","Not Blocked or Sealed"); }
+    private Fault initializeFault160() { return new Fault(160,"Inconsistent","Inconsistent"); }
+    private Fault initializeFault161() { return new Fault(161,"Firestop chase tops","Firestop chase tops"); }
+    private Fault initializeFault162() { return new Fault(162,"Firestop top plate penetrations","Firestop top plate penetrations"); }
+    private Fault initializeFault163() { return new Fault(163,"Firestop dropped ceiling","Firestop dropped ceiling"); }
+    private Fault initializeFault164() { return new Fault(164,"Firestop horizontal chase","Firestop horizontal chase"); }
+    private Fault initializeFault165() { return new Fault(165,"Firestop rake walls","Firestop rake walls"); }
+    private Fault initializeFault166() { return new Fault(166,"Firestop stairway","Firestop stairway"); }
+    private Fault initializeFault167() { return new Fault(167,"Compressed by electrical","-Compressed by electrical"); }
+    private Fault initializeFault168() { return new Fault(168,"Compressed by low voltage","-Compressed by low voltage"); }
+    private Fault initializeFault169() { return new Fault(169,"Compressed by plumbing","-Compressed by plumbing"); }
+    private Fault initializeFault170() { return new Fault(170,"Compressed by framing","-Compressed by framing"); }
+    private Fault initializeFault171() { return new Fault(171,"Roof Decking not gapped properly","-Roof Decking not gapped properly"); }
+    private Fault initializeFault172() { return new Fault(172,"Filled to overflow, Not","-Not filled to overflow"); }
+    private Fault initializeFault173() { return new Fault(173,"Vented, Not","Not vented"); }
+    private Fault initializeFault174() { return new Fault(174,"Secure and Seal","Secure and Seal"); }
+    private Fault initializeFault175() { return new Fault(175,"Poly sealed, Not","Not Poly sealed"); }
+    private Fault initializeFault176() { return new Fault(176,"per Builder specifications, Not","Not per Builder's Specifications"); }
+    private Fault initializeFault177() { return new Fault(177,"ZIP System Properly rolled, Not","ZIP System Tape is not properly rolled"); }
     //endregion
 }

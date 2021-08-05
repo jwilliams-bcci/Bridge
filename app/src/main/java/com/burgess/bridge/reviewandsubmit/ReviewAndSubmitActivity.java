@@ -189,15 +189,16 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         int builderId = mInspection.builder_id;
         Builder_Table builder = mReviewAndSubmitViewModel.getBuilder(builderId);
         boolean builderConditionalReinspect = builder.reinspection_required;
+        List<ReviewAndSubmit_View> list = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
 
-        if (mInspectionDefectList.isEmpty()) {
+        if (list.isEmpty()) {
             status = 11;
         } else {
-            List<ReviewAndSubmit_View> notAllCs = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
+            List<ReviewAndSubmit_View> notAllCs = list.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
             if (notAllCs.isEmpty()) {
                 status = 11;
             } else {
-                List<ReviewAndSubmit_View> reinspectionRequired = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
+                List<ReviewAndSubmit_View> reinspectionRequired = list.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
                 if (builderConditionalReinspect && reinspectionRequired.isEmpty()) {
                     status = 11;
                 } else {

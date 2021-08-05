@@ -3,6 +3,12 @@ package com.burgess.bridge.inspect;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,9 +19,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +31,8 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 import data.Tables.Inspection_Table;
 
@@ -147,6 +157,53 @@ public class InspectActivity extends AppCompatActivity {
             defectItemIntent.putExtra(DefectItemActivity.DEFECT_ID, 1);
             startActivity(defectItemIntent);
         });
+
+//        if (mReinspection) {
+//            ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//                @Override
+//                public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+//                    return false;
+//                }
+//
+//                @Override
+//                public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                }
+//
+//                @Override
+//                public int getSwipeDirs(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
+//                    return super.getSwipeDirs(recyclerView, viewHolder);
+//                }
+//
+//                @Override
+//                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+//                    try {
+//                        Bitmap icon;
+//                        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+//                            View itemView = viewHolder.itemView;
+//                            float height = (float) itemView.getBottom() - (float) itemView.getTop();
+//                            float width = height / 5;
+//                            viewHolder.itemView.setTranslationX(dX / 5);
+//
+//                            Paint paint = new Paint();
+//                            int dir = getSwipeDirs(recyclerView, viewHolder);
+//                            if (dX > 0) {
+//                                paint.setColor(Color.GREEN);
+//                            } else {
+//                                paint.setColor(Color.RED);
+//                            }
+//                            RectF background = new RectF((float) itemView.getRight() + dX / 5, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
+//                            c.drawRect(background, paint);
+//                        } else {
+//                            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+//                        }
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            };
+//            ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
+//            touchHelper.attachToRecyclerView(mRecyclerDefectItems);
+//        }
     }
 
     private void displayAddress(TextView textAddress) {
