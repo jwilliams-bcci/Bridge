@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
@@ -161,7 +162,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         try {
                             completeInspection();
                         } catch (JSONException e) {
-                            Log.i(TAG, "Yo fuck this... " + e.getMessage());
                             e.printStackTrace();
                         }
                     })
@@ -243,7 +243,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     public void onSuccess() {
                         mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
                         if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
-                            Log.i(TAG, "All defects uploaded");
+                            BridgeLogger.log('I', TAG, "All defect items uploaded.");
                             mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
                             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
                         }

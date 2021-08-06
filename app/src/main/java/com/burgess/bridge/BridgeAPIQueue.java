@@ -71,7 +71,7 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = false;
+        isProd = true;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -104,7 +104,7 @@ public class BridgeAPIQueue {
     public JsonObjectRequest loginUser(String userName, String password, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url +=  String.format(LOGIN_URL, userName, password);
-        BridgeLogger.getInstance(ctx).log('I', TAG, "URL for loginUser: " + url);
+        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for loginUser: " + url);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             mEditor.putString(PREF_AUTH_TOKEN, response.optString("AuthorizationToken"));
@@ -408,7 +408,7 @@ public class BridgeAPIQueue {
             }
         };
 
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(45), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
     public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime) {
@@ -429,7 +429,7 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(45), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
 }
