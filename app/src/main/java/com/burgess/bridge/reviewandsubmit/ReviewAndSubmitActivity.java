@@ -245,6 +245,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
                             BridgeLogger.log('I', TAG, "All defect items uploaded.");
                             mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
+                            BridgeLogger.log('I', TAG, "Timeout time updateInspectionStatus... " + mUpdateInspectionStatusRequest.getTimeoutMs() / 1000);
                             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
                         }
                     }

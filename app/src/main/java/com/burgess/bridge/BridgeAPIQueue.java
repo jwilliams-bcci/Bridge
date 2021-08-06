@@ -71,7 +71,7 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = true;
+        isProd = false;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -380,7 +380,7 @@ public class BridgeAPIQueue {
     public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += POST_INSPECTION_DEFECT_URL;
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for uploadInspectionDefect: " + url);
+        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for ID:" + defectItemId + " for InspectionID:" + inspectionId + " uploadInspectionDefect: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             BridgeLogger.getInstance(ctx).log('I', TAG, "Uploaded defect " + defectItemId + " for inspection " + inspectionId + ".");
@@ -429,6 +429,7 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
