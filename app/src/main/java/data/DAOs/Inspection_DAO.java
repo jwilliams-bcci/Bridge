@@ -14,7 +14,7 @@ import data.Views.RouteSheet_View;
 
 @Dao
 public interface Inspection_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Inspection_Table inspection);
 
     @Query("DELETE FROM inspection_table")
@@ -23,7 +23,7 @@ public interface Inspection_DAO {
     @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
     LiveData<List<Inspection_Table>> getInspections(int inspector_id);
 
-    @Query("SELECT * FROM routesheet_view WHERE inspector_id = :inspector_id AND is_uploaded = 0")
+    @Query("SELECT * FROM routesheet_view WHERE inspector_id = :inspector_id AND is_uploaded = 0 AND inspection_status_id = 2")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
