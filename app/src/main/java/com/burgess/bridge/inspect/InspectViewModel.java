@@ -9,9 +9,11 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import data.Repositories.DefectItemRepository;
+import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Tables.DefectItem_Table;
+import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
 
@@ -19,12 +21,14 @@ public class InspectViewModel extends AndroidViewModel {
     private DefectItemRepository mDefectItemRepository;
     private InspectionRepository mInspectionRepository;
     private InspectionHistoryRepository mInspectionHistoryRepository;
+    private InspectionDefectRepository mInspectionDefectRepository;
 
     public InspectViewModel(@NonNull Application application) {
         super(application);
         mDefectItemRepository = new DefectItemRepository(application);
         mInspectionRepository = new InspectionRepository(application);
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
+        mInspectionDefectRepository = new InspectionDefectRepository(application);
     }
 
     public LiveData<List<DefectItem_Table>> getAllDefectItemsFilteredNumberSort(String category_name, int inspection_type_id, int inspection_id) {
@@ -65,5 +69,21 @@ public class InspectViewModel extends AndroidViewModel {
 
     public int getItemsToReview(int inspectionId) {
         return mInspectionHistoryRepository.getItemsToReview(inspectionId);
+    }
+
+    public void updateIsReviewed(int inspectionHistoryId) {
+        mInspectionHistoryRepository.updateIsReviewed(inspectionHistoryId);
+    }
+
+    public void updateReviewedStatus(int defectStatusId, int inspectionHistoryId) {
+        mInspectionHistoryRepository.updateReviewedStatus(defectStatusId, inspectionHistoryId);
+    }
+
+    public void insertNewFailedDefectItem(InspectionDefect_Table defectItem) {
+        mInspectionDefectRepository.insert(defectItem);
+    }
+
+    public void insertNewCompleteDefectItem(InspectionDefect_Table defectItem) {
+        mInspectionDefectRepository.insert(defectItem);
     }
 }

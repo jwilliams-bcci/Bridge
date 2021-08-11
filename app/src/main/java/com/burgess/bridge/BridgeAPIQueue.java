@@ -355,6 +355,7 @@ public class BridgeAPIQueue {
                     hist.defect_item_description = obj.optString("ItemDescription");
                     hist.comment = obj.optString("Comment");
                     hist.is_reviewed = false;
+                    hist.reviewed_status = null;
                     vm.insertInspectionHistory(hist);
                 } catch (JSONException e) {
                     Log.e(TAG, "ERROR - updateInspectionHistory: " + e.getMessage());

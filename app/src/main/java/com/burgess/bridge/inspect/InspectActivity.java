@@ -34,6 +34,7 @@ import com.burgess.bridge.routesheet.RouteSheetActivity;
 
 import org.jetbrains.annotations.NotNull;
 
+import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 
 import static com.burgess.bridge.Constants.PREF;
@@ -158,52 +159,57 @@ public class InspectActivity extends AppCompatActivity {
             startActivity(defectItemIntent);
         });
 
-//        if (mReinspection) {
-//            ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-//                @Override
-//                public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
-//                    return false;
-//                }
-//
-//                @Override
-//                public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                }
-//
-//                @Override
-//                public int getSwipeDirs(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
-//                    return super.getSwipeDirs(recyclerView, viewHolder);
-//                }
-//
-//                @Override
-//                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-//                    try {
-//                        Bitmap icon;
-//                        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-//                            View itemView = viewHolder.itemView;
-//                            float height = (float) itemView.getBottom() - (float) itemView.getTop();
-//                            float width = height / 5;
-//                            viewHolder.itemView.setTranslationX(dX / 5);
-//
-//                            Paint paint = new Paint();
-//                            int dir = getSwipeDirs(recyclerView, viewHolder);
-//                            if (dX > 0) {
-//                                paint.setColor(Color.GREEN);
-//                            } else {
-//                                paint.setColor(Color.RED);
-//                            }
-//                            RectF background = new RectF((float) itemView.getRight() + dX / 5, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
-//                            c.drawRect(background, paint);
-//                        } else {
-//                            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            };
-//            ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
-//            touchHelper.attachToRecyclerView(mRecyclerDefectItems);
-//        }
+        if (mReinspection) {
+            ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                @Override
+                public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    InspectViewHolder holder = (InspectViewHolder) viewHolder;
+                    final int selectedHistoryId = holder.mInspectionHistoryId;
+                    final int selectedDefectItemId = holder.mDefectItemId;
+
+                    switch (direction) {
+                        case ItemTouchHelper.LEFT:
+                            Toast.makeText(getApplicationContext(), "Swiped left DefectItemID:" + selectedHistoryId, Toast.LENGTH_SHORT).show();
+                            InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, "", selectedHistoryId, false, null);
+                            mInspectViewModel.insertNewFailedDefectItem(newFailedDefect);
+                            mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
+                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                            break;
+                        case ItemTouchHelper.RIGHT:
+                            Toast.makeText(getApplicationContext(), "Swiped right DefectItemID:" + selectedHistoryId, Toast.LENGTH_SHORT).show();
+                            InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, "", selectedHistoryId, false, null);
+                            mInspectViewModel.insertNewCompleteDefectItem(newCompleteDefect);
+                            mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
+                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                            break;
+                    }
+                    //holder.notifyAll();
+                    mReinspectListAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public int getSwipeDirs(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
+                    return super.getSwipeDirs(recyclerView, viewHolder);
+                }
+
+                @Override
+                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                    View itemView = viewHolder.itemView;
+                    if (dX > 0) {
+                        
+                    }
+                }
+            };
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
+            itemTouchHelper.attachToRecyclerView(mRecyclerDefectItems);
+        }
     }
 
     private void displayAddress(TextView textAddress) {

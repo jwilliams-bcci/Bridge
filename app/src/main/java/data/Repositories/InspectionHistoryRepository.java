@@ -36,6 +36,10 @@ public class InspectionHistoryRepository {
         mInspectionHistoryDao.updateIsReviewed(inspectionHistoryId);
     }
 
+    public void updateReviewedStatus(int defectStatusId, int inspectionHistoryId) {
+        mInspectionHistoryDao.updateReviewedStatus(defectStatusId, inspectionHistoryId);
+    }
+
     public int getItemsToReview(int inspectionId) {
         return mInspectionHistoryDao.getItemsToReview(inspectionId);
     }

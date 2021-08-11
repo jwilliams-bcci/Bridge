@@ -1,7 +1,6 @@
 package com.burgess.bridge.routesheet;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,7 +13,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.R;
 
 import java.util.Collections;
@@ -24,7 +22,7 @@ import data.Views.RouteSheet_View;
 
 public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter {
     private List<RouteSheet_View> currentList;
-    private OnStartDragListener mDragListener;
+    private OnDragListener mDragListener;
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
@@ -36,6 +34,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         return RouteSheetViewHolder.create(parent);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
         RouteSheet_View current = getItem(position);
@@ -60,7 +59,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         holder.bind(current.community, current.address, current.inspection_type, current.notes);
 
         holder.mReorderHandle.setOnTouchListener((v, event) -> {
-            Log.d("DRAG", "Action is... " + event.toString());
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mDragListener.onStartDrag(holder);
             }
@@ -86,7 +84,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         currentList = list;
     }
 
-    public void setDragListener(OnStartDragListener listener) {
+    public void setDragListener(OnDragListener listener) {
         mDragListener = listener;
     }
 

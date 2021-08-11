@@ -1,5 +1,6 @@
 package com.burgess.bridge.routesheet;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,6 +44,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public final ImageView mReorderHandle;
     public final ImageView mReupload;
 
+    @SuppressLint("ClickableViewAccessibility")
     public RouteSheetViewHolder(@NonNull View itemView) {
         super(itemView);
         mTextInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
@@ -65,19 +67,10 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         });
 
         mReupload.setOnClickListener(v -> {
-            BridgeLogger.log('I', TAG, "Trying reupload for ID:" + mInspectionId);
+            BridgeLogger.log('I', TAG, "Trying reupload for ID: " + mInspectionId);
             Intent reviewAndSubmitIntent = new Intent(v.getContext(), ReviewAndSubmitActivity.class);
             reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
             v.getContext().startActivity(reviewAndSubmitIntent);
-        });
-
-        mReorderHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                Log.d("DRAG", "Action is ACTION_DOWN");
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                Log.d("DRAG", "Action is ACTION_UP");
-            }
-            return true;
         });
     }
 

@@ -59,6 +59,14 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
                 holder.itemView.getContext().startActivity(intent);
             });
         } else {
+            switch (current.reviewed_status) {
+                case 2:
+                    group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_reviewed_failed));
+                    break;
+                default:
+                    group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_reviewed_complete));
+                    break;
+            }
             holder.itemView.setOnClickListener(v -> {
                 Toast.makeText(v.getContext(), "Please edit in Review & Submit screen, id: " + current.id, Toast.LENGTH_LONG).show();
             });

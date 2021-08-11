@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Dev/Bridge/app/src/main/res/drawable/defect_border_not_reviewed.xml" value="0.3828125" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/drawable/defect_border_reviewed_complete.xml" value="0.3828125" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/drawable/defect_border_reviewed_failed.xml" value="0.3828125" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_login.xml" value="0.297554347826087" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_route_sheet.xml" value="0.297554347826087" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/layout/item_defect_item.xml" value="0.67" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/layout/item_inspection_defect.xml" value="0.297554347826087" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/layout/item_inspection_list.xml" value="0.297554347826087" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

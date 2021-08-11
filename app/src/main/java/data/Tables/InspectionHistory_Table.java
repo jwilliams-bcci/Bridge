@@ -1,5 +1,6 @@
 package data.Tables;
 
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -16,4 +17,6 @@ public class InspectionHistory_Table {
     public String defect_item_description;
     public String comment;
     public boolean is_reviewed;
+    @Nullable
+    public Integer reviewed_status;
 }

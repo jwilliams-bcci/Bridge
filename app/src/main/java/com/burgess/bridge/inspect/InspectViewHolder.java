@@ -27,15 +27,6 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
         mTextDefectItemNumber = itemView.findViewById(R.id.item_defect_item_text_number);
         mTextDefectItemDescription = itemView.findViewById(R.id.item_defect_item_text_description);
         mTextDefectItemSection = itemView.findViewById(R.id.item_defect_item_text_section);
-
-//        itemView.setOnClickListener(v -> {
-//            Intent intent = new Intent(v.getContext(), DefectItemActivity.class);
-//            intent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
-//            intent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
-//            intent.putExtra(DefectItemActivity.DEFECT_ID, mDefectItemId);
-//            intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, mInspectionHistoryId);
-//            v.getContext().startActivity(intent);
-//        });
     }
 
     public void bind(String itemNumber, String itemDescription, String sectionName, boolean showSection, int inspectionId, int inspectionTypeId, int inspectionHistoryId) {

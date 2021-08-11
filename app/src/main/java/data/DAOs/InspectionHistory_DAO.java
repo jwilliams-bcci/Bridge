@@ -30,6 +30,9 @@ public interface InspectionHistory_DAO {
     @Query("UPDATE inspection_history_table SET is_reviewed = 1 WHERE id = :inspection_history_id")
     void updateIsReviewed(int inspection_history_id);
 
+    @Query("UPDATE inspection_history_table SET reviewed_status = :defect_status_id WHERE id = :inspection_history_id")
+    void updateReviewedStatus(int defect_status_id, int inspection_history_id);
+
     @Query("SELECT COUNT(*) FROM inspection_history_table WHERE inspection_id = :inspection_id AND is_reviewed = 0")
     int getItemsToReview(int inspection_id);
 }
