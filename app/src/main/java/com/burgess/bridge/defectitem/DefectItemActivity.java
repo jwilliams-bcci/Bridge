@@ -56,6 +56,7 @@ import java.util.Locale;
 
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
+import data.Tables.Inspection_Table;
 
 import static com.burgess.bridge.Constants.PREF;
 
@@ -97,6 +98,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private ImageView mImageViewThumbnail;
     private SharedPreferences mSharedPreferences;
     private Button mSaveInspectionDefect;
+    private Inspection_Table mInspection;
 
     // Fragments
     private LocationFragment mLocationFragment;
@@ -112,6 +114,7 @@ public class DefectItemActivity extends AppCompatActivity {
         setSupportActionBar(findViewById(R.id.defect_item_toolbar));
         checkPermission();
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
 
         Intent intent = getIntent();
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
@@ -133,12 +136,11 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemTextFault = findViewById(R.id.defect_item_text_fault);
         mSaveInspectionDefect = findViewById(R.id.defect_item_button_save);
         mButtonCancel = findViewById(R.id.defect_item_button_cancel);
+        mInspection = mDefectItemViewModel.getInspectionSync(mInspectionId);
 
         if (mDefectId == 1) {
             mRadioGroupDefectStatus.setVisibility(View.INVISIBLE);
         }
-
-        mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         mDefectItem = mDefectItemViewModel.getDefectItemSync(mDefectId);
 
         if (mInspectionDefectId > 0) {
@@ -369,7 +371,7 @@ public class DefectItemActivity extends AppCompatActivity {
             mDefectItemTextPreviousComment.setText(mDefectItemViewModel.getInspectionHistoryComment(mInspectionHistoryId));
         }
         displayDefectDetails(mDefectItemDetails);
-        fillSpinner(mSpinnerCannedComment);
+        fillSpinner(mInspection.inspection_class, mSpinnerCannedComment);
     }
 
     private void displayDefectDetails(TextView textDefectItemDetails) {
@@ -378,12 +380,20 @@ public class DefectItemActivity extends AppCompatActivity {
         textDefectItemDetails.append(mDefectItem.item_description);
     }
 
-    private void fillSpinner(Spinner spinnerCannedComments) {
-        mDefectItemViewModel.getCannedComments().observe(this, cannedComments -> {
-            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, cannedComments);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerCannedComments.setAdapter(adapter);
-        });
+    private void fillSpinner(int inspectionClass, Spinner spinnerCannedComments) {
+        if (inspectionClass == 7) {
+            mDefectItemViewModel.getEnergyCannedComments().observe(this, cannedComments -> {
+                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, cannedComments);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerCannedComments.setAdapter(adapter);
+            });
+        } else {
+            mDefectItemViewModel.getCannedComments().observe(this, cannedComments -> {
+                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, cannedComments);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinnerCannedComments.setAdapter(adapter);
+            });
+        }
     }
 
     private void checkPermission() {

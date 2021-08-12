@@ -18,6 +18,10 @@ public class CannedCommentRepository {
         mCannedCommentDao = db.mCannedCommentDao();
     }
 
+    public LiveData<List<String>> getEnergyCannedComments() {
+        return mCannedCommentDao.getEnergyCannedComments();
+    }
+
     public LiveData<List<String>> getCannedComments() {
         return mCannedCommentDao.getCannedComments();
     }

@@ -41,6 +41,10 @@ public class DefectItemViewModel extends AndroidViewModel {
         return mDefectItemRepository.getDefectItemSync(defect_item_id);
     }
 
+    public LiveData<List<String>> getEnergyCannedComments() {
+        return mCannedCommentRepository.getEnergyCannedComments();
+    }
+
     public LiveData<List<String>> getCannedComments() {
         return mCannedCommentRepository.getCannedComments();
     }
@@ -51,6 +55,10 @@ public class DefectItemViewModel extends AndroidViewModel {
 
     public LiveData<Inspection_Table> getInspection(int inspection_id) {
         return mInspectionRepository.getInspection(inspection_id);
+    }
+
+    public Inspection_Table getInspectionSync(int inspection_id) {
+        return mInspectionRepository.getInspectionSync(inspection_id);
     }
 
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {

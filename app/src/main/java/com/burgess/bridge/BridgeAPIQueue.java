@@ -132,8 +132,9 @@ public class BridgeAPIQueue {
                 try {
                     JSONObject obj = response.getJSONObject(i);
                     CannedComment_Table cannedComment = new CannedComment_Table();
-                    cannedComment.id = obj.optInt("CommentKey");
+                    cannedComment.id = i + 1;
                     cannedComment.text = obj.optString("Comment");
+                    cannedComment.isEnergy = obj.optInt("IsEnergy");
                     vm.insertCannedComment(cannedComment);
                 } catch (JSONException e) {
                     BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateCannedComments: " + e.getMessage());
@@ -290,6 +291,7 @@ public class BridgeAPIQueue {
                     inspection.inspector = obj.getString("Inspector");
                     inspection.community = obj.getString("Community");
                     inspection.community_id = obj.optInt("CommunityID");
+                    inspection.inspection_class = obj.optInt("InspectionClass");
                     inspection.city = obj.getString("City");
                     inspection.inspection_type_id = obj.optInt("InspectionTypeID");
                     inspection.inspection_type = obj.getString("InspectionType");

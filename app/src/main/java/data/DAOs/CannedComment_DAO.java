@@ -18,6 +18,9 @@ public interface CannedComment_DAO {
     @Query("DELETE FROM canned_comment_table")
     void deleteAll();
 
-    @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table ORDER BY text ASC")
+    @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table WHERE isEnergy = 0 ORDER BY text ASC")
     LiveData<List<String>> getCannedComments();
+
+    @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table WHERE isEnergy = 1 ORDER BY text ASC")
+    LiveData<List<String>> getEnergyCannedComments();
 }

@@ -8,4 +8,5 @@ public class CannedComment_Table {
     @PrimaryKey
     public int id;
     public String text;
+    public int isEnergy;
 }

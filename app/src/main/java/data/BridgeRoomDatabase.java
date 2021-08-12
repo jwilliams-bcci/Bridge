@@ -69,7 +69,7 @@ import data.Views.RouteSheet_View;
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 29, exportSchema = false)
+        }, version = 32, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -97,7 +97,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
                             .addCallback(sRoomDatabaseCallback)
                             .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()
-                            .createFromAsset("bridge_seed_database.db")
+                            //.createFromAsset("bridge_seed_database.db")
                             .build();
                 }
             }
