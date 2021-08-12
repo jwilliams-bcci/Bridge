@@ -88,10 +88,8 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-    private static RequestQueue queue;
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
-        queue = BridgeAPIQueue.getInstance(context).getRequestQueue();
         if (INSTANCE == null) {
             synchronized (BridgeRoomDatabase.class) {
                 if (INSTANCE == null) {
@@ -113,8 +111,6 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
             super.onCreate(db);
 
             databaseWriteExecutor.execute(() -> {
-                Direction_DAO directionDao = INSTANCE.mDirectionDao();
-                DefectItem_DAO defectItemDao = INSTANCE.mDefectItemDao();
             });
         }
     };

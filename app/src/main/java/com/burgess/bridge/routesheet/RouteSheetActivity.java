@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
 
-public class RouteSheetActivity extends BaseActivity implements OnDragListener {
+public class RouteSheetActivity extends AppCompatActivity implements OnDragListener {
     private RouteSheetViewModel mRouteSheetViewModel;
     private SharedPreferences mSharedPreferences;
     private ItemTouchHelper mItemTouchHelper;
@@ -81,7 +81,6 @@ public class RouteSheetActivity extends BaseActivity implements OnDragListener {
         mButtonUpdateRouteSheet.setOnClickListener(v -> {
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
             Snackbar.make(mConstraintLayout, "Route sheet updated.", Snackbar.LENGTH_SHORT).show();
-            updateInspectionsRemaining();
         });
 
         mButtonSendActivityLog.setOnClickListener(v -> {
