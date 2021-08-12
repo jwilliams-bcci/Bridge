@@ -20,6 +20,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
+import com.burgess.bridge.base.BaseActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
 
-public class RouteSheetActivity extends AppCompatActivity implements OnDragListener {
+public class RouteSheetActivity extends BaseActivity implements OnDragListener {
     private RouteSheetViewModel mRouteSheetViewModel;
     private SharedPreferences mSharedPreferences;
     private ItemTouchHelper mItemTouchHelper;
@@ -80,6 +81,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         mButtonUpdateRouteSheet.setOnClickListener(v -> {
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
             Snackbar.make(mConstraintLayout, "Route sheet updated.", Snackbar.LENGTH_SHORT).show();
+            updateInspectionsRemaining();
         });
 
         mButtonSendActivityLog.setOnClickListener(v -> {

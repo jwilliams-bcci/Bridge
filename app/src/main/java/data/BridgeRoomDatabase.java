@@ -88,8 +88,6 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-    private static final String roomUrl = "https://apistage.burgess-inc.com/api/Bridge/GetRooms";
-    private static final String TAG = "DATABASE";
     private static RequestQueue queue;
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
@@ -101,6 +99,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
                             .addCallback(sRoomDatabaseCallback)
                             .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()
+                            .createFromAsset("bridge_seed_database.db")
                             .build();
                 }
             }
@@ -108,14 +107,14 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+    private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
-            // If you want to keep data through app restarts, comment out the following block
             databaseWriteExecutor.execute(() -> {
                 Direction_DAO directionDao = INSTANCE.mDirectionDao();
+                DefectItem_DAO defectItemDao = INSTANCE.mDefectItemDao();
             });
         }
     };

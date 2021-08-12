@@ -304,6 +304,7 @@ public class DefectItemActivity extends AppCompatActivity {
                     mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
                     if (mInspectionHistoryId > 0) {
                         mDefectItemViewModel.updateIsReviewed(mInspectionHistoryId);
+                        mDefectItemViewModel.updateReviewedStatus(defectStatusId, mInspectionHistoryId);
                     }
                     Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
                     inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);

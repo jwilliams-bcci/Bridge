@@ -65,4 +65,8 @@ public class InspectionRepository {
     public void startInspection(Date start_time, int inspection_id) {
         mInspectionDao.startInspection(start_time, inspection_id);
     }
+
+    public int getIndividualRemainingInspections() {
+        return mInspectionDao.getIndividualRemainingInspections();
+    }
 }

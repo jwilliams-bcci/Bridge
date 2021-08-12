@@ -1,7 +1,9 @@
 package data.Tables;
 
 import androidx.room.Entity;
+import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
+import androidx.room.Update;
 
 @Entity(tableName = "defect_item_table")
 public class DefectItem_Table {

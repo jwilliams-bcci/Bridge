@@ -68,4 +68,8 @@ public class DefectItemViewModel extends AndroidViewModel {
     public void updateIsReviewed (int inspectionHistoryId) {
         mInspectionHistoryRepository.updateIsReviewed(inspectionHistoryId);
     }
+
+    public void updateReviewedStatus(int defectStatusId, int inspectionHistoryId) {
+        mInspectionHistoryRepository.updateReviewedStatus(defectStatusId, inspectionHistoryId);
+    }
 }

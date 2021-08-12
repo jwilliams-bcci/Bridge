@@ -49,4 +49,7 @@ public interface Inspection_DAO {
 
     @Query("UPDATE inspection_table SET start_time = :start_time WHERE id = :inspection_id")
     void startInspection(Date start_time, int inspection_id);
+
+    @Query("SELECT COUNT() FROM inspection_table WHERE is_complete = 0")
+    int getIndividualRemainingInspections();
 }
