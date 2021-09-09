@@ -17,7 +17,8 @@ public class Inspection_Table {
     public int id;
     public int inspection_type_id;
     @TypeConverters({DateConverter.class})
-    public Date inspection_date;
+    public OffsetDateTime inspection_date;
+    public int division_id;
     public int location_id;
     public String builder_name;
     public int builder_id;
@@ -41,9 +42,9 @@ public class Inspection_Table {
     public int incomplete_reason_id;
     public String notes;
     @TypeConverters({DateConverter.class})
-    public Date start_time;
+    public OffsetDateTime start_time;
     @TypeConverters({DateConverter.class})
-    public Date end_time;
+    public OffsetDateTime end_time;
     public boolean is_complete;
     public boolean is_uploaded;
     public int route_sheet_order;
@@ -52,18 +53,19 @@ public class Inspection_Table {
 
     }
 
-    public Inspection_Table(@NonNull int id, Date inspection_date, int location_id,
-                            String builder_name, int builder_id, String super_name,
+    public Inspection_Table(@NonNull int id, OffsetDateTime inspection_date, int division_id,
+                            int location_id, String builder_name, int builder_id, String super_name,
                             int inspector_id, String inspector, String community, int community_id,
                             int inspection_class, String city, int inspection_type_id,
                             String inspection_type, boolean reinspect, int inspection_order,
                             String address, int inspection_status_id, String inspection_status,
                             String super_phone, String super_email, int super_present,
                             String incomplete_reason, int incomplete_reason_id, String notes,
-                            Date start_time, Date end_time, boolean is_complete,
+                            OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
                             boolean is_uploaded, int route_sheet_order) {
         this.id = id;
         this.inspection_date = inspection_date;
+        this.division_id = division_id;
         this.builder_name = builder_name;
         this.builder_id = builder_id;
         this.super_name = super_name;

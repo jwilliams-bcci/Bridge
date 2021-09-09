@@ -1,4 +1,4 @@
-package com.burgess.bridge;
+package com.burgess.bridge.inspectiondetails;
 
 import android.app.Application;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 import data.Repositories.InspectionRepository;
@@ -23,7 +24,11 @@ public class InspectionDetailsViewModel extends AndroidViewModel {
         return mRepository.getInspection(inspectionId);
     }
 
-    public void startInspection(Date startTime, int inspectionId) {
+    public Inspection_Table getInspectionSync(int inspectionId) {
+        return mRepository.getInspectionSync(inspectionId);
+    }
+
+    public void startInspection(OffsetDateTime startTime, int inspectionId) {
         mRepository.startInspection(startTime, inspectionId);
     }
 }

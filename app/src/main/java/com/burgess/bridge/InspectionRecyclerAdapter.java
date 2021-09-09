@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.burgess.bridge.inspectiondetails.InspectionDetailsActivity;
+
 import java.util.List;
 
 import data.DataManager;
@@ -66,15 +69,10 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
             mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
             mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(mContext, InspectionDetailsActivity.class);
-                    intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
-                    intent.putExtra(InspectionDetailsActivity.BUILDER_ID, mBuilderId);
-                    intent.putExtra(InspectionDetailsActivity.LOCATION_ID, mLocationId);
-                    mContext.startActivity(intent);
-                }
+            itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(mContext, InspectionDetailsActivity.class);
+                intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
+                mContext.startActivity(intent);
             });
         }
     }

@@ -1,5 +1,7 @@
 package com.burgess.bridge.reviewandsubmit;
 
+import static com.burgess.bridge.Constants.PREF;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,8 @@ import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
@@ -50,6 +54,7 @@ import data.Enums.IncompleteReason;
 import data.Tables.Builder_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
+import data.Tables.MultifamilyDetails_Table;
 import data.Views.ReviewAndSubmit_View;
 
 public class ReviewAndSubmitActivity extends AppCompatActivity {
@@ -62,65 +67,113 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private int mInspectionId;
     private int mInspectionStatusId;
     private boolean mSupervisorPresent;
-    private boolean mStatusCorrect;
-    private boolean mIsReinspection;
     private LinearLayout mLockScreen;
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerInspectionDefects;
     private TextView mTextAddress;
     private ConstraintLayout mConstraintLayout;
+    private StringRequest mUploadMultifamilyDetailsRequest;
     private StringRequest mUploadInspectionDataRequest;
     private StringRequest mUpdateInspectionStatusRequest;
-    private String startTime;
-    private String endTime;
     private SharedPreferences mSharedPreferences;
     private String mSecurityUserId;
+    private int mDivisionId;
     private ItemTouchHelper mItemTouchHelper;
     private List<ReviewAndSubmit_View> mInspectionDefectList;
     private List<InspectionDefect_Table> mReinspectionRequiredDefectList;
+    private Button mButtonAttachFile;
+    private Button mButtonSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_and_submit);
         setSupportActionBar(findViewById(R.id.review_and_submit_toolbar));
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         mReviewAndSubmitViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
-        mInspectionStatusId = 12;
         mInspection = mReviewAndSubmitViewModel.getInspectionSync(mInspectionId);
-        mIsReinspection = mInspection.reinspect;
-        mTextAddress = findViewById(R.id.review_and_submit_text_address);
-        mSupervisorPresent = false;
-        mStatusCorrect = false;
-
-        mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mSecurityUserId = mSharedPreferences.getString(Constants.PREF_SECURITY_USER_ID, "NULL");
+        mDivisionId = mInspection.division_id;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        try {
-            startTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
-            endTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG, "Problem formatting date, yo");
-            e.printStackTrace();
-        }
+        initializeViews();
+        initializeButtonListeners();
+        initializeDisplayContent();
+    }
 
-
+    private void initializeViews() {
         mConstraintLayout = findViewById(R.id.review_and_submit_constraint_layout);
         mLockScreen = findViewById(R.id.review_and_submit_lock_screen);
         mProgressBar = findViewById(R.id.review_and_submit_progress_bar);
+        mTextAddress = findViewById(R.id.review_and_submit_text_address);
+        mButtonAttachFile = findViewById(R.id.review_and_submit_button_attach_file);
+        mButtonSubmit = findViewById(R.id.review_and_submit_button_submit);
         mRecyclerInspectionDefects = findViewById(R.id.review_and_submit_recycler_inspection_defects);
-        final ReviewAndSubmitListAdapter adapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
-        mRecyclerInspectionDefects.setAdapter(adapter);
+    }
+    private void initializeButtonListeners() {
+        mButtonAttachFile.setOnClickListener(v -> {
+            Snackbar.make(mConstraintLayout, "Attaching file...", Snackbar.LENGTH_SHORT).show();
+        });
+        mButtonSubmit.setOnClickListener(v -> {
+            mInspectionStatusId = getInspectionStatusId();
+            String statusMessage;
+            switch (mInspectionStatusId) {
+                case 11:
+                    statusMessage = "PASSED";
+                    break;
+                case 12:
+                    statusMessage = "FAILED";
+                    break;
+                case 26:
+                    statusMessage = "NO DEFICIENCIES OBSERVED";
+                    break;
+                case 25:
+                    statusMessage = "DEFICIENCIES OBSERVED";
+                    break;
+                default:
+                    statusMessage = "NA";
+                    break;
+            }
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Is the following resolution accurate?")
+                    .setMessage(statusMessage)
+                    .setPositiveButton("Yes", (dialogInterface, i) -> {
+                        try {
+                            completeInspection();
+                        } catch (JSONException e) {
+                            BridgeLogger.log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
+                        }
+                    })
+                    .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
+                    .show();
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Supervisor Present?")
+                    .setMessage("Was the supervisor present?")
+                    .setPositiveButton("Yes", (dialogInterface, i) -> mSupervisorPresent = true)
+                    .setNegativeButton("No", (dialogInterface, i) -> mSupervisorPresent = false)
+                    .show();
+        });
+    }
+    private void initializeDisplayContent() {
+        // Display address
+        mTextAddress.setText("");
+        mTextAddress.append(mInspection.community + "\n");
+        mTextAddress.append(mInspection.address + "\n");
+        mTextAddress.append(mInspection.inspection_type);
+
+        // Populate the recycler view of inspection defects
+        ReviewAndSubmitListAdapter reviewAndSubmitListAdapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
+        mRecyclerInspectionDefects.setAdapter(reviewAndSubmitListAdapter);
         mRecyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
         mInspectionDefectList = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
-        adapter.submitList(mInspectionDefectList);
+        reviewAndSubmitListAdapter.submitList(mInspectionDefectList);
 
-        displayAddress(mTextAddress);
-
-        if (!mIsReinspection) {
+        // If this is not a reinspection, set up the swipe functionality to remove an item
+        if (!mInspection.reinspect) {
             ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
                 @Override
@@ -137,51 +190,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
             touchHelper.attachToRecyclerView(mRecyclerInspectionDefects);
         }
-
-        Button buttonSubmit = findViewById(R.id.review_and_submit_button_submit);
-        buttonSubmit.setOnClickListener(v -> {
-            mInspectionStatusId = getInspectionStatusId();
-            String statusMessage;
-            switch (mInspectionStatusId) {
-                case 11:
-                    statusMessage = "PASSED";
-                    break;
-                case 12:
-                    statusMessage = "FAILED";
-                    break;
-                default:
-                    statusMessage = "NA";
-                    break;
-            }
-
-            new AlertDialog.Builder(this)
-                    .setTitle("Is the following resolution accurate?")
-                    .setMessage(statusMessage)
-                    .setPositiveButton("Yes", (dialogInterface, i) -> {
-                        mStatusCorrect = true;
-                        try {
-                            completeInspection();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    })
-                    .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
-                    .show();
-
-            new AlertDialog.Builder(this)
-                    .setTitle("Supervisor Present?")
-                    .setMessage("Was the supervisor present?")
-                    .setPositiveButton("Yes", (dialogInterface, i) -> mSupervisorPresent = true)
-                    .setNegativeButton("No", null)
-                    .show();
-        });
-    }
-
-    private void displayAddress(TextView textAddress) {
-        textAddress.setText("");
-        textAddress.append(mInspection.community + "\n");
-        textAddress.append(mInspection.address + "\n");
-        textAddress.append(mInspection.inspection_type);
     }
 
     private int getInspectionStatusId() {
@@ -189,21 +197,28 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         int builderId = mInspection.builder_id;
         Builder_Table builder = mReviewAndSubmitViewModel.getBuilder(builderId);
         boolean builderConditionalReinspect = builder.reinspection_required;
-        List<ReviewAndSubmit_View> list = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
 
-        if (list.isEmpty()) {
+        if (mInspectionDefectList.isEmpty()) {
             status = 11;
         } else {
-            List<ReviewAndSubmit_View> notAllCs = list.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
+            List<ReviewAndSubmit_View> notAllCs = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
             if (notAllCs.isEmpty()) {
                 status = 11;
             } else {
-                List<ReviewAndSubmit_View> reinspectionRequired = list.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
+                List<ReviewAndSubmit_View> reinspectionRequired = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
                 if (builderConditionalReinspect && reinspectionRequired.isEmpty()) {
                     status = 11;
                 } else {
                     status = 12;
                 }
+            }
+        }
+
+        if (mDivisionId == 20) {
+            if (status == 11) {
+                status = 26;
+            } else if (status == 12) {
+                status = 25;
             }
         }
         return status;
@@ -212,10 +227,54 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private void completeInspection() throws JSONException {
         showProgressSpinner();
         List<InspectionDefect_Table> inspectionDefects = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
+        String startTime = "";
+        String endTime = "";
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        try {
+            startTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
+            endTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            BridgeLogger.log('E', TAG, "ERROR in onCreate - " + e.getMessage());
+        }
+
+        if (mDivisionId == 20) {
+            JSONObject jObj = new JSONObject();
+            MultifamilyDetails_Table multifamilyDetails = mReviewAndSubmitViewModel.getMultifamilyDetails(mInspectionId);
+            jObj.put("InspectionId", multifamilyDetails.inspection_id);
+            jObj.put("BuilderPersonnel", multifamilyDetails.builder_personnel);
+            jObj.put("BurgessPersonnel", multifamilyDetails.burgess_personnel);
+            jObj.put("AreaObserved", multifamilyDetails.area_observed);
+            jObj.put("Temperature", multifamilyDetails.temperature);
+            jObj.put("WeatherConditions", multifamilyDetails.weather_conditions);
+            mUploadMultifamilyDetailsRequest = BridgeAPIQueue.getInstance().uploadMultifamilyDetails(jObj, mInspectionId, new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest");
+                }
+            });
+        }
 
         JSONObject jObj;
         InspectionDefect_Table defect;
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), startTime, endTime);
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), startTime, endTime, new ServerCallback() {
+            @Override
+            public void onSuccess(String message) {
+                if (mDivisionId == 20) {
+                    BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadMultifamilyDetailsRequest);
+                }
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+            }
+        });
         for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
             defect = inspectionDefects.get(lcv);
             jObj = new JSONObject();
@@ -240,18 +299,18 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             if (!defect.is_uploaded) {
                 mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(String message) {
                         mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
                         if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
                             BridgeLogger.log('I', TAG, "All defect items uploaded.");
                             mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
-                            BridgeLogger.log('I', TAG, "Timeout time updateInspectionStatus... " + mUpdateInspectionStatusRequest.getTimeoutMs() / 1000);
                             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
                         }
                     }
 
                     @Override
-                    public void onFailure() {
+                    public void onFailure(String message) {
+                        BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest");
                     }
                 });
                 BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
@@ -298,6 +357,13 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         });
     }
 
+    private void returnToRouteSheet() {
+        finish();
+        Intent routeSheetIntent = new Intent(ReviewAndSubmitActivity.this, RouteSheetActivity.class);
+        routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(routeSheetIntent);
+    }
+
     private void showProgressSpinner() {
         mProgressBar.setVisibility(View.VISIBLE);
         mLockScreen.setVisibility(View.VISIBLE);
@@ -307,12 +373,5 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
         mLockScreen.setVisibility(View.GONE);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
-
-    private void returnToRouteSheet() {
-        finish();
-        Intent routeSheetIntent = new Intent(ReviewAndSubmitActivity.this, RouteSheetActivity.class);
-        routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(routeSheetIntent);
     }
 }

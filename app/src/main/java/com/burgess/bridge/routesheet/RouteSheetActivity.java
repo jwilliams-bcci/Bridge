@@ -27,16 +27,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
+import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
 
 public class RouteSheetActivity extends AppCompatActivity implements OnDragListener {
     private RouteSheetViewModel mRouteSheetViewModel;
     private SharedPreferences mSharedPreferences;
     private ItemTouchHelper mItemTouchHelper;
-
     private static final String TAG = "ROUTE_SHEET";
     private JsonArrayRequest mUpdateRouteSheetRequest;
     private String mInspectorId;
-    private String mVersionName;
     private ConstraintLayout mConstraintLayout;
     private Button mButtonUpdateRouteSheet;
     private Button mButtonPrintRouteSheet;
@@ -48,25 +47,18 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_sheet);
         setSupportActionBar(findViewById(R.id.route_sheet_toolbar));
-
         mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
-
-        PackageInfo pInfo = null;
-        try {
-            pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        mVersionName = pInfo.versionName;
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
+        mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
         mInspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
 
         initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
-        mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(LocalDateTime.now()));
-        BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
+        if (mSharedPreferences.getBoolean(PREF_IS_ONLINE, false)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
+            mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(LocalDateTime.now()));
+            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
+        }
     }
 
     private void initializeViews() {
@@ -76,16 +68,15 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         mButtonSendActivityLog = findViewById(R.id.route_sheet_button_send_log);
         mRecyclerInspections = findViewById(R.id.route_sheet_list_inspections);
     }
-
     private void initializeButtonListeners() {
         mButtonUpdateRouteSheet.setOnClickListener(v -> {
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
-            Snackbar.make(mConstraintLayout, "Route sheet updated.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mConstraintLayout, "Route sheet updating.", Snackbar.LENGTH_SHORT).show();
         });
 
         mButtonSendActivityLog.setOnClickListener(v -> {
             Snackbar.make(mConstraintLayout, "Sending activity log...", Snackbar.LENGTH_SHORT).show();
-            Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, mVersionName);
+            Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, getVersionName());
             startActivity(Intent.createChooser(emailIntent, "Send activity log..."));
         });
 
@@ -93,23 +84,34 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             Snackbar.make(mConstraintLayout, "Printing route sheet not yet available.", Snackbar.LENGTH_SHORT).show();
         });
     }
-
     private void initializeDisplayContent() {
-        RouteSheetListAdapter routeSheetListAdapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
-        mRecyclerInspections.setAdapter(routeSheetListAdapter);
-        routeSheetListAdapter.setDragListener(this);
-        mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerInspections.getItemAnimator().setChangeDuration(0);
+        try {
+            RouteSheetListAdapter routeSheetListAdapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
+            mRecyclerInspections.setAdapter(routeSheetListAdapter);
+            routeSheetListAdapter.setDragListener(this);
+            mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
+            mRecyclerInspections.getItemAnimator().setChangeDuration(0);
+            mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId)).observe(this, inspections -> {
+                routeSheetListAdapter.submitList(inspections);
+                routeSheetListAdapter.setCurrentList(inspections);
+            });
 
-        mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
-        mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL"))).observe(this, inspections -> {
-            routeSheetListAdapter.submitList(inspections);
-            routeSheetListAdapter.setCurrentList(inspections);
-        });
+            ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(routeSheetListAdapter);
+            mItemTouchHelper = new ItemTouchHelper(callback);
+            mItemTouchHelper.attachToRecyclerView(mRecyclerInspections);
+        } catch (Exception e) {
+            BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
+        }
+    }
 
-        ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(routeSheetListAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerInspections);
+    private String getVersionName() {
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pInfo.versionName;
     }
 
     @Override

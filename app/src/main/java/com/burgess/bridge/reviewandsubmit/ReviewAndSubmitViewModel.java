@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import data.Repositories.BuilderRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionRepository;
+import data.Repositories.MultifamilyDetailsRepository;
 import data.Tables.Builder_Table;
+import data.Tables.MultifamilyDetails_Table;
 import data.Views.ReviewAndSubmit_View;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
@@ -23,6 +26,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
     private InspectionDefectRepository mInspectionDefectRepository;
     private InspectionRepository mInspectionRepository;
     private BuilderRepository mBuilderRepository;
+    private MultifamilyDetailsRepository mMultifamilyDetailsRepository;
 
     public ReviewAndSubmitViewModel(@NonNull Application application) {
         super(application);
@@ -30,6 +34,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         mInspectionDefectRepository = new InspectionDefectRepository(application);
         mInspectionRepository = new InspectionRepository(application);
         mBuilderRepository = new BuilderRepository(application);
+        mMultifamilyDetailsRepository = new MultifamilyDetailsRepository(application);
     }
 
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
@@ -64,7 +69,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         return mInspectionRepository.getInspectionSync(inspectionId);
     }
 
-    public void completeInspection(Date endTime, int inspectionId) {
+    public void completeInspection(OffsetDateTime endTime, int inspectionId) {
         mInspectionRepository.completeInspection(endTime, inspectionId);
     }
 
@@ -86,5 +91,9 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public Builder_Table getBuilder(int builderId) {
         return mBuilderRepository.getBuilder(builderId);
+    }
+
+    public MultifamilyDetails_Table getMultifamilyDetails(int inspectionId) {
+        return mMultifamilyDetailsRepository.getMultifamilyDetails(inspectionId);
     }
 }

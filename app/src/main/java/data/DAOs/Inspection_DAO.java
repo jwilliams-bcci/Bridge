@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface Inspection_DAO {
     @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
     LiveData<List<Inspection_Table>> getInspections(int inspector_id);
 
-    @Query("SELECT * FROM routesheet_view WHERE inspector_id = :inspector_id AND is_uploaded = 0 AND inspection_status_id = 2")
+    @Query("SELECT * FROM routesheet_view WHERE inspector_id = :inspector_id AND is_uploaded = 0 AND inspection_status_id = 2 AND date(inspection_date) = date() ORDER BY is_complete")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
@@ -39,7 +40,7 @@ public interface Inspection_DAO {
     boolean getReinspect(int inspection_id);
 
     @Query("UPDATE inspection_table SET is_complete = 1, end_time = :end_time WHERE id = :inspection_id")
-    void completeInspection(Date end_time, int inspection_id);
+    void completeInspection(OffsetDateTime end_time, int inspection_id);
 
     @Query("UPDATE inspection_table SET is_uploaded = 1 WHERE id = :inspection_id")
     void uploadInspection(int inspection_id);
@@ -48,7 +49,7 @@ public interface Inspection_DAO {
     void swapOrder(int inspection_id, int new_order);
 
     @Query("UPDATE inspection_table SET start_time = :start_time WHERE id = :inspection_id")
-    void startInspection(Date start_time, int inspection_id);
+    void startInspection(OffsetDateTime start_time, int inspection_id);
 
     @Query("SELECT COUNT() FROM inspection_table WHERE is_complete = 0")
     int getIndividualRemainingInspections();

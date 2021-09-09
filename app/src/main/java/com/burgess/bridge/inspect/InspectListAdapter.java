@@ -42,14 +42,13 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), DefectItemActivity.class);
             intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
-            intent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, holder.mInspectionTypeId);
             intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
             intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, holder.mInspectionHistoryId);
             holder.itemView.getContext().startActivity(intent);
         });
 
         holder.mDefectItemId = current.id;
-        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, -1);
+        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, -1, -1, "");
     }
 
     public void setInspectionId (int inspectionId) {

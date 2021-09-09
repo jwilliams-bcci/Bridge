@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import data.BridgeRoomDatabase;
 import data.DAOs.InspectionDefect_DAO;
@@ -43,10 +44,13 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getReinspectionRequiredDefects(inspection_id);
     }
 
-    public void insert(InspectionDefect_Table inspectionDefect) {
-        BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mInspectionDefectDao.insert(inspectionDefect);
-        });
+    public long insert(InspectionDefect_Table inspectionDefect) {
+        AtomicLong id = new AtomicLong();
+        return mInspectionDefectDao.insert(inspectionDefect);
+//        BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
+//            id.set(mInspectionDefectDao.insert(inspectionDefect));
+//        });
+//        return id.longValue();
     }
 
     public void updateInspectionDefect(InspectionDefect_Table inspectionDefect) {

@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import data.DbInsertCallback;
 import data.Repositories.CannedCommentRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
@@ -49,8 +50,8 @@ public class DefectItemViewModel extends AndroidViewModel {
         return mCannedCommentRepository.getCannedComments();
     }
 
-    public void insertInspectionDefect(InspectionDefect_Table inspectionDefect) {
-        mInspectionDefectRepository.insert(inspectionDefect);
+    public long insertInspectionDefect(InspectionDefect_Table inspectionDefect) {
+        return mInspectionDefectRepository.insert(inspectionDefect);
     }
 
     public LiveData<Inspection_Table> getInspection(int inspection_id) {
@@ -79,5 +80,9 @@ public class DefectItemViewModel extends AndroidViewModel {
 
     public void updateReviewedStatus(int defectStatusId, int inspectionHistoryId) {
         mInspectionHistoryRepository.updateReviewedStatus(defectStatusId, inspectionHistoryId);
+    }
+
+    public void updateInspectionDefectId(int inspectionDefectId, int inspectionHistoryId) {
+        mInspectionHistoryRepository.updateInspectionDefectId(inspectionDefectId, inspectionHistoryId);
     }
 }

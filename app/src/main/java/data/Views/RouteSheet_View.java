@@ -2,6 +2,7 @@ package data.Views;
 
 import androidx.room.DatabaseView;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @DatabaseView("SELECT i.id, i.inspector_id, i.inspection_type_id, i.inspection_status_id, i.reinspect, i.community, i.address, i.inspection_type, i.notes, i.inspection_date, i.is_complete, i.is_uploaded, SUM(CASE WHEN id.is_uploaded = 1 THEN 1 ELSE 0 END) AS num_uploaded, COUNT(id.id) AS num_total " +
@@ -17,7 +18,7 @@ public class RouteSheet_View {
     public String address;
     public String inspection_type;
     public String notes;
-    public Date inspection_date;
+    public OffsetDateTime inspection_date;
     public boolean is_complete;
     public boolean is_uploaded;
     public int num_uploaded;

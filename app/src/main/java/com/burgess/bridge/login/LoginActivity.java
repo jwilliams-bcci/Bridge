@@ -24,6 +24,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
@@ -52,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
     private JsonArrayRequest mUpdateBuildersRequest;
 
     private String mVersionName;
+    private String mUserName;
+    private String mPassword;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
         // Prepare Shared Preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
+        mEditor.putBoolean(PREF_IS_ONLINE, true);
+        mEditor.apply();
 
         // Set the text boxes to respond to "Return" on keyboard...
         mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
@@ -90,26 +95,24 @@ public class LoginActivity extends AppCompatActivity {
             mLockScreen.setVisibility(View.VISIBLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-            String userName = mTextUserName.getText().toString();
-            String password = mTextPassword.getText().toString();
+            mUserName = mTextUserName.getText().toString();
+            mPassword = mTextPassword.getText().toString();
 
             RequestQueue queue = BridgeAPIQueue.getInstance(LoginActivity.this).getRequestQueue();
 
-            mLoginRequest = BridgeAPIQueue.getInstance().loginUser(userName, password, new ServerCallback() {
+            mLoginRequest = BridgeAPIQueue.getInstance().loginUser(mUserName, mPassword, new ServerCallback() {
                 @Override
-                public void onSuccess() {
-                    Log.i(TAG, "loginRequest returned success");
+                public void onSuccess(String message) {
                     if (mCheckBoxKeepMeLoggedIn.isChecked()) {
                         mEditor.putBoolean(PREF_STAY_LOGGED_IN, true);
                         mEditor.apply();
                     }
-                    Log.i(TAG, "Sending request for CannedComments...");
                     queue.add(mUpdateCannedCommentsRequest);
                 }
 
                 @Override
-                public void onFailure() {
-                    Snackbar.make(mConstraintLayout, "Error in login! Email support", Snackbar.LENGTH_LONG).show();
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
                     mProgressBar.setVisibility(View.GONE);
                     mLockScreen.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -117,15 +120,23 @@ public class LoginActivity extends AppCompatActivity {
             });
             mUpdateCannedCommentsRequest = BridgeAPIQueue.getInstance().updateCannedComments(mLoginViewModel, new ServerCallback() {
                 @Override
-                public void onSuccess() {
-                    Log.i(TAG, "updateCannedComments returned success");
-                    Log.i(TAG, "Sending request for DefectItems...");
+                public void onSuccess(String message) {
                     queue.add(mUpdateDefectItemsRequest);
                 }
 
                 @Override
-                public void onFailure() {
-                    Log.e(TAG, "updateCannedComments returned failure");
+                public void onFailure(String message) {
+                    if (message.equals("No connection! Working offline...")) {
+                        if (checkSavedLogin()) {
+                            Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                            Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
+                            startActivity(routeSheetIntent);
+                        } else {
+                            Snackbar.make(mConstraintLayout, "Authentication error! Please try again.", Snackbar.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                    }
                     mProgressBar.setVisibility(View.GONE);
                     mLockScreen.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -133,15 +144,13 @@ public class LoginActivity extends AppCompatActivity {
             });
             mUpdateDefectItemsRequest = BridgeAPIQueue.getInstance().updateDefectItems(mLoginViewModel, new ServerCallback() {
                 @Override
-                public void onSuccess() {
-                    Log.i(TAG, "updateDefectItems returned success");
-                    Log.i(TAG, "Sending request for DIIT...");
+                public void onSuccess(String message) {
                     queue.add(mUpdateDIITReferenceRequest);
                 }
 
                 @Override
-                public void onFailure() {
-                    Log.i(TAG, "updateDefectItems returned failure");
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
                     mProgressBar.setVisibility(View.GONE);
                     mLockScreen.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -149,14 +158,13 @@ public class LoginActivity extends AppCompatActivity {
             });
             mUpdateDIITReferenceRequest = BridgeAPIQueue.getInstance().updateDefectItem_InspectionTypeXRef(mLoginViewModel, new ServerCallback() {
                 @Override
-                public void onSuccess() {
-                    Log.i(TAG, "updateDefectItem_InspectionTypeXRef returned success");
+                public void onSuccess(String message) {
                     queue.add(mUpdateBuildersRequest);
                 }
 
                 @Override
-                public void onFailure() {
-                    Log.i(TAG, "updateDefectItem_InspectionTypeXRef returned failure");
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
                     mProgressBar.setVisibility(View.GONE);
                     mLockScreen.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
@@ -164,8 +172,7 @@ public class LoginActivity extends AppCompatActivity {
             });
             mUpdateBuildersRequest = BridgeAPIQueue.getInstance().updateBuilders(mLoginViewModel, new ServerCallback() {
                 @Override
-                public void onSuccess() {
-                    Log.i(TAG, "updateBuilders returned success");
+                public void onSuccess(String message) {
                     Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
                     startActivity(routeSheetIntent);
                     mProgressBar.setVisibility(View.GONE);
@@ -174,15 +181,22 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure() {
-                    Log.i(TAG, "updateBuilders returned failure");
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
                     mProgressBar.setVisibility(View.GONE);
                     mLockScreen.setVisibility(View.GONE);
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 }
             });
 
-            queue.add(mLoginRequest);
+            long tokenAge = mSharedPreferences.getLong(PREF_AUTH_TOKEN_AGE, 0);
+            if (tokenAge > System.currentTimeMillis() - (60 * 60 * 12 * 1000)) {
+                BridgeLogger.log('I', TAG, "Token is younger than 12 hours");
+                queue.add(mUpdateCannedCommentsRequest);
+            } else {
+                BridgeLogger.log('I', TAG, "Token is older than 12 hours, getting new one...");
+                queue.add(mLoginRequest);
+            }
         });
     }
 
@@ -195,5 +209,11 @@ public class LoginActivity extends AppCompatActivity {
         mConstraintLayout = findViewById(R.id.login_constraint_layout);
         mLockScreen = findViewById(R.id.login_lock_screen);
         mProgressBar = findViewById(R.id.login_progress_bar);
+    }
+
+    private boolean checkSavedLogin() {
+        String savedUsername = mSharedPreferences.getString(PREF_LOGIN_NAME, null);
+        String savedPassword = mSharedPreferences.getString(PREF_LOGIN_PASSWORD, null);
+        return mUserName.equalsIgnoreCase(savedUsername) && mPassword.equals(savedPassword);
     }
 }

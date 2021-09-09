@@ -21,16 +21,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,23 +45,16 @@ import static com.burgess.bridge.Constants.PREF;
 
 public class InspectActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
-    public static final String INSPECTION_TYPE_ID = "com.burgess.bridge.INSPECTION_TYPE_ID";
-    public static final String LOCATION_ID = "com.burgess.bridge.LOCATION_ID";
-    public static final String INSPECTION_HISTORY_ID = "com.burgess.bridge.INSPECTION_HISTORY_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
-    public static final int INSPECTION_TYPE_ID_NOT_FOUND = -1;
-    public static final int LOCATION_ID_NOT_FOUND = -1;
-    public static final int INSPECTION_HISTORY_ID_NOT_FOUND = -1;
     public static final String TAG = "INSPECT";
 
     public int mInspectionId;
-    private int mLocationId;
     public int mInspectionTypeId;
     public boolean mReinspection;
+    private ConstraintLayout mConstraintLayout;
     private Spinner mSpinnerDefectCategories;
     private InspectViewModel mInspectViewModel;
-    private SharedPreferences mSharedPreferences;
-    private LiveData<Inspection_Table> mInspection;
+    private Inspection_Table mInspection;
     private Button mButtonSaveAndExit;
     private Button mButtonSortItemNumber;
     private Button mButtonSortDescription;
@@ -65,54 +62,52 @@ public class InspectActivity extends AppCompatActivity {
     private RecyclerView mRecyclerDefectItems;
     private InspectListAdapter mInspectListAdapter;
     private ReinspectListAdapter mReinspectListAdapter;
-    private AddNoteFragment mAddNoteFragment;
+    private TextView mTextAddress;
+    private Button mButtonReviewAndSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inspect);
         setSupportActionBar(findViewById(R.id.inspect_toolbar));
-        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
 
         Intent intent = getIntent();
-        TextView textAddress = findViewById(R.id.inspect_text_inspection_address);
-
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
-        mInspectionTypeId = intent.getIntExtra(INSPECTION_TYPE_ID, INSPECTION_ID_NOT_FOUND);
-        mLocationId = intent.getIntExtra(LOCATION_ID, LOCATION_ID_NOT_FOUND);
-        mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
-        mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
-        mInspection = mInspectViewModel.getInspection(mInspectionId);
+        mInspection = mInspectViewModel.getInspectionSync(mInspectionId);
         mReinspection = mInspectViewModel.getReinspect(mInspectionId);
+        mInspectionTypeId = mInspection.inspection_type_id;
+
+        initializeViews();
+        initializeButtonListeners();
+        initializeDisplayContent();
+    }
+
+    private void initializeViews() {
+        mConstraintLayout = findViewById(R.id.inspect_constraint_layout);
+        mTextAddress = findViewById(R.id.inspect_text_inspection_address);
+        mButtonAddNote = findViewById(R.id.inspect_button_add_note);
         mButtonSaveAndExit = findViewById(R.id.inspect_button_save_and_exit);
+        mButtonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
+        mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
         mButtonSortItemNumber = findViewById(R.id.inspect_button_sort_by_defect_number);
         mButtonSortDescription = findViewById(R.id.inspect_button_sort_by_description);
-        mButtonAddNote = findViewById(R.id.inspect_button_add_note);
         mRecyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
-
-        displayAddress(textAddress);
-        fillSpinner(mSpinnerDefectCategories);
-
-        if (mReinspection) {
-            Log.i(TAG, "Going into reinspect list adapter...");
-            mRecyclerDefectItems.setItemViewCacheSize(300);
-            mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.InspectDiff());
-            mReinspectListAdapter.setInspectionId(mInspectionId);
-            mReinspectListAdapter.setInspectionTypeId(mInspectionTypeId);
-            mRecyclerDefectItems.setAdapter(mReinspectListAdapter);
-            displayReinspectItems("ALL");
-        } else {
-            Log.i(TAG, "Going into new inspection list adapter...");
-            mInspectListAdapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
-            mInspectListAdapter.setInspectionId(mInspectionId);
-            mInspectListAdapter.setInspectionTypeId(mInspectionTypeId);
-            mRecyclerDefectItems.setAdapter(mInspectListAdapter);
-            displayDefectItems("ALL");
-        }
-        mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
-
-        Button buttonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
-        buttonReviewAndSubmit.setOnClickListener(v -> {
+    }
+    private void initializeButtonListeners() {
+        mButtonAddNote.setOnClickListener(v -> {
+            Intent defectItemIntent = new Intent(this, DefectItemActivity.class);
+            defectItemIntent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
+            defectItemIntent.putExtra(DefectItemActivity.DEFECT_ID, 1);
+            startActivity(defectItemIntent);
+        });
+        mButtonSaveAndExit.setOnClickListener(v -> {
+            finish();
+            Intent routeSheetIntent = new Intent(InspectActivity.this, RouteSheetActivity.class);
+            routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(routeSheetIntent);
+        });
+        mButtonReviewAndSubmit.setOnClickListener(v -> {
             boolean allGood;
             int numberToReview = mInspectViewModel.getItemsToReview(mInspectionId);
             if (mReinspection) {
@@ -126,113 +121,52 @@ public class InspectActivity extends AppCompatActivity {
                 reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
                 startActivity(reviewAndSubmitIntent);
             } else {
-                Toast.makeText(this, "Please review all items.", Toast.LENGTH_LONG).show();
+                Snackbar.make(mConstraintLayout, "Please review all items", Snackbar.LENGTH_LONG).show();
             }
         });
-
-        mButtonSaveAndExit.setOnClickListener(v -> {
-            finish();
-            Intent routeSheetIntent = new Intent(InspectActivity.this, RouteSheetActivity.class);
-            routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(routeSheetIntent);
-        });
-
-        if (mReinspection) {
-            mButtonSortDescription.setVisibility(View.INVISIBLE);
-            mButtonSortItemNumber.setVisibility(View.INVISIBLE);
-        }
         mButtonSortItemNumber.setOnClickListener(v -> {
             mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
                     mInspectListAdapter.submitList(defectItems));
         });
-
         mButtonSortDescription.setOnClickListener(v -> {
             mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
                     mInspectListAdapter.submitList(defectItems));
         });
-
-        mButtonAddNote.setOnClickListener(v -> {
-            Intent defectItemIntent = new Intent(this, DefectItemActivity.class);
-            defectItemIntent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
-            defectItemIntent.putExtra(DefectItemActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
-            defectItemIntent.putExtra(DefectItemActivity.DEFECT_ID, 1);
-            startActivity(defectItemIntent);
-        });
+    }
+    private void initializeDisplayContent() {
+        // Set address label
+        mTextAddress.setText("");
+        mTextAddress.append(mInspection.community + "\n");
+        mTextAddress.append(mInspection.address + "\n");
+        mTextAddress.append(mInspection.inspection_type);
 
         if (mReinspection) {
-            ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-                @Override
-                public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
-                    return false;
-                }
-
-                @Override
-                public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    InspectViewHolder holder = (InspectViewHolder) viewHolder;
-                    final int selectedHistoryId = holder.mInspectionHistoryId;
-                    final int selectedDefectItemId = holder.mDefectItemId;
-
-                    switch (direction) {
-                        case ItemTouchHelper.LEFT:
-                            Toast.makeText(getApplicationContext(), "Swiped left DefectItemID:" + selectedHistoryId, Toast.LENGTH_SHORT).show();
-                            InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, "", selectedHistoryId, false, null);
-                            mInspectViewModel.insertNewFailedDefectItem(newFailedDefect);
-                            mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
-                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
-                            break;
-                        case ItemTouchHelper.RIGHT:
-                            Toast.makeText(getApplicationContext(), "Swiped right DefectItemID:" + selectedHistoryId, Toast.LENGTH_SHORT).show();
-                            InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, "", selectedHistoryId, false, null);
-                            mInspectViewModel.insertNewCompleteDefectItem(newCompleteDefect);
-                            mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
-                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
-                            break;
-                    }
-                    //holder.notifyAll();
-                    mReinspectListAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public int getSwipeDirs(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
-                    return super.getSwipeDirs(recyclerView, viewHolder);
-                }
-
-                @Override
-                public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                    View itemView = viewHolder.itemView;
-                    if (dX > 0) {
-                        
-                    }
-                }
-            };
-            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
-            itemTouchHelper.attachToRecyclerView(mRecyclerDefectItems);
+            initializeReinspectDisplayContent();
+        } else {
+            // Set up defect list
+            mInspectListAdapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
+            mInspectListAdapter.setInspectionId(mInspectionId);
+            mInspectListAdapter.setInspectionTypeId(mInspectionTypeId);
+            mRecyclerDefectItems.setAdapter(mInspectListAdapter);
+            displayDefectItems("ALL");
         }
+        mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
+
+        fillSpinner();
     }
 
-    private void displayAddress(TextView textAddress) {
-        textAddress.setText("");
-        mInspection.observe(this, inspection -> {
-            textAddress.append(inspection.community + "\n");
-            textAddress.append(inspection.address + "\n");
-            textAddress.append(inspection.inspection_type);
-        });
-    }
-
-    private void fillSpinner(Spinner spinnerDefectCategories) {
+    private void fillSpinner() {
         mInspectViewModel.getDefectCategories(mInspectionTypeId).observe(this, defectCategories -> {
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, defectCategories);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinnerDefectCategories.setAdapter(adapter);
+            mSpinnerDefectCategories.setAdapter(adapter);
         });
 
-        spinnerDefectCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpinnerDefectCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mReinspection) {
-                    displayReinspectItems(parent.getSelectedItem().toString());
+                    displayReinspectItems();
                 } else {
                     displayDefectItems(parent.getSelectedItem().toString());
                 }
@@ -250,8 +184,90 @@ public class InspectActivity extends AppCompatActivity {
                 mInspectListAdapter.submitList(defectItems));
     }
 
-    private void displayReinspectItems(String filter) {
+    private void displayReinspectItems() {
         mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems ->
                 mReinspectListAdapter.submitList(defectItems));
+    }
+
+    private void initializeReinspectDisplayContent() {
+        // Hide sort buttons
+        mButtonSortDescription.setVisibility(View.INVISIBLE);
+        mButtonSortItemNumber.setVisibility(View.INVISIBLE);
+
+        // Set up the defect list
+        mRecyclerDefectItems.setItemViewCacheSize(300);
+        mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.InspectDiff());
+        mReinspectListAdapter.setInspectionId(mInspectionId);
+        mReinspectListAdapter.setInspectionTypeId(mInspectionTypeId);
+        mRecyclerDefectItems.setAdapter(mReinspectListAdapter);
+        displayReinspectItems();
+
+        // Add swipe functionality to defect item list
+        ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                InspectViewHolder holder = (InspectViewHolder) viewHolder;
+                final int selectedHistoryId = holder.mInspectionHistoryId;
+                final int selectedDefectItemId = holder.mDefectItemId;
+                final int selectedInspectionDefectId = holder.mInspectionDefectId;
+                final String selectedComment = holder.mComment;
+                final long newId;
+
+                switch (direction) {
+                    case ItemTouchHelper.LEFT:
+                        BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as NC using swipe.");
+                        if (selectedInspectionDefectId > 0) {
+                            InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
+                            inspectionDefectToUpdate.defect_status_id = 2;
+                            mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
+                            mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
+                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                            mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
+                        } else {
+                            InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, selectedComment, selectedHistoryId, false, null);
+                            newId = mInspectViewModel.insertInspectionDefect(newFailedDefect);
+                            mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
+                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                            mInspectViewModel.updateInspectionDefectId((int) newId, selectedHistoryId);
+                        }
+                        break;
+                    case ItemTouchHelper.RIGHT:
+                        BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as C using swipe.");
+                        if (selectedInspectionDefectId > 0) {
+                            InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
+                            inspectionDefectToUpdate.defect_status_id = 3;
+                            mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
+                            mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
+                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                            mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
+                        } else {
+                            InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, selectedComment, selectedHistoryId, false, null);
+                            newId = mInspectViewModel.insertInspectionDefect(newCompleteDefect);
+                            mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
+                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                            mInspectViewModel.updateInspectionDefectId((int) newId, selectedHistoryId);
+                        }
+                        break;
+                }
+                mReinspectListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public int getSwipeDirs(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder) {
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
+        itemTouchHelper.attachToRecyclerView(mRecyclerDefectItems);
     }
 }

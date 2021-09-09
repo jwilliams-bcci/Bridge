@@ -1,5 +1,6 @@
 package com.burgess.bridge.reviewandsubmit;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.burgess.bridge.R;
+import com.burgess.bridge.defectitem.DefectItemActivity;
 
 import data.Views.ReviewAndSubmit_View;
 
@@ -32,7 +34,15 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
         if (current.picture_path != null) {
             showThumbnail = true;
         }
-        holder.bind(current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, showThumbnail);
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), DefectItemActivity.class);
+            intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
+            intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
+            intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, holder.mInspectionDefectId);
+            v.getContext().startActivity(intent);
+        });
+
+        holder.bind(current.inspection_id, current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, showThumbnail);
     }
 
     public static class ReviewAndSubmitDiff extends DiffUtil.ItemCallback<ReviewAndSubmit_View> {

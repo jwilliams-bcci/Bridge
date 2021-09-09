@@ -15,7 +15,7 @@ import data.Tables.InspectionDefect_Table;
 @Dao
 public interface InspectionDefect_DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(InspectionDefect_Table inspectionDefect);
+    long insert(InspectionDefect_Table inspectionDefect);
 
     @Update
     void update(InspectionDefect_Table inspectionDefect);

@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import data.DbInsertCallback;
+import data.InspectionDefect;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
@@ -59,12 +61,12 @@ public class InspectViewModel extends AndroidViewModel {
         return mInspectionRepository.getInspection(inspection_id);
     }
 
-    public boolean getReinspect(int inspection_id) {
-        return mInspectionRepository.getReinspect(inspection_id);
+    public Inspection_Table getInspectionSync(int inspection_id) {
+        return mInspectionRepository.getInspectionSync(inspection_id);
     }
 
-    public LiveData<Integer> getInspectionTypeId(int inspection_id) {
-        return mInspectionRepository.getInspectionTypeId(inspection_id);
+    public boolean getReinspect(int inspection_id) {
+        return mInspectionRepository.getReinspect(inspection_id);
     }
 
     public int getItemsToReview(int inspectionId) {
@@ -79,11 +81,19 @@ public class InspectViewModel extends AndroidViewModel {
         mInspectionHistoryRepository.updateReviewedStatus(defectStatusId, inspectionHistoryId);
     }
 
-    public void insertNewFailedDefectItem(InspectionDefect_Table defectItem) {
-        mInspectionDefectRepository.insert(defectItem);
+    public long insertInspectionDefect(InspectionDefect_Table inspectionDefect) {
+        return mInspectionDefectRepository.insert(inspectionDefect);
     }
 
-    public void insertNewCompleteDefectItem(InspectionDefect_Table defectItem) {
-        mInspectionDefectRepository.insert(defectItem);
+    public void updateInspectionDefectId(int inspectionDefectId, int inspectionHistoryId) {
+        mInspectionHistoryRepository.updateInspectionDefectId(inspectionDefectId, inspectionHistoryId);
+    }
+
+    public void updateInspectionDefect(InspectionDefect_Table inspectionDefect) {
+        mInspectionDefectRepository.updateInspectionDefect(inspectionDefect);
+    }
+
+    public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
+        return mInspectionDefectRepository.getInspectionDefect(inspectionDefectId);
     }
 }

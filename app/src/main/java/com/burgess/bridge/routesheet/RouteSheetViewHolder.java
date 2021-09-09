@@ -2,9 +2,7 @@ package com.burgess.bridge.routesheet;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,22 +13,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.bridge.BridgeLogger;
-import com.burgess.bridge.InspectionDetailsActivity;
+import com.burgess.bridge.inspectiondetails.InspectionDetailsActivity;
 import com.burgess.bridge.R;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
-
-import java.util.List;
-
-import data.Repositories.InspectionDefectRepository;
-import data.Tables.InspectionDefect_Table;
 
 public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public static final String TAG = "ROUTE_SHEET";
 
     public int mInspectionId;
     public int mInspectionTypeId;
-    public int mBuilderName;
-    public String mInspectionAddress;
     public boolean isComplete;
     public boolean isReinspection;
     public int numberUploaded;
@@ -59,7 +50,6 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
             if (!isComplete) {
                 Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
                 intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
-                intent.putExtra(InspectionDetailsActivity.INSPECTION_TYPE_ID, mInspectionTypeId);
                 v.getContext().startActivity(intent);
             } else {
                 Toast.makeText(itemView.getContext(), "Cannot edit inspections while uploading!", Toast.LENGTH_LONG).show();

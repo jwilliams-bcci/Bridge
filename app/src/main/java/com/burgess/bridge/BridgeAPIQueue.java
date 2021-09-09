@@ -5,11 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Network;
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
@@ -24,9 +27,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,7 +52,11 @@ import data.Tables.Inspection_Table;
 import static com.burgess.bridge.Constants.API_PROD_URL;
 import static com.burgess.bridge.Constants.API_STAGE_URL;
 import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
+import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN_AGE;
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
+import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
+import static com.burgess.bridge.Constants.PREF_LOGIN_NAME;
+import static com.burgess.bridge.Constants.PREF_LOGIN_PASSWORD;
 import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
 
 public class BridgeAPIQueue {
@@ -65,13 +77,14 @@ public class BridgeAPIQueue {
     private static final String GET_BUILDERS_URL = "GetBuilders";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String POST_MULTIFAMILY_DETAILS_URL = "InsertMultifamilyDetails";
     private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
     private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s&UserId=%s&InspectionTotal=%s&SuperPresent=%s&StartTime=%s&EndTime=%s";
 
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = false;
+        isProd = true;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -100,34 +113,52 @@ public class BridgeAPIQueue {
         return queue;
     }
 
+    public boolean isProd() {
+        return isProd;
+    }
+
     // Login
     public JsonObjectRequest loginUser(String userName, String password, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url +=  String.format(LOGIN_URL, userName, password);
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for loginUser: " + url);
+        BridgeLogger.getInstance(ctx).log('I', TAG, "Application is currently in: " + (isProd ? "PRODUCTION" : "STAGING"));
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            mEditor.putBoolean(PREF_IS_ONLINE, true);
             mEditor.putString(PREF_AUTH_TOKEN, response.optString("AuthorizationToken"));
             mEditor.putString(PREF_SECURITY_USER_ID, response.optString("SecurityUserId"));
             mEditor.putString(PREF_INSPECTOR_ID, response.optString("InspectorId"));
+            mEditor.putString(PREF_LOGIN_NAME, userName);
+            mEditor.putString(PREF_LOGIN_PASSWORD, password);
+            mEditor.putLong(PREF_AUTH_TOKEN_AGE, System.currentTimeMillis());
             mEditor.apply();
             BridgeLogger.getInstance(ctx).log('I', TAG, "PREF_AUTH_TOKEN set to: " + response.optString("AuthorizationToken"));
             BridgeLogger.getInstance(ctx).log('I', TAG, "PREF_SECURITY_USER_ID set to: " + response.optString("SecurityUserId"));
             BridgeLogger.getInstance(ctx).log('I', TAG, "PREF_INSPECTOR_ID set to: " + response.optString("InspectorId"));
-            callback.onSuccess();
+            callback.onSuccess("Success");
         }, error -> {
-            String errorMessage = new String(error.networkResponse.data);
-            BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in loginUser: " + errorMessage);
-            callback.onFailure();
+            if (error instanceof NoConnectionError) {
+                mEditor.putBoolean(PREF_IS_ONLINE, false);
+                mEditor.apply();
+                BridgeLogger.getInstance(ctx).log('I', TAG, "No connection, security token expired.");
+                callback.onFailure("No connection and security token expired! Please try again when network is available.");
+            } else if (error instanceof AuthFailureError) {
+                BridgeLogger.getInstance(ctx).log('E', TAG, "Authentication error.");
+                callback.onFailure("Authentication error! Please try again.");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in loginUser: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
         });
         return request;
     }
     public JsonArrayRequest updateCannedComments(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_CANNED_COMMENTS_URL;
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateCannedComments: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            mEditor.putBoolean(PREF_IS_ONLINE, true);
             for (int i = 0; i < response.length(); i++) {
                 try {
                     JSONObject obj = response.getJSONObject(i);
@@ -141,11 +172,18 @@ public class BridgeAPIQueue {
                 }
             }
             BridgeLogger.getInstance(ctx).log('I', TAG, "Canned Comments downloaded");
-            callback.onSuccess();
+            callback.onSuccess("Success");
         }, error -> {
-            String errorMessage = new String(error.networkResponse.data);
-            BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateCannedComments: " + errorMessage);
-            callback.onFailure();
+            if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                mEditor.putBoolean(PREF_IS_ONLINE, false);
+                mEditor.apply();
+                BridgeLogger.getInstance(ctx).log('I', TAG, "No connection, working in offline mode.");
+                callback.onFailure("No connection! Working offline...");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateCannedComments: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -159,7 +197,6 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateDefectItems(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_DEFECT_ITEMS_URL;
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateDefectItems: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
@@ -182,11 +219,11 @@ public class BridgeAPIQueue {
                 }
             }
             Log.i(TAG, "Defect Items downloaded");
-            callback.onSuccess();
+            callback.onSuccess("Success");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateDefectItems: " + errorMessage);
-            callback.onFailure();
+            callback.onFailure("Error! Please contact support.");
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -200,7 +237,6 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateDefectItem_InspectionTypeXRef(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_URL;
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateDefectItem_InspectionTypeXRef: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
@@ -216,11 +252,11 @@ public class BridgeAPIQueue {
                 }
             }
             Log.i(TAG, "DefectItem_InspectionType references downloaded");
-            callback.onSuccess();
+            callback.onSuccess("Success");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateDIIT: " + errorMessage);
-            callback.onFailure();
+            callback.onFailure("Error! Please contact support");
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -234,7 +270,6 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateBuilders(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_BUILDERS_URL;
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateBuilders: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
@@ -251,11 +286,11 @@ public class BridgeAPIQueue {
                 }
             }
             Log.i(TAG, "Builders downloaded");
-            callback.onSuccess();
+            callback.onSuccess("Success");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateBuilders: " + errorMessage);
-            callback.onFailure();
+            callback.onFailure("Error! Please contact support.");
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -271,10 +306,9 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateRouteSheet(RouteSheetViewModel vm, String inspectorId, String inspectionDate) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_INSPECTIONS_URL, inspectorId, inspectionDate);
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateRouteSheet: " + url);
 
         ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
-        DateFormat format = new SimpleDateFormat("MM-dd-YYYY", Locale.ENGLISH);
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
@@ -282,7 +316,8 @@ public class BridgeAPIQueue {
                     JSONObject obj = response.getJSONObject(i);
                     Inspection_Table inspection = new Inspection_Table();
                     inspection.id = obj.optInt("InspectionID");
-                    inspection.inspection_date = format.parse(obj.getString("InspectionDate"));
+                    inspection.inspection_date = OffsetDateTime.parse(obj.optString("InspectionDate"));
+                    inspection.division_id = obj.optInt("DivisionID");
                     inspection.location_id = obj.optInt("LocationID");
                     inspection.builder_name = obj.getString("BuilderName");
                     inspection.builder_id = obj.optInt("BuilderID");
@@ -316,7 +351,7 @@ public class BridgeAPIQueue {
                         inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
                     }
                     vm.insertInspection(inspection);
-                } catch (JSONException | ParseException e) {
+                } catch (JSONException e) {
                     BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateRouteSheet: " + e.getMessage());
                 }
             }
@@ -340,7 +375,6 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateInspectionHistory(RouteSheetViewModel vm, int inspectionId, int inspectionOrder, int inspectionTypeId, int locationId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_INSPECTION_HISTORY_URL, inspectionOrder, inspectionTypeId, locationId);
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateInspectionHistory: " + url);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {
@@ -358,13 +392,12 @@ public class BridgeAPIQueue {
                     hist.comment = obj.optString("Comment");
                     hist.is_reviewed = false;
                     hist.reviewed_status = null;
+                    hist.inspection_defect_id = -1;
                     vm.insertInspectionHistory(hist);
                 } catch (JSONException e) {
-                    Log.e(TAG, "ERROR - updateInspectionHistory: " + e.getMessage());
                     BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateInspectionHistory: " + e.getMessage());
                 }
             }
-            Log.i(TAG, "Inspection Histories downloaded");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateInspectionHistory: " + errorMessage);
@@ -380,18 +413,60 @@ public class BridgeAPIQueue {
     }
 
     // Review & Submit
+    public StringRequest uploadMultifamilyDetails(JSONObject multifamilyDetails, int inspectionId, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += POST_MULTIFAMILY_DETAILS_URL;
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            BridgeLogger.getInstance(ctx).log('I', TAG, "Uploaded Multifamily Details for InspectionID " + inspectionId + ".");
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof  TimeoutError || error instanceof NoConnectionError) {
+                BridgeLogger.getInstance(ctx).log('I', TAG, "No connection, skipping upload for Multifamily Details");
+                callback.onFailure("No connection! Please attempt to upload when the network is available");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in uploadMultifamilyDetails: " + errorMessage);
+                callback.onFailure("Error! Please send error log.");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+
+            @Override
+            public byte[] getBody() {
+                return multifamilyDetails.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
     public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += POST_INSPECTION_DEFECT_URL;
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for ID:" + defectItemId + " for InspectionID:" + inspectionId + " uploadInspectionDefect: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            BridgeLogger.getInstance(ctx).log('I', TAG, "Uploaded defect " + defectItemId + " for inspection " + inspectionId + ".");
-            callback.onSuccess();
+            BridgeLogger.getInstance(ctx).log('I', TAG, "Uploaded DefectItemID " + defectItemId + " for InspectionID " + inspectionId + ".");
+            callback.onSuccess("Success");
         }, error -> {
-            String errorMessage = new String(error.networkResponse.data);
-            BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in uploadInspectionDefect: " + errorMessage);
-            callback.onFailure();
+            if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                BridgeLogger.getInstance(ctx).log('I', TAG, "No connection, skipping upload for DefectItemID: " + defectItemId + " for InspectionID: " + inspectionId + ".");
+                callback.onFailure("No connection! Please attempt to upload when the network is available.");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in uploadInspectionDefect: " + errorMessage);
+                callback.onFailure("Error! Please send error log.");
+            }
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -414,16 +489,17 @@ public class BridgeAPIQueue {
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
-    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime) {
+    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime);
-        BridgeLogger.getInstance(ctx).log('I', TAG, "Url for updateInspectionStatus: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             BridgeLogger.getInstance(ctx).log('I', TAG, "Updated status for " + inspectionId + ".");
+            callback.onSuccess("Success");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateInspectionStatus: " + errorMessage);
+            callback.onFailure("Error! Please send error log");
         }) {
             @Override
             public Map<String, String> getHeaders() {

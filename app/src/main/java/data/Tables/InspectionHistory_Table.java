@@ -19,4 +19,6 @@ public class InspectionHistory_Table {
     public boolean is_reviewed;
     @Nullable
     public Integer reviewed_status;
+    @Nullable
+    public Integer inspection_defect_id;
 }

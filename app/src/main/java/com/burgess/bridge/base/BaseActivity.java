@@ -11,14 +11,13 @@ import android.widget.TextView;
 import com.burgess.bridge.R;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
     public BaseViewModel mBaseViewModel;
     public TextView mIndividualRemainingInspections;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutResourceId());
         setSupportActionBar(findViewById(R.id.base_toolbar));
 
         mBaseViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(BaseViewModel.class);
@@ -27,16 +26,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public void setContentView(int layoutResId) {
-        ConstraintLayout constraintLayout = (ConstraintLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
-        FrameLayout frameLayout = constraintLayout.findViewById(R.id.base_frame_layout);
-
-        getLayoutInflater().inflate(layoutResId, frameLayout, true);
-        super.setContentView(R.layout.activity_base);
+        super.setContentView(layoutResId);
+        updateInspectionsRemaining();
     }
 
     public void updateInspectionsRemaining() {
         mIndividualRemainingInspections.setText("23");
     }
-
-    protected abstract int getLayoutResourceId();
 }

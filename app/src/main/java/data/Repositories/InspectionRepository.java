@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class InspectionRepository {
         });
     }
 
-    public void completeInspection(Date end_time, int inspection_id) {
+    public void completeInspection(OffsetDateTime end_time, int inspection_id) {
         mInspectionDao.completeInspection(end_time, inspection_id);
     }
 
@@ -62,7 +63,7 @@ public class InspectionRepository {
         mInspectionDao.swapOrder(inspection_id, new_order);
     }
 
-    public void startInspection(Date start_time, int inspection_id) {
+    public void startInspection(OffsetDateTime start_time, int inspection_id) {
         mInspectionDao.startInspection(start_time, inspection_id);
     }
 
