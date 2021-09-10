@@ -114,7 +114,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     }
     private void initializeButtonListeners() {
         mButtonAttachFile.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Attaching file...", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
         });
         mButtonSubmit.setOnClickListener(v -> {
             mInspectionStatusId = getInspectionStatusId();
@@ -262,7 +262,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
         JSONObject jObj;
         InspectionDefect_Table defect;
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), startTime, endTime, new ServerCallback() {
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 if (mDivisionId == 20) {
@@ -275,45 +275,51 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
             }
         });
-        for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
-            defect = inspectionDefects.get(lcv);
-            jObj = new JSONObject();
-            jObj.put("InspectionId", defect.inspection_id);
-            jObj.put("DefectItemId", defect.defect_item_id);
-            jObj.put("DefectStatusId", defect.defect_status_id);
-            if (defect.comment != null) {
-                jObj.put("Comment", defect.comment);
-            } else {
-                jObj.put("Comment", "");
-            }
-            jObj.put("Comment", defect.comment);
-            if (defect.picture_path != null) {
-                jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(defect.id)));
-                jObj.put("ImageFileName", defect.picture_path.substring(defect.picture_path.lastIndexOf("/")+1));
-            } else {
-                jObj.put("ImageData", null);
-                jObj.put("ImageFileName", null);
-            }
-            jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
-            InspectionDefect_Table finalDefect = defect;
-            if (!defect.is_uploaded) {
-                mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
-                    @Override
-                    public void onSuccess(String message) {
-                        mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
-                        if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
-                            BridgeLogger.log('I', TAG, "All defect items uploaded.");
-                            mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
-                            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(String message) {
-                        BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest");
-                    }
-                });
-                BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
+        // If there are no defects, go ahead and update the status
+        if (inspectionDefects.isEmpty()) {
+            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+        } else {
+            for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
+                defect = inspectionDefects.get(lcv);
+                jObj = new JSONObject();
+                jObj.put("InspectionId", defect.inspection_id);
+                jObj.put("DefectItemId", defect.defect_item_id);
+                jObj.put("DefectStatusId", defect.defect_status_id);
+                if (defect.comment != null) {
+                    jObj.put("Comment", defect.comment);
+                } else {
+                    jObj.put("Comment", "");
+                }
+                jObj.put("Comment", defect.comment);
+                if (defect.picture_path != null) {
+                    jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(defect.id)));
+                    jObj.put("ImageFileName", defect.picture_path.substring(defect.picture_path.lastIndexOf("/")+1));
+                } else {
+                    jObj.put("ImageData", null);
+                    jObj.put("ImageFileName", null);
+                }
+                jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
+                InspectionDefect_Table finalDefect = defect;
+                if (!defect.is_uploaded) {
+                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
+                        @Override
+                        public void onSuccess(String message) {
+                            mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
+                            if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
+                                BridgeLogger.log('I', TAG, "All defect items uploaded.");
+                                mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
+                                BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+                            BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest");
+                        }
+                    });
+                    BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
+                }
             }
         }
 

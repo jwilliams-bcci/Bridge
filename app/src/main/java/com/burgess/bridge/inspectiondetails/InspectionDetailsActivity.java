@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.burgess.bridge.AssignTraineeActivity;
@@ -19,6 +20,7 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.TransferInspectionActivity;
 import com.burgess.bridge.inspect.InspectActivity;
 import com.burgess.bridge.multifamily.MultifamilyDetailsActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.OffsetDateTime;
 
@@ -31,6 +33,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     public static final int INSPECTION_ID_NOT_SET = -1;
     private int mInspectionId;
     private Inspection_Table mInspection;
+    private ConstraintLayout mConstraintLayout;
     private TextView mTextAddress;
     private TextView mTextBuilder;
     private TextView mTextSuperintendent;
@@ -58,6 +61,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        mConstraintLayout = findViewById(R.id.inspection_details_constraint_layout);
         mTextAddress = findViewById(R.id.inspection_details_text_inspection_address);
         mTextBuilder = findViewById(R.id.inspection_details_text_builder);
         mTextSuperintendent = findViewById(R.id.inspection_details_text_superintendent);
@@ -89,26 +93,30 @@ public class InspectionDetailsActivity extends AppCompatActivity {
 
 
         mViewInspectionHistoryButton.setOnClickListener(view -> {
-            Intent viewInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, InspectionHistoryActivity.class);
-            startActivity(viewInspectionHistoryIntent);
+            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
+//            Intent viewInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, InspectionHistoryActivity.class);
+//            startActivity(viewInspectionHistoryIntent);
         });
 
         mTransferInspectionButton.setOnClickListener(view -> {
-            Intent transferInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, TransferInspectionActivity.class);
-            transferInspectionHistoryIntent.putExtra(TransferInspectionActivity.INSPECTION_ID, mInspectionId);
-            startActivity(transferInspectionHistoryIntent);
+            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
+//            Intent transferInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, TransferInspectionActivity.class);
+//            transferInspectionHistoryIntent.putExtra(TransferInspectionActivity.INSPECTION_ID, mInspectionId);
+//            startActivity(transferInspectionHistoryIntent);
         });
 
         mAssignTraineeButton.setOnClickListener(view -> {
-            Intent assignTraineeIntent = new Intent(InspectionDetailsActivity.this, AssignTraineeActivity.class);
-            assignTraineeIntent.putExtra(AssignTraineeActivity.INSPECTION_ID, mInspectionId);
-            startActivity(assignTraineeIntent);
+            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
+//            Intent assignTraineeIntent = new Intent(InspectionDetailsActivity.this, AssignTraineeActivity.class);
+//            assignTraineeIntent.putExtra(AssignTraineeActivity.INSPECTION_ID, mInspectionId);
+//            startActivity(assignTraineeIntent);
         });
 
         mEditResolutionButton.setOnClickListener(view -> {
-            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
-            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
-            startActivity(editResolutionIntent);
+            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
+//            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
+//            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
+//            startActivity(editResolutionIntent);
         });
     }
     private void initializeDisplayContent() {
