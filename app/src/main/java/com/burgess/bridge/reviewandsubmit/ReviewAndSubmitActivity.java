@@ -143,7 +143,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     .setPositiveButton("Yes", (dialogInterface, i) -> {
                         try {
                             completeInspection();
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             BridgeLogger.log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
                         }
                     })
@@ -224,15 +224,13 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         return status;
     }
 
-    private void completeInspection() throws JSONException {
+    private void completeInspection() throws Exception {
         showProgressSpinner();
         List<InspectionDefect_Table> inspectionDefects = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
-        String startTime = "";
         String endTime = "";
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         try {
-            startTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
             endTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
         } catch (UnsupportedEncodingException e) {
             BridgeLogger.log('E', TAG, "ERROR in onCreate - " + e.getMessage());
@@ -312,7 +310,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                                 BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
                             }
                         }
-
                         @Override
                         public void onFailure(String message) {
                             BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest");
@@ -357,7 +354,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             mInspectionStatusId = selectedItem.code;
             try {
                 completeInspection();
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });

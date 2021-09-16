@@ -53,7 +53,7 @@
                 android:layout_marginEnd="8dp"
                 android:autoSizeMaxTextSize="24sp"
                 android:autoSizeMinTextSize="16sp"
-                android:maxLines="2"
+                android:maxLines="6"
                 android:text="Beans, top loaded nailed in rows of 2, spaced at 4x"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/item_defect_item_group"

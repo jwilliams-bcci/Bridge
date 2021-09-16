@@ -31,34 +31,39 @@ import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
 
 public class RouteSheetActivity extends AppCompatActivity implements OnDragListener {
     private RouteSheetViewModel mRouteSheetViewModel;
+    private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private ItemTouchHelper mItemTouchHelper;
-    private static final String TAG = "ROUTE_SHEET";
-    private JsonArrayRequest mUpdateRouteSheetRequest;
-    private String mInspectorId;
-    private ConstraintLayout mConstraintLayout;
     private Button mButtonUpdateRouteSheet;
     private Button mButtonPrintRouteSheet;
     private Button mButtonSendActivityLog;
     private RecyclerView mRecyclerInspections;
+
+    private JsonArrayRequest mUpdateRouteSheetRequest;
+    private String mInspectorId;
+    private boolean mIsOnline;
+
+    private static final String TAG = "ROUTE_SHEET";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_sheet);
         setSupportActionBar(findViewById(R.id.route_sheet_toolbar));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
+
         mSharedPreferences = getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
         mInspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
+        mIsOnline = mSharedPreferences.getBoolean(PREF_IS_ONLINE, true);
+        mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(LocalDateTime.now()));
 
         initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
-        if (mSharedPreferences.getBoolean(PREF_IS_ONLINE, false)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
-            mUpdateRouteSheetRequest = BridgeAPIQueue.getInstance().updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(LocalDateTime.now()));
-            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
-        }
+
+        updateRouteSheet();
     }
 
     private void initializeViews() {
@@ -70,14 +75,17 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
     }
     private void initializeButtonListeners() {
         mButtonUpdateRouteSheet.setOnClickListener(v -> {
-            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
-            Snackbar.make(mConstraintLayout, "Route sheet updating.", Snackbar.LENGTH_SHORT).show();
+            updateRouteSheet();
         });
 
         mButtonSendActivityLog.setOnClickListener(v -> {
             Snackbar.make(mConstraintLayout, "Sending activity log...", Snackbar.LENGTH_SHORT).show();
-            Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, getVersionName());
-            startActivity(Intent.createChooser(emailIntent, "Send activity log..."));
+            try {
+                Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, getVersionName());
+                startActivity(Intent.createChooser(emailIntent, "Send activity log..."));
+            } catch (Exception e) {
+                BridgeLogger.getInstance().log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
+            }
         });
 
         mButtonPrintRouteSheet.setOnClickListener(v -> {
@@ -100,6 +108,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             mItemTouchHelper = new ItemTouchHelper(callback);
             mItemTouchHelper.attachToRecyclerView(mRecyclerInspections);
         } catch (Exception e) {
+            Snackbar.make(mConstraintLayout, "Error in loading route sheet, please send log.", Snackbar.LENGTH_LONG).show();
             BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
         }
     }
@@ -109,9 +118,18 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         try {
             pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            BridgeLogger.getInstance(this).log('E', TAG, "ERROR in getVersionName: " + e.getMessage());
         }
-        return pInfo.versionName;
+        return pInfo.versionName != null ? pInfo.versionName : "VERSION NOT FOUND";
+    }
+
+    private void updateRouteSheet() {
+        if (mIsOnline) {
+            Snackbar.make(mConstraintLayout, "Route sheet updating...", Snackbar.LENGTH_LONG).show();
+            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
+        } else {
+            Snackbar.make(mConstraintLayout, "Currently working offline", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
