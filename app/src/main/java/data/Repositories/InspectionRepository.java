@@ -1,6 +1,7 @@
 package data.Repositories;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteConstraintException;
 
 import androidx.lifecycle.LiveData;
 
@@ -37,6 +38,10 @@ public class InspectionRepository {
         return mInspectionDao.getInspections(inspector_id);
     }
 
+    public List<Integer> getAllInspectionIds(int inspector_id) {
+        return mInspectionDao.getAllInspectionIds(inspector_id);
+    }
+
     public LiveData<Integer> getInspectionTypeId(int inspection_id) {
         return mInspectionDao.getInspectionTypeId(inspection_id);
     }
@@ -47,8 +52,16 @@ public class InspectionRepository {
 
     public void insert(Inspection_Table inspection) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mInspectionDao.insert(inspection);
+            try {
+                mInspectionDao.insert(inspection);
+            } catch (SQLiteConstraintException e) {
+                mInspectionDao.update(inspection.id, inspection.inspection_date, inspection.inspection_status_id, inspection.incomplete_reason_id);
+            }
         });
+    }
+
+    public void delete(int inspectionId) {
+        mInspectionDao.delete(inspectionId);
     }
 
     public void completeInspection(OffsetDateTime end_time, int inspection_id) {

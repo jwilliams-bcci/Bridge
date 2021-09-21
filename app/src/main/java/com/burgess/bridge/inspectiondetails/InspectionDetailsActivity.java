@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.burgess.bridge.AssignTraineeActivity;
+import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.EditResolutionActivity;
 import com.burgess.bridge.InspectionHistoryActivity;
 import com.burgess.bridge.R;
@@ -43,6 +44,8 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     private Button mTransferInspectionButton;
     private Button mAssignTraineeButton;
     private Button mEditResolutionButton;
+
+    private static final String TAG = "INSPECTION_DETAILS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,8 @@ public class InspectionDetailsActivity extends AppCompatActivity {
 
             Intent multifamilyInformationIntent = new Intent(InspectionDetailsActivity.this, MultifamilyDetailsActivity.class);
             multifamilyInformationIntent.putExtra(MultifamilyDetailsActivity.INSPECTION_ID, mInspectionId);
+
+            BridgeLogger.getInstance().log('I', TAG, "Starting inspection " + mInspectionId + " at " + startTime.toString());
 
             if (mInspection.division_id == 20) {
                 startActivity(multifamilyInformationIntent);

@@ -2,6 +2,7 @@ package com.burgess.bridge;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.Environment;
 import android.util.Log;
 
@@ -77,6 +78,7 @@ public class BridgeAPIQueue {
     private static final String GET_BUILDERS_URL = "GetBuilders";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String GET_CHECK_DATE_URL = "CheckDate?inspectionid=%s";
     private static final String POST_MULTIFAMILY_DETAILS_URL = "InsertMultifamilyDetails";
     private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
     private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s&UserId=%s&InspectionTotal=%s&SuperPresent=%s&StartTime=%s&EndTime=%s";
@@ -84,7 +86,7 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = false;
+        isProd = true;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
@@ -432,6 +434,28 @@ public class BridgeAPIQueue {
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateInspectionHistory: " + errorMessage);
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonObjectRequest checkDate(RouteSheetViewModel vm, int inspectionId) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url +=  String.format(GET_CHECK_DATE_URL, inspectionId);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            int remove = response.optInt("RemoveFromRouteSheet");
+            if (remove > 0) {
+                BridgeLogger.getInstance(ctx).log('I', TAG, "Found future-dated inspection for " + inspectionId + ". Removing...");
+                vm.deleteInspection(inspectionId);
+            }
+        }, error -> {
+            BridgeLogger.getInstance(ctx).log('E', TAG, "Error in checkDate: " + error.getMessage());
         }) {
             @Override
             public Map<String, String> getHeaders() {

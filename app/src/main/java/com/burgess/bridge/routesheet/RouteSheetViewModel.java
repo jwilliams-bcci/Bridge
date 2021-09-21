@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import data.InspectionHistory;
@@ -33,8 +34,16 @@ public class RouteSheetViewModel extends AndroidViewModel {
         return mInspectionRepository.getAllInspectionsForRouteSheet(inspectorId);
     }
 
+    public List<Integer> getAllInspectionIds(int inspectorId) {
+        return mInspectionRepository.getAllInspectionIds(inspectorId);
+    }
+
     public void insertInspection(Inspection_Table inspection) {
         mInspectionRepository.insert(inspection);
+    }
+
+    public void deleteInspection(int inspectionId) {
+        mInspectionRepository.delete(inspectionId);
     }
 
     public void insertInspectionHistory(InspectionHistory_Table inspectionHistory) {

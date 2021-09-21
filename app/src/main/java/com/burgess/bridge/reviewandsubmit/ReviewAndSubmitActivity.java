@@ -234,6 +234,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             endTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
         } catch (UnsupportedEncodingException e) {
             BridgeLogger.log('E', TAG, "ERROR in onCreate - " + e.getMessage());
+            hideProgressSpinner();
+            Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send Activity Log", Snackbar.LENGTH_LONG).show();
         }
 
         if (mDivisionId == 20) {
@@ -260,6 +262,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
         JSONObject jObj;
         InspectionDefect_Table defect;
+        BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime);
         mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime, new ServerCallback() {
             @Override
             public void onSuccess(String message) {

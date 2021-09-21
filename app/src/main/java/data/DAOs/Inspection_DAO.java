@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.time.OffsetDateTime;
 import java.util.Date;
@@ -15,11 +16,17 @@ import data.Views.RouteSheet_View;
 
 @Dao
 public interface Inspection_DAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.FAIL)
     void insert(Inspection_Table inspection);
 
     @Query("DELETE FROM inspection_table")
     void deleteAll();
+
+    @Query("DELETE FROM inspection_table WHERE id = :id")
+    void delete(int id);
+
+    @Query("UPDATE inspection_Table SET inspection_date = :inspection_date, inspection_status_id = :inspection_status_id, incomplete_reason_id = :incomplete_reason_id WHERE id = :id")
+    void update(int id, OffsetDateTime inspection_date, int inspection_status_id, int incomplete_reason_id);
 
     @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
     LiveData<List<Inspection_Table>> getInspections(int inspector_id);
@@ -35,6 +42,9 @@ public interface Inspection_DAO {
 
     @Query("SELECT inspection_type_id FROM inspection_table WHERE id = :inspection_id")
     LiveData<Integer> getInspectionTypeId(int inspection_id);
+
+    @Query("SELECT id FROM inspection_table WHERE inspector_id = :inspector_id")
+    List<Integer> getAllInspectionIds(int inspector_id);
 
     @Query("SELECT reinspect FROM inspection_table WHERE id = :inspection_id")
     boolean getReinspect(int inspection_id);

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.widget.Button;
 
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
@@ -25,6 +26,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
 import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
@@ -40,6 +43,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
     private RecyclerView mRecyclerInspections;
 
     private JsonArrayRequest mUpdateRouteSheetRequest;
+    private JsonObjectRequest mCheckInspectionDatesRequest;
     private String mInspectorId;
     private boolean mIsOnline;
 
@@ -127,6 +131,14 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         if (mIsOnline) {
             Snackbar.make(mConstraintLayout, "Route sheet updating...", Snackbar.LENGTH_LONG).show();
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
+            List<Integer> allInspectionIds = mRouteSheetViewModel.getAllInspectionIds(Integer.parseInt(mInspectorId));
+            ArrayList<JsonObjectRequest> checkDateRequests = new ArrayList<>();
+            for (int lcv = 0; lcv < allInspectionIds.size(); lcv++) {
+                checkDateRequests.add(BridgeAPIQueue.getInstance().checkDate(mRouteSheetViewModel, allInspectionIds.get(lcv)));
+            }
+            for (int lcv = 0; lcv < checkDateRequests.size(); lcv++) {
+                BridgeAPIQueue.getInstance().getRequestQueue().add(checkDateRequests.get(lcv));
+            }
         } else {
             Snackbar.make(mConstraintLayout, "Currently working offline", Snackbar.LENGTH_LONG).show();
         }
