@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.assigntrainee.AssignTraineeActivity;
+import com.burgess.bridge.editresolution.EditResolutionActivity;
 import com.burgess.bridge.inspect.InspectActivity;
 import com.burgess.bridge.multifamily.MultifamilyDetailsActivity;
 import com.burgess.bridge.transferinspection.TransferInspectionActivity;
@@ -117,10 +118,9 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         });
 
         mEditResolutionButton.setOnClickListener(view -> {
-            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
-//            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
-//            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
-//            startActivity(editResolutionIntent);
+            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
+            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
+            startActivity(editResolutionIntent);
         });
 
         mAttachmentsButton.setOnClickListener(view -> {

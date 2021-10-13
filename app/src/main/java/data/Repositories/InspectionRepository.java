@@ -50,12 +50,15 @@ public class InspectionRepository {
         return mInspectionDao.getReinspect(inspection_id);
     }
 
-    public void insert(Inspection_Table inspection) {
+    public void insert(Inspection_Table i) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
             try {
-                mInspectionDao.insert(inspection);
+                mInspectionDao.insert(i);
             } catch (SQLiteConstraintException e) {
-                mInspectionDao.update(inspection.id, inspection.inspection_date, inspection.inspector_id, inspection.inspection_status_id, inspection.incomplete_reason_id);
+                mInspectionDao.update(i.id, i.inspection_type_id, i.inspection_date, i.division_id, i.location_id, i.builder_name, i.builder_id,
+                        i.super_name, i.inspector_id, i.inspector, i.community, i.community_id, i.city, i.inspection_class, i.inspection_type,
+                        i.reinspect, i.inspection_order, i.address, i.inspection_status_id, i.inspection_status, i.super_phone, i.super_email,
+                        i.super_present, i.incomplete_reason, i.incomplete_reason_id, i.notes);
             }
         });
     }
