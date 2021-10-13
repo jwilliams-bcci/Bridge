@@ -22,6 +22,7 @@ public class ReviewAndSubmitViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextDefectItemNumber;
     private final TextView mTextDefectItemDescription;
     private final TextView mTextInspectionDefectComment;
+    private final TextView mTextDefectStatus;
     private final ImageView mImageViewShowThumbnail;
 
     public ReviewAndSubmitViewHolder(@NonNull View itemView) {
@@ -29,16 +30,18 @@ public class ReviewAndSubmitViewHolder extends RecyclerView.ViewHolder {
         mTextDefectItemNumber = itemView.findViewById(R.id.item_inspection_defect_text_defect_number);
         mTextDefectItemDescription = itemView.findViewById(R.id.item_inspection_defect_text_defect_description);
         mTextInspectionDefectComment = itemView.findViewById(R.id.item_inspection_defect_text_comment);
+        mTextDefectStatus = itemView.findViewById(R.id.item_inspection_defect_text_status);
         mImageViewShowThumbnail = itemView.findViewById(R.id.item_inspection_defect_imageview);
     }
 
-    public void bind(int inspectionId, int inspectionDefectId, int defectItemId, int defectItemNumber, String defectItemDescription, String comment, boolean showThumbnail) {
+    public void bind(int inspectionId, int inspectionDefectId, int defectItemId, int defectItemNumber, String defectItemDescription, String comment, String status, boolean showThumbnail) {
         mInspectionId = inspectionId;
         mInspectionDefectId = inspectionDefectId;
         mDefectItemId = defectItemId;
         mTextDefectItemNumber.setText(String.valueOf(defectItemNumber));
         mTextDefectItemDescription.setText(defectItemDescription);
         mTextInspectionDefectComment.setText(comment);
+        mTextDefectStatus.setText(status);
         if (showThumbnail) {
             mImageViewShowThumbnail.setVisibility(View.VISIBLE);
         } else {

@@ -27,6 +27,9 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
@@ -48,6 +51,7 @@ import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import data.Enums.IncompleteReason;
@@ -144,7 +148,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         try {
                             completeInspection();
                         } catch (Exception e) {
-                            BridgeLogger.log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
+                            BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
                         }
                     })
                     .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
@@ -237,6 +241,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             hideProgressSpinner();
             Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send Activity Log", Snackbar.LENGTH_LONG).show();
         }
+        mReviewAndSubmitViewModel.completeInspection(mInspection.end_time, mInspectionId);
+
 
         if (mDivisionId == 20) {
             JSONObject jObj = new JSONObject();
@@ -262,18 +268,20 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
         JSONObject jObj;
         InspectionDefect_Table defect;
-        BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime);
+        BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
         mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
+                BridgeLogger.getInstance().log('I', TAG, "mUpdateInspectionStatusRequest returned success.");
                 if (mDivisionId == 20) {
                     BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadMultifamilyDetailsRequest);
                 }
+                mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
             }
 
             @Override
             public void onFailure(String message) {
-
+                BridgeLogger.getInstance().log('E', TAG, "ERROR in completeInspection: " + message);
             }
         });
 
@@ -308,8 +316,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         public void onSuccess(String message) {
                             mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
                             if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
-                                BridgeLogger.log('I', TAG, "All defect items uploaded.");
-                                mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
+                                BridgeLogger.log('I', TAG, "All defect items uploaded. Adding mUpdateInspectionStatusRequest");
+                                mUpdateInspectionStatusRequest.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                                 BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
                             }
                         }
@@ -322,10 +330,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
             }
         }
-
-        mReviewAndSubmitViewModel.completeInspection(mInspection.end_time, mInspectionId);
-        returnToRouteSheet();
         hideProgressSpinner();
+        returnToRouteSheet();
     }
 
     private byte[] getPictureData(int inspectionDefectId) {

@@ -25,13 +25,13 @@ public interface Inspection_DAO {
     @Query("DELETE FROM inspection_table WHERE id = :id")
     void delete(int id);
 
-    @Query("UPDATE inspection_Table SET inspection_date = :inspection_date, inspection_status_id = :inspection_status_id, incomplete_reason_id = :incomplete_reason_id WHERE id = :id")
-    void update(int id, OffsetDateTime inspection_date, int inspection_status_id, int incomplete_reason_id);
+    @Query("UPDATE inspection_Table SET inspection_date = :inspection_date, inspector_id = :inspector_id, inspection_status_id = :inspection_status_id, incomplete_reason_id = :incomplete_reason_id WHERE id = :id")
+    void update(int id, OffsetDateTime inspection_date, int inspector_id, int inspection_status_id, int incomplete_reason_id);
 
     @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
     LiveData<List<Inspection_Table>> getInspections(int inspector_id);
 
-    @Query("SELECT * FROM routesheet_view WHERE inspector_id = :inspector_id AND is_uploaded = 0 AND inspection_status_id = 2 AND date(inspection_date) = date() ORDER BY is_complete")
+    @Query("SELECT * FROM routesheet_view WHERE inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date() AND is_uploaded = 0 ORDER BY is_complete DESC, route_sheet_order")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
@@ -52,7 +52,7 @@ public interface Inspection_DAO {
     @Query("UPDATE inspection_table SET is_complete = 1, end_time = :end_time WHERE id = :inspection_id")
     void completeInspection(OffsetDateTime end_time, int inspection_id);
 
-    @Query("UPDATE inspection_table SET is_uploaded = 1 WHERE id = :inspection_id")
+    @Query("UPDATE inspection_table SET is_uploaded = 1, route_sheet_order = -1 WHERE id = :inspection_id")
     void uploadInspection(int inspection_id);
 
     @Query("UPDATE inspection_table SET route_sheet_order = :new_order WHERE id = :inspection_id")
@@ -63,4 +63,7 @@ public interface Inspection_DAO {
 
     @Query("SELECT COUNT() FROM inspection_table WHERE is_complete = 0")
     int getIndividualRemainingInspections();
+
+    @Query("UPDATE inspection_table SET trainee_id = :trainee_id WHERE id = :inspection_id")
+    void assignTrainee(int trainee_id, int inspection_id);
 }

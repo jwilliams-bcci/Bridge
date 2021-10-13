@@ -9,12 +9,15 @@
     tools:context=".inspectiondetails.InspectionDetailsActivity">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -117,12 +120,13 @@
         android:id="@+id/inspection_details_text_superintendent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:autoLink="all"
         android:autoSizeMaxTextSize="24sp"
         android:autoSizeMinTextSize="12sp"
-        android:editable="false"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:linksClickable="true"
         android:maxLines="2"
         app:layout_constraintEnd_toEndOf="@+id/divider3"
         app:layout_constraintStart_toStartOf="@+id/inspection_details_text_builder"
@@ -169,7 +173,7 @@
         android:id="@+id/inspection_details_button_inspect"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="32dp"
         android:autoSizeMaxTextSize="24sp"
         android:autoSizeMinTextSize="12sp"
         android:background="@drawable/button_rounded_blue"
@@ -181,78 +185,88 @@
         android:textStyle="bold"
         android:topLeftRadius="8dp"
         android:topRightRadius="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/inspection_details_button_view_inspection_history"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_text_notes"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/inspection_details_text_notes_label" />
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_text_notes_label"
+        app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
     <Button
         android:id="@+id/inspection_details_button_edit_resolution"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:autoSizeMaxTextSize="14sp"
         android:autoSizeMinTextSize="8sp"
         android:background="@drawable/button_rounded_orange"
         android:text="@string/inspection_details_button_edit_status_text"
         android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_assign_trainee"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_assign_trainee" />
-
-    <Button
-        android:id="@+id/inspection_details_button_assign_trainee"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:autoSizeMaxTextSize="14sp"
-        android:autoSizeMinTextSize="8sp"
-        android:background="@drawable/button_rounded_orange"
-        android:text="@string/inspection_details_button_assign_trainee_text"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/inspection_details_button_edit_resolution"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_transfer_inspection"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_transfer_inspection" />
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_transfer_inspection"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_details_button_transfer_inspection" />
 
     <Button
         android:id="@+id/inspection_details_button_transfer_inspection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
         android:autoSizeMaxTextSize="14sp"
         android:autoSizeMinTextSize="8sp"
         android:background="@drawable/button_rounded_orange"
         android:text="@string/inspection_details_button_transfer_inspection_text"
         android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/inspection_details_button_assign_trainee"
+        app:layout_constraintEnd_toStartOf="@id/inspection_details_button_assign_trainee"
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_view_inspection_history"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_details_button_view_inspection_history" />
+
+    <Button
+        android:id="@+id/inspection_details_button_assign_trainee"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeMinTextSize="8sp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/inspection_details_button_assign_trainee_text"
+        android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_view_inspection_history"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_view_inspection_history" />
+        app:layout_constraintStart_toEndOf="@+id/inspection_details_button_transfer_inspection"
+        app:layout_constraintTop_toTopOf="@+id/inspection_details_button_transfer_inspection" />
 
     <Button
         android:id="@+id/inspection_details_button_view_inspection_history"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="24dp"
         android:autoSizeMaxTextSize="14sp"
         android:autoSizeMinTextSize="8sp"
         android:background="@drawable/button_rounded_orange"
         android:text="@string/inspection_details_button_view_history_text"
         android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/inspection_details_button_transfer_inspection"
         app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_inspect"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_inspect" />
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_inspect"
+        app:layout_constraintTop_toBottomOf="@+id/inspection_details_button_inspect" />
+
+    <Button
+        android:id="@+id/inspection_details_button_attachments"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_orange"
+        android:text="Attachments"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_assign_trainee"
+        app:layout_constraintStart_toStartOf="@+id/inspection_details_button_assign_trainee"
+        app:layout_constraintTop_toTopOf="@+id/inspection_details_button_edit_resolution" />
 
     <View
         android:id="@+id/divider5"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="32dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/inspection_details_button_inspect"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspection_details_text_notes" />
 </androidx.constraintlayout.widget.ConstraintLayout>

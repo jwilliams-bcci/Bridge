@@ -55,7 +55,7 @@ public class InspectionRepository {
             try {
                 mInspectionDao.insert(inspection);
             } catch (SQLiteConstraintException e) {
-                mInspectionDao.update(inspection.id, inspection.inspection_date, inspection.inspection_status_id, inspection.incomplete_reason_id);
+                mInspectionDao.update(inspection.id, inspection.inspection_date, inspection.inspector_id, inspection.inspection_status_id, inspection.incomplete_reason_id);
             }
         });
     }
@@ -82,5 +82,9 @@ public class InspectionRepository {
 
     public int getIndividualRemainingInspections() {
         return mInspectionDao.getIndividualRemainingInspections();
+    }
+
+    public void assignTrainee(int traineeId, int inspectionId) {
+        mInspectionDao.assignTrainee(traineeId, inspectionId);
     }
 }

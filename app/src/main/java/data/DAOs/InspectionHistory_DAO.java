@@ -21,7 +21,7 @@ public interface InspectionHistory_DAO {
     @Query("SELECT * " +
             "FROM inspection_history_table " +
             "WHERE inspection_id = :inspection_id " +
-            "ORDER BY comment ASC")
+            "ORDER BY is_reviewed, comment ASC")
     LiveData<List<InspectionHistory_Table>> getInspectionHistory(int inspection_id);
 
     @Query("SELECT comment FROM inspection_history_table WHERE id = :inspection_history_id")

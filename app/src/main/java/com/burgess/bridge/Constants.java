@@ -10,6 +10,7 @@ public final class Constants {
     public static final String PREF_AUTH_TOKEN = "AuthorizationToken";
     public static final String PREF_AUTH_TOKEN_AGE = "TokenAge";
     public static final String PREF_INSPECTOR_ID = "InspectorId";
+    public static final String PREF_INSPECTOR_DIVISION_ID = "DivisionId";
     public static final String PREF_SECURITY_USER_ID = "SecurityUserId";
     public static final String PREF_LOGIN_NAME = "LoginName";
     public static final String PREF_LOGIN_PASSWORD = "LoginPassword";

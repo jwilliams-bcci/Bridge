@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -13,14 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.burgess.bridge.AssignTraineeActivity;
 import com.burgess.bridge.BridgeLogger;
-import com.burgess.bridge.EditResolutionActivity;
-import com.burgess.bridge.InspectionHistoryActivity;
 import com.burgess.bridge.R;
-import com.burgess.bridge.TransferInspectionActivity;
+import com.burgess.bridge.assigntrainee.AssignTraineeActivity;
 import com.burgess.bridge.inspect.InspectActivity;
 import com.burgess.bridge.multifamily.MultifamilyDetailsActivity;
+import com.burgess.bridge.transferinspection.TransferInspectionActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.OffsetDateTime;
@@ -44,6 +43,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     private Button mTransferInspectionButton;
     private Button mAssignTraineeButton;
     private Button mEditResolutionButton;
+    private Button mAttachmentsButton;
 
     private static final String TAG = "INSPECTION_DETAILS";
 
@@ -75,6 +75,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mTransferInspectionButton = findViewById(R.id.inspection_details_button_transfer_inspection);
         mAssignTraineeButton = findViewById(R.id.inspection_details_button_assign_trainee);
         mEditResolutionButton = findViewById(R.id.inspection_details_button_edit_resolution);
+        mAttachmentsButton = findViewById(R.id.inspection_details_button_attachments);
     }
     private void initializeButtonListeners() {
         mInspectButton.setOnClickListener(view -> {
@@ -104,17 +105,15 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         });
 
         mTransferInspectionButton.setOnClickListener(view -> {
-            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
-//            Intent transferInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, TransferInspectionActivity.class);
-//            transferInspectionHistoryIntent.putExtra(TransferInspectionActivity.INSPECTION_ID, mInspectionId);
-//            startActivity(transferInspectionHistoryIntent);
+            Intent transferInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, TransferInspectionActivity.class);
+            transferInspectionHistoryIntent.putExtra(TransferInspectionActivity.INSPECTION_ID, mInspectionId);
+            startActivity(transferInspectionHistoryIntent);
         });
 
         mAssignTraineeButton.setOnClickListener(view -> {
-            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
-//            Intent assignTraineeIntent = new Intent(InspectionDetailsActivity.this, AssignTraineeActivity.class);
-//            assignTraineeIntent.putExtra(AssignTraineeActivity.INSPECTION_ID, mInspectionId);
-//            startActivity(assignTraineeIntent);
+            Intent assignTraineeIntent = new Intent(InspectionDetailsActivity.this, AssignTraineeActivity.class);
+            assignTraineeIntent.putExtra(AssignTraineeActivity.INSPECTION_ID, mInspectionId);
+            startActivity(assignTraineeIntent);
         });
 
         mEditResolutionButton.setOnClickListener(view -> {
@@ -122,6 +121,10 @@ public class InspectionDetailsActivity extends AppCompatActivity {
 //            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
 //            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
 //            startActivity(editResolutionIntent);
+        });
+
+        mAttachmentsButton.setOnClickListener(view -> {
+            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
         });
     }
     private void initializeDisplayContent() {
@@ -131,7 +134,8 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mTextAddress.append(mInspection.inspection_type + "\n");
 
         mTextBuilder.setText(mInspection.builder_name);
-        mTextSuperintendent.setText(mInspection.super_name);
+        mTextSuperintendent.setText(mInspection.super_name + "\n" + mInspection.super_phone);
+        mTextSuperintendent.setMovementMethod(LinkMovementMethod.getInstance());
         mTextNotes.setText(mInspection.notes);
     }
 }

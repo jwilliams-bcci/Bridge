@@ -2,6 +2,7 @@ package com.burgess.bridge.routesheet;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.bridge.BridgeLogger;
@@ -56,6 +58,10 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        if (isComplete) {
+            itemView.setBackgroundColor(Color.YELLOW);
+        }
+
         mReupload.setOnClickListener(v -> {
             BridgeLogger.log('I', TAG, "Trying reupload for ID: " + mInspectionId);
             Intent reviewAndSubmitIntent = new Intent(v.getContext(), ReviewAndSubmitActivity.class);
@@ -72,6 +78,8 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         if (isComplete) {
             mTextInspectionUploaded.setVisibility(View.VISIBLE);
             mTextInspectionUploaded.setText(String.format("Uploaded %d of %d defects.", numberUploaded, numberToUpload));
+
+            mReupload.setVisibility(View.VISIBLE);
         }
     }
 

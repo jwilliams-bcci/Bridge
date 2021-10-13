@@ -48,6 +48,7 @@ public class Inspection_Table {
     public boolean is_complete;
     public boolean is_uploaded;
     public int route_sheet_order;
+    public int trainee_id;
 
     public Inspection_Table () {
 
@@ -62,7 +63,7 @@ public class Inspection_Table {
                             String super_phone, String super_email, int super_present,
                             String incomplete_reason, int incomplete_reason_id, String notes,
                             OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
-                            boolean is_uploaded, int route_sheet_order) {
+                            boolean is_uploaded, int route_sheet_order, int trainee_id) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.division_id = division_id;
@@ -94,5 +95,6 @@ public class Inspection_Table {
         this.is_complete = is_complete;
         this.is_uploaded = is_uploaded;
         this.route_sheet_order = route_sheet_order;
+        this.trainee_id = trainee_id;
     }
 }

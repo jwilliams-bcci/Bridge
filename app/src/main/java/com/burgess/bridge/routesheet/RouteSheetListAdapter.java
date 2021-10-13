@@ -50,12 +50,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         if (current.is_complete) {
             view.setCardBackgroundColor(Color.YELLOW);
         }
-        if (current.reinspect) {
-            imageReinspect.setVisibility(View.VISIBLE);
-        }
-        if (current.is_complete && !current.is_uploaded) {
-            imageReupload.setVisibility(View.VISIBLE);
-        }
         holder.bind(current.community, current.address, current.inspection_type, current.notes);
 
         holder.mReorderHandle.setOnTouchListener((v, event) -> {
@@ -68,6 +62,8 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
+        System.out.println("moved");
+
         if (fromPosition < toPosition) {
             for (int i = fromPosition; i < toPosition; i++) {
                 Collections.swap(currentList, i, i + 1);
@@ -91,13 +87,15 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     public static class InspectionDiff extends DiffUtil.ItemCallback<RouteSheet_View> {
         @Override
         public boolean areItemsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
+            System.out.println("areItemsTheSame: " + oldItem.address + " -- " + newItem.address + " " + (oldItem.id == newItem.id));
             return oldItem.id == newItem.id;
         }
 
         @SuppressLint("DiffUtilEquals")
         @Override
         public boolean areContentsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
-            return oldItem == newItem;
+            System.out.println("areContentsTheSame: " + oldItem.address + " -- " + newItem.address + " " + (oldItem.num_uploaded == newItem.num_uploaded));
+            return oldItem.num_uploaded == newItem.num_uploaded;
         }
     }
 }

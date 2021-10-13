@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transfer_inspection_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TransferInspectionActivity">
+    tools:context=".transferinspection.TransferInspectionActivity">
 
     <include
         android:id="@+id/include5"
@@ -79,17 +80,6 @@
         app:layout_constraintStart_toStartOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/transfer_inspection_text_current_inspector" />
 
-    <Spinner
-        android:id="@+id/transfer_inspection_spinner_inspectors"
-        style="@style/Widget.AppCompat.Spinner.Underlined"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="@+id/transfer_inspection_text_current_inspector"
-        app:layout_constraintStart_toStartOf="@+id/transfer_inspection_text_current_inspector"
-        app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
     <TextView
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
@@ -98,7 +88,7 @@
         android:text="Note"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/textView10"
-        app:layout_constraintTop_toBottomOf="@+id/transfer_inspection_spinner_inspectors" />
+        app:layout_constraintTop_toBottomOf="@+id/transfer_inspection_text_new_inspector" />
 
     <EditText
         android:id="@+id/transfer_inspection_text_note"
@@ -107,13 +97,14 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="Note for transfer"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="@+id/transfer_inspection_spinner_inspectors"
-        app:layout_constraintStart_toStartOf="@+id/transfer_inspection_spinner_inspectors"
+        app:layout_constraintEnd_toEndOf="@+id/transfer_inspection_text_new_inspector"
+        app:layout_constraintStart_toStartOf="@+id/transfer_inspection_text_new_inspector"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/transfer_inspection_button_transfer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -123,5 +114,15 @@
         android:textColor="@color/colorWhite"
         app:layout_constraintEnd_toEndOf="@+id/transfer_inspection_text_note"
         app:layout_constraintTop_toBottomOf="@+id/transfer_inspection_text_note" />
+
+    <AutoCompleteTextView
+        android:id="@+id/transfer_inspection_text_new_inspector"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="New Inspector"
+        app:layout_constraintEnd_toEndOf="@+id/transfer_inspection_text_current_inspector"
+        app:layout_constraintStart_toStartOf="@+id/transfer_inspection_text_current_inspector"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

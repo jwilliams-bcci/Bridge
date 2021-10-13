@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     private JsonArrayRequest mUpdateDefectItemsRequest;
     private JsonArrayRequest mUpdateDIITReferenceRequest;
     private JsonArrayRequest mUpdateBuildersRequest;
+    private JsonArrayRequest mUpdateInspectorsRequest;
     private String mVersionName;
     private String mUserName;
     private String mPassword;
@@ -190,6 +191,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         mUpdateBuildersRequest = BridgeAPIQueue.getInstance().updateBuilders(mLoginViewModel, new ServerCallback() {
+            @Override
+            public void onSuccess(String message) {
+                queue.add(mUpdateInspectorsRequest);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                hideSpinner();
+            }
+        });
+        mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectors(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 try {

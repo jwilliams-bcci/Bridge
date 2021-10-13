@@ -33,6 +33,7 @@ import data.DAOs.InspectionDefect_DAO;
 import data.DAOs.InspectionHistory_DAO;
 import data.DAOs.InspectionResolution_DAO;
 import data.DAOs.Inspection_DAO;
+import data.DAOs.Inspector_DAO;
 import data.DAOs.Location_DAO;
 import data.DAOs.MultifamilyDetails_DAO;
 import data.DAOs.Room_DAO;
@@ -47,6 +48,7 @@ import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.InspectionResolution_Table;
 import data.Tables.Inspection_Table;
+import data.Tables.Inspector_Table;
 import data.Tables.Location_Table;
 import data.Tables.MultifamilyDetails_Table;
 import data.Tables.Room_Table;
@@ -68,11 +70,12 @@ import data.Views.RouteSheet_View;
         DefectCategory_InspectionType_XRef.class,
         DefectItem_InspectionType_XRef.class,
         InspectionHistory_Table.class,
-        MultifamilyDetails_Table.class
+        MultifamilyDetails_Table.class,
+        Inspector_Table.class
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 37, exportSchema = false)
+        }, version = 43, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -89,6 +92,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract DefectItem_InspectionType_DAO mDefectItem_InspectionTypeDao();
     public abstract InspectionHistory_DAO mInspectionHistoryDao();
     public abstract MultifamilyDetails_DAO mMultifamilyDetailsDao();
+    public abstract Inspector_DAO mInspectorDao();
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);

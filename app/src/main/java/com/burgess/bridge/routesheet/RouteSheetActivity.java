@@ -13,7 +13,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -21,7 +20,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
-import com.burgess.bridge.base.BaseActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
@@ -134,7 +132,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             List<Integer> allInspectionIds = mRouteSheetViewModel.getAllInspectionIds(Integer.parseInt(mInspectorId));
             ArrayList<JsonObjectRequest> checkDateRequests = new ArrayList<>();
             for (int lcv = 0; lcv < allInspectionIds.size(); lcv++) {
-                checkDateRequests.add(BridgeAPIQueue.getInstance().checkDate(mRouteSheetViewModel, allInspectionIds.get(lcv)));
+                checkDateRequests.add(BridgeAPIQueue.getInstance().checkExistingInspection(mRouteSheetViewModel, allInspectionIds.get(lcv), Integer.parseInt(mInspectorId)));
             }
             for (int lcv = 0; lcv < checkDateRequests.size(); lcv++) {
                 BridgeAPIQueue.getInstance().getRequestQueue().add(checkDateRequests.get(lcv));

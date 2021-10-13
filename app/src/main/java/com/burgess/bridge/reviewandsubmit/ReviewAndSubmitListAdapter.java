@@ -42,7 +42,26 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
             v.getContext().startActivity(intent);
         });
 
-        holder.bind(current.inspection_id, current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, showThumbnail);
+        String status = "";
+        switch(current.defect_status_id) {
+            case 7:
+                status = "NOTE";
+                break;
+            case 2:
+                status = "NC";
+                break;
+            case 3:
+                status = "C";
+                break;
+            case 6:
+                status = "R";
+                break;
+            case 4:
+                status = "NA";
+                break;
+        }
+
+        holder.bind(current.inspection_id, current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, status, showThumbnail);
     }
 
     public static class ReviewAndSubmitDiff extends DiffUtil.ItemCallback<ReviewAndSubmit_View> {

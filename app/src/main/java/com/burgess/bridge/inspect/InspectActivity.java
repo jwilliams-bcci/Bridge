@@ -1,15 +1,10 @@
 package com.burgess.bridge.inspect;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,13 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,15 +27,14 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
-
-import static com.burgess.bridge.Constants.PREF;
 
 public class InspectActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
@@ -68,6 +61,7 @@ public class InspectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_inspect);
         setSupportActionBar(findViewById(R.id.inspect_toolbar));
         mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
@@ -183,7 +177,6 @@ public class InspectActivity extends AppCompatActivity {
         mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(filter, mInspectionTypeId, mInspectionId).observe(this, defectItems ->
                 mInspectListAdapter.submitList(defectItems));
     }
-
     private void displayReinspectItems() {
         mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems ->
                 mReinspectListAdapter.submitList(defectItems));
@@ -196,9 +189,9 @@ public class InspectActivity extends AppCompatActivity {
 
         // Set up the defect list
         mRecyclerDefectItems.setItemViewCacheSize(300);
-        mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.InspectDiff());
-        mReinspectListAdapter.setInspectionId(mInspectionId);
-        mReinspectListAdapter.setInspectionTypeId(mInspectionTypeId);
+        mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.ReinspectDiff());
+        mReinspectListAdapter.mInspectionId = mInspectionId;
+        mReinspectListAdapter.mInspectionTypeId = mInspectionTypeId;
         mRecyclerDefectItems.setAdapter(mReinspectListAdapter);
         displayReinspectItems();
 
@@ -254,7 +247,7 @@ public class InspectActivity extends AppCompatActivity {
                         }
                         break;
                 }
-                mReinspectListAdapter.notifyDataSetChanged();
+                mReinspectListAdapter.notifyItemChanged(((InspectViewHolder) viewHolder).mInspectionHistoryId);
             }
 
             @Override

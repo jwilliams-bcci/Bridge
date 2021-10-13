@@ -9,16 +9,19 @@ import data.Repositories.BuilderRepository;
 import data.Repositories.CannedCommentRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.DefectItem_InspectionType_XRefRepository;
+import data.Repositories.InspectorRepository;
 import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
+import data.Tables.Inspector_Table;
 
 public class LoginViewModel extends AndroidViewModel {
     private DefectItemRepository mDefectItemRepository;
     private CannedCommentRepository mCannedCommentRepository;
     private DefectItem_InspectionType_XRefRepository mRelationRepository;
     private BuilderRepository mBuilderRepository;
+    private InspectorRepository mInspectorRepository;
 
     public LoginViewModel(@NonNull Application application) {
         super(application);
@@ -26,6 +29,7 @@ public class LoginViewModel extends AndroidViewModel {
         mCannedCommentRepository = new CannedCommentRepository(application);
         mRelationRepository = new DefectItem_InspectionType_XRefRepository(application);
         mBuilderRepository = new BuilderRepository(application);
+        mInspectorRepository = new InspectorRepository(application);
     }
 
     public void insertDefectItem(DefectItem_Table defectItem) {
@@ -42,5 +46,9 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void insertBuilder(Builder_Table builder) {
         mBuilderRepository.insert(builder);
+    }
+
+    public void insertInspector(Inspector_Table inspector) {
+        mInspectorRepository.insert(inspector);
     }
 }
