@@ -132,17 +132,17 @@ public class BridgeAPIQueue {
                 mEditor.putBoolean(PREF_IS_ONLINE, false);
                 mEditor.apply();
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Lost connection in loginUser.");
-                callback.onFailure("No connection, please try again.");
+                callback.onFailure("Lost connection during login!");
             } else if (error instanceof TimeoutError) {
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Request timed out in loginUser.");
-                callback.onFailure("Request timed out, please try again.");
+                callback.onFailure("Request timed during login!");
             } else if (error instanceof AuthFailureError) {
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Authentication error in loginUser.");
                 callback.onFailure("Authentication error! Please try again.");
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in loginUser: " + errorMessage);
-                callback.onFailure("Error! Please contact support...");
+                callback.onFailure("Error during login!");
             }
         });
         return request;
@@ -169,17 +169,15 @@ public class BridgeAPIQueue {
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
-                mEditor.putBoolean(PREF_IS_ONLINE, false);
-                mEditor.apply();
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Lost connection in updateCannedComments.");
-                callback.onFailure("No connection, please try again.");
+                callback.onFailure("Lost connection while getting canned comments!");
             } else if (error instanceof TimeoutError) {
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Request timed out in updateCannedComments.");
-                callback.onFailure("Request timed out, please try again");
+                callback.onFailure("Request timed out while getting canned comments!");
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateCannedComments: " + errorMessage);
-                callback.onFailure("Error! Please contact support...");
+                callback.onFailure("Error getting canned comments!");
             }
         }) {
             @Override
@@ -219,17 +217,15 @@ public class BridgeAPIQueue {
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
-                mEditor.putBoolean(PREF_IS_ONLINE, false);
-                mEditor.apply();
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Lost connection in updateDefectItems.");
-                callback.onFailure("No connection, please try again.");
+                callback.onFailure("Lost connection while getting defect items!");
             } else if (error instanceof TimeoutError) {
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Request timed out in updateDefectItems.");
-                callback.onFailure("Request timed out, please try again");
+                callback.onFailure("Request timed out while getting defect items!");
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateDefectItems: " + errorMessage);
-                callback.onFailure("Error! Please contact support...");
+                callback.onFailure("Error getting defect items!");
             }
         }) {
             @Override
@@ -262,17 +258,15 @@ public class BridgeAPIQueue {
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
-                mEditor.putBoolean(PREF_IS_ONLINE, false);
-                mEditor.apply();
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Lost connection in updateDIIT.");
-                callback.onFailure("No connection, please try again.");
+                callback.onFailure("Lost connection while getting DIITs!");
             } else if (error instanceof TimeoutError) {
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Request timed out in updateDIIT.");
-                callback.onFailure("Request timed out, please try again");
+                callback.onFailure("Request timed out while getting DIITs!");
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateDIIT: " + errorMessage);
-                callback.onFailure("Error! Please contact support...");
+                callback.onFailure("Error getting DIITs!");
             }
         }) {
             @Override
@@ -306,17 +300,15 @@ public class BridgeAPIQueue {
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
-                mEditor.putBoolean(PREF_IS_ONLINE, false);
-                mEditor.apply();
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Lost connection in updateBuilders.");
-                callback.onFailure("No connection, please try again.");
+                callback.onFailure("Lost connection while getting builders!");
             } else if (error instanceof TimeoutError) {
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Request timed out in updateBuilders.");
-                callback.onFailure("Request timed out, please try again");
+                callback.onFailure("Request timed out while getting builders!");
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateBuilders: " + errorMessage);
-                callback.onFailure("Error! Please contact support...");
+                callback.onFailure("Error getting builders!");
             }
         }) {
             @Override
@@ -346,21 +338,19 @@ public class BridgeAPIQueue {
                     BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateBuilders: " + e.getMessage());
                 }
             }
-            Log.i(TAG, "Builders downloaded");
+            Log.i(TAG, "Inspectors downloaded");
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
-                mEditor.putBoolean(PREF_IS_ONLINE, false);
-                mEditor.apply();
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Lost connection in updateInspectors.");
-                callback.onFailure("No connection, please try again.");
+                callback.onFailure("Lost connection while getting inspectors!");
             } else if (error instanceof TimeoutError) {
                 BridgeLogger.getInstance(ctx).log('E', TAG, "Request timed out in updateInspectors.");
-                callback.onFailure("Request timed out, please try again");
+                callback.onFailure("Request timed out while getting inspectors!");
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.getInstance(ctx).log('E', TAG, "ERROR in updateInspectors: " + errorMessage);
-                callback.onFailure("Error! Please contact support...");
+                callback.onFailure("Error getting inspectors!");
             }
         }) {
             @Override

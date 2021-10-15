@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -34,6 +35,8 @@ import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import static com.burgess.bridge.Constants.*;
+
+import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel mLoginViewModel;
@@ -66,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mLoginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
 
+        BridgeLogger.getInstance(this);
         initializeViews();
         initializeButtonListeners();
 
@@ -114,19 +118,11 @@ public class LoginActivity extends AppCompatActivity {
             mPassword = mTextPassword.getText().toString();
 
             if (!isNetworkAvailable()) {
-                Snackbar snackbar = Snackbar
-                        .make(mConstraintLayout, "No network available! Continue offline?", Snackbar.LENGTH_LONG)
-                        .setAction("YES", v -> {
-                            mEditor.putBoolean(PREF_IS_ONLINE, false);
-                            mEditor.apply();
-                            workOffline();
-                        });
-                View snackbarView = snackbar.getView();
-                TextView textView = (TextView) snackbarView.findViewById(R.id.snackbar_text);
-                textView.setMaxLines(5);
+                Snackbar snackbar = showWorkOfflineSnackbar("No network available!");
                 snackbar.show();
             } else {
                 mEditor.putBoolean(PREF_IS_ONLINE, true);
+                mEditor.apply();
                 workOnline();
             }
         });
@@ -150,7 +146,12 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                if (message.equals("Authentication error! Please try again.")) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar snackbar = showWorkOfflineSnackbar(message);
+                    snackbar.show();
+                }
                 hideSpinner();
             }
         });
@@ -162,7 +163,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
                 hideSpinner();
             }
         });
@@ -174,7 +176,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
                 hideSpinner();
             }
         });
@@ -186,7 +189,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
                 hideSpinner();
             }
         });
@@ -198,56 +202,53 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
                 hideSpinner();
             }
         });
         mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectors(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                try {
-                    Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
-                    startActivity(routeSheetIntent);
-                } catch (Exception e) {
-                    BridgeLogger.getInstance().log('E', TAG, "ERROR in workOnline: " + e.getMessage());
-                    Snackbar.make(mConstraintLayout, "Error! Please contact support.", Snackbar.LENGTH_LONG).show();
-                }
+                Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
+                startActivity(routeSheetIntent);
                 hideSpinner();
             }
 
             @Override
             public void onFailure(String message) {
-                Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
                 hideSpinner();
             }
         });
 
         if (tokenAge > System.currentTimeMillis() - (60 * 60 * 12 * 1000)) {
-            BridgeLogger.getInstance(this).log('I', TAG, "Token is younger than 12 hours");
+            BridgeLogger.log('I', TAG, "Token is younger than 12 hours");
             if (checkSavedLogin()) {
-                BridgeLogger.getInstance(this).log('I', TAG, "The same user is logging in, bypassing loginRequest.");
+                BridgeLogger.log('I', TAG, "The same user is logging in, bypassing loginRequest.");
                 queue.add(mUpdateCannedCommentsRequest);
             } else {
-                BridgeLogger.getInstance(this).log('I', TAG, "Different user is logging in, getting new token...");
+                BridgeLogger.log('I', TAG, "Different user is logging in, getting new token...");
                 queue.add(mLoginRequest);
             }
         } else {
-            BridgeLogger.getInstance(this).log('I', TAG, "Token is older than 12 hours, getting new one...");
+            BridgeLogger.log('I', TAG, "Token is older than 12 hours, getting new one...");
             queue.add(mLoginRequest);
         }
     }
     private void workOffline() {
         if (checkSavedLogin()) {
-            BridgeLogger.getInstance(this).log('I', TAG, "Working offline, credentials match");
+            BridgeLogger.log('I', TAG, "Working offline, credentials match");
             try {
                 Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
                 startActivity(routeSheetIntent);
             } catch (Exception e) {
-                BridgeLogger.getInstance().log('E', TAG, "ERROR in workOffline: " + e.getMessage());
+                BridgeLogger.log('E', TAG, "ERROR in workOffline: " + e.getMessage());
                 Snackbar.make(mConstraintLayout, "Error! Please contact support.", Snackbar.LENGTH_LONG).show();
             }
         } else {
-            BridgeLogger.getInstance(this).log('I', TAG, "Working offline, credentials do not match");
+            BridgeLogger.log('I', TAG, "Working offline, credentials do not match");
             Snackbar.make(mConstraintLayout, "Credentials do not match, please try again when network is available", Snackbar.LENGTH_LONG).show();
         }
     }
@@ -261,6 +262,20 @@ public class LoginActivity extends AppCompatActivity {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+    private Snackbar showWorkOfflineSnackbar(String message) {
+        Snackbar snackbar = Snackbar
+                .make(mConstraintLayout, message + " Continue offline?", Snackbar.LENGTH_LONG)
+                .setAction("YES", v-> {
+                    mEditor.putBoolean(PREF_IS_ONLINE, false);
+                    mEditor.apply();
+                    workOffline();
+                });
+        View snackbarView = snackbar.getView();
+        TextView textView = (TextView) snackbarView.findViewById(R.id.snackbar_text);
+        textView.setMaxLines(5);
+
+        return snackbar;
     }
 
     private void showSpinner() {
