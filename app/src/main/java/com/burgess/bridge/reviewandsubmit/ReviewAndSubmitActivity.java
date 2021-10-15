@@ -286,7 +286,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         });
 
         // If there are no defects, go ahead and update the status
-        if (inspectionDefects.isEmpty()) {
+        if (inspectionDefects.isEmpty() || mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
         } else {
             for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
