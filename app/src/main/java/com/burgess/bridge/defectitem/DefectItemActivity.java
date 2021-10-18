@@ -206,6 +206,9 @@ public class DefectItemActivity extends AppCompatActivity {
                 InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
                 currentItem.comment = comment;
                 currentItem.defect_status_id = defectStatusId;
+                if (mPictureTaken) {
+                    currentItem.picture_path = mCurrentPhotoPath;
+                }
                 mDefectItemViewModel.updateInspectionDefect(currentItem);
                 mDefectItemViewModel.updateReviewedStatus(defectStatusId, mInspectionHistoryId);
                 mDefectItemViewModel.updateIsReviewed(mInspectionHistoryId);

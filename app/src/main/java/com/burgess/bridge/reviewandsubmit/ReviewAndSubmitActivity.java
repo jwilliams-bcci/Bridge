@@ -149,6 +149,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                             completeInspection();
                         } catch (Exception e) {
                             BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
+                            hideProgressSpinner();
+                            Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
                         }
                     })
                     .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
@@ -286,9 +288,15 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         });
 
         // If there are no defects, go ahead and update the status
-        if (inspectionDefects.isEmpty() || mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
+        if (inspectionDefects.isEmpty()) {
+            BridgeLogger.log('I', TAG, "No defects");
+            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+        }
+        else if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
+            BridgeLogger.log('I', TAG, "All uploaded previously");
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
         } else {
+            BridgeLogger.log('I', TAG, "Found defects, uploading...");
             for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
                 defect = inspectionDefects.get(lcv);
                 jObj = new JSONObject();
@@ -311,6 +319,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
                 InspectionDefect_Table finalDefect = defect;
                 if (!defect.is_uploaded) {
+                    BridgeLogger.log('I', TAG, "Not uploaded, start the upload");
                     mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
                         @Override
                         public void onSuccess(String message) {
@@ -328,6 +337,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     });
                     BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
                 }
+                BridgeLogger.log('I', TAG, "Going to next defect");
             }
         }
         hideProgressSpinner();
