@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -87,6 +88,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private List<InspectionDefect_Table> mReinspectionRequiredDefectList;
     private Button mButtonAttachFile;
     private Button mButtonSubmit;
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +123,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
         });
         mButtonSubmit.setOnClickListener(v -> {
+            // Prevent double clicking
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             mInspectionStatusId = getInspectionStatusId();
             String statusMessage;
             switch (mInspectionStatusId) {
@@ -310,8 +318,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
                 jObj.put("Comment", defect.comment);
                 if (defect.picture_path != null) {
-                    jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(defect.id)));
-                    jObj.put("ImageFileName", defect.picture_path.substring(defect.picture_path.lastIndexOf("/")+1));
+                    try{
+                        jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(defect.id)));
+                        jObj.put("ImageFileName", defect.picture_path.substring(defect.picture_path.lastIndexOf("/")+1));
+                    } catch (NullPointerException e) {
+                        Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + defect.defect_item_id, Snackbar.LENGTH_SHORT).show();
+                        hideProgressSpinner();
+                        return;
+                    }
                 } else {
                     jObj.put("ImageData", null);
                     jObj.put("ImageFileName", null);

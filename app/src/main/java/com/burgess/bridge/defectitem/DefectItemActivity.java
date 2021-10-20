@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.speech.RecognitionListener;
@@ -67,6 +68,7 @@ public class DefectItemActivity extends AppCompatActivity {
     public boolean mPictureTaken = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
     private String mCurrentPhotoPath;
+    private long mLastClickTime = 0;
 
     private int mInspectionId;
     private int mDefectId;
@@ -155,6 +157,12 @@ public class DefectItemActivity extends AppCompatActivity {
             }
         });
         mSaveInspectionDefect.setOnClickListener(v -> {
+            // Prevent double clicking
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             // Initialize local variables for new defect item.
             int defectStatusId = 0;
             int priorInspectionDetailId = mInspectionHistoryId == -1 ? 0 : mInspectionHistoryId;
@@ -282,6 +290,11 @@ public class DefectItemActivity extends AppCompatActivity {
                     break;
             }
             mDefectItemTextComment.setText(currentItem.comment);
+
+            if (!currentItem.picture_path.isEmpty()) {
+                mCurrentPhotoPath = currentItem.picture_path;
+                displayThumbnail();
+            }
         }
 
         // If mInspectionHistoryId > 0, then this is a reinspect and we need to show the previous comment label / text
@@ -347,7 +360,6 @@ public class DefectItemActivity extends AppCompatActivity {
                 Log.d("SPEECH", "onEvent");
             }
         });
-
         mButtonMicrophone.setOnTouchListener((view, motionEvent) -> {
             switch(motionEvent.getAction()) {
                 case MotionEvent.ACTION_UP:
@@ -389,6 +401,7 @@ public class DefectItemActivity extends AppCompatActivity {
         }
     }
 
+    // Camera functions
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Bridge_" + mInspectionId + "_" + mDefectId + "_" + timeStamp;
@@ -397,7 +410,6 @@ public class DefectItemActivity extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
     private void rotateImageFile(String filePath) throws IOException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;
@@ -419,11 +431,8 @@ public class DefectItemActivity extends AppCompatActivity {
         outBmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         stream.close();
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+    private void displayThumbnail() {
+        try {
             Bitmap imageThumbnailBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath), 128, 128);
             Bitmap outBmp;
             float degrees = 90;
@@ -431,12 +440,21 @@ public class DefectItemActivity extends AppCompatActivity {
             matrix.setRotate(degrees);
             outBmp = Bitmap.createBitmap(imageThumbnailBitmap, 0, 0, imageThumbnailBitmap.getWidth(), imageThumbnailBitmap.getHeight(), matrix, true);
             mImageViewThumbnail.setImageBitmap(outBmp);
-            try {
-                rotateImageFile(mCurrentPhotoPath);
-            } catch (IOException e) {
-                BridgeLogger.log('E', TAG, "ERROR in onActivityResult: " + e.getMessage());
-            }
+            rotateImageFile(mCurrentPhotoPath);
+        } catch (IOException e) {
+            BridgeLogger.log('E', TAG, "ERROR in onActivityResult: " + e.getMessage());
+        } catch (NullPointerException e) {
+            mImageViewThumbnail.setImageResource(R.drawable.ic_no_picture);
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            displayThumbnail();
             mPictureTaken = true;
         }
     }
+
+
 }
