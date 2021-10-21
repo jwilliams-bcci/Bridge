@@ -182,14 +182,17 @@ public class EditResolutionActivity extends AppCompatActivity {
 
     private void addNote() {
         InspectionDefect_Table inspectionDefect;
+        long newId = 0;
+
         if (mPictureTaken) {
             inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, false, mCurrentPhotoPath);
         } else {
             inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, false, null);
         }
-        mEditResolutionViewModel.addInspectionDefect(inspectionDefect);
+        newId = mEditResolutionViewModel.addInspectionDefect(inspectionDefect);
 
-        BridgeAPIQueue.getInstance().getRequestQueue().add(getUploadInspectionDefectRequest(inspectionDefect));
+        InspectionDefect_Table newInspectionDefect = mEditResolutionViewModel.getInspectionDefect((int) newId);
+        BridgeAPIQueue.getInstance().getRequestQueue().add(getUploadInspectionDefectRequest(newInspectionDefect));
     }
     private StringRequest getUploadInspectionDefectRequest(InspectionDefect_Table noteDetails) {
         BridgeLogger.log('I', TAG, "Uploading note...");

@@ -26,8 +26,8 @@ public class EditResolutionViewModel extends AndroidViewModel {
         return mInspectionRepository.getInspectionSync(inspectionId);
     }
 
-    public void addInspectionDefect(InspectionDefect_Table inspectionDefect) {
-        mInspectionDefectRepository.insert(inspectionDefect);
+    public long addInspectionDefect(InspectionDefect_Table inspectionDefect) {
+        return mInspectionDefectRepository.insert(inspectionDefect);
     }
 
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {

@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-permission-sdk-23 android:name="android.permission.RECORD_AUDIO" />
 
@@ -20,6 +21,9 @@
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera.any" />
 
     <application
         android:allowBackup="false"
