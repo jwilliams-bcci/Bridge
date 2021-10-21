@@ -143,12 +143,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mButtonCamera.setOnClickListener(v -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                } catch (IOException e) {
-                    BridgeLogger.log('E', TAG, "ERROR in launching camera activity: " + e.getMessage());
-                }
+                File photoFile = createImageFile();
                 if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(this, "com.burgess.bridge", photoFile);
                     cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -291,7 +286,7 @@ public class DefectItemActivity extends AppCompatActivity {
             }
             mDefectItemTextComment.setText(currentItem.comment);
 
-            if (!currentItem.picture_path.isEmpty()) {
+            if (currentItem.picture_path != null) {
                 mCurrentPhotoPath = currentItem.picture_path;
                 displayThumbnail();
             }
@@ -402,34 +397,19 @@ public class DefectItemActivity extends AppCompatActivity {
     }
 
     // Camera functions
-    private File createImageFile() throws IOException {
+    private File createImageFile() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "Bridge_" + mInspectionId + "_" + mDefectId + "_" + timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".png", storageDir);
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-    private void rotateImageFile(String filePath) throws IOException {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2;
-        Bitmap image;
+        File image;
         try {
-            image = BitmapFactory.decodeFile(filePath, options);
-        } catch (OutOfMemoryError e) {
-            image = null;
-            Log.i(TAG, "Out of memory error when rotating image");
-            BridgeLogger.log('E', TAG, "ERROR in rotateImageFile: " + e.getMessage());
+            image = File.createTempFile(imageFileName, ".png", storageDir);
+            mCurrentPhotoPath = image.getAbsolutePath();
+            return image;
+        } catch (IOException e) {
+            BridgeLogger.log('E', TAG, "ERROR in createImageFile: " + e.getMessage());
+            return null;
         }
-        Bitmap outBmp;
-        float degrees = 90;
-        Matrix matrix = new Matrix();
-        matrix.setRotate(degrees);
-        assert image != null;
-        outBmp = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
-        FileOutputStream stream = new FileOutputStream(filePath, false);
-        outBmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        stream.close();
     }
     private void displayThumbnail() {
         try {
@@ -440,9 +420,6 @@ public class DefectItemActivity extends AppCompatActivity {
             matrix.setRotate(degrees);
             outBmp = Bitmap.createBitmap(imageThumbnailBitmap, 0, 0, imageThumbnailBitmap.getWidth(), imageThumbnailBitmap.getHeight(), matrix, true);
             mImageViewThumbnail.setImageBitmap(outBmp);
-            rotateImageFile(mCurrentPhotoPath);
-        } catch (IOException e) {
-            BridgeLogger.log('E', TAG, "ERROR in onActivityResult: " + e.getMessage());
         } catch (NullPointerException e) {
             mImageViewThumbnail.setImageResource(R.drawable.ic_no_picture);
         }
@@ -455,6 +432,4 @@ public class DefectItemActivity extends AppCompatActivity {
             mPictureTaken = true;
         }
     }
-
-
 }

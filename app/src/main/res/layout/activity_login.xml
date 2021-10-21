@@ -99,15 +99,15 @@
         app:srcCompat="@drawable/logo_dark_background" />
 
     <CheckBox
-        android:id="@+id/login_checkbox_keep_me_logged_in"
+        android:id="@+id/login_checkbox_remember_credentials"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:buttonTint="@color/colorWhite"
-        android:text="Keep Me Logged In"
+        android:text="Remember Credentials"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button_login" />
@@ -121,6 +121,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_checkbox_keep_me_logged_in" />
+        app:layout_constraintTop_toBottomOf="@+id/login_checkbox_remember_credentials" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

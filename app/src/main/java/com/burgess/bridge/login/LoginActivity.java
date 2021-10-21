@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -17,13 +16,11 @@ import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -36,8 +33,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import static com.burgess.bridge.Constants.*;
 
-import java.util.concurrent.TimeUnit;
-
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel mLoginViewModel;
     private ConstraintLayout mConstraintLayout;
@@ -47,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mTextPassword;
     private TextView mTextVersionName;
     private Button mButtonLogin;
-    private CheckBox mCheckBoxKeepMeLoggedIn;
+    private CheckBox mCheckBoxRememberCredentials;
     private LinearLayout mLockScreen;
     private ProgressBar mProgressBar;
 
@@ -69,36 +64,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mLoginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
 
-        BridgeLogger.getInstance(this);
-        initializeViews();
-        initializeButtonListeners();
-
         // Prepare Shared Preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
         mEditor.putBoolean(PREF_IS_ONLINE, true);
         mEditor.apply();
 
-        // Set the text boxes to respond to "Return" on keyboard...
-        mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
-        mTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        // Prepare Logger and API...
+        BridgeLogger.getInstance(this);
+        BridgeAPIQueue.getInstance(this);
 
-        // Set the version label to display the version number...
-        PackageInfo pInfo = null;
-        try {
-            pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        mVersionName = pInfo.versionName;
-        mTextVersionName.setText("Version " + mVersionName);
-
-        // Not currently being used - logic to check if "Keep Me Logged In" is checked
-        if (mSharedPreferences.getBoolean(PREF_STAY_LOGGED_IN, false)) {
-            Log.i(TAG, "KeepMeLoggedIn is true");
-            Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
-            startActivity(routeSheetIntent);
-        }
+        initializeViews();
+        initializeButtonListeners();
+        initializeDisplayContent();
     }
 
     private void initializeViews() {
@@ -106,16 +84,22 @@ public class LoginActivity extends AppCompatActivity {
         mTextPassword = findViewById(R.id.login_text_password);
         mTextVersionName = findViewById(R.id.login_text_version_name);
         mButtonLogin = findViewById(R.id.login_button_login);
-        mCheckBoxKeepMeLoggedIn = findViewById(R.id.login_checkbox_keep_me_logged_in);
+        mCheckBoxRememberCredentials = findViewById(R.id.login_checkbox_remember_credentials);
         mConstraintLayout = findViewById(R.id.login_constraint_layout);
         mLockScreen = findViewById(R.id.login_lock_screen);
         mProgressBar = findViewById(R.id.login_progress_bar);
     }
-
     private void initializeButtonListeners() {
         mButtonLogin.setOnClickListener(view -> {
             mUserName = mTextUserName.getText().toString();
             mPassword = mTextPassword.getText().toString();
+
+            if (mCheckBoxRememberCredentials.isChecked()) {
+                mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
+            } else {
+                mEditor.putBoolean(REMEMBER_CREDENTIALS, false);
+            }
+            mEditor.apply();
 
             if (!isNetworkAvailable()) {
                 Snackbar snackbar = showWorkOfflineSnackbar("No network available!");
@@ -127,6 +111,27 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    private void initializeDisplayContent() {
+        if (mSharedPreferences.getBoolean(REMEMBER_CREDENTIALS, false)) {
+            mCheckBoxRememberCredentials.setChecked(true);
+            mTextUserName.setText(mSharedPreferences.getString(PREF_LOGIN_NAME, "NOT FOUND"));
+            mTextPassword.setText(mSharedPreferences.getString(PREF_LOGIN_PASSWORD, ""));
+        }
+
+        // Set the version label to display the version number...
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        mVersionName = pInfo.versionName;
+        mTextVersionName.setText("Version " + mVersionName);
+
+        // Set the text boxes to respond to "Return" on keyboard...
+        mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        mTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+    }
 
     private void workOnline() {
         showSpinner();
@@ -137,8 +142,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginRequest = BridgeAPIQueue.getInstance().loginUser(mUserName, mPassword, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                if (mCheckBoxKeepMeLoggedIn.isChecked()) {
-                    mEditor.putBoolean(PREF_STAY_LOGGED_IN, true);
+                if (mCheckBoxRememberCredentials.isChecked()) {
+                    mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
                     mEditor.apply();
                 }
                 queue.add(mUpdateCannedCommentsRequest);

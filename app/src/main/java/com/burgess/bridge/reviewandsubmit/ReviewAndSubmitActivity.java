@@ -1,6 +1,7 @@
 package com.burgess.bridge.reviewandsubmit;
 
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -81,6 +82,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private StringRequest mUploadInspectionDataRequest;
     private StringRequest mUpdateInspectionStatusRequest;
     private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
     private String mSecurityUserId;
     private int mDivisionId;
     private ItemTouchHelper mItemTouchHelper;
@@ -88,6 +90,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private List<InspectionDefect_Table> mReinspectionRequiredDefectList;
     private Button mButtonAttachFile;
     private Button mButtonSubmit;
+    private boolean mIsOnline;
     private long mLastClickTime = 0;
 
     @Override
@@ -95,14 +98,18 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_and_submit);
         setSupportActionBar(findViewById(R.id.review_and_submit_toolbar));
-        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         mReviewAndSubmitViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
+
+        // Prepare shared preferences...
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
         mInspection = mReviewAndSubmitViewModel.getInspectionSync(mInspectionId);
         mSecurityUserId = mSharedPreferences.getString(Constants.PREF_SECURITY_USER_ID, "NULL");
         mDivisionId = mInspection.division_id;
+        mIsOnline = mSharedPreferences.getBoolean(PREF_IS_ONLINE, false);
 
         initializeViews();
         initializeButtonListeners();

@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +22,7 @@ import java.util.List;
 
 import data.Views.RouteSheet_View;
 
-public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter {
+public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter, Filterable {
     private List<RouteSheet_View> currentList;
     private OnDragListener mDragListener;
 
@@ -74,6 +76,11 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
             }
         }
         notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return null;
     }
 
     public void setCurrentList(List<RouteSheet_View> list) {
