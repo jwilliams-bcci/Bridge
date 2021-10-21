@@ -40,8 +40,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
     private SharedPreferences.Editor mEditor;
     private ItemTouchHelper mItemTouchHelper;
     private TextView mTextSearchCommunity;
-    private TextView mTextSearchAddress;
-    private TextView mTextSearchInspectionType;
     private Switch mSwitchSearchReinspects;
     private Button mButtonUpdateRouteSheet;
     private Button mButtonPrintRouteSheet;
@@ -87,8 +85,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         mButtonPrintRouteSheet = findViewById(R.id.route_sheet_button_print_route_sheet);
         mButtonSendActivityLog = findViewById(R.id.route_sheet_button_send_log);
         mTextSearchCommunity = findViewById(R.id.route_sheet_text_search_community);
-        mTextSearchAddress = findViewById(R.id.route_sheet_text_search_address);
-        mTextSearchInspectionType = findViewById(R.id.route_sheet_text_search_inspection_type);
         mSwitchSearchReinspects = findViewById(R.id.route_sheet_switch_search_reinspects);
         mRecyclerInspections = findViewById(R.id.route_sheet_list_inspections);
     }

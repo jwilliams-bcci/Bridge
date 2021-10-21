@@ -45,48 +45,18 @@
         app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_update_route_sheet" />
 
     <EditText
-        android:id="@+id/route_sheet_text_search_address"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:autofillHints="@string/route_sheet_text_search_address_hint"
-        android:ems="10"
-        android:hint="@string/route_sheet_text_search_address_hint"
-        android:inputType="textPostalAddress"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_inspection_type"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/route_sheet_text_search_community"
-        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
-
-    <EditText
-        android:id="@+id/route_sheet_text_search_inspection_type"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="2dp"
-        android:autofillHints="@string/route_sheet_text_search_inspection_type_hint"
-        android:ems="10"
-        android:hint="@string/route_sheet_text_search_inspection_type_hint"
-        android:inputType="textPersonName"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/route_sheet_switch_search_reinspects"
-        app:layout_constraintStart_toEndOf="@+id/route_sheet_text_search_address"
-        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
-
-    <EditText
         android:id="@+id/route_sheet_text_search_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="2dp"
         android:autofillHints="@string/route_sheet_text_search_community_hint"
         android:ems="10"
         android:hint="@string/route_sheet_text_search_community_hint"
         android:inputType="textPersonName"
         android:singleLine="false"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/route_sheet_text_search_address"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/route_sheet_switch_search_reinspects"
         app:layout_constraintStart_toStartOf="@+id/route_sheet_button_send_log"
         app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_send_log" />
 
@@ -137,8 +107,8 @@
         android:splitTrack="false"
         android:text="Reinspects"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/route_sheet_text_search_inspection_type"
+        app:layout_constraintBottom_toBottomOf="@+id/route_sheet_text_search_community"
         app:layout_constraintEnd_toEndOf="@+id/route_sheet_button_print_route_sheet"
-        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_inspection_type" />
+        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
