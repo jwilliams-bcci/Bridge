@@ -34,8 +34,8 @@ public class InspectionRepository {
         return mInspectionDao.getInspectionsForRouteSheet(inspector_id);
     }
 
-    public LiveData<List<Inspection_Table>> getAllInspectionsForRouteSheet2(int inspector_id) {
-        return mInspectionDao.getInspections(inspector_id);
+    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet2(int inspectorId, String communityFilter, boolean onlyReinspects) {
+        return mInspectionDao.getInspectionsForRouteSheet2(inspectorId, communityFilter, onlyReinspects);
     }
 
     public List<Integer> getAllInspectionIds(int inspector_id) {
@@ -51,16 +51,19 @@ public class InspectionRepository {
     }
 
     public void insert(Inspection_Table i) {
-        BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-            try {
-                mInspectionDao.insert(i);
-            } catch (SQLiteConstraintException e) {
+        Inspection_Table existingInspection = getInspectionSync(i.id);
+        if (existingInspection != null) {
+            BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
                 mInspectionDao.update(i.id, i.inspection_type_id, i.inspection_date, i.division_id, i.location_id, i.builder_name, i.builder_id,
                         i.super_name, i.inspector_id, i.inspector, i.community, i.community_id, i.city, i.inspection_class, i.inspection_type,
                         i.reinspect, i.inspection_order, i.address, i.inspection_status_id, i.inspection_status, i.super_phone, i.super_email,
                         i.super_present, i.incomplete_reason, i.incomplete_reason_id, i.notes);
-            }
-        });
+            });
+        } else {
+            BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
+                mInspectionDao.insert(i);
+            });
+        }
     }
 
     public void delete(int inspectionId) {

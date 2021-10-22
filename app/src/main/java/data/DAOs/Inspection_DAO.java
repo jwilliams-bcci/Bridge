@@ -41,8 +41,16 @@ public interface Inspection_DAO {
     @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
     LiveData<List<Inspection_Table>> getInspections(int inspector_id);
 
-    @Query("SELECT * FROM routesheet_view WHERE inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 ORDER BY is_complete DESC, route_sheet_order")
+    @Query("SELECT * FROM routesheet_view " +
+            "WHERE inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 " +
+            "ORDER BY is_complete DESC, route_sheet_order")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
+
+    @Query("SELECT * FROM routesheet_view " +
+            "WHERE inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 " +
+            "AND community LIKE :communityFilter AND reinspect >= :onlyReinspects " +
+            "ORDER BY is_complete DESC, route_sheet_order")
+    LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet2(int inspector_id, String communityFilter, boolean onlyReinspects);
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
     LiveData<Inspection_Table> getInspection(int inspection_id);

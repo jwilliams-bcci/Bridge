@@ -29,6 +29,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public int numberUploaded;
     public int numberToUpload;
 
+    private final CardView mCardView;
     private final TextView mTextInspectionCommunity;
     private final TextView mTextInspectionAddress;
     private final TextView mTextInspectionType;
@@ -40,6 +41,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     @SuppressLint("ClickableViewAccessibility")
     public RouteSheetViewHolder(@NonNull View itemView) {
         super(itemView);
+        mCardView = itemView.findViewById(R.id.item_inspection_list_card_view);
         mTextInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
         mTextInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
         mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
@@ -76,11 +78,15 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mTextInspectionType.setText(inspectionType);
         mTextInspectionNotes.setText(notes.equalsIgnoreCase("null") ? "No additional notes" : notes);
         if (isComplete) {
+            setBackgroundColor(Color.YELLOW);
             mTextInspectionUploaded.setVisibility(View.VISIBLE);
             mTextInspectionUploaded.setText(String.format("Uploaded %d of %d defects.", numberUploaded, numberToUpload));
-
             mReupload.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setBackgroundColor(int color) {
+        mCardView.setCardBackgroundColor(color);
     }
 
     public static RouteSheetViewHolder create(ViewGroup parent) {

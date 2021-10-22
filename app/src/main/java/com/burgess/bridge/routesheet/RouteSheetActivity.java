@@ -13,6 +13,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -76,6 +79,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
 
         initializeViews();
         initializeButtonListeners();
+        initializeTextListeners();
         initializeDisplayContent();
     }
 
@@ -107,6 +111,24 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             Snackbar.make(mConstraintLayout, "Printing route sheet not yet available.", Snackbar.LENGTH_SHORT).show();
         });
     }
+    private void initializeTextListeners() {
+        mTextSearchCommunity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.i("SEARCH", "beforeTextChange: " + s);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.i("SEARCH", "onTextChanged: " + s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.i("SEARCH", "afterTextChanged: " + s.toString());
+            }
+        });
+    }
     private void initializeDisplayContent() {
         try {
             RouteSheetListAdapter routeSheetListAdapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
@@ -115,6 +137,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerInspections.getItemAnimator().setChangeDuration(0);
             mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId)).observe(this, inspections -> {
+                routeSheetListAdapter.getFilter().filter("AAA");
                 routeSheetListAdapter.submitList(inspections);
                 routeSheetListAdapter.setCurrentList(inspections);
             });

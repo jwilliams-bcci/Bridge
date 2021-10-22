@@ -17,8 +17,11 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.burgess.bridge.R;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import data.Views.RouteSheet_View;
 
@@ -41,8 +44,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
         RouteSheet_View current = getItem(position);
         CardView view = holder.itemView.findViewById(R.id.item_inspection_list_card_view);
-        ImageView imageReinspect = holder.itemView.findViewById(R.id.item_inspection_list_imageview_reinspection);
-        ImageView imageReupload = holder.itemView.findViewById(R.id.item_inspection_list_imageview_reupload);
         holder.mInspectionId = current.id;
         holder.mInspectionTypeId = current.inspection_type_id;
         holder.isComplete = current.is_complete;
@@ -63,6 +64,11 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     }
 
     @Override
+    public int getItemCount() {
+        return currentList == null ? 0 : currentList.size();
+    }
+
+    @Override
     public void onItemMove(int fromPosition, int toPosition) {
         System.out.println("moved");
 
@@ -80,7 +86,35 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     @Override
     public Filter getFilter() {
-        return null;
+        Filter searchFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<RouteSheet_View> filteredList = new ArrayList<>();
+                if (constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(currentList);
+                } else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+                    for (RouteSheet_View item : currentList) {
+                        if (item.community.toLowerCase().contains(filterPattern)) {
+                            filteredList.add(item);
+                        }
+                    }
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                if (currentList != null && results.values != null) {
+                    currentList.clear();
+                    currentList.addAll((Collection<? extends RouteSheet_View>) results.values);
+                    notifyDataSetChanged();
+                }
+            }
+        };
+        return searchFilter;
     }
 
     public void setCurrentList(List<RouteSheet_View> list) {
