@@ -34,6 +34,10 @@ public class InspectionRepository {
         return mInspectionDao.getInspectionsForRouteSheet(inspector_id);
     }
 
+    public List<RouteSheet_View> getAllInspectionsForRouteSheetSync(int inspectorId) {
+        return mInspectionDao.getInspectionsForRouteSheetSync(inspectorId);
+    }
+
     public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet2(int inspectorId, String communityFilter, boolean onlyReinspects) {
         return mInspectionDao.getInspectionsForRouteSheet2(inspectorId, communityFilter, onlyReinspects);
     }

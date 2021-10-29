@@ -146,7 +146,8 @@ public class LoginActivity extends AppCompatActivity {
                     mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
                     mEditor.apply();
                 }
-                queue.add(mUpdateCannedCommentsRequest);
+                //queue.add(mUpdateCannedCommentsRequest);
+                queue.add(mUpdateBuildersRequest);
             }
 
             @Override

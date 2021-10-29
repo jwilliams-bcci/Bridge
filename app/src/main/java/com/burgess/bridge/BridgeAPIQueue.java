@@ -108,6 +108,10 @@ public class BridgeAPIQueue {
         return queue;
     }
 
+    public boolean isProd() {
+        return isProd;
+    }
+
     // Login
     public JsonObjectRequest loginUser(String userName, String password, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;

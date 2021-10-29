@@ -2,13 +2,10 @@ package com.burgess.bridge.routesheet;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -21,12 +18,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import data.Views.RouteSheet_View;
 
 public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter, Filterable {
     private List<RouteSheet_View> currentList;
+    private List<RouteSheet_View> dataSet;
     private OnDragListener mDragListener;
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
@@ -65,7 +62,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     @Override
     public int getItemCount() {
-        return currentList == null ? 0 : currentList.size();
+        return currentList == null ? 0 : dataSet.size();
     }
 
     @Override
@@ -108,17 +105,18 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (currentList != null && results.values != null) {
-                    currentList.clear();
-                    currentList.addAll((Collection<? extends RouteSheet_View>) results.values);
+                    dataSet.clear();
+                    dataSet.addAll((Collection<? extends RouteSheet_View>) results.values);
                     notifyDataSetChanged();
                 }
             }
         };
+        System.out.println(searchFilter.toString());
         return searchFilter;
     }
 
     public void setCurrentList(List<RouteSheet_View> list) {
-        currentList = list;
+        dataSet = list;
     }
 
     public void setDragListener(OnDragListener listener) {

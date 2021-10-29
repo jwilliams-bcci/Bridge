@@ -34,8 +34,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
         return mInspectionRepository.getAllInspectionsForRouteSheet(inspectorId);
     }
 
-    public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet2(int inspectorId, String communityFilter, boolean onlyReinspects) {
-        return mInspectionRepository.getAllInspectionsForRouteSheet2(inspectorId, communityFilter, onlyReinspects);
+    public List<RouteSheet_View> getAllInspectionsForRouteSheetSync(int inspectorId) {
+        return mInspectionRepository.getAllInspectionsForRouteSheetSync(inspectorId);
     }
 
     public List<Integer> getAllInspectionIds(int inspectorId) {

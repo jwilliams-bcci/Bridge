@@ -98,6 +98,8 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
+        String isProd = BridgeAPIQueue.getInstance(context).isProd() ? "bridge_database_prod.db" : "bridge_database_stage.db";
+
         if (INSTANCE == null) {
             synchronized (BridgeRoomDatabase.class) {
                 if (INSTANCE == null) {
@@ -105,7 +107,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
                             .addCallback(sRoomDatabaseCallback)
                             .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()
-                            //.createFromAsset("bridge_seed_database.db")
+                            .createFromAsset(isProd)
                             .build();
                 }
             }

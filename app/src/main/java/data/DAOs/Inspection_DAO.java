@@ -47,6 +47,11 @@ public interface Inspection_DAO {
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 
     @Query("SELECT * FROM routesheet_view " +
+            "WHERE inspector_id = :inspectorId AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 " +
+            "ORDER BY is_complete DESC, route_sheet_order")
+    List<RouteSheet_View> getInspectionsForRouteSheetSync(int inspectorId);
+
+    @Query("SELECT * FROM routesheet_view " +
             "WHERE inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 " +
             "AND community LIKE :communityFilter AND reinspect >= :onlyReinspects " +
             "ORDER BY is_complete DESC, route_sheet_order")

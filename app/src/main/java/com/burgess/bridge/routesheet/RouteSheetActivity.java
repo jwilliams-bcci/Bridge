@@ -2,6 +2,8 @@ package com.burgess.bridge.routesheet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +19,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -35,6 +38,8 @@ import java.util.List;
 import static com.burgess.bridge.Constants.PREF;
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
 import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
+
+import data.Views.RouteSheet_View;
 
 public class RouteSheetActivity extends AppCompatActivity implements OnDragListener {
     private RouteSheetViewModel mRouteSheetViewModel;
@@ -56,6 +61,8 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
 
     private static final String TAG = "ROUTE_SHEET";
     private static BridgeAPIQueue apiQueue;
+    private RouteSheetListAdapter mRouteSheetListAdapter;
+    private LiveData<List<RouteSheet_View>> mInspectionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +128,12 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.i("SEARCH", "onTextChanged: " + s);
+                mInspectionList.observeForever(inspections -> {
+                    mRouteSheetListAdapter.submitList(inspections);
+                    mRouteSheetListAdapter.setCurrentList(inspections);
+                    mRouteSheetListAdapter.getFilter().filter(mTextSearchCommunity.getText());
+                });
+                //mRouteSheetListAdapter.notifyAll();
             }
 
             @Override
@@ -131,18 +144,19 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
     }
     private void initializeDisplayContent() {
         try {
-            RouteSheetListAdapter routeSheetListAdapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
-            mRecyclerInspections.setAdapter(routeSheetListAdapter);
-            routeSheetListAdapter.setDragListener(this);
+            mInspectionList = mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId));
+            mRouteSheetListAdapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
+            mRecyclerInspections.setAdapter(mRouteSheetListAdapter);
+            mRouteSheetListAdapter.setDragListener(this);
             mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerInspections.getItemAnimator().setChangeDuration(0);
-            mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId)).observe(this, inspections -> {
-                routeSheetListAdapter.getFilter().filter("AAA");
-                routeSheetListAdapter.submitList(inspections);
-                routeSheetListAdapter.setCurrentList(inspections);
+            mInspectionList.observe(this, inspections -> {
+                //mRouteSheetListAdapter.getFilter().filter(mTextSearchCommunity.getText());
+                mRouteSheetListAdapter.setCurrentList(inspections);
+                mRouteSheetListAdapter.submitList(inspections);
             });
 
-            ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(routeSheetListAdapter);
+            ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(mRouteSheetListAdapter);
             mItemTouchHelper = new ItemTouchHelper(callback);
             mItemTouchHelper.attachToRecyclerView(mRecyclerInspections);
         } catch (Exception e) {
