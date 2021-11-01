@@ -2,6 +2,7 @@ package com.burgess.bridge.routesheet;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -23,7 +24,7 @@ import data.Views.RouteSheet_View;
 
 public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter, Filterable {
     private List<RouteSheet_View> currentList;
-    private List<RouteSheet_View> dataSet;
+    private List<RouteSheet_View> dataSet = new ArrayList<>();
     private OnDragListener mDragListener;
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
@@ -41,6 +42,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
         RouteSheet_View current = getItem(position);
         CardView view = holder.itemView.findViewById(R.id.item_inspection_list_card_view);
+        //Log.i("SEARCH", "Binding " + current.id);
         holder.mInspectionId = current.id;
         holder.mInspectionTypeId = current.inspection_type_id;
         holder.isComplete = current.is_complete;
@@ -62,7 +64,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     @Override
     public int getItemCount() {
-        return currentList == null ? 0 : dataSet.size();
+        return currentList == null ? 0 : currentList.size();
     }
 
     @Override
@@ -86,37 +88,38 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         Filter searchFilter = new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<RouteSheet_View> filteredList = new ArrayList<>();
-                if (constraint == null || constraint.length() == 0) {
-                    filteredList.addAll(currentList);
+                constraint = constraint.toString().toLowerCase().trim();
+                currentList.clear();
+
+                if (constraint == null || constraint.length() == 0 || constraint == "") {
+                    currentList.addAll(dataSet);
                 } else {
-                    String filterPattern = constraint.toString().toLowerCase().trim();
-                    for (RouteSheet_View item : currentList) {
-                        if (item.community.toLowerCase().contains(filterPattern)) {
-                            filteredList.add(item);
+                    for (RouteSheet_View item : dataSet) {
+                        if (item.community.toLowerCase().contains(constraint)) {
+                            currentList.add(item);
+                            Log.i("SEARCH", "Added " + item.inspection_type + " in " + item.community + " with id " + item.id);
                         }
                     }
                 }
                 FilterResults results = new FilterResults();
-                results.values = filteredList;
+                results.values = currentList;
                 return results;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (currentList != null && results.values != null) {
-                    dataSet.clear();
-                    dataSet.addAll((Collection<? extends RouteSheet_View>) results.values);
-                    notifyDataSetChanged();
-                }
+                Log.i("SEARCH", "dataSet size: " + dataSet.size() + " currentList size: " + currentList.size());
+                notifyDataSetChanged();
             }
         };
-        System.out.println(searchFilter.toString());
+        Log.i("SEARCH",searchFilter.toString());
         return searchFilter;
     }
 
     public void setCurrentList(List<RouteSheet_View> list) {
-        dataSet = list;
+        currentList = list;
+        dataSet.addAll(currentList);
+        notifyDataSetChanged();
     }
 
     public void setDragListener(OnDragListener listener) {

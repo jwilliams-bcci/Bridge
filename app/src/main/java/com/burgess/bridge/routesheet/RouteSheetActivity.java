@@ -122,23 +122,16 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         mTextSearchCommunity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.i("SEARCH", "beforeTextChange: " + s);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.i("SEARCH", "onTextChanged: " + s);
-                mInspectionList.observeForever(inspections -> {
-                    mRouteSheetListAdapter.submitList(inspections);
-                    mRouteSheetListAdapter.setCurrentList(inspections);
-                    mRouteSheetListAdapter.getFilter().filter(mTextSearchCommunity.getText());
-                });
-                //mRouteSheetListAdapter.notifyAll();
+                mRouteSheetListAdapter.getFilter().filter(mTextSearchCommunity.getText());
+                mRouteSheetListAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.i("SEARCH", "afterTextChanged: " + s.toString());
             }
         });
     }
@@ -151,7 +144,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerInspections.getItemAnimator().setChangeDuration(0);
             mInspectionList.observe(this, inspections -> {
-                //mRouteSheetListAdapter.getFilter().filter(mTextSearchCommunity.getText());
                 mRouteSheetListAdapter.setCurrentList(inspections);
                 mRouteSheetListAdapter.submitList(inspections);
             });
