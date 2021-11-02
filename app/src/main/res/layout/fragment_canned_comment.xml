@@ -29,7 +29,10 @@
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:hint="Enter canned comment"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:maxLines="3"
+        android:singleLine="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/canned_comment_button_save_and_exit"
         app:layout_constraintStart_toStartOf="parent" />
