@@ -143,9 +143,9 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             mRouteSheetListAdapter.setDragListener(this);
             mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerInspections.getItemAnimator().setChangeDuration(0);
-            mInspectionList.observe(this, inspections -> {
+            mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId)).observe(this, inspections -> {
                 mRouteSheetListAdapter.setCurrentList(inspections);
-                mRouteSheetListAdapter.submitList(inspections);
+                Log.i("SEARCH", "Size of inspections:" + inspections.size());
             });
 
             ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(mRouteSheetListAdapter);
@@ -155,7 +155,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             Snackbar.make(mConstraintLayout, "Error in loading route sheet, please send log.", Snackbar.LENGTH_LONG).show();
             BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
         }
-
         updateRouteSheet();
     }
 

@@ -45,7 +45,7 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
         holder.mTextCommunity.setText(location.getCommunity());
         holder.mTextAddress.setText(location.getFullAddress());
         holder.mTextInspectionType.setText(inspection.inspection_type);
-        holder.mTextInspectionNotes.setText(inspection.notes);
+        //holder.mTextInspectionNotes.setText(inspection.notes);
     }
 
     @Override
@@ -60,14 +60,14 @@ public class InspectionRecyclerAdapter extends RecyclerView.Adapter<InspectionRe
         public final TextView mTextCommunity;
         public final TextView mTextAddress;
         public final TextView mTextInspectionType;
-        public final TextView mTextInspectionNotes;
+        //public final TextView mTextInspectionNotes;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextCommunity = itemView.findViewById(R.id.text_recycler_community);
             mTextAddress = itemView.findViewById(R.id.text_recycler_address);
             mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
-            mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
+            //mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
 
             itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(mContext, InspectionDetailsActivity.class);

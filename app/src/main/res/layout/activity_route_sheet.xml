@@ -78,7 +78,7 @@
         android:id="@+id/route_sheet_list_inspections"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -107,6 +107,7 @@
         android:splitTrack="false"
         android:text="Reinspects"
         android:textSize="12sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/route_sheet_text_search_community"
         app:layout_constraintEnd_toEndOf="@+id/route_sheet_button_print_route_sheet"
         app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />

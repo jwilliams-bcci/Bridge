@@ -15,7 +15,7 @@
         <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_multifamily_details.xml" value="0.3229166666666667" />
         <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_multifamily_information.xml" value="0.3374094202898551" />
         <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_review_and_submit.xml" value="0.31521739130434784" />
-        <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_route_sheet.xml" value="0.5" />
+        <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_route_sheet.xml" value="0.297554347826087" />
         <entry key="..\:/Dev/Bridge/app/src/main/res/layout/activity_transfer_inspection.xml" value="0.3070652173913043" />
         <entry key="..\:/Dev/Bridge/app/src/main/res/layout/fragment_direction.xml" value="0.3374094202898551" />
         <entry key="..\:/Dev/Bridge/app/src/main/res/layout/fragment_inspections_remaining.xml" value="0.2930253623188406" />
@@ -26,6 +26,8 @@
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/drawable-anydpi/ic_no_picture.xml" value="0.3828125" />
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_defect_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_edit_resolution.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_route_sheet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/item_inspection_list.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

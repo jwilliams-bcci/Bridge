@@ -33,7 +33,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextInspectionCommunity;
     private final TextView mTextInspectionAddress;
     private final TextView mTextInspectionType;
-    private final TextView mTextInspectionNotes;
+    //private final TextView mTextInspectionNotes;
     private final TextView mTextInspectionUploaded;
     public final ImageView mReorderHandle;
     public final ImageView mReupload;
@@ -45,7 +45,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mTextInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
         mTextInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
         mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
-        mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
+        //mTextInspectionNotes = itemView.findViewById(R.id.text_recycler_inspection_notes);
         mTextInspectionUploaded = itemView.findViewById(R.id.text_recycler_uploaded);
         mReorderHandle = itemView.findViewById(R.id.item_inspection_list_imageview_reorder_handle);
         mReupload = itemView.findViewById(R.id.item_inspection_list_imageview_reupload);
@@ -74,9 +74,9 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(String community, String address, String inspectionType, String notes) {
         mTextInspectionCommunity.setText(community);
-        mTextInspectionAddress.setText(address);
+        mTextInspectionAddress.setText(" - " + address);
         mTextInspectionType.setText(inspectionType);
-        mTextInspectionNotes.setText(notes.equalsIgnoreCase("null") ? "No additional notes" : notes);
+        //mTextInspectionNotes.setText(notes.equalsIgnoreCase("null") ? "No additional notes" : notes);
         if (isComplete) {
             setBackgroundColor(Color.YELLOW);
             mTextInspectionUploaded.setVisibility(View.VISIBLE);

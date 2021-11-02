@@ -40,26 +40,30 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
-        RouteSheet_View current = getItem(position);
-        CardView view = holder.itemView.findViewById(R.id.item_inspection_list_card_view);
-        //Log.i("SEARCH", "Binding " + current.id);
-        holder.mInspectionId = current.id;
-        holder.mInspectionTypeId = current.inspection_type_id;
-        holder.isComplete = current.is_complete;
-        holder.isReinspection = current.reinspect;
-        holder.numberUploaded = current.num_uploaded;
-        holder.numberToUpload = current.num_total;
-        if (current.is_complete) {
-            view.setCardBackgroundColor(Color.YELLOW);
-        }
-        holder.bind(current.community, current.address, current.inspection_type, current.notes);
-
-        holder.mReorderHandle.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mDragListener.onStartDrag(holder);
+        try {
+            RouteSheet_View current = getItem(position);
+            CardView view = holder.itemView.findViewById(R.id.item_inspection_list_card_view);
+            //Log.i("SEARCH", "Binding " + current.id);
+            holder.mInspectionId = current.id;
+            holder.mInspectionTypeId = current.inspection_type_id;
+            holder.isComplete = current.is_complete;
+            holder.isReinspection = current.reinspect;
+            holder.numberUploaded = current.num_uploaded;
+            holder.numberToUpload = current.num_total;
+            if (current.is_complete) {
+                view.setCardBackgroundColor(Color.YELLOW);
             }
-            return false;
-        });
+            holder.bind(current.community, current.address, current.inspection_type, current.notes);
+
+            holder.mReorderHandle.setOnTouchListener((v, event) -> {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mDragListener.onStartDrag(holder);
+                }
+                return false;
+            });
+        } catch (Exception e) {
+            Log.e("SEARCH", e.getMessage());
+        }
     }
 
     @Override
@@ -97,29 +101,30 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
                     for (RouteSheet_View item : dataSet) {
                         if (item.community.toLowerCase().contains(constraint)) {
                             currentList.add(item);
-                            Log.i("SEARCH", "Added " + item.inspection_type + " in " + item.community + " with id " + item.id);
                         }
                     }
                 }
                 FilterResults results = new FilterResults();
                 results.values = currentList;
+                results.count = currentList.size();
+
                 return results;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 Log.i("SEARCH", "dataSet size: " + dataSet.size() + " currentList size: " + currentList.size());
-                notifyDataSetChanged();
             }
         };
-        Log.i("SEARCH",searchFilter.toString());
         return searchFilter;
     }
 
     public void setCurrentList(List<RouteSheet_View> list) {
         currentList = list;
+        dataSet.clear();
         dataSet.addAll(currentList);
-        notifyDataSetChanged();
+        submitList(currentList);
+        Log.i("SEARCH", "Size of dataSet: " + dataSet.size());
     }
 
     public void setDragListener(OnDragListener listener) {
