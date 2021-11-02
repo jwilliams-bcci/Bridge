@@ -21,6 +21,12 @@ public interface CannedComment_DAO {
     @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table WHERE isEnergy = 0 ORDER BY text ASC")
     LiveData<List<String>> getCannedComments();
 
+    @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table WHERE isEnergy = 0 ORDER BY text ASC")
+    List<String> getCannedCommentsSync();
+
     @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table WHERE isEnergy = 1 ORDER BY text ASC")
     LiveData<List<String>> getEnergyCannedComments();
+
+    @Query("SELECT '' AS [text] UNION SELECT text FROM canned_comment_table WHERE isEnergy = 1 ORDER BY text ASC")
+    List<String> getEnergyCannedCommentsSync();
 }

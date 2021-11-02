@@ -83,6 +83,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private TextView mDefectItemTextRoom;
     private TextView mDefectItemTextDirection;
     private TextView mDefectItemTextFault;
+    private TextView mDefectItemTextCannedComment;
     private TextView mDefectItemTextComment;
     private TextView mDefectItemTextPreviousComment;
     private TextView mDefectItemLabelPreviousComment;
@@ -98,6 +99,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private RoomFragment mRoomFragment;
     private DirectionFragment mDirectionFragment;
     private FaultFragment mFaultFragment;
+    private CannedCommentFragment mCannedCommentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +130,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemTextRoom = findViewById(R.id.defect_item_text_room);
         mDefectItemTextDirection = findViewById(R.id.defect_item_text_direction);
         mDefectItemTextFault = findViewById(R.id.defect_item_text_fault);
+        mDefectItemTextCannedComment = findViewById(R.id.defect_item_text_canned_comment);
         mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemLabelPreviousComment = findViewById(R.id.defect_item_label_previous_comment);
         mDefectItemTextPreviousComment = findViewById(R.id.defect_item_text_previous_comment);
@@ -252,6 +255,14 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemTextFault.setOnClickListener(view -> {
             mFaultFragment = FaultFragment.newInstance();
             mFaultFragment.show(getSupportFragmentManager(), "FAULT");
+        });
+        mDefectItemTextCannedComment.setOnClickListener(view -> {
+            if (mInspection.inspection_class == 7) {
+                mCannedCommentFragment = CannedCommentFragment.newInstance(mDefectItemViewModel.getEnergyCannedCommentsSync());
+            } else {
+                mCannedCommentFragment = CannedCommentFragment.newInstance(mDefectItemViewModel.getCannedCommentsSync());
+            }
+            mCannedCommentFragment.show(getSupportFragmentManager(), "CANNED_COMMENT");
         });
     }
     private void initializeDisplayContent() {
