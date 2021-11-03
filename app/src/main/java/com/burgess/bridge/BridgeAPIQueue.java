@@ -622,7 +622,7 @@ public class BridgeAPIQueue {
     }
     public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime, int training, int traineeId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime, training, traineeId);
+        url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime, 0, traineeId);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             BridgeLogger.log('I', TAG, "Updated status for " + inspectionId + ".");
