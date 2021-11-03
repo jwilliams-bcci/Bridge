@@ -16,6 +16,7 @@ import data.Tables.DefectItem_Table;
 public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectViewHolder> {
     private int mInspectionId;
     private int mInspectionTypeId;
+    private String mFilter;
 
     protected InspectListAdapter(@NonNull DiffUtil.ItemCallback<DefectItem_Table> diffCallback) {
         super(diffCallback);
@@ -44,11 +45,12 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
             intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
             intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
             intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, holder.mInspectionHistoryId);
+            intent.putExtra(DefectItemActivity.FILTER_OPTION, holder.mFilter);
             holder.itemView.getContext().startActivity(intent);
         });
 
         holder.mDefectItemId = current.id;
-        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, -1, -1, "");
+        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, -1, -1, "", mFilter);
     }
 
     public void setInspectionId (int inspectionId) {
@@ -57,6 +59,10 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
 
     public void setInspectionTypeId (int inspectionTypeId) {
         mInspectionTypeId = inspectionTypeId;
+    }
+
+    public void setFilter (String filter) {
+        mFilter = filter;
     }
 
     public static class InspectDiff extends DiffUtil.ItemCallback<DefectItem_Table> {

@@ -76,7 +76,7 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         });
 
         holder.mDefectItemId = current.defect_item_id;
-        holder.bind(String.valueOf(current.defect_item_number), current.defect_item_description + "\n" + current.comment, String.valueOf(current.defect_category_name), false, mInspectionId, mInspectionTypeId, current.id, current.inspection_defect_id, current.comment);
+        holder.bind(String.valueOf(current.defect_item_number), current.defect_item_description + "\n" + current.comment, String.valueOf(current.defect_category_name), false, mInspectionId, mInspectionTypeId, current.id, current.inspection_defect_id, current.comment, null);
     }
 
     public static class ReinspectDiff extends DiffUtil.ItemCallback<InspectionHistory_Table> {
