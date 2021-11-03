@@ -24,32 +24,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/text_recycler_address" />
 
             <TextView
                 android:id="@+id/text_recycler_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="8dp"
                 android:text="TextView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#000000"
-                app:layout_constraintStart_toEndOf="@+id/text_recycler_community"
-                app:layout_constraintTop_toTopOf="@+id/text_recycler_community" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/text_recycler_inspection_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="TextView"
                 app:layout_constraintStart_toStartOf="@+id/text_recycler_community"
-                app:layout_constraintTop_toBottomOf="@+id/text_recycler_address" />
+                app:layout_constraintTop_toBottomOf="@+id/text_recycler_community" />
 
             <ImageView
                 android:id="@+id/item_inspection_list_imageview_reorder_handle"

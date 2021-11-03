@@ -74,7 +74,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(String community, String address, String inspectionType, String notes) {
         mTextInspectionCommunity.setText(community);
-        mTextInspectionAddress.setText(" - " + address);
+        mTextInspectionAddress.setText(address);
         mTextInspectionType.setText(inspectionType);
         //mTextInspectionNotes.setText(notes.equalsIgnoreCase("null") ? "No additional notes" : notes);
         if (isComplete) {
