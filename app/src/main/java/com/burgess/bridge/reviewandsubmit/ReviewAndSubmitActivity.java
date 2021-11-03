@@ -286,7 +286,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         JSONObject jObj;
         InspectionDefect_Table defect;
         BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime, new ServerCallback() {
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime, (mInspection.trainee_id > 0 ? 1 : 0), mInspection.trainee_id, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 BridgeLogger.getInstance().log('I', TAG, "mUpdateInspectionStatusRequest returned success.");

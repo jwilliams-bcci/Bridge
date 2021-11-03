@@ -238,7 +238,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         return request;
     }
     private StringRequest getUpdateInspectionStatusRequest(int resolutionCode, String inspectionTime) {
-        StringRequest request = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, resolutionCode, mSharedPreferences.getString(PREF_SECURITY_USER_ID, "NULL"), 0, 0, inspectionTime, inspectionTime, new ServerCallback() {
+        StringRequest request = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, resolutionCode, mSharedPreferences.getString(PREF_SECURITY_USER_ID, "NULL"), 0, 0, inspectionTime, inspectionTime, 0, 0, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 BridgeLogger.getInstance().log('I', TAG, "Resolution edited");

@@ -73,7 +73,7 @@ public class BridgeAPIQueue {
     private static final String POST_TRANSFER_INSPECTION_URL = "TransferInspection?inspectionId=%s&inspectorId=%s";
     private static final String POST_MULTIFAMILY_DETAILS_URL = "InsertMultifamilyDetails";
     private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
-    private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s&UserId=%s&InspectionTotal=%s&SuperPresent=%s&StartTime=%s&EndTime=%s";
+    private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s&UserId=%s&InspectionTotal=%s&SuperPresent=%s&StartTime=%s&EndTime=%s&Training=%s&TraineeId=%s";
 
     private BridgeAPIQueue(Context context) {
         ctx = context;
@@ -620,9 +620,9 @@ public class BridgeAPIQueue {
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
-    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime, final ServerCallback callback) {
+    public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime, int training, int traineeId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime);
+        url += String.format(POST_INSPECTION_STATUS_URL, inspectionId, inspectionStatusId, userId, inspectionTotal, superPresent, startTime, endTime, training, traineeId);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             BridgeLogger.log('I', TAG, "Updated status for " + inspectionId + ".");
@@ -649,7 +649,6 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
-
         return request;
     }
 }
