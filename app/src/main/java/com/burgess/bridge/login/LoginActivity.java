@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mTextUserName;
     private TextView mTextPassword;
     private TextView mTextVersionName;
+    private TextView mTextStaging;
     private Button mButtonLogin;
     private CheckBox mCheckBoxRememberCredentials;
     private LinearLayout mLockScreen;
@@ -83,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         mTextUserName = findViewById(R.id.login_text_username);
         mTextPassword = findViewById(R.id.login_text_password);
         mTextVersionName = findViewById(R.id.login_text_version_name);
+        mTextStaging = findViewById(R.id.login_text_staging);
         mButtonLogin = findViewById(R.id.login_button_login);
         mCheckBoxRememberCredentials = findViewById(R.id.login_checkbox_remember_credentials);
         mConstraintLayout = findViewById(R.id.login_constraint_layout);
@@ -127,6 +129,12 @@ public class LoginActivity extends AppCompatActivity {
         }
         mVersionName = pInfo.versionName;
         mTextVersionName.setText("Version " + mVersionName);
+
+        if (!BridgeAPIQueue.getInstance().isProd()) {
+            mTextStaging.setVisibility(View.VISIBLE);
+        } else {
+            mTextStaging.setVisibility(View.GONE);
+        }
 
         // Set the text boxes to respond to "Return" on keyboard...
         mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
