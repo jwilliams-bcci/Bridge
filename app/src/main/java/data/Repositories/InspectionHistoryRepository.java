@@ -22,10 +22,21 @@ public class InspectionHistoryRepository {
         return mInspectionHistoryDao.getInspectionHistory(inspection_id);
     }
 
+    public InspectionHistory_Table getInspectionHistorySync(int inspection_history_id) {
+        return mInspectionHistoryDao.getInspectionHistorySync(inspection_history_id);
+    }
+
     public void insert(InspectionHistory_Table inspectionHistory) {
-        BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-            mInspectionHistoryDao.insert(inspectionHistory);
-        });
+        InspectionHistory_Table existingInspectionHistory = getInspectionHistorySync(inspectionHistory.id);
+        if (existingInspectionHistory != null) {
+            BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
+                mInspectionHistoryDao.update(existingInspectionHistory.id, inspectionHistory.inspection_id);
+            });
+        } else {
+            BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
+                mInspectionHistoryDao.insert(inspectionHistory);
+            });
+        }
     }
 
     public String getComment(int inspectionHistoryId) {

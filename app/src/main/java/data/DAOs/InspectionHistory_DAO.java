@@ -18,11 +18,17 @@ public interface InspectionHistory_DAO {
     @Query("DELETE FROM inspection_history_table")
     void deleteAll();
 
+    @Query("UPDATE inspection_history_table SET inspection_id = :inspection_id, is_reviewed = 0, reviewed_status = null, inspection_defect_id = -1  WHERE id = :id")
+    void update(int id, int inspection_id);
+
     @Query("SELECT * " +
             "FROM inspection_history_table " +
             "WHERE inspection_id = :inspection_id " +
             "ORDER BY is_reviewed, comment ASC")
     LiveData<List<InspectionHistory_Table>> getInspectionHistory(int inspection_id);
+
+    @Query("SELECT * FROM inspection_history_table WHERE id = :inspection_history_id")
+    InspectionHistory_Table getInspectionHistorySync(int inspection_history_id);
 
     @Query("SELECT comment FROM inspection_history_table WHERE id = :inspection_history_id")
     String getComment(int inspection_history_id);
