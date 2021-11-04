@@ -1,5 +1,6 @@
 package com.burgess.bridge.login;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.RequestQueue;
@@ -32,6 +35,8 @@ import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import static com.burgess.bridge.Constants.*;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel mLoginViewModel;
@@ -78,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
+        checkPermissions();
     }
 
     private void initializeViews() {
@@ -139,6 +145,24 @@ public class LoginActivity extends AppCompatActivity {
         // Set the text boxes to respond to "Return" on keyboard...
         mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
         mTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+    }
+    private void checkPermissions() {
+        ArrayList<String> permissionRequests = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            permissionRequests.add(Manifest.permission.RECORD_AUDIO);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            permissionRequests.add(Manifest.permission.CAMERA);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionRequests.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionRequests.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (permissionRequests.size() > 0) {
+            requestPermissions(permissionRequests.toArray(new String[permissionRequests.size()]), 100);
+        }
     }
 
     private void workOnline() {
