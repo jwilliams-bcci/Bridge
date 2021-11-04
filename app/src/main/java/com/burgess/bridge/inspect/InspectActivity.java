@@ -3,9 +3,6 @@ package com.burgess.bridge.inspect;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,19 +27,19 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 
 public class InspectActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
+    public static final String FILTER_OPTION = "com.burgess.bridge.FILTER_OPTION";
     public static final String TAG = "INSPECT";
 
     public int mInspectionId;
     public int mInspectionTypeId;
     public boolean mReinspection;
+    public String mFilter;
     private ConstraintLayout mConstraintLayout;
     private Spinner mSpinnerDefectCategories;
     private InspectViewModel mInspectViewModel;
@@ -68,6 +64,7 @@ public class InspectActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mFilter = intent.getStringExtra(FILTER_OPTION) != null ? intent.getStringExtra(FILTER_OPTION) : "ALL";
         mInspection = mInspectViewModel.getInspectionSync(mInspectionId);
         mReinspection = mInspectViewModel.getReinspect(mInspectionId);
         mInspectionTypeId = mInspection.inspection_type_id;
@@ -141,19 +138,21 @@ public class InspectActivity extends AppCompatActivity {
             mInspectListAdapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
             mInspectListAdapter.setInspectionId(mInspectionId);
             mInspectListAdapter.setInspectionTypeId(mInspectionTypeId);
+            mInspectListAdapter.setFilter(mFilter);
             mRecyclerDefectItems.setAdapter(mInspectListAdapter);
-            displayDefectItems("ALL");
+            displayDefectItems(mFilter);
         }
         mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
 
-        fillSpinner();
+        fillCategorySpinner(mFilter);
     }
 
-    private void fillSpinner() {
+    private void fillCategorySpinner(String initialFilter) {
         mInspectViewModel.getDefectCategories(mInspectionTypeId).observe(this, defectCategories -> {
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, defectCategories);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mSpinnerDefectCategories.setAdapter(adapter);
+            mSpinnerDefectCategories.setSelection(adapter.getPosition(initialFilter));
         });
 
         mSpinnerDefectCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -162,6 +161,8 @@ public class InspectActivity extends AppCompatActivity {
                 if (mReinspection) {
                     displayReinspectItems();
                 } else {
+                    mFilter = parent.getSelectedItem().toString();
+                    mInspectListAdapter.setFilter(mFilter);
                     displayDefectItems(parent.getSelectedItem().toString());
                 }
             }

@@ -65,6 +65,7 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final String INSPECTION_DEFECT_ID = "com.burgess.bridge.INSPECTION_DEFECT_ID";
     public static final int INSPECTION_DEFECT_ID_NOT_FOUND = -1;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
+    public static final String FILTER_OPTION = "com.burgess.bridge.FILTER_OPTION";
     public boolean mPictureTaken = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
     private String mCurrentPhotoPath;
@@ -74,6 +75,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private int mDefectId;
     private int mInspectionDefectId;
     private int mInspectionHistoryId;
+    private String mFilter;
     private DefectItemViewModel mDefectItemViewModel;
     private DefectItem_Table mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
@@ -114,6 +116,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mInspectionDefectId = intent.getIntExtra(INSPECTION_DEFECT_ID, INSPECTION_DEFECT_ID_NOT_FOUND);
         mInspectionHistoryId = intent.getIntExtra(INSPECTION_HISTORY_ID, INSPECTION_HISTORY_ID_NOT_FOUND);
+        mFilter = intent.getStringExtra(FILTER_OPTION);
         mInspection = mDefectItemViewModel.getInspectionSync(mInspectionId);
         mDefectItem = mDefectItemViewModel.getDefectItemSync(mDefectId);
 
@@ -230,12 +233,14 @@ public class DefectItemActivity extends AppCompatActivity {
                 }
                 Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
                 inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+                inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
                 startActivity(inspectIntent);
             }
         });
         mButtonCancel.setOnClickListener(v -> {
             Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
             inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+            inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
             startActivity(inspectIntent);
         });
     }
