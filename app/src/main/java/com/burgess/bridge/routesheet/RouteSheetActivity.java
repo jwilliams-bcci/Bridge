@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -52,6 +53,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
     private Button mButtonUpdateRouteSheet;
     private Button mButtonPrintRouteSheet;
     private Button mButtonSendActivityLog;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerInspections;
 
     private JsonArrayRequest mUpdateRouteSheetRequest;
@@ -87,6 +89,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         initializeViews();
         initializeButtonListeners();
         initializeTextListeners();
+        initializeSwipeRefresh();
         initializeDisplayContent();
     }
 
@@ -97,6 +100,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         mButtonSendActivityLog = findViewById(R.id.route_sheet_button_send_log);
         mTextSearchCommunity = findViewById(R.id.route_sheet_text_search_community);
         mSwitchSearchReinspects = findViewById(R.id.route_sheet_switch_search_reinspects);
+        mSwipeRefreshLayout = findViewById(R.id.route_sheet_swipe_refresh);
         mRecyclerInspections = findViewById(R.id.route_sheet_list_inspections);
     }
     private void initializeButtonListeners() {
@@ -133,6 +137,11 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             @Override
             public void afterTextChanged(Editable s) {
             }
+        });
+    }
+    private void initializeSwipeRefresh() {
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            updateRouteSheet();
         });
     }
     private void initializeDisplayContent() {
@@ -183,6 +192,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         } else {
             Snackbar.make(mConstraintLayout, "Cannot update route sheet! Currently offline", Snackbar.LENGTH_LONG).show();
         }
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

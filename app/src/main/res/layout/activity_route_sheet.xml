@@ -74,17 +74,27 @@
         app:layout_constraintStart_toEndOf="@+id/route_sheet_button_send_log"
         app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_update_route_sheet" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/route_sheet_list_inspections"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/route_sheet_swipe_refresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="4dp"
-        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_text_search_community"
-        tools:listitem="@layout/item_inspection_list" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_text_search_community">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/route_sheet_list_inspections"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/route_sheet_text_search_community"
+            tools:listitem="@layout/item_inspection_list" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/route_sheet_button_update_route_sheet"
