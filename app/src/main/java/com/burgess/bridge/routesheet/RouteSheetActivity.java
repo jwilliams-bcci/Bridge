@@ -95,7 +95,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.route_sheet_constraint_layout);
-        mButtonUpdateRouteSheet = findViewById(R.id.route_sheet_button_update_route_sheet);
+        //mButtonUpdateRouteSheet = findViewById(R.id.route_sheet_button_update_route_sheet);
         mButtonPrintRouteSheet = findViewById(R.id.route_sheet_button_print_route_sheet);
         mButtonSendActivityLog = findViewById(R.id.route_sheet_button_send_log);
         mTextSearchCommunity = findViewById(R.id.route_sheet_text_search_community);
@@ -104,9 +104,9 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         mRecyclerInspections = findViewById(R.id.route_sheet_list_inspections);
     }
     private void initializeButtonListeners() {
-        mButtonUpdateRouteSheet.setOnClickListener(v -> {
-            updateRouteSheet();
-        });
+//        mButtonUpdateRouteSheet.setOnClickListener(v -> {
+//            updateRouteSheet();
+//        });
 
         mButtonSendActivityLog.setOnClickListener(v -> {
             Snackbar.make(mConstraintLayout, "Sending activity log...", Snackbar.LENGTH_SHORT).show();

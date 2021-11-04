@@ -36,13 +36,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:text="@string/route_sheet_button_order_route_sheet_text"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/route_sheet_button_print_route_sheet"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_update_route_sheet" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
 
     <EditText
         android:id="@+id/route_sheet_text_search_community"
@@ -65,14 +64,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="@string/route_sheet_button_print_route_sheet_text"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/route_sheet_button_send_log"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_update_route_sheet" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/route_sheet_swipe_refresh"
@@ -99,15 +97,12 @@
     <Button
         android:id="@+id/route_sheet_button_update_route_sheet"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
         android:background="@drawable/button_rounded_orange"
         android:text="Update Route Sheet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar"
+        tools:visibility="gone" />
 
     <Switch
         android:id="@+id/route_sheet_switch_search_reinspects"
