@@ -46,8 +46,16 @@ public class DefectItemViewModel extends AndroidViewModel {
         return mCannedCommentRepository.getEnergyCannedComments();
     }
 
+    public List<String> getEnergyCannedCommentsSync() {
+        return mCannedCommentRepository.getEnergyCannedCommentsSync();
+    }
+
     public LiveData<List<String>> getCannedComments() {
         return mCannedCommentRepository.getCannedComments();
+    }
+
+    public List<String> getCannedCommentsSync() {
+        return mCannedCommentRepository.getCannedCommentsSync();
     }
 
     public long insertInspectionDefect(InspectionDefect_Table inspectionDefect) {

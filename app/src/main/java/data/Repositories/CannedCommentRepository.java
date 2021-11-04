@@ -22,8 +22,16 @@ public class CannedCommentRepository {
         return mCannedCommentDao.getEnergyCannedComments();
     }
 
+    public List<String> getEnergyCannedCommentsSync() {
+        return mCannedCommentDao.getEnergyCannedCommentsSync();
+    }
+
     public LiveData<List<String>> getCannedComments() {
         return mCannedCommentDao.getCannedComments();
+    }
+
+    public List<String> getCannedCommentsSync() {
+        return mCannedCommentDao.getCannedCommentsSync();
     }
 
     public void insert(CannedComment_Table cannedComment) {

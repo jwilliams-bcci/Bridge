@@ -643,6 +643,10 @@ public class DataManager {
         mFaults.add(initializeFault177());
     }
 
+    private void initializeCannedComments() {
+
+    }
+
     //region InspectionResolution Initializations
     private InspectionResolution initializeInspectionResolution1() { return new InspectionResolution(1, "Cancel"); }
     private InspectionResolution initializeInspectionResolution2() { return new InspectionResolution(2, "Defer"); }
