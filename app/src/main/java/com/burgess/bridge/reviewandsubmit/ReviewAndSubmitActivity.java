@@ -340,7 +340,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
                 InspectionDefect_Table finalDefect = defect;
                 if (!defect.is_uploaded) {
-                    BridgeLogger.log('I', TAG, "Not uploaded, start the upload");
                     mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
                         @Override
                         public void onSuccess(String message) {
@@ -358,7 +357,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     });
                     BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
                 }
-                BridgeLogger.log('I', TAG, "Going to next defect");
             }
         }
         hideProgressSpinner();

@@ -50,11 +50,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import data.DataManager;
 import data.Enums.IncompleteReason;
@@ -159,7 +161,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         mTextAddress.append(mInspection.address + "\n");
         mTextAddress.append(mInspection.inspection_type + "\n");
 
-        mSpinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, IncompleteReason.values()));
+        mSpinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, (List<IncompleteReason>) Arrays.stream(IncompleteReason.values()).filter(e -> e.editResolutionOnly).collect(Collectors.toList())));
         mSpinnerResolutions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
