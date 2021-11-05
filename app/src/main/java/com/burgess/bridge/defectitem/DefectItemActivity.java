@@ -79,7 +79,6 @@ public class DefectItemActivity extends AppCompatActivity {
     private DefectItemViewModel mDefectItemViewModel;
     private DefectItem_Table mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
-    private Spinner mSpinnerCannedComment;
     private TextView mDefectItemDetails;
     private TextView mDefectItemTextLocation;
     private TextView mDefectItemTextRoom;
@@ -134,7 +133,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemTextDirection = findViewById(R.id.defect_item_text_direction);
         mDefectItemTextFault = findViewById(R.id.defect_item_text_fault);
         mDefectItemTextCannedComment = findViewById(R.id.defect_item_text_canned_comment);
-        mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
+        //mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemLabelPreviousComment = findViewById(R.id.defect_item_label_previous_comment);
         mDefectItemTextPreviousComment = findViewById(R.id.defect_item_text_previous_comment);
         mButtonMicrophone = findViewById(R.id.defect_item_button_microphone);
@@ -192,7 +191,7 @@ public class DefectItemActivity extends AppCompatActivity {
             comment += mDefectItemTextRoom.getText().toString();
             comment += mDefectItemTextDirection.getText().toString();
             comment += mDefectItemTextFault.getText().toString();
-            comment += mSpinnerCannedComment.getSelectedItem().toString();
+            comment += mDefectItemTextCannedComment.getText().toString();
             comment += mDefectItemTextComment.getText();
 
             // If there is a previous comment and current comment, prepend previous comment and date
@@ -274,8 +273,6 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemDetails.append(Integer.toString(mDefectItem.item_number));
         mDefectItemDetails.append(" - ");
         mDefectItemDetails.append(mDefectItem.item_description);
-
-        fillCannedCommentSpinner();
 
         // If mDefectId == 1, then it's a note, hide the radio buttons.
         if (mDefectId == 1) {
@@ -386,22 +383,6 @@ public class DefectItemActivity extends AppCompatActivity {
             }
             return false;
         });
-    }
-
-    private void fillCannedCommentSpinner() {
-        if (mInspection.inspection_class == 7) {
-            mDefectItemViewModel.getEnergyCannedComments().observe(this, cannedComments -> {
-                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, cannedComments);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mSpinnerCannedComment.setAdapter(adapter);
-            });
-        } else {
-            mDefectItemViewModel.getCannedComments().observe(this, cannedComments -> {
-                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, cannedComments);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                mSpinnerCannedComment.setAdapter(adapter);
-            });
-        }
     }
 
     private void checkPermission() {

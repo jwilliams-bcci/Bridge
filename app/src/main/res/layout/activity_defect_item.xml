@@ -145,7 +145,7 @@
             android:layout_marginTop="20dp"
             android:autoSizeMaxTextSize="18sp"
             android:autoSizeMinTextSize="12sp"
-            android:labelFor="@id/defect_item_spinner_canned_comment"
+            android:labelFor="@id/defect_item_text_canned_comment"
             android:text="Canned\nComment"
             app:layout_constraintStart_toStartOf="@+id/textView16"
             app:layout_constraintTop_toBottomOf="@+id/textView16" />
@@ -233,17 +233,6 @@
             app:layout_constraintEnd_toEndOf="@+id/defect_item_text_direction"
             app:layout_constraintStart_toStartOf="@+id/defect_item_text_direction" />
 
-        <Spinner
-            android:id="@+id/defect_item_spinner_canned_comment"
-            style="@style/Widget.AppCompat.Spinner.Underlined"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/defect_item_text_fault"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/defect_item_text_fault"
-            app:layout_constraintTop_toTopOf="@+id/textView17"
-            tools:visibility="gone" />
-
         <TextView
             android:id="@+id/textView18"
             android:layout_width="wrap_content"
@@ -325,6 +314,7 @@
             android:background="@drawable/defect_border"
             android:ems="10"
             android:hint="Canned Comments"
+            android:maxLines="1"
             android:paddingHorizontal="8dp"
             android:paddingVertical="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView17"
