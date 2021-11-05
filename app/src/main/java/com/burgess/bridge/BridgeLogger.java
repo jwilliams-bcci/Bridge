@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import androidx.core.content.FileProvider;
@@ -12,6 +13,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 public class BridgeLogger {
     private static BridgeLogger instance;
@@ -23,6 +26,9 @@ public class BridgeLogger {
     private BridgeLogger(Context context) {
         ctx = context;
         logFile = new File(ctx.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "BridgeLogFile.txt");
+        if (logFile.lastModified() > 0 && !DateUtils.isToday(logFile.lastModified())) {
+            logFile.delete();
+        }
     }
 
     public static synchronized BridgeLogger getInstance(Context context) {
