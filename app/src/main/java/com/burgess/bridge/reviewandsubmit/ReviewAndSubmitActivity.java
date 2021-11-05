@@ -307,11 +307,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             BridgeLogger.log('I', TAG, "No defects");
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
         }
-        // If the status is 3 (not complete), ignore defects
-        else if(mInspectionStatusId == 3) {
-            BridgeLogger.log('I', TAG, "Inspection status is NOT READY");
-            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
-        }
         // If all defects have been previously uploaded
         else if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
             BridgeLogger.log('I', TAG, "All uploaded previously");
