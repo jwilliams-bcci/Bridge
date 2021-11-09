@@ -12,7 +12,7 @@ import data.Tables.CannedComment_Table;
 
 @Dao
 public interface CannedComment_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(CannedComment_Table cannedComment);
 
     @Query("DELETE FROM canned_comment_table")

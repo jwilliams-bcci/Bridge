@@ -178,8 +178,7 @@ public class LoginActivity extends AppCompatActivity {
                     mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
                     mEditor.apply();
                 }
-                //queue.add(mUpdateCannedCommentsRequest);
-                queue.add(mUpdateBuildersRequest);
+                queue.add(mUpdateCannedCommentsRequest);
             }
 
             @Override
@@ -196,7 +195,8 @@ public class LoginActivity extends AppCompatActivity {
         mUpdateCannedCommentsRequest = BridgeAPIQueue.getInstance().updateCannedComments(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                queue.add(mUpdateDefectItemsRequest);
+                //queue.add(mUpdateDefectItemsRequest);
+                queue.add(mUpdateBuildersRequest);
             }
 
             @Override
