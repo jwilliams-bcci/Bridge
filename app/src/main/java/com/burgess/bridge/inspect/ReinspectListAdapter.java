@@ -82,24 +82,18 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
     public static class ReinspectDiff extends DiffUtil.ItemCallback<InspectionHistory_Table> {
         @Override
         public boolean areItemsTheSame(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
-            System.out.println("areItemsTheSame == oldItem: " + oldItem.id + " -- newItem: " + newItem.id);
-            Log.i("DIFFUTIL", "areItemsTheSame == oldItem: " + oldItem.id + " -- newItem: " + newItem.id);
             return oldItem.id == newItem.id;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
-            System.out.println("areContentsTheSame == oldItem: " + oldItem.reviewed_status + " -- newItem: " + newItem.reviewed_status);
-            Log.i("DIFFUTIL", "areContentsTheSame == oldItem: " + oldItem.reviewed_status + " -- newItem: " + newItem.reviewed_status);
-            return oldItem.is_reviewed == newItem.is_reviewed && oldItem.reviewed_status == newItem.reviewed_status;
+            return oldItem.reviewed_status == newItem.reviewed_status;
         }
 
-//        @Nullable
-//        @Override
-//        public Object getChangePayload(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
-//            System.out.println("getChangePayload == oldItem: " + oldItem.id + " -- newItem: " + newItem.id);
-//            Log.i("DIFFUTIL", "getChangePayload == oldItem: " + oldItem.id + " -- newItem: " + newItem.id);
-//            return super.getChangePayload(oldItem, newItem);
-//        }
+        @Nullable
+        @Override
+        public Object getChangePayload(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
+            return super.getChangePayload(oldItem, newItem);
+        }
     }
 }
