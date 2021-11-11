@@ -76,9 +76,10 @@ import data.Views.RouteSheet_View;
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 44, exportSchema = false)
+        }, version = 45, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
+    private static Context mContext;
     public abstract Builder_DAO mBuilderDao();
     public abstract CannedComment_DAO mCannedCommentDao();
     public abstract DefectCategory_DAO mDefectCategoryDao();
@@ -100,6 +101,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
         String isProd = BridgeAPIQueue.getInstance(context).isProd() ? "bridge_database_prod.db" : "bridge_database_stage.db";
+        mContext = context;
 
         if (INSTANCE == null) {
             synchronized (BridgeRoomDatabase.class) {
@@ -120,11 +122,11 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+        }
 
-            //List<CannedComment_Table> cannedComments = DataManager.getInstance().getCannedComments();
-
-            databaseWriteExecutor.execute(() -> {
-            });
+        @Override
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
         }
     };
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import data.Tables.CannedComment_Table;
+import data.Tables.DefectItem_Table;
 
 public class DataManager {
     private static DataManager ourInstance = null;
@@ -21,19 +22,20 @@ public class DataManager {
     private List<InspectionHistory> mInspectionHistories = new ArrayList<>();
     private List<InspectionResolution> mInspectionResolutions = new ArrayList<>();
     private List<DefectCategory> mDefectCategories = new ArrayList<>();
-    private List<DefectItem> mDefectItems = new ArrayList<>();
     private List mInspectDefectListItems = new ArrayList<>();
-    private List<CannedComment_Table> mCannedComments = new ArrayList<>();
     private List<Room> mRooms = new ArrayList<>();
     private List<Direction> mDirections = new ArrayList<>();
     private List<Fault> mFaults = new ArrayList<>();
     private List<InspectionDefect> mInspectionDefects = new ArrayList<>();
 
+    private List<CannedComment_Table> mCannedComments = new ArrayList<>();
+    private List<DefectItem_Table> mDefectItems = new ArrayList<>();
+
     public static DataManager getInstance() {
         if(ourInstance == null) {
             ourInstance = new DataManager();
             ourInstance.initializeInspectionResolutions();
-            ourInstance.initializeInspectDefectList();
+            //ourInstance.initializeInspectDefectList();
             ourInstance.initializeRooms();
             ourInstance.initializeDirections();
             ourInstance.initializeFaults();
@@ -134,31 +136,31 @@ public class DataManager {
         return null;
     }
 
-    public List<DefectItem> getDefectItems() {
-        return mDefectItems;
-    }
-    public List<DefectItem> getDefectItems(int categoryId) {
-        return mDefectItems.stream().filter(p -> p.getDefectCategoryId() == categoryId).collect(Collectors.toList());
-    }
-    public DefectItem getDefectItem(int id) {
-        for (DefectItem defectItem : mDefectItems) {
-            if (id == defectItem.getDefectItemId()) {
-                return defectItem;
-            }
-        }
-        return null;
-    }
+//    public List<DefectItem> getDefectItems() {
+//        return mDefectItems;
+//    }
+//    public List<DefectItem> getDefectItems(int categoryId) {
+//        return mDefectItems.stream().filter(p -> p.getDefectCategoryId() == categoryId).collect(Collectors.toList());
+//    }
+//    public DefectItem getDefectItem(int id) {
+//        for (DefectItem defectItem : mDefectItems) {
+//            if (id == defectItem.getDefectItemId()) {
+//                return defectItem;
+//            }
+//        }
+//        return null;
+//    }
 
-    public List getInspectDefectList() {
-        List listItems = new ArrayList();
-
-        for (Object object : mDefectCategories) {
-            DefectCategory category = (DefectCategory) object;
-            listItems.add(category);
-            listItems.addAll(getDefectItems(category.getDefectCategoryId()));
-        }
-        return listItems;
-    }
+//    public List getInspectDefectList() {
+//        List listItems = new ArrayList();
+//
+//        for (Object object : mDefectCategories) {
+//            DefectCategory category = (DefectCategory) object;
+//            listItems.add(category);
+//            listItems.addAll(getDefectItems(category.getDefectCategoryId()));
+//        }
+//        return listItems;
+//    }
 
 //    public List<CannedComment> getCannedComments() {
 //        return mCannedComments;
@@ -227,12 +229,12 @@ public class DataManager {
         mInspectionResolutions.add(initializeInspectionResolution3());
     }
 
-    private void initializeInspectDefectList() {
-        for (DefectCategory category : mDefectCategories) {
-            mInspectDefectListItems.add(category);
-            mInspectDefectListItems.addAll(getDefectItems(category.getDefectCategoryId()));
-        }
-    }
+//    private void initializeInspectDefectList() {
+//        for (DefectCategory category : mDefectCategories) {
+//            mInspectDefectListItems.add(category);
+//            mInspectDefectListItems.addAll(getDefectItems(category.getDefectCategoryId()));
+//        }
+//    }
 
     private void initializeRooms() {
         mRooms.add(initializeRoom1());
@@ -645,137 +647,266 @@ public class DataManager {
         mFaults.add(initializeFault177());
     }
 
-    private List<CannedComment_Table> initializeCannedComments() {
+    protected List<CannedComment_Table> initializeCannedComments() {
+        mCannedComments.add(initializeCannedComment1());
+        mCannedComments.add(initializeCannedComment2());
+        mCannedComments.add(initializeCannedComment3());
+        mCannedComments.add(initializeCannedComment4());
+        mCannedComments.add(initializeCannedComment5());
+        mCannedComments.add(initializeCannedComment6());
+        mCannedComments.add(initializeCannedComment7());
+        mCannedComments.add(initializeCannedComment8());
+        mCannedComments.add(initializeCannedComment9());
+        mCannedComments.add(initializeCannedComment10());
+        mCannedComments.add(initializeCannedComment11());
+        mCannedComments.add(initializeCannedComment12());
+        mCannedComments.add(initializeCannedComment13());
+        mCannedComments.add(initializeCannedComment14());
+        mCannedComments.add(initializeCannedComment15());
+        mCannedComments.add(initializeCannedComment16());
+        mCannedComments.add(initializeCannedComment17());
+        mCannedComments.add(initializeCannedComment18());
+        mCannedComments.add(initializeCannedComment19());
+        mCannedComments.add(initializeCannedComment20());
+        mCannedComments.add(initializeCannedComment21());
+        mCannedComments.add(initializeCannedComment22());
+        mCannedComments.add(initializeCannedComment23());
+        mCannedComments.add(initializeCannedComment24());
+        mCannedComments.add(initializeCannedComment25());
+        mCannedComments.add(initializeCannedComment26());
+        mCannedComments.add(initializeCannedComment27());
+        mCannedComments.add(initializeCannedComment28());
+        mCannedComments.add(initializeCannedComment29());
+        mCannedComments.add(initializeCannedComment30());
+        mCannedComments.add(initializeCannedComment31());
+        mCannedComments.add(initializeCannedComment32());
+        mCannedComments.add(initializeCannedComment33());
+        mCannedComments.add(initializeCannedComment34());
+        mCannedComments.add(initializeCannedComment35());
+        mCannedComments.add(initializeCannedComment36());
+        mCannedComments.add(initializeCannedComment37());
+        mCannedComments.add(initializeCannedComment38());
+        mCannedComments.add(initializeCannedComment39());
+        mCannedComments.add(initializeCannedComment40());
+        mCannedComments.add(initializeCannedComment41());
+        mCannedComments.add(initializeCannedComment42());
+        mCannedComments.add(initializeCannedComment43());
+        mCannedComments.add(initializeCannedComment44());
+        mCannedComments.add(initializeCannedComment45());
+        mCannedComments.add(initializeCannedComment46());
+        mCannedComments.add(initializeCannedComment47());
+        mCannedComments.add(initializeCannedComment48());
+        mCannedComments.add(initializeCannedComment49());
+        mCannedComments.add(initializeCannedComment50());
+        mCannedComments.add(initializeCannedComment51());
+        mCannedComments.add(initializeCannedComment52());
+        mCannedComments.add(initializeCannedComment53());
+        mCannedComments.add(initializeCannedComment54());
+        mCannedComments.add(initializeCannedComment55());
+        mCannedComments.add(initializeCannedComment56());
+        mCannedComments.add(initializeCannedComment57());
+        mCannedComments.add(initializeCannedComment58());
+        mCannedComments.add(initializeCannedComment59());
+        mCannedComments.add(initializeCannedComment60());
+        mCannedComments.add(initializeCannedComment61());
+        mCannedComments.add(initializeCannedComment62());
+        mCannedComments.add(initializeCannedComment63());
+        mCannedComments.add(initializeCannedComment64());
+        mCannedComments.add(initializeCannedComment65());
+        mCannedComments.add(initializeCannedComment66());
+        mCannedComments.add(initializeCannedComment79());
+        mCannedComments.add(initializeCannedComment80());
+        mCannedComments.add(initializeCannedComment81());
+        mCannedComments.add(initializeCannedComment82());
+        mCannedComments.add(initializeCannedComment83());
+        mCannedComments.add(initializeCannedComment84());
+        mCannedComments.add(initializeCannedComment85());
+        mCannedComments.add(initializeCannedComment88());
+        mCannedComments.add(initializeCannedComment90());
+        mCannedComments.add(initializeCannedComment91());
+        mCannedComments.add(initializeCannedComment92());
+        mCannedComments.add(initializeCannedComment93());
+        mCannedComments.add(initializeCannedComment94());
+        mCannedComments.add(initializeCannedCommentE1());
+        mCannedComments.add(initializeCannedCommentE2());
+        mCannedComments.add(initializeCannedCommentE3());
+        mCannedComments.add(initializeCannedCommentE4());
+        mCannedComments.add(initializeCannedCommentE5());
+        mCannedComments.add(initializeCannedCommentE6());
+        mCannedComments.add(initializeCannedCommentE7());
+        mCannedComments.add(initializeCannedCommentE8());
+        mCannedComments.add(initializeCannedCommentE9());
+        mCannedComments.add(initializeCannedCommentE10());
+        mCannedComments.add(initializeCannedCommentE11());
+        mCannedComments.add(initializeCannedCommentE12());
+        mCannedComments.add(initializeCannedCommentE13());
+        mCannedComments.add(initializeCannedCommentE14());
+        mCannedComments.add(initializeCannedCommentE15());
+        mCannedComments.add(initializeCannedCommentE16());
+        mCannedComments.add(initializeCannedCommentE17());
+        mCannedComments.add(initializeCannedCommentE18());
+        mCannedComments.add(initializeCannedCommentE19());
+        mCannedComments.add(initializeCannedCommentE20());
+        mCannedComments.add(initializeCannedCommentE21());
+        mCannedComments.add(initializeCannedCommentE22());
+        mCannedComments.add(initializeCannedCommentE23());
+        mCannedComments.add(initializeCannedCommentE24());
+        mCannedComments.add(initializeCannedCommentE25());
+        mCannedComments.add(initializeCannedCommentE26());
+        mCannedComments.add(initializeCannedCommentE27());
+        mCannedComments.add(initializeCannedCommentE28());
+        mCannedComments.add(initializeCannedCommentE29());
+        mCannedComments.add(initializeCannedCommentE30());
+        mCannedComments.add(initializeCannedCommentE31());
+        mCannedComments.add(initializeCannedCommentE32());
+        mCannedComments.add(initializeCannedCommentE33());
+        mCannedComments.add(initializeCannedCommentE34());
+        mCannedComments.add(initializeCannedCommentE35());
+        mCannedComments.add(initializeCannedCommentE36());
+        mCannedComments.add(initializeCannedCommentE37());
+        mCannedComments.add(initializeCannedCommentE38());
+        mCannedComments.add(initializeCannedCommentE39());
+        mCannedComments.add(initializeCannedCommentE40());
+        mCannedComments.add(initializeCannedCommentE41());
+        mCannedComments.add(initializeCannedCommentE42());
+        mCannedComments.add(initializeCannedCommentE43());
+        mCannedComments.add(initializeCannedCommentE44());
+        mCannedComments.add(initializeCannedCommentE46());
+        mCannedComments.add(initializeCannedCommentE47());
         return mCannedComments;
     }
 
-//    //region CannedComment Initializations
-//    private CannedComment_Table initializeCannedComment1() { return new CannedComment_Table("IECC 2012 Requirement", 0); }
-//    private CannedComment_Table initializeCannedComment2() { return new CannedComment_Table("Not secured per Mfg guidelines", 0); }
-//    private CannedComment_Table initializeCannedComment3() { return new CannedComment_Table("Required paperwork left on site", 0); }
-//    private CannedComment_Table initializeCannedComment4() { return new CannedComment_Table("Insulation installed, unable to perform full inspection", 0); }
-//    private CannedComment_Table initializeCannedComment5() { return new CannedComment_Table("Foyer receptacles do not meet 2012 IRC requirements", 0); }
-//    private CannedComment_Table initializeCannedComment6() { return new CannedComment_Table("Sod, landscaping not installed", 0); }
-//    private CannedComment_Table initializeCannedComment7() { return new CannedComment_Table("Sprinkler system not installed", 0); }
-//    private CannedComment_Table initializeCannedComment8() { return new CannedComment_Table("Fence not installed", 0); }
-//    private CannedComment_Table initializeCannedComment9() { return new CannedComment_Table("Spec Home - No appliances installed", 0); }
-//    private CannedComment_Table initializeCannedComment10() { return new CannedComment_Table("Electrical boxes have no observable damage", 0); }
-//    private CannedComment_Table initializeCannedComment11() { return new CannedComment_Table("Shear walls, interior-not called out in plans", 0); }
-//    private CannedComment_Table initializeCannedComment12() { return new CannedComment_Table("Shear walls, interior-installed and fastened per plan", 0); }
-//    private CannedComment_Table initializeCannedComment13() { return new CannedComment_Table("Drywall fasteners installed per plan or IRC ", 0); }
-//    private CannedComment_Table initializeCannedComment14() { return new CannedComment_Table("Wet areas have moisture resistant material installed properly", 0); }
-//    private CannedComment_Table initializeCannedComment15() { return new CannedComment_Table("Drywall, garage ceiling- 5/8in. Type X installed properly", 0); }
-//    private CannedComment_Table initializeCannedComment16() { return new CannedComment_Table("Drywall, garage wall to living space - 1/2in. installed properly", 0); }
-//    private CannedComment_Table initializeCannedComment17() { return new CannedComment_Table("Stair Headroom clearance negligible; may not pass after finish surface applied", 0); }
-//    private CannedComment_Table initializeCannedComment18() { return new CannedComment_Table("Obstructions or other issues not observed", 0); }
-//    private CannedComment_Table initializeCannedComment19() { return new CannedComment_Table("Garage door opener not installed", 0); }
-//    private CannedComment_Table initializeCannedComment20() { return new CannedComment_Table("Appliances not installed", 0); }
-//    private CannedComment_Table initializeCannedComment21() { return new CannedComment_Table("Observations noted in this report are what were visible at the time of the inspection.  Other details of wall construction were either not visible or not yet constructed.", 0); }
-//    private CannedComment_Table initializeCannedComment22() { return new CannedComment_Table("Outlet spacing, placement, unable to verify in cabinet areas", 0); }
-//    private CannedComment_Table initializeCannedComment23() { return new CannedComment_Table("Weather at time of inspection: ", 0); }
-//    private CannedComment_Table initializeCannedComment24() { return new CannedComment_Table("Start Time: ", 0); }
-//    private CannedComment_Table initializeCannedComment25() { return new CannedComment_Table("End Time:", 0); }
-//    private CannedComment_Table initializeCannedComment26() { return new CannedComment_Table("Rainfall since last inspection: ", 0); }
-//    private CannedComment_Table initializeCannedComment27() { return new CannedComment_Table("All SWPPP items not listed in this report are in compliance at the time of the inspection.", 0); }
-//    private CannedComment_Table initializeCannedComment28() { return new CannedComment_Table("Gas Meter not set - Must re-inspect: Gas Leaks; Pilot Lights; Hot/Cold Crossed; Water Htr Works; Furnace Works; Cooktop Works; Fireplace Works", 0); }
-//    private CannedComment_Table initializeCannedComment29() { return new CannedComment_Table("All defects noted in this report have been corrected. Sign & Date: ____________________________", 0); }
-//    private CannedComment_Table initializeCannedComment30() { return new CannedComment_Table("Exterior - Primer application not started", 0); }
-//    private CannedComment_Table initializeCannedComment31() { return new CannedComment_Table("Plumbing encroaching on perimeter beam, follow proper detail", 0); }
-//    private CannedComment_Table initializeCannedComment32() { return new CannedComment_Table("Moisture level excessive - ", 0); }
-//    private CannedComment_Table initializeCannedComment33() { return new CannedComment_Table("No excessive moisture levels observed at this time", 0); }
-//    private CannedComment_Table initializeCannedComment34() { return new CannedComment_Table("Siding not installed.  Defects must be verified before siding installed.", 0); }
-//    private CannedComment_Table initializeCannedComment35() { return new CannedComment_Table("Floor joist damage observed.  Engineer provided passing report", 0); }
-//    private CannedComment_Table initializeCannedComment36() { return new CannedComment_Table("Rooms to be renovated:", 0); }
-//    private CannedComment_Table initializeCannedComment37() { return new CannedComment_Table("Inspection of renovated area(s):", 0); }
-//    private CannedComment_Table initializeCannedComment38() { return new CannedComment_Table("Inspected per engineering design and installation per plan.", 0); }
-//    private CannedComment_Table initializeCannedComment39() { return new CannedComment_Table("Unable to get on roof due to weather (rain, snow, wind)", 0); }
-//    private CannedComment_Table initializeCannedComment40() { return new CannedComment_Table("Perry Homes-No Roofing items checked at Pre-Drywall Inspection", 0); }
-//    private CannedComment_Table initializeCannedComment41() { return new CannedComment_Table("Primary Tub not installed", 0); }
-//    private CannedComment_Table initializeCannedComment42() { return new CannedComment_Table("RTB List not complete", 0); }
-//    private CannedComment_Table initializeCannedComment43() { return new CannedComment_Table("Check throughout as marked", 0); }
-//    private CannedComment_Table initializeCannedComment44() { return new CannedComment_Table("Repair Letter Needed", 0); }
-//    private CannedComment_Table initializeCannedComment45() { return new CannedComment_Table("Safety Rail Installed", 0); }
-//    private CannedComment_Table initializeCannedComment46() { return new CannedComment_Table("Garage Sleeper Installed", 0); }
-//    private CannedComment_Table initializeCannedComment47() { return new CannedComment_Table("Staples Observed (1.25 in.)", 0); }
-//    private CannedComment_Table initializeCannedComment48() { return new CannedComment_Table("Primary Tub Skirted-Unable to observe all conditions", 0); }
-//    private CannedComment_Table initializeCannedComment49() { return new CannedComment_Table("Plumbing out of wall at cabinet", 0); }
-//    private CannedComment_Table initializeCannedComment50() { return new CannedComment_Table("Soffit encroaches into 5ft setback.  5/8 in drywall installed and appears to be in compliance with Brighton 1-hour assembly requirements.", 0); }
-//    private CannedComment_Table initializeCannedComment51() { return new CannedComment_Table("Wallboard installed and nailed in compliance with 2012 IRC", 0); }
-//    private CannedComment_Table initializeCannedComment52() { return new CannedComment_Table("5/8 in. Type X Wallboard installed at garage ceiling", 0); }
-//    private CannedComment_Table initializeCannedComment53() { return new CannedComment_Table("5/8 in. Type X Wallboard not required at garage ceiling", 0); }
-//    private CannedComment_Table initializeCannedComment54() { return new CannedComment_Table("Cancellation at same address", 0); }
-//    private CannedComment_Table initializeCannedComment55() { return new CannedComment_Table("Permit pack not on site", 0); }
-//    private CannedComment_Table initializeCannedComment56() { return new CannedComment_Table("Faces North", 0); }
-//    private CannedComment_Table initializeCannedComment57() { return new CannedComment_Table("Faces NorthEast", 0); }
-//    private CannedComment_Table initializeCannedComment58() { return new CannedComment_Table("Faces East", 0); }
-//    private CannedComment_Table initializeCannedComment59() { return new CannedComment_Table("Faces SouthEast", 0); }
-//    private CannedComment_Table initializeCannedComment60() { return new CannedComment_Table("Faces South", 0); }
-//    private CannedComment_Table initializeCannedComment61() { return new CannedComment_Table("Faces SouthWest", 0); }
-//    private CannedComment_Table initializeCannedComment62() { return new CannedComment_Table("Faces West", 0); }
-//    private CannedComment_Table initializeCannedComment63() { return new CannedComment_Table("Faces NorthWest", 0); }
-//    private CannedComment_Table initializeCannedComment64() { return new CannedComment_Table("Must Re-Inspect", 0); }
-//    private CannedComment_Table initializeCannedComment65() { return new CannedComment_Table("Window for drywall stock not inspected", 0); }
-//    private CannedComment_Table initializeCannedComment66() { return new CannedComment_Table("Kitchen-verify outlet spacing around cabinets", 0); }
-//    private CannedComment_Table initializeCannedComment79() { return new CannedComment_Table("1. Roof covering for this single-family home is __________________", 0); }
-//    private CannedComment_Table initializeCannedComment80() { return new CannedComment_Table("2. Roof at approximately ________% complete at time of inspection", 0); }
-//    //private CannedComment_Table initializeCannedComment81() { return new CannedComment_Table("3. Observed, ________________, ___________gauge, and width of valley metal flashing with type of ______" wide ice and water shield at all eaves and under metal valley flashing as required", 0); }
-//        private CannedComment_Table initializeCannedComment82() { return new CannedComment_Table("4. Able to verify the rest of the roof covered with, _____# of underlayment ", 0); }
-//        private CannedComment_Table initializeCannedComment83() { return new CannedComment_Table("5. Observed galvanized metal drip edge at eaves and rakes with galvanized metal flashing at headwalls", 0); }
-//        //private CannedComment_Table initializeCannedComment84() { return new CannedComment_Table("6. ___"x___" batten strip with _____" gap elevated batten system for tile", 0); }
-//            private CannedComment_Table initializeCannedComment85() { return new CannedComment_Table("7. Verified wind clips installed at nose of eave course tiles", 0); }
-//            private CannedComment_Table initializeCannedComment88() { return new CannedComment_Table("8.observed hip starters installed, each field tile secured with __________ ___________ fasteners with _____________ _______________ fasteners used for hip, ridge, and rake tiles", 0); }
-//            private CannedComment_Table initializeCannedComment90() { return new CannedComment_Table("9. All boots installed are ________________ installed on all plumbing and mechanical vents", 0); }
-//            private CannedComment_Table initializeCannedComment91() { return new CannedComment_Table("10.  Observed ____________ of attic vents installed", 0); }
-//            private CannedComment_Table initializeCannedComment92() { return new CannedComment_Table("11. Observed __________ ___________ of ridge boards installed", 0); }
-//            private CannedComment_Table initializeCannedComment93() { return new CannedComment_Table("12. Crickets installed or not installed as required", 0); }
-//            private CannedComment_Table initializeCannedComment94() { return new CannedComment_Table("Home Not Ready. More than 15 different defects on exterior including garage", 0); }
-//            private CannedComment_Table initializeCannedCommentE1() { return new CannedComment_Table("Furnace Model Number: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE2() { return new CannedComment_Table("Compressor Model Number: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE3() { return new CannedComment_Table("Water Heater Model Number: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE4() { return new CannedComment_Table("Energy Code Only - Blower Door Test not performed", 1); }
-//            private CannedComment_Table initializeCannedCommentE5() { return new CannedComment_Table("Air Barrier", 1); }
-//            private CannedComment_Table initializeCannedCommentE6() { return new CannedComment_Table("Target was: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE7() { return new CannedComment_Table("Possible causes of D/L failure: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE8() { return new CannedComment_Table("Possible causes of B/D failure: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE9() { return new CannedComment_Table("Potential Reasons for Failure: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE10() { return new CannedComment_Table("Check throughout as marked", 1); }
-//            private CannedComment_Table initializeCannedCommentE11() { return new CannedComment_Table("Cancellation at same address", 1); }
-//            private CannedComment_Table initializeCannedCommentE12() { return new CannedComment_Table("Vent fan requires minimum 50 CFM; Actual: ", 1); }
-//            private CannedComment_Table initializeCannedCommentE13() { return new CannedComment_Table("All defects noted in this report have been corrected. Sign & Date: ____________________________", 1); }
-//            private CannedComment_Table initializeCannedCommentE14() { return new CannedComment_Table("Unit 1 LTO: , s/b: ; Unit 2 LTO: , s/b: ; AVG Passes at:", 1); }
-//            private CannedComment_Table initializeCannedCommentE15() { return new CannedComment_Table("Static pressure-Supply:   Return:", 1); }
-//            private CannedComment_Table initializeCannedCommentE16() { return new CannedComment_Table("Must Re-Inspect prior to sheet rock", 1); }
-//            private CannedComment_Table initializeCannedCommentE17() { return new CannedComment_Table("City paperwork not on site", 1); }
-//            private CannedComment_Table initializeCannedCommentE18() { return new CannedComment_Table("Must Re-Test", 1); }
-//            private CannedComment_Table initializeCannedCommentE19() { return new CannedComment_Table("Tested Mechanical Ventilation @  cfm does not meet HVAC contractor report @ - cfm. Please correct report no further testing required.", 1); }
-//            private CannedComment_Table initializeCannedCommentE20() { return new CannedComment_Table("Faces North", 1); }
-//            private CannedComment_Table initializeCannedCommentE21() { return new CannedComment_Table("Faces NorthEast", 1); }
-//            private CannedComment_Table initializeCannedCommentE22() { return new CannedComment_Table("Faces East", 1); }
-//            private CannedComment_Table initializeCannedCommentE23() { return new CannedComment_Table("Faces SouthEast", 1); }
-//            private CannedComment_Table initializeCannedCommentE24() { return new CannedComment_Table("Faces South", 1); }
-//            private CannedComment_Table initializeCannedCommentE25() { return new CannedComment_Table("Faces SouthWest", 1); }
-//            private CannedComment_Table initializeCannedCommentE26() { return new CannedComment_Table("Faces West", 1); }
-//            private CannedComment_Table initializeCannedCommentE27() { return new CannedComment_Table("Faces NorthWest", 1); }
-//            private CannedComment_Table initializeCannedCommentE28() { return new CannedComment_Table("Email signed report to forms@burgess-inc.com", 1); }
-//            private CannedComment_Table initializeCannedCommentE29() { return new CannedComment_Table("Thermal Checklist Picked Up", 1); }
-//            private CannedComment_Table initializeCannedCommentE30() { return new CannedComment_Table("Water Management Checklist Picked Up", 1); }
-//            private CannedComment_Table initializeCannedCommentE31() { return new CannedComment_Table("HVAC Contractor Checklist Picked Up", 1); }
-//            private CannedComment_Table initializeCannedCommentE32() { return new CannedComment_Table("All Checklists picked up", 1); }
-//            private CannedComment_Table initializeCannedCommentE33() { return new CannedComment_Table("Must Re-Inspect", 1); }
-//            private CannedComment_Table initializeCannedCommentE34() { return new CannedComment_Table("Window for drywall stock not inspected", 1); }
-//            private CannedComment_Table initializeCannedCommentE35() { return new CannedComment_Table("Unit 1 Duct Lkg to Outside Passed @: , Target:", 1); }
-//            private CannedComment_Table initializeCannedCommentE36() { return new CannedComment_Table("Unit 2 Duct Lkg to Outside Passed @: , Target:", 1); }
-//            private CannedComment_Table initializeCannedCommentE37() { return new CannedComment_Table("Unit 3 Duct Lkg to Outside Passed @: , Target:", 1); }
-//            private CannedComment_Table initializeCannedCommentE38() { return new CannedComment_Table("Unit 1 Duct Lkg Total, Passed @: , Target:", 1); }
-//            private CannedComment_Table initializeCannedCommentE39() { return new CannedComment_Table("Unit 2 Duct Lkg Total, Passed @: , Target:", 1); }
-//            private CannedComment_Table initializeCannedCommentE40() { return new CannedComment_Table("Unit 3 Duct Lkg Total, Passed @: , Target:", 1); }
-//            private CannedComment_Table initializeCannedCommentE41() { return new CannedComment_Table("Blower Door Test Passed @: , Target:", 1); }
-//            private CannedComment_Table initializeCannedCommentE42() { return new CannedComment_Table("Ensure that supply and return boots are caulked/sealed to sheetrock", 1); }
-//            private CannedComment_Table initializeCannedCommentE43() { return new CannedComment_Table("Check for any missing supply or return covered by sheetrock", 1); }
-//            private CannedComment_Table initializeCannedCommentE44() { return new CannedComment_Table("Check leakage at the unit, around filter, copper and PVC line penetrations and panel cover", 1); }
-//            private CannedComment_Table initializeCannedCommentE46() { return new CannedComment_Table("Conditioned Floor Area ", 1); }
-//            private CannedComment_Table initializeCannedCommentE47() { return new CannedComment_Table("Pass according to 2015 IECC 403.3.3 and 403.3.4", 1); }
-//    //endregion
+    protected List<DefectItem_Table> initializeDefectItems() {
+        return mDefectItems;
+    }
+
+    //region CannedComment Initializations
+    private CannedComment_Table initializeCannedComment1() { return new CannedComment_Table("IECC 2012 Requirement", 0); }
+    private CannedComment_Table initializeCannedComment2() { return new CannedComment_Table("Not secured per Mfg guidelines", 0); }
+    private CannedComment_Table initializeCannedComment3() { return new CannedComment_Table("Required paperwork left on site", 0); }
+    private CannedComment_Table initializeCannedComment4() { return new CannedComment_Table("Insulation installed, unable to perform full inspection", 0); }
+    private CannedComment_Table initializeCannedComment5() { return new CannedComment_Table("Foyer receptacles do not meet 2012 IRC requirements", 0); }
+    private CannedComment_Table initializeCannedComment6() { return new CannedComment_Table("Sod, landscaping not installed", 0); }
+    private CannedComment_Table initializeCannedComment7() { return new CannedComment_Table("Sprinkler system not installed", 0); }
+    private CannedComment_Table initializeCannedComment8() { return new CannedComment_Table("Fence not installed", 0); }
+    private CannedComment_Table initializeCannedComment9() { return new CannedComment_Table("Spec Home - No appliances installed", 0); }
+    private CannedComment_Table initializeCannedComment10() { return new CannedComment_Table("Electrical boxes have no observable damage", 0); }
+    private CannedComment_Table initializeCannedComment11() { return new CannedComment_Table("Shear walls, interior-not called out in plans", 0); }
+    private CannedComment_Table initializeCannedComment12() { return new CannedComment_Table("Shear walls, interior-installed and fastened per plan", 0); }
+    private CannedComment_Table initializeCannedComment13() { return new CannedComment_Table("Drywall fasteners installed per plan or IRC ", 0); }
+    private CannedComment_Table initializeCannedComment14() { return new CannedComment_Table("Wet areas have moisture resistant material installed properly", 0); }
+    private CannedComment_Table initializeCannedComment15() { return new CannedComment_Table("Drywall, garage ceiling- 5/8in. Type X installed properly", 0); }
+    private CannedComment_Table initializeCannedComment16() { return new CannedComment_Table("Drywall, garage wall to living space - 1/2in. installed properly", 0); }
+    private CannedComment_Table initializeCannedComment17() { return new CannedComment_Table("Stair Headroom clearance negligible; may not pass after finish surface applied", 0); }
+    private CannedComment_Table initializeCannedComment18() { return new CannedComment_Table("Obstructions or other issues not observed", 0); }
+    private CannedComment_Table initializeCannedComment19() { return new CannedComment_Table("Garage door opener not installed", 0); }
+    private CannedComment_Table initializeCannedComment20() { return new CannedComment_Table("Appliances not installed", 0); }
+    private CannedComment_Table initializeCannedComment21() { return new CannedComment_Table("Observations noted in this report are what were visible at the time of the inspection.  Other details of wall construction were either not visible or not yet constructed.", 0); }
+    private CannedComment_Table initializeCannedComment22() { return new CannedComment_Table("Outlet spacing, placement, unable to verify in cabinet areas", 0); }
+    private CannedComment_Table initializeCannedComment23() { return new CannedComment_Table("Weather at time of inspection: ", 0); }
+    private CannedComment_Table initializeCannedComment24() { return new CannedComment_Table("Start Time: ", 0); }
+    private CannedComment_Table initializeCannedComment25() { return new CannedComment_Table("End Time:", 0); }
+    private CannedComment_Table initializeCannedComment26() { return new CannedComment_Table("Rainfall since last inspection: ", 0); }
+    private CannedComment_Table initializeCannedComment27() { return new CannedComment_Table("All SWPPP items not listed in this report are in compliance at the time of the inspection.", 0); }
+    private CannedComment_Table initializeCannedComment28() { return new CannedComment_Table("Gas Meter not set - Must re-inspect: Gas Leaks; Pilot Lights; Hot/Cold Crossed; Water Htr Works; Furnace Works; Cooktop Works; Fireplace Works", 0); }
+    private CannedComment_Table initializeCannedComment29() { return new CannedComment_Table("All defects noted in this report have been corrected. Sign & Date: ____________________________", 0); }
+    private CannedComment_Table initializeCannedComment30() { return new CannedComment_Table("Exterior - Primer application not started", 0); }
+    private CannedComment_Table initializeCannedComment31() { return new CannedComment_Table("Plumbing encroaching on perimeter beam, follow proper detail", 0); }
+    private CannedComment_Table initializeCannedComment32() { return new CannedComment_Table("Moisture level excessive - ", 0); }
+    private CannedComment_Table initializeCannedComment33() { return new CannedComment_Table("No excessive moisture levels observed at this time", 0); }
+    private CannedComment_Table initializeCannedComment34() { return new CannedComment_Table("Siding not installed.  Defects must be verified before siding installed.", 0); }
+    private CannedComment_Table initializeCannedComment35() { return new CannedComment_Table("Floor joist damage observed.  Engineer provided passing report", 0); }
+    private CannedComment_Table initializeCannedComment36() { return new CannedComment_Table("Rooms to be renovated:", 0); }
+    private CannedComment_Table initializeCannedComment37() { return new CannedComment_Table("Inspection of renovated area(s):", 0); }
+    private CannedComment_Table initializeCannedComment38() { return new CannedComment_Table("Inspected per engineering design and installation per plan.", 0); }
+    private CannedComment_Table initializeCannedComment39() { return new CannedComment_Table("Unable to get on roof due to weather (rain, snow, wind)", 0); }
+    private CannedComment_Table initializeCannedComment40() { return new CannedComment_Table("Perry Homes-No Roofing items checked at Pre-Drywall Inspection", 0); }
+    private CannedComment_Table initializeCannedComment41() { return new CannedComment_Table("Primary Tub not installed", 0); }
+    private CannedComment_Table initializeCannedComment42() { return new CannedComment_Table("RTB List not complete", 0); }
+    private CannedComment_Table initializeCannedComment43() { return new CannedComment_Table("Check throughout as marked", 0); }
+    private CannedComment_Table initializeCannedComment44() { return new CannedComment_Table("Repair Letter Needed", 0); }
+    private CannedComment_Table initializeCannedComment45() { return new CannedComment_Table("Safety Rail Installed", 0); }
+    private CannedComment_Table initializeCannedComment46() { return new CannedComment_Table("Garage Sleeper Installed", 0); }
+    private CannedComment_Table initializeCannedComment47() { return new CannedComment_Table("Staples Observed (1.25 in.)", 0); }
+    private CannedComment_Table initializeCannedComment48() { return new CannedComment_Table("Primary Tub Skirted-Unable to observe all conditions", 0); }
+    private CannedComment_Table initializeCannedComment49() { return new CannedComment_Table("Plumbing out of wall at cabinet", 0); }
+    private CannedComment_Table initializeCannedComment50() { return new CannedComment_Table("Soffit encroaches into 5ft setback.  5/8 in drywall installed and appears to be in compliance with Brighton 1-hour assembly requirements.", 0); }
+    private CannedComment_Table initializeCannedComment51() { return new CannedComment_Table("Wallboard installed and nailed in compliance with 2012 IRC", 0); }
+    private CannedComment_Table initializeCannedComment52() { return new CannedComment_Table("5/8 in. Type X Wallboard installed at garage ceiling", 0); }
+    private CannedComment_Table initializeCannedComment53() { return new CannedComment_Table("5/8 in. Type X Wallboard not required at garage ceiling", 0); }
+    private CannedComment_Table initializeCannedComment54() { return new CannedComment_Table("Cancellation at same address", 0); }
+    private CannedComment_Table initializeCannedComment55() { return new CannedComment_Table("Permit pack not on site", 0); }
+    private CannedComment_Table initializeCannedComment56() { return new CannedComment_Table("Faces North", 0); }
+    private CannedComment_Table initializeCannedComment57() { return new CannedComment_Table("Faces NorthEast", 0); }
+    private CannedComment_Table initializeCannedComment58() { return new CannedComment_Table("Faces East", 0); }
+    private CannedComment_Table initializeCannedComment59() { return new CannedComment_Table("Faces SouthEast", 0); }
+    private CannedComment_Table initializeCannedComment60() { return new CannedComment_Table("Faces South", 0); }
+    private CannedComment_Table initializeCannedComment61() { return new CannedComment_Table("Faces SouthWest", 0); }
+    private CannedComment_Table initializeCannedComment62() { return new CannedComment_Table("Faces West", 0); }
+    private CannedComment_Table initializeCannedComment63() { return new CannedComment_Table("Faces NorthWest", 0); }
+    private CannedComment_Table initializeCannedComment64() { return new CannedComment_Table("Must Re-Inspect", 0); }
+    private CannedComment_Table initializeCannedComment65() { return new CannedComment_Table("Window for drywall stock not inspected", 0); }
+    private CannedComment_Table initializeCannedComment66() { return new CannedComment_Table("Kitchen-verify outlet spacing around cabinets", 0); }
+    private CannedComment_Table initializeCannedComment79() { return new CannedComment_Table("1. Roof covering for this single-family home is __________________", 0); }
+    private CannedComment_Table initializeCannedComment80() { return new CannedComment_Table("2. Roof at approximately ________% complete at time of inspection", 0); }
+    private CannedComment_Table initializeCannedComment81() { return new CannedComment_Table("3. Observed, ________________, ___________gauge, and width of valley metal flashing with type of ______\" wide ice and water shield at all eaves and under metal valley flashing as required", 0); }
+    private CannedComment_Table initializeCannedComment82() { return new CannedComment_Table("4. Able to verify the rest of the roof covered with, _____# of underlayment ", 0); }
+    private CannedComment_Table initializeCannedComment83() { return new CannedComment_Table("5. Observed galvanized metal drip edge at eaves and rakes with galvanized metal flashing at headwalls", 0); }
+    private CannedComment_Table initializeCannedComment84() { return new CannedComment_Table("6. ___\"x___\" batten strip with _____\" gap elevated batten system for tile", 0); }
+    private CannedComment_Table initializeCannedComment85() { return new CannedComment_Table("7. Verified wind clips installed at nose of eave course tiles", 0); }
+    private CannedComment_Table initializeCannedComment88() { return new CannedComment_Table("8.observed hip starters installed, each field tile secured with __________ ___________ fasteners with _____________ _______________ fasteners used for hip, ridge, and rake tiles", 0); }
+    private CannedComment_Table initializeCannedComment90() { return new CannedComment_Table("9. All boots installed are ________________ installed on all plumbing and mechanical vents", 0); }
+    private CannedComment_Table initializeCannedComment91() { return new CannedComment_Table("10.  Observed ____________ of attic vents installed", 0); }
+    private CannedComment_Table initializeCannedComment92() { return new CannedComment_Table("11. Observed __________ ___________ of ridge boards installed", 0); }
+    private CannedComment_Table initializeCannedComment93() { return new CannedComment_Table("12. Crickets installed or not installed as required", 0); }
+    private CannedComment_Table initializeCannedComment94() { return new CannedComment_Table("Home Not Ready. More than 15 different defects on exterior including garage", 0); }
+    private CannedComment_Table initializeCannedCommentE1() { return new CannedComment_Table("Furnace Model Number: ", 1); }
+    private CannedComment_Table initializeCannedCommentE2() { return new CannedComment_Table("Compressor Model Number: ", 1); }
+    private CannedComment_Table initializeCannedCommentE3() { return new CannedComment_Table("Water Heater Model Number: ", 1); }
+    private CannedComment_Table initializeCannedCommentE4() { return new CannedComment_Table("Energy Code Only - Blower Door Test not performed", 1); }
+    private CannedComment_Table initializeCannedCommentE5() { return new CannedComment_Table("Air Barrier", 1); }
+    private CannedComment_Table initializeCannedCommentE6() { return new CannedComment_Table("Target was: ", 1); }
+    private CannedComment_Table initializeCannedCommentE7() { return new CannedComment_Table("Possible causes of D/L failure: ", 1); }
+    private CannedComment_Table initializeCannedCommentE8() { return new CannedComment_Table("Possible causes of B/D failure: ", 1); }
+    private CannedComment_Table initializeCannedCommentE9() { return new CannedComment_Table("Potential Reasons for Failure: ", 1); }
+    private CannedComment_Table initializeCannedCommentE10() { return new CannedComment_Table("Check throughout as marked", 1); }
+    private CannedComment_Table initializeCannedCommentE11() { return new CannedComment_Table("Cancellation at same address", 1); }
+    private CannedComment_Table initializeCannedCommentE12() { return new CannedComment_Table("Vent fan requires minimum 50 CFM; Actual: ", 1); }
+    private CannedComment_Table initializeCannedCommentE13() { return new CannedComment_Table("All defects noted in this report have been corrected. Sign & Date: ____________________________", 1); }
+    private CannedComment_Table initializeCannedCommentE14() { return new CannedComment_Table("Unit 1 LTO: , s/b: ; Unit 2 LTO: , s/b: ; AVG Passes at:", 1); }
+    private CannedComment_Table initializeCannedCommentE15() { return new CannedComment_Table("Static pressure-Supply:   Return:", 1); }
+    private CannedComment_Table initializeCannedCommentE16() { return new CannedComment_Table("Must Re-Inspect prior to sheet rock", 1); }
+    private CannedComment_Table initializeCannedCommentE17() { return new CannedComment_Table("City paperwork not on site", 1); }
+    private CannedComment_Table initializeCannedCommentE18() { return new CannedComment_Table("Must Re-Test", 1); }
+    private CannedComment_Table initializeCannedCommentE19() { return new CannedComment_Table("Tested Mechanical Ventilation @  cfm does not meet HVAC contractor report @ - cfm. Please correct report no further testing required.", 1); }
+    private CannedComment_Table initializeCannedCommentE20() { return new CannedComment_Table("Faces North", 1); }
+    private CannedComment_Table initializeCannedCommentE21() { return new CannedComment_Table("Faces NorthEast", 1); }
+    private CannedComment_Table initializeCannedCommentE22() { return new CannedComment_Table("Faces East", 1); }
+    private CannedComment_Table initializeCannedCommentE23() { return new CannedComment_Table("Faces SouthEast", 1); }
+    private CannedComment_Table initializeCannedCommentE24() { return new CannedComment_Table("Faces South", 1); }
+    private CannedComment_Table initializeCannedCommentE25() { return new CannedComment_Table("Faces SouthWest", 1); }
+    private CannedComment_Table initializeCannedCommentE26() { return new CannedComment_Table("Faces West", 1); }
+    private CannedComment_Table initializeCannedCommentE27() { return new CannedComment_Table("Faces NorthWest", 1); }
+    private CannedComment_Table initializeCannedCommentE28() { return new CannedComment_Table("Email signed report to forms@burgess-inc.com", 1); }
+    private CannedComment_Table initializeCannedCommentE29() { return new CannedComment_Table("Thermal Checklist Picked Up", 1); }
+    private CannedComment_Table initializeCannedCommentE30() { return new CannedComment_Table("Water Management Checklist Picked Up", 1); }
+    private CannedComment_Table initializeCannedCommentE31() { return new CannedComment_Table("HVAC Contractor Checklist Picked Up", 1); }
+    private CannedComment_Table initializeCannedCommentE32() { return new CannedComment_Table("All Checklists picked up", 1); }
+    private CannedComment_Table initializeCannedCommentE33() { return new CannedComment_Table("Must Re-Inspect", 1); }
+    private CannedComment_Table initializeCannedCommentE34() { return new CannedComment_Table("Window for drywall stock not inspected", 1); }
+    private CannedComment_Table initializeCannedCommentE35() { return new CannedComment_Table("Unit 1 Duct Lkg to Outside Passed @: , Target:", 1); }
+    private CannedComment_Table initializeCannedCommentE36() { return new CannedComment_Table("Unit 2 Duct Lkg to Outside Passed @: , Target:", 1); }
+    private CannedComment_Table initializeCannedCommentE37() { return new CannedComment_Table("Unit 3 Duct Lkg to Outside Passed @: , Target:", 1); }
+    private CannedComment_Table initializeCannedCommentE38() { return new CannedComment_Table("Unit 1 Duct Lkg Total, Passed @: , Target:", 1); }
+    private CannedComment_Table initializeCannedCommentE39() { return new CannedComment_Table("Unit 2 Duct Lkg Total, Passed @: , Target:", 1); }
+    private CannedComment_Table initializeCannedCommentE40() { return new CannedComment_Table("Unit 3 Duct Lkg Total, Passed @: , Target:", 1); }
+    private CannedComment_Table initializeCannedCommentE41() { return new CannedComment_Table("Blower Door Test Passed @: , Target:", 1); }
+    private CannedComment_Table initializeCannedCommentE42() { return new CannedComment_Table("Ensure that supply and return boots are caulked/sealed to sheetrock", 1); }
+    private CannedComment_Table initializeCannedCommentE43() { return new CannedComment_Table("Check for any missing supply or return covered by sheetrock", 1); }
+    private CannedComment_Table initializeCannedCommentE44() { return new CannedComment_Table("Check leakage at the unit, around filter, copper and PVC line penetrations and panel cover", 1); }
+    private CannedComment_Table initializeCannedCommentE46() { return new CannedComment_Table("Conditioned Floor Area ", 1); }
+    private CannedComment_Table initializeCannedCommentE47() { return new CannedComment_Table("Pass according to 2015 IECC 403.3.3 and 403.3.4", 1); }
+    //endregion
 
     //region InspectionResolution Initializations
     private InspectionResolution initializeInspectionResolution1() { return new InspectionResolution(1, "Cancel"); }

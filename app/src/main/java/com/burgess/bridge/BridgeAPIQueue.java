@@ -78,10 +78,12 @@ public class BridgeAPIQueue {
     private BridgeAPIQueue(Context context) {
         ctx = context;
         queue = getRequestQueue();
-        isProd = true;
         mSharedPreferences = context.getSharedPreferences("Bridge_Preferences", Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
         BridgeLogger.getInstance(ctx);
+
+        // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
+        isProd = false;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -241,6 +243,7 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
     public JsonArrayRequest updateDefectItem_InspectionTypeXRef(LoginViewModel vm, final ServerCallback callback) {
@@ -282,6 +285,7 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
     public JsonArrayRequest updateBuilders(LoginViewModel vm, final ServerCallback callback) {
@@ -324,6 +328,7 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
     public JsonArrayRequest updateInspectors(LoginViewModel vm, final ServerCallback callback) {
@@ -366,6 +371,7 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
 

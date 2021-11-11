@@ -13,7 +13,7 @@ import data.Views.ReinspectDefectList_View;
 
 @Dao
 public interface DefectItem_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(DefectItem_Table defectItem);
 
     @Query("DELETE FROM defect_item_table")

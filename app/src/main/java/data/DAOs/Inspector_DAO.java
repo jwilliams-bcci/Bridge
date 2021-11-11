@@ -11,7 +11,7 @@ import data.Tables.Inspector_Table;
 
 @Dao
 public interface Inspector_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Inspector_Table inspector);
 
     @Query("DELETE FROM inspector_table")

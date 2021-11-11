@@ -12,7 +12,7 @@ import data.Tables.Builder_Table;
 
 @Dao
 public interface Builder_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Builder_Table builder);
 
     @Query("DELETE FROM builder_table")
