@@ -60,7 +60,7 @@ public class CannedCommentFragment extends DialogFragment implements OnButtonCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_canned_comment, container, false);
-        List<CannedComment> cannedComments = DataManager.getInstance().getCannedComments();
+        //List<CannedComment> cannedComments = DataManager.getInstance().getCannedComments();
         mCannedCommentResultsDialog = mView.findViewById(R.id.canned_comment_text_result);
         TextView cannedCommentResultsCannedComment = getActivity().findViewById(R.id.defect_item_text_canned_comment);
 

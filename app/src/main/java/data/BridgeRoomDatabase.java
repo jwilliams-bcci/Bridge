@@ -19,6 +19,7 @@ import com.burgess.bridge.login.LoginActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -119,6 +120,8 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
+
+            //List<CannedComment_Table> cannedComments = DataManager.getInstance().getCannedComments();
 
             databaseWriteExecutor.execute(() -> {
             });
