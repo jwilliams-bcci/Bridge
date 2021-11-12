@@ -14,14 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.burgess.bridge.FaultsRecyclerAdapter;
 import com.burgess.bridge.OnButtonClickListener;
 import com.burgess.bridge.R;
 
 import java.util.List;
 
-import data.DataManager;
-import data.Fault;
+import data.Tables.Fault_Table;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +30,7 @@ public class FaultFragment extends DialogFragment implements OnButtonClickListen
     private static FaultFragment mFragment;
     private View mView;
     private EditText mFaultResultsDialog;
+    private List<Fault_Table> faultList;
 
     public FaultFragment() {
         // Required empty public constructor
@@ -56,13 +55,12 @@ public class FaultFragment extends DialogFragment implements OnButtonClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_fault, container, false);
-        List<Fault> faults = DataManager.getInstance().getFaults();
         mFaultResultsDialog = mView.findViewById(R.id.fault_text_result);
         TextView faultResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_fault);
 
         RecyclerView recyclerFaults = (RecyclerView) mView.findViewById(R.id.fault_recycler_buttons);
         recyclerFaults.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        recyclerFaults.setAdapter(new FaultsRecyclerAdapter(getActivity(), faults, this));
+        recyclerFaults.setAdapter(new FaultsRecyclerAdapter(getActivity(), faultList, this));
 
         Button saveAndExit = mView.findViewById(R.id.fault_button_save_and_exit);
         saveAndExit.setOnClickListener(v -> {
@@ -76,5 +74,9 @@ public class FaultFragment extends DialogFragment implements OnButtonClickListen
     @Override
     public void onButtonClick(String buttonName) {
         mFaultResultsDialog.append(buttonName + " ");
+    }
+
+    public void setFaultList(List<Fault_Table> faultList) {
+        this.faultList = faultList;
     }
 }

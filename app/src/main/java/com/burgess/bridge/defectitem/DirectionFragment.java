@@ -14,14 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.burgess.bridge.DirectionsRecyclerAdapter;
 import com.burgess.bridge.OnButtonClickListener;
 import com.burgess.bridge.R;
 
 import java.util.List;
 
-import data.DataManager;
-import data.Direction;
+import data.Tables.Direction_Table;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +30,7 @@ public class DirectionFragment extends DialogFragment implements OnButtonClickLi
     private static DirectionFragment mFragment;
     private View mView;
     private EditText mDirectionResultsDialog;
+    private List<Direction_Table> directionList;
 
     public DirectionFragment() {
         // Required empty public constructor
@@ -55,13 +54,12 @@ public class DirectionFragment extends DialogFragment implements OnButtonClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_direction, container, false);
-        List<Direction> directions = DataManager.getInstance().getDirections();
         mDirectionResultsDialog = mView.findViewById(R.id.direction_text_result);
         TextView directionResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_direction);
 
         RecyclerView recyclerDirections = (RecyclerView) mView.findViewById(R.id.direction_recycler_buttons);
         recyclerDirections.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        recyclerDirections.setAdapter(new DirectionsRecyclerAdapter(getActivity(), directions, this));
+        recyclerDirections.setAdapter(new DirectionsRecyclerAdapter(getActivity(), directionList, this));
 
         Button saveAndExit = mView.findViewById(R.id.direction_button_save_and_exit);
         saveAndExit.setOnClickListener(v -> {
@@ -75,5 +73,9 @@ public class DirectionFragment extends DialogFragment implements OnButtonClickLi
     @Override
     public void onButtonClick(String buttonName) {
         mDirectionResultsDialog.append(buttonName + " ");
+    }
+
+    public void setDirectionList(List<Direction_Table> directionList) {
+        this.directionList = directionList;
     }
 }

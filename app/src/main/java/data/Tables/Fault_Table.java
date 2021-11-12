@@ -4,15 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "room_table")
-public class Room_Table {
+@Entity(tableName = "fault_table")
+public class Fault_Table {
     @PrimaryKey
     public int id;
-    public String room_name;
+    public String text;
+    public String display_text;
 
     @NonNull
     @Override
     public String toString() {
-        return room_name;
+        return display_text;
     }
 }

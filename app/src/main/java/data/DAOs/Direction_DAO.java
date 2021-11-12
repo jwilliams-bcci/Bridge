@@ -12,12 +12,12 @@ import data.Tables.Direction_Table;
 
 @Dao
 public interface Direction_DAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Direction_Table direction);
 
     @Query("DELETE FROM direction_table")
     void deleteAll();
 
-    @Query("SELECT * FROM direction_table ORDER BY id ASC")
-    LiveData<List<Direction_Table>> getDirections();
+    @Query("SELECT * FROM direction_table ORDER BY direction_order ASC")
+    List<Direction_Table> getDirections();
 }

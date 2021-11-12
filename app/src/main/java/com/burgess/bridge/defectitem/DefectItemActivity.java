@@ -48,11 +48,15 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import data.Tables.DefectItem_Table;
+import data.Tables.Direction_Table;
+import data.Tables.Fault_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
+import data.Tables.Room_Table;
 
 public class DefectItemActivity extends AppCompatActivity {
     private static final String TAG = "DEFECT_ITEM";
@@ -102,6 +106,11 @@ public class DefectItemActivity extends AppCompatActivity {
     private FaultFragment mFaultFragment;
     private CannedCommentFragment mCannedCommentFragment;
 
+    // Fragment data
+    private List<Room_Table> mRoomList;
+    private List<Direction_Table> mDirectionList;
+    private List<Fault_Table> mFaultList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +127,9 @@ public class DefectItemActivity extends AppCompatActivity {
         mFilter = intent.getStringExtra(FILTER_OPTION);
         mInspection = mDefectItemViewModel.getInspectionSync(mInspectionId);
         mDefectItem = mDefectItemViewModel.getDefectItemSync(mDefectId);
+        mRoomList = mDefectItemViewModel.getRooms();
+        mDirectionList = mDefectItemViewModel.getDirections();
+        mFaultList = mDefectItemViewModel.getFaults();
 
         initializeViews();
         initializeButtonListeners();
@@ -133,7 +145,6 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemTextDirection = findViewById(R.id.defect_item_text_direction);
         mDefectItemTextFault = findViewById(R.id.defect_item_text_fault);
         mDefectItemTextCannedComment = findViewById(R.id.defect_item_text_canned_comment);
-        //mSpinnerCannedComment = findViewById(R.id.defect_item_spinner_canned_comment);
         mDefectItemLabelPreviousComment = findViewById(R.id.defect_item_label_previous_comment);
         mDefectItemTextPreviousComment = findViewById(R.id.defect_item_text_previous_comment);
         mButtonMicrophone = findViewById(R.id.defect_item_button_microphone);
@@ -250,14 +261,17 @@ public class DefectItemActivity extends AppCompatActivity {
         });
         mDefectItemTextRoom.setOnClickListener(view -> {
             mRoomFragment = RoomFragment.newInstance();
+            mRoomFragment.setRoomList(mRoomList);
             mRoomFragment.show(getSupportFragmentManager(), "ROOM");
         });
         mDefectItemTextDirection.setOnClickListener(view -> {
             mDirectionFragment = DirectionFragment.newInstance();
+            mDirectionFragment.setDirectionList(mDirectionList);
             mDirectionFragment.show(getSupportFragmentManager(), "DIRECTION");
         });
         mDefectItemTextFault.setOnClickListener(view -> {
             mFaultFragment = FaultFragment.newInstance();
+            mFaultFragment.setFaultList(mFaultList);
             mFaultFragment.show(getSupportFragmentManager(), "FAULT");
         });
         mDefectItemTextCannedComment.setOnClickListener(view -> {

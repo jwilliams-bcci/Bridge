@@ -35,9 +35,12 @@ import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
+import data.Tables.Direction_Table;
+import data.Tables.Fault_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
 import data.Tables.Inspector_Table;
+import data.Tables.Room_Table;
 
 import static com.burgess.bridge.Constants.API_PROD_URL;
 import static com.burgess.bridge.Constants.API_STAGE_URL;
@@ -67,6 +70,9 @@ public class BridgeAPIQueue {
     private static final String GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_URL = "GetDefectItem_InspectionType_XRef";
     private static final String GET_BUILDERS_URL = "GetBuilders";
     private static final String GET_INSPECTORS_URL = "GetInspectors";
+    private static final String GET_ROOMS_URL = "GetRooms";
+    private static final String GET_DIRECTIONS_URL = "GetDirections";
+    private static final String GET_FAULTS_URL = "GetFaults";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
@@ -375,7 +381,129 @@ public class BridgeAPIQueue {
         return request;
     }
     public JsonArrayRequest updateRooms(LoginViewModel vm, final ServerCallback callback) {
-        
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += GET_ROOMS_URL;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    Room_Table room = new Room_Table();
+                    room.id = obj.optInt("RoomId");
+                    room.room_name = obj.optString("RoomName");
+
+                    vm.insertRoom(room);
+                } catch (JSONException e) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateRooms: " + e.getMessage());
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateRooms.");
+                callback.onFailure("Lost connection while getting rooms!");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateRooms.");
+                callback.onFailure("Request timed out while getting rooms!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateRooms: " + errorMessage);
+                callback.onFailure("Error getting rooms!");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+    public JsonArrayRequest updateDirections(LoginViewModel vm, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += GET_DIRECTIONS_URL;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    Direction_Table direction = new Direction_Table();
+                    direction.id = obj.optInt("DirectionID");
+                    direction.direction_description = obj.optString("Direction");
+                    direction.direction_order = obj.optInt("Order");
+
+                    vm.insertDirection(direction);
+                } catch (JSONException e) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateDirections: " + e.getMessage());
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateDirections.");
+                callback.onFailure("Lost connection while getting directions!");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateDirections.");
+                callback.onFailure("Request timed out while getting directions!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateDirections: " + errorMessage);
+                callback.onFailure("Error getting directions!");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+    public JsonArrayRequest updateFaults(LoginViewModel vm, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += GET_FAULTS_URL;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    Fault_Table fault = new Fault_Table();
+                    fault.id = obj.optInt("FaultID");
+                    fault.text = obj.optString("Fault");
+                    fault.display_text = obj.optString("PlainText");
+
+                    vm.insertFault(fault);
+                } catch (JSONException e) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateFaults: " + e.getMessage());
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateFaults.");
+                callback.onFailure("Lost connection while getting faults!");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateFaults.");
+                callback.onFailure("Request timed out while getting faults!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateFaults: " + errorMessage);
+                callback.onFailure("Error getting faults!");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
     }
 
     // Route Sheet

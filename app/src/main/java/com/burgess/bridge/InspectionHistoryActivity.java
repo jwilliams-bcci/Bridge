@@ -36,9 +36,9 @@ public class InspectionHistoryActivity extends AppCompatActivity {
     }
 
     private void displayAddress(TextView textAddress) {
-        Location location = DataManager.getInstance().getLocation(mLocationId);
-        textAddress.append(location.getCommunity() + "\n");
-        textAddress.append(location.getFullAddress());
+        //Location location = DataManager.getInstance().getLocation(mLocationId);
+        //textAddress.append(location.getCommunity() + "\n");
+        //textAddress.append(location.getFullAddress());
     }
 
     private void displayInspectionHistory() {
@@ -46,8 +46,8 @@ public class InspectionHistoryActivity extends AppCompatActivity {
         final LinearLayoutManager inspectionHistoriesLayoutManager = new LinearLayoutManager(this);
         recyclerInspectionHistories.setLayoutManager(inspectionHistoriesLayoutManager);
 
-        List<InspectionHistory> inspectionHistories = DataManager.getInstance().getInspectionHistories(mLocationId);
-        final InspectionHistoryRecyclerAdapter inspectionHistoryRecyclerAdapter = new InspectionHistoryRecyclerAdapter(this, inspectionHistories);
-        recyclerInspectionHistories.setAdapter(inspectionHistoryRecyclerAdapter);
+        //List<InspectionHistory> inspectionHistories = DataManager.getInstance().getInspectionHistories(mLocationId);
+        //final InspectionHistoryRecyclerAdapter inspectionHistoryRecyclerAdapter = new InspectionHistoryRecyclerAdapter(this, inspectionHistories);
+        //recyclerInspectionHistories.setAdapter(inspectionHistoryRecyclerAdapter);
     }
 }

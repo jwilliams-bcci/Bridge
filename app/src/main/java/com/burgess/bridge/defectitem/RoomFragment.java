@@ -16,12 +16,10 @@ import android.widget.TextView;
 
 import com.burgess.bridge.OnButtonClickListener;
 import com.burgess.bridge.R;
-import com.burgess.bridge.RoomsRecyclerAdapter;
 
 import java.util.List;
 
-import data.DataManager;
-import data.Room;
+import data.Tables.Room_Table;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +30,7 @@ public class RoomFragment extends DialogFragment implements OnButtonClickListene
     private static RoomFragment mFragment;
     private View mView;
     private EditText mRoomResultsDialog;
+    private List<Room_Table> roomList;
 
     public RoomFragment() {
         // Required empty public constructor
@@ -57,13 +56,12 @@ public class RoomFragment extends DialogFragment implements OnButtonClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_room, container, false);
-        List<Room> rooms = DataManager.getInstance().getRooms();
         mRoomResultsDialog = mView.findViewById(R.id.room_text_result);
         TextView roomResultsDefectItem = getActivity().findViewById(R.id.defect_item_text_room);
 
         RecyclerView recyclerRooms = mView.findViewById(R.id.room_recycler_buttons);
         recyclerRooms.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), rooms, this));
+        recyclerRooms.setAdapter(new RoomsRecyclerAdapter(getActivity(), roomList, this));
 
         Button saveAndExit = mView.findViewById(R.id.room_button_save_and_exit);
         saveAndExit.setOnClickListener(v -> {
@@ -77,5 +75,9 @@ public class RoomFragment extends DialogFragment implements OnButtonClickListene
     @Override
     public void onButtonClick(String buttonName) {
         mRoomResultsDialog.append(buttonName + " ");
+    }
+
+    public void setRoomList(List<Room_Table> roomList) {
+        this.roomList = roomList;
     }
 }

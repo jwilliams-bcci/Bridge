@@ -14,15 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.burgess.bridge.CannedCommentRecyclerAdapter;
 import com.burgess.bridge.OnButtonClickListener;
 import com.burgess.bridge.R;
 
 import java.util.List;
-
-import data.CannedComment;
-import data.DataManager;
-import data.Tables.CannedComment_Table;
 
 /**
  * A simple {@link Fragment} subclass.

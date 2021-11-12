@@ -1,4 +1,4 @@
-package com.burgess.bridge;
+package com.burgess.bridge.defectitem;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,9 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import com.burgess.bridge.OnButtonClickListener;
+import com.burgess.bridge.R;
 
-import data.CannedComment;
+import java.util.List;
 
 public class CannedCommentRecyclerAdapter extends RecyclerView.Adapter<CannedCommentRecyclerAdapter.ViewHolder> {
     private final Context mContext;

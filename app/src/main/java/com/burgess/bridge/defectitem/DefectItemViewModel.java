@@ -11,12 +11,18 @@ import java.util.List;
 import data.DbInsertCallback;
 import data.Repositories.CannedCommentRepository;
 import data.Repositories.DefectItemRepository;
+import data.Repositories.DirectionRepository;
+import data.Repositories.FaultRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
+import data.Repositories.RoomRepository;
 import data.Tables.DefectItem_Table;
+import data.Tables.Direction_Table;
+import data.Tables.Fault_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
+import data.Tables.Room_Table;
 
 public class DefectItemViewModel extends AndroidViewModel {
     private DefectItemRepository mDefectItemRepository;
@@ -24,6 +30,9 @@ public class DefectItemViewModel extends AndroidViewModel {
     private InspectionDefectRepository mInspectionDefectRepository;
     private InspectionRepository mInspectionRepository;
     private InspectionHistoryRepository mInspectionHistoryRepository;
+    private RoomRepository mRoomRepository;
+    private DirectionRepository mDirectionRepository;
+    private FaultRepository mFaultRepository;
 
     public DefectItemViewModel(@NonNull Application application) {
         super(application);
@@ -32,6 +41,9 @@ public class DefectItemViewModel extends AndroidViewModel {
         mInspectionDefectRepository = new InspectionDefectRepository(application);
         mInspectionRepository = new InspectionRepository(application);
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
+        mRoomRepository = new RoomRepository(application);
+        mDirectionRepository = new DirectionRepository(application);
+        mFaultRepository = new FaultRepository(application);
     }
 
     public LiveData<DefectItem_Table> getDefectItem(int defect_item_id) {
@@ -92,5 +104,17 @@ public class DefectItemViewModel extends AndroidViewModel {
 
     public void updateInspectionDefectId(int inspectionDefectId, int inspectionHistoryId) {
         mInspectionHistoryRepository.updateInspectionDefectId(inspectionDefectId, inspectionHistoryId);
+    }
+
+    public List<Room_Table> getRooms() {
+        return mRoomRepository.getRooms();
+    }
+
+    public List<Direction_Table> getDirections() {
+        return mDirectionRepository.getDirections();
+    }
+
+    public List<Fault_Table> getFaults() {
+        return mFaultRepository.getFaults();
     }
 }

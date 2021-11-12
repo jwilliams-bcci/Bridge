@@ -58,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
     private JsonArrayRequest mUpdateDIITReferenceRequest;
     private JsonArrayRequest mUpdateBuildersRequest;
     private JsonArrayRequest mUpdateInspectorsRequest;
+    private JsonArrayRequest mUpdateRoomsRequest;
+    private JsonArrayRequest mUpdateDirectionsRequest;
+    private JsonArrayRequest mUpdateFaultsRequest;
     private String mVersionName;
     private String mUserName;
     private String mPassword;
@@ -255,6 +258,45 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectors(mLoginViewModel, new ServerCallback() {
+            @Override
+            public void onSuccess(String message) {
+                queue.add(mUpdateRoomsRequest);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
+                hideSpinner();
+            }
+        });
+        mUpdateRoomsRequest = BridgeAPIQueue.getInstance().updateRooms(mLoginViewModel, new ServerCallback() {
+            @Override
+            public void onSuccess(String message) {
+                queue.add(mUpdateDirectionsRequest);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
+                hideSpinner();
+            }
+        });
+        mUpdateDirectionsRequest = BridgeAPIQueue.getInstance().updateDirections(mLoginViewModel, new ServerCallback() {
+            @Override
+            public void onSuccess(String message) {
+                queue.add(mUpdateFaultsRequest);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                Snackbar snackbar = showWorkOfflineSnackbar(message);
+                snackbar.show();
+                hideSpinner();
+            }
+        });
+        mUpdateFaultsRequest = BridgeAPIQueue.getInstance().updateFaults(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
