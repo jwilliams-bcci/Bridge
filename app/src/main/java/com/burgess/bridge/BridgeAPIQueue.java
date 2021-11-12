@@ -114,7 +114,7 @@ public class BridgeAPIQueue {
         return isProd;
     }
 
-    // Login
+    // Login & Database Update
     public JsonObjectRequest loginUser(String userName, String password, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url +=  String.format(LOGIN_URL, userName, password);
@@ -373,6 +373,9 @@ public class BridgeAPIQueue {
         };
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
+    }
+    public JsonArrayRequest updateRooms(LoginViewModel vm, final ServerCallback callback) {
+        
     }
 
     // Route Sheet
