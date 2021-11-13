@@ -248,7 +248,7 @@ public class InspectActivity extends AppCompatActivity {
                         }
                         break;
                 }
-                //mReinspectListAdapter.notifyItemChanged(((InspectViewHolder) viewHolder).mInspectionHistoryId);
+                mReinspectListAdapter.notifyItemChanged(((InspectViewHolder) viewHolder).mInspectionHistoryId);
             }
 
             @Override

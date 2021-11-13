@@ -29,43 +29,6 @@ public class DataManager {
         return ourInstance;
     }
 
-    public List<Room> getRooms() {
-        Collections.sort(mRooms, Comparator.comparing(Room::getRoomName));
-        return mRooms;
-    }
-    public Room getRoom(int id) {
-        for (Room room : mRooms) {
-            if (id == room.getRoomId()) {
-                return room;
-            }
-        }
-        return null;
-    }
-
-    public List<Direction> getDirections() {
-        return mDirections;
-    }
-    public Direction getDirection(int id) {
-        for (Direction direction : mDirections) {
-            if (id == direction.getDirectionId()) {
-                return direction;
-            }
-        }
-        return null;
-    }
-
-    public List<Fault> getFaults() {
-        return mFaults;
-    }
-    public Fault getFault(int id) {
-        for (Fault fault : mFaults) {
-            if (id == fault.getFaultId()) {
-                return fault;
-            }
-        }
-        return null;
-    }
-
     private void initializeRooms() {
         mRooms.add(initializeRoom1());
         mRooms.add(initializeRoom2());

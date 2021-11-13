@@ -23,6 +23,7 @@ import com.burgess.bridge.defectitem.DefectItemActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 
 import data.Tables.InspectionHistory_Table;
 
@@ -87,7 +88,7 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
 
         @Override
         public boolean areContentsTheSame(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
-            return oldItem.reviewed_status == newItem.reviewed_status;
+            return Objects.equals(oldItem.reviewed_status, newItem.reviewed_status);
         }
 
         @Nullable
