@@ -45,7 +45,7 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull InspectViewHolder holder, int position) {
-        InspectionHistory_Table current = getItem(position);
+        InspectionHistory_Table current = getCurrentList().get(position);
         Group group = holder.itemView.findViewById(R.id.item_defect_item_group);
         TextView textDescription = holder.itemView.findViewById(R.id.item_defect_item_text_description);
         TextView textNumber = holder.itemView.findViewById(R.id.item_defect_item_text_number);
@@ -80,6 +80,16 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         holder.bind(String.valueOf(current.defect_item_number), current.defect_item_description + "\n" + current.comment, String.valueOf(current.defect_category_name), false, mInspectionId, mInspectionTypeId, current.id, current.inspection_defect_id, current.comment, null);
     }
 
+//    @Override
+//    public int getItemCount() {
+//        return getCurrentList().size();
+//    }
+
+//    @Override
+//    public int getItemViewType(int position) {
+//        return position;
+//    }
+
     public static class ReinspectDiff extends DiffUtil.ItemCallback<InspectionHistory_Table> {
         @Override
         public boolean areItemsTheSame(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
@@ -91,10 +101,10 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
             return Objects.equals(oldItem.reviewed_status, newItem.reviewed_status);
         }
 
-        @Nullable
-        @Override
-        public Object getChangePayload(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
-            return super.getChangePayload(oldItem, newItem);
-        }
+//        @Nullable
+//        @Override
+//        public Object getChangePayload(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
+//            return super.getChangePayload(oldItem, newItem);
+//        }
     }
 }

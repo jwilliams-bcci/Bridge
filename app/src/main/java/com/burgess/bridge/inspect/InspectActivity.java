@@ -3,6 +3,7 @@ package com.burgess.bridge.inspect;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -102,7 +104,7 @@ public class InspectActivity extends AppCompatActivity {
             boolean allGood;
             int numberToReview = mInspectViewModel.getItemsToReview(mInspectionId);
             if (mReinspection) {
-                allGood = numberToReview < 1 ? true : false;
+                allGood = numberToReview < 1;
             } else {
                 allGood = true;
             }
@@ -159,7 +161,7 @@ public class InspectActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (mReinspection) {
-                    displayReinspectItems();
+                    displayReinspectItems(0);
                 } else {
                     mFilter = parent.getSelectedItem().toString();
                     mInspectListAdapter.setFilter(mFilter);
@@ -178,23 +180,30 @@ public class InspectActivity extends AppCompatActivity {
         mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(filter, mInspectionTypeId, mInspectionId).observe(this, defectItems ->
                 mInspectListAdapter.submitList(defectItems));
     }
-    private void displayReinspectItems() {
+    private void displayReinspectItems(int scrollPosition) {
         mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems ->
-                mReinspectListAdapter.submitList(defectItems));
+                mReinspectListAdapter.submitList(defectItems, () -> {
+                    mRecyclerDefectItems.scrollToPosition(scrollPosition);
+                }));
     }
 
     private void initializeReinspectDisplayContent() {
         // Hide sort buttons
-        mButtonSortDescription.setVisibility(View.INVISIBLE);
-        mButtonSortItemNumber.setVisibility(View.INVISIBLE);
+        mButtonSortDescription.setVisibility(View.GONE);
+        mButtonSortItemNumber.setVisibility(View.GONE);
+
+        // Change constraints
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(mConstraintLayout);
+        constraintSet.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_spinner_defect_category, ConstraintSet.BOTTOM);
+        constraintSet.applyTo(mConstraintLayout);
 
         // Set up the defect list
-        mRecyclerDefectItems.setItemViewCacheSize(300);
         mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.ReinspectDiff());
         mReinspectListAdapter.mInspectionId = mInspectionId;
         mReinspectListAdapter.mInspectionTypeId = mInspectionTypeId;
         mRecyclerDefectItems.setAdapter(mReinspectListAdapter);
-        displayReinspectItems();
+        displayReinspectItems(0);
 
         // Add swipe functionality to defect item list
         ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -217,11 +226,15 @@ public class InspectActivity extends AppCompatActivity {
                         BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as NC using swipe.");
                         if (selectedInspectionDefectId > 0) {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
-                            inspectionDefectToUpdate.defect_status_id = 2;
-                            mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
-                            mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
-                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
-                            mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
+                            if (inspectionDefectToUpdate.defect_status_id == 2) {
+                                Snackbar.make(mConstraintLayout, "Defect is already marked NC!", Snackbar.LENGTH_SHORT).show();
+                            } else {
+                                inspectionDefectToUpdate.defect_status_id = 2;
+                                mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
+                                mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
+                                mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                                mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
+                            }
                         } else {
                             InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, selectedComment, selectedHistoryId, false, null);
                             newId = mInspectViewModel.insertInspectionDefect(newFailedDefect);
@@ -234,11 +247,16 @@ public class InspectActivity extends AppCompatActivity {
                         BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as C using swipe.");
                         if (selectedInspectionDefectId > 0) {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
-                            inspectionDefectToUpdate.defect_status_id = 3;
-                            mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
-                            mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
-                            mInspectViewModel.updateIsReviewed(selectedHistoryId);
-                            mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
+                            if (inspectionDefectToUpdate.defect_status_id == 3) {
+                                Snackbar.make(mConstraintLayout, "Defect is already marked C!", Snackbar.LENGTH_SHORT).show();
+                                mRecyclerDefectItems.notifyAll();
+                            } else {
+                                inspectionDefectToUpdate.defect_status_id = 3;
+                                mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
+                                mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
+                                mInspectViewModel.updateIsReviewed(selectedHistoryId);
+                                mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
+                            }
                         } else {
                             InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, selectedComment, selectedHistoryId, false, null);
                             newId = mInspectViewModel.insertInspectionDefect(newCompleteDefect);
@@ -248,7 +266,6 @@ public class InspectActivity extends AppCompatActivity {
                         }
                         break;
                 }
-                mReinspectListAdapter.notifyItemChanged(((InspectViewHolder) viewHolder).mInspectionHistoryId);
             }
 
             @Override
