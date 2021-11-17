@@ -103,7 +103,7 @@ public class InspectActivity extends AppCompatActivity {
         mButtonReviewAndSubmit.setOnClickListener(v -> {
             boolean allGood;
             int numberToReview = mInspectViewModel.getItemsToReview(mInspectionId);
-            if (mReinspection) {
+            if (mReinspection && mInspection.division_id != 20) {
                 allGood = numberToReview < 1;
             } else {
                 allGood = true;
@@ -133,7 +133,7 @@ public class InspectActivity extends AppCompatActivity {
         mTextAddress.append(mInspection.address + "\n");
         mTextAddress.append(mInspection.inspection_type);
 
-        if (mReinspection) {
+        if (mReinspection && mInspection.division_id != 20) {
             initializeReinspectDisplayContent();
         } else {
             // Set up defect list
@@ -160,7 +160,7 @@ public class InspectActivity extends AppCompatActivity {
         mSpinnerDefectCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (mReinspection) {
+                if (mReinspection && mInspection.division_id != 20) {
                     displayReinspectItems(0);
                 } else {
                     mFilter = parent.getSelectedItem().toString();
