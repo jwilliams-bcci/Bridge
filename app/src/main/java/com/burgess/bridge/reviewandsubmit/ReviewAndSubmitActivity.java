@@ -273,7 +273,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             mUploadMultifamilyDetailsRequest = BridgeAPIQueue.getInstance().uploadMultifamilyDetails(jObj, mInspectionId, new ServerCallback() {
                 @Override
                 public void onSuccess(String message) {
-
                 }
 
                 @Override

@@ -81,7 +81,9 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     private void initializeButtonListeners() {
         mInspectButton.setOnClickListener(view -> {
             OffsetDateTime startTime = OffsetDateTime.now();
-            mInspectionDetailsViewModel.startInspection(startTime, mInspectionId);
+            if (mInspection.start_time != null) {
+                mInspectionDetailsViewModel.startInspection(startTime, mInspectionId);
+            }
 
             Intent inspectIntent = new Intent(InspectionDetailsActivity.this, InspectActivity.class);
             inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
