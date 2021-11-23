@@ -50,6 +50,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
@@ -248,18 +249,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private void completeInspection() throws Exception {
         showProgressSpinner();
         List<InspectionDefect_Table> inspectionDefects = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
-        String endTime = "";
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        try {
-            endTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            BridgeLogger.log('E', TAG, "ERROR in onCreate - " + e.getMessage());
-            hideProgressSpinner();
-            Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send Activity Log", Snackbar.LENGTH_LONG).show();
+        OffsetDateTime endTime = OffsetDateTime.now();
+        if (mInspection.end_time == null) {
+            mReviewAndSubmitViewModel.completeInspection(endTime, mInspectionId);
         }
-        mReviewAndSubmitViewModel.completeInspection(mInspection.end_time, mInspectionId);
-
 
         if (mDivisionId == 20) {
             JSONObject jObj = new JSONObject();
@@ -284,8 +277,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
         JSONObject jObj;
         InspectionDefect_Table defect;
-        BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime, (mInspection.trainee_id > 0 ? 1 : 0), mInspection.trainee_id, new ServerCallback() {
+        BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + mInspection.end_time + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), mInspection.end_time.toString(), (mInspection.trainee_id > 0 ? 1 : 0), mInspection.trainee_id, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 BridgeLogger.getInstance().log('I', TAG, "mUpdateInspectionStatusRequest returned success.");

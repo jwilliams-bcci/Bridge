@@ -117,8 +117,7 @@ public class LoginActivity extends AppCompatActivity {
             mEditor.apply();
 
             if (!isNetworkAvailable()) {
-                Snackbar snackbar = showWorkOfflineSnackbar("No network available!");
-                snackbar.show();
+                showWorkOfflineSnackbar("No network available!");
             } else {
                 mEditor.putBoolean(PREF_IS_ONLINE, true);
                 mEditor.apply();
@@ -199,8 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (message.equals("Authentication error! Please try again.")) {
                     Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
                 } else {
-                    Snackbar snackbar = showWorkOfflineSnackbar(message);
-                    snackbar.show();
+                    showWorkOfflineSnackbar(message);
                 }
                 hideSpinner();
             }
@@ -213,8 +211,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -226,8 +223,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -239,8 +235,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -252,8 +247,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -265,8 +259,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -278,8 +271,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -291,8 +283,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -306,8 +297,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Snackbar snackbar = showWorkOfflineSnackbar(message);
-                snackbar.show();
+                showWorkOfflineSnackbar(message);
                 hideSpinner();
             }
         });
@@ -358,7 +348,7 @@ public class LoginActivity extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-    private Snackbar showWorkOfflineSnackbar(String message) {
+    private void showWorkOfflineSnackbar(String message) {
         Snackbar snackbar = Snackbar
                 .make(mConstraintLayout, message + " Continue offline?", Snackbar.LENGTH_LONG)
                 .setAction("YES", v-> {
@@ -367,10 +357,10 @@ public class LoginActivity extends AppCompatActivity {
                     workOffline();
                 });
         View snackbarView = snackbar.getView();
-        TextView textView = (TextView) snackbarView.findViewById(R.id.snackbar_text);
+        TextView textView = snackbarView.findViewById(R.id.snackbar_text);
         textView.setMaxLines(5);
 
-        return snackbar;
+        snackbar.show();
     }
 
     private void showSpinner() {
