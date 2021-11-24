@@ -350,7 +350,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void showWorkOfflineSnackbar(String message) {
         Snackbar snackbar = Snackbar
-                .make(mConstraintLayout, message + " Continue offline?", Snackbar.LENGTH_LONG)
+                .make(mConstraintLayout, message + " Continue offline?", Snackbar.LENGTH_INDEFINITE)
                 .setAction("YES", v-> {
                     mEditor.putBoolean(PREF_IS_ONLINE, false);
                     mEditor.apply();
