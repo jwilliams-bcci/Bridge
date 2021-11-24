@@ -135,10 +135,6 @@ public class BridgeAPIQueue {
             mEditor.putString(PREF_LOGIN_PASSWORD, password);
             mEditor.putLong(PREF_AUTH_TOKEN_AGE, System.currentTimeMillis());
             mEditor.apply();
-            BridgeLogger.log('I', TAG, "PREF_AUTH_TOKEN set to: " + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
-            BridgeLogger.log('I', TAG, "PREF_SECURITY_USER_ID set to: " + mSharedPreferences.getString(PREF_SECURITY_USER_ID, "NULL"));
-            BridgeLogger.log('I', TAG, "PREF_INSPECTOR_ID set to: " + mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL"));
-            BridgeLogger.log('I', TAG, "PREF_INSPECTOR_DIVISION_ID set to: " + mSharedPreferences.getString(PREF_INSPECTOR_DIVISION_ID, "NULL"));
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -269,7 +265,6 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateDIIT: " + e.getMessage());
                 }
             }
-            Log.i(TAG, "DefectItem_InspectionType references downloaded");
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -512,8 +507,6 @@ public class BridgeAPIQueue {
         url += String.format(GET_INSPECTIONS_URL, inspectorId, inspectionDate);
 
         ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
                 try {
@@ -603,6 +596,7 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateInspectionHistory: " + e.getMessage());
                 }
             }
+            BridgeLogger.log('I', TAG, "Inspection histories downloaded.");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.log('E', TAG, "ERROR in updateInspectionHistory: " + errorMessage);
