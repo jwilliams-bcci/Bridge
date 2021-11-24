@@ -242,6 +242,7 @@ public class DefectItemActivity extends AppCompatActivity {
                     mDefectItemViewModel.updateInspectionDefectId((int) newId, mInspectionHistoryId);
                 }
                 Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
+                inspectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
                 inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
                 startActivity(inspectIntent);
@@ -249,6 +250,7 @@ public class DefectItemActivity extends AppCompatActivity {
         });
         mButtonCancel.setOnClickListener(v -> {
             Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
+            inspectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
             inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
             startActivity(inspectIntent);
