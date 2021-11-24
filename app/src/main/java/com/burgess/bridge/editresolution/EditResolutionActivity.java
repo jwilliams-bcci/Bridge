@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Calendar;
@@ -132,27 +133,20 @@ public class EditResolutionActivity extends AppCompatActivity {
             }
         });
         mButtonSubmit.setOnClickListener(view -> {
-            String inspectionTime = "";
             IncompleteReason selectedItem = (IncompleteReason) mSpinnerResolutions.getSelectedItem();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            try {
-                inspectionTime = URLEncoder.encode(formatter.format(Calendar.getInstance().getTime()), "utf-8");
-            } catch (UnsupportedEncodingException e) {
-                BridgeLogger.getInstance().log('E', TAG, "ERROR in getting date: " + e.getMessage());
-                Snackbar.make(mConstraintLayout, "Error! Please return to Route Sheet and send Activity Log", Snackbar.LENGTH_LONG).show();
-            }
-            if (selectedItem.code == 3 && mCurrentPhotoPath.isEmpty()) {
+            OffsetDateTime inspectionTime = OffsetDateTime.now();
+            if (selectedItem.code == 3 && mCurrentPhotoPath == null) {
                 Snackbar.make(mConstraintLayout, "For \"Not Ready\", please submit a picture", Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            addNote();
-            mEditResolutionRequest = getUpdateInspectionStatusRequest(selectedItem.code, inspectionTime);
-            BridgeAPIQueue.getInstance().getRequestQueue().add(mEditResolutionRequest);
+            } else {
+                addNote();
+                mEditResolutionRequest = getUpdateInspectionStatusRequest(selectedItem.code, inspectionTime.toString());
+                BridgeAPIQueue.getInstance().getRequestQueue().add(mEditResolutionRequest);
 
-            finish();
-            Intent routeSheetIntent = new Intent(EditResolutionActivity.this, RouteSheetActivity.class);
-            routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(routeSheetIntent);
+                finish();
+                Intent routeSheetIntent = new Intent(EditResolutionActivity.this, RouteSheetActivity.class);
+                routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(routeSheetIntent);
+            }
         });
     }
     private void initializeDisplayContent() {
