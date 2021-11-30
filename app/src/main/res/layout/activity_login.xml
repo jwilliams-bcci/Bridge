@@ -116,12 +116,12 @@
         android:id="@+id/login_text_version_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_checkbox_remember_credentials" />
+        app:layout_constraintTop_toBottomOf="@+id/login_checkbox_reload_inspection_data" />
 
     <TextView
         android:id="@+id/login_text_staging"
@@ -135,5 +135,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_text_version_name" />
+
+    <CheckBox
+        android:id="@+id/login_checkbox_reload_inspection_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:buttonTint="@color/colorWhite"
+        android:text="Reload Inspection Data"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/login_checkbox_remember_credentials"
+        app:layout_constraintStart_toStartOf="@+id/login_checkbox_remember_credentials"
+        app:layout_constraintTop_toBottomOf="@+id/login_checkbox_remember_credentials" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

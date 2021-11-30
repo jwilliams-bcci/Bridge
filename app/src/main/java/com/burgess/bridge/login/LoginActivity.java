@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mTextStaging;
     private Button mButtonLogin;
     private CheckBox mCheckBoxRememberCredentials;
+    private CheckBox mCheckBoxReloadInspectionData;
     private LinearLayout mLockScreen;
     private ProgressBar mProgressBar;
 
@@ -64,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     private String mVersionName;
     private String mUserName;
     private String mPassword;
-    private boolean loadDatabase;
+    private boolean loadDatabase = false;
 
     private static final String TAG = "LOGIN";
 
@@ -73,9 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mLoginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
-
-        // TODO: If true, all static tables are updated from database
-        loadDatabase = false;
 
         // Prepare Shared Preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -100,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         mTextStaging = findViewById(R.id.login_text_staging);
         mButtonLogin = findViewById(R.id.login_button_login);
         mCheckBoxRememberCredentials = findViewById(R.id.login_checkbox_remember_credentials);
+        mCheckBoxReloadInspectionData = findViewById(R.id.login_checkbox_reload_inspection_data);
         mConstraintLayout = findViewById(R.id.login_constraint_layout);
         mLockScreen = findViewById(R.id.login_lock_screen);
         mProgressBar = findViewById(R.id.login_progress_bar);
@@ -122,6 +122,20 @@ public class LoginActivity extends AppCompatActivity {
                 mEditor.putBoolean(PREF_IS_ONLINE, true);
                 mEditor.apply();
                 workOnline();
+            }
+        });
+
+        mCheckBoxReloadInspectionData.setOnCheckedChangeListener((v, i) -> {
+            if (v.isChecked()) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Are you sure?")
+                        .setMessage("Please note that this will reload the database from Burgess! This could take a few minutes, please only attempt this while in a good service area. Are you sure you want to reload the database?")
+                        .setPositiveButton("Yes", (dialogInterface, x) -> loadDatabase = true)
+                        .setNegativeButton("No", (dialogInterface, x) -> {
+                            loadDatabase = false;
+                            v.setChecked(false);
+                        })
+                        .show();
             }
         });
     }
