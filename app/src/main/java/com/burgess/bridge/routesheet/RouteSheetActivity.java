@@ -32,6 +32,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
+import com.burgess.bridge.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
@@ -40,8 +41,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
+import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN_AGE;
+import static com.burgess.bridge.Constants.PREF_INSPECTOR_DIVISION_ID;
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
 import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
+import static com.burgess.bridge.Constants.PREF_LOGIN_NAME;
+import static com.burgess.bridge.Constants.PREF_LOGIN_PASSWORD;
+import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
 
 import data.Views.RouteSheet_View;
 
@@ -52,10 +59,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
     private SharedPreferences.Editor mEditor;
     private ItemTouchHelper mItemTouchHelper;
     private TextView mTextSearchCommunity;
-    private Switch mSwitchSearchReinspects;
-    private Button mButtonUpdateRouteSheet;
-    private Button mButtonPrintRouteSheet;
-    private Button mButtonSendActivityLog;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerInspections;
     private Toolbar mToolbar;
@@ -113,27 +116,40 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.route_sheet_constraint_layout);
-        mButtonPrintRouteSheet = findViewById(R.id.route_sheet_button_print_route_sheet);
-        mButtonSendActivityLog = findViewById(R.id.route_sheet_button_send_log);
         mTextSearchCommunity = findViewById(R.id.route_sheet_text_search_community);
-        mSwitchSearchReinspects = findViewById(R.id.route_sheet_switch_search_reinspects);
         mSwipeRefreshLayout = findViewById(R.id.route_sheet_swipe_refresh);
         mRecyclerInspections = findViewById(R.id.route_sheet_list_inspections);
         mToolbar = findViewById(R.id.route_sheet_toolbar);
     }
     private void initializeButtonListeners() {
-        mButtonSendActivityLog.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Sending activity log...", Snackbar.LENGTH_SHORT).show();
-            try {
-                Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, getVersionName());
-                startActivity(Intent.createChooser(emailIntent, "Send activity log..."));
-            } catch (Exception e) {
-                BridgeLogger.getInstance().log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
+        mToolbar.setOnMenuItemClickListener(v -> {
+            if (v.getItemId() == R.id.route_sheet_menu_send_activity_log) {
+                Snackbar.make(mConstraintLayout, "Sending activity log...", Snackbar.LENGTH_SHORT).show();
+                try {
+                    Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, getVersionName());
+                    startActivity(Intent.createChooser(emailIntent, "Send activity log..."));
+                } catch (Exception e) {
+                    BridgeLogger.getInstance().log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
+                }
             }
-        });
+            else if (v.getItemId() == R.id.route_sheet_menu_print_route_sheet) {
+                Snackbar.make(mConstraintLayout, "Printing route sheet not yet available.", Snackbar.LENGTH_SHORT).show();
+            }
+            else if (v.getItemId() == R.id.route_sheet_menu_logout) {
+                mEditor.remove(PREF_AUTH_TOKEN);
+                mEditor.remove(PREF_SECURITY_USER_ID);
+                mEditor.remove(PREF_INSPECTOR_ID);
+                mEditor.remove(PREF_INSPECTOR_DIVISION_ID);
+                mEditor.remove(PREF_LOGIN_NAME);
+                mEditor.remove(PREF_LOGIN_PASSWORD);
+                mEditor.remove(PREF_AUTH_TOKEN_AGE);
+                mEditor.apply();
 
-        mButtonPrintRouteSheet.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "Printing route sheet not yet available.", Snackbar.LENGTH_SHORT).show();
+                Intent loginIntent = new Intent(RouteSheetActivity.this, LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(loginIntent);
+            }
+            return false;
         });
     }
     private void initializeTextListeners() {
@@ -174,25 +190,6 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(mRouteSheetListAdapter);
             mItemTouchHelper = new ItemTouchHelper(callback);
             mItemTouchHelper.attachToRecyclerView(mRecyclerInspections);
-
-            mToolbar.setOnMenuItemClickListener(v -> {
-                if (v.getItemId() == R.id.route_sheet_menu_send_activity_log) {
-                    Snackbar.make(mConstraintLayout, "Sending activity log...", Snackbar.LENGTH_SHORT).show();
-                    try {
-                        Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, getVersionName());
-                        startActivity(Intent.createChooser(emailIntent, "Send activity log..."));
-                    } catch (Exception e) {
-                        BridgeLogger.getInstance().log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
-                    }
-                }
-                else if (v.getItemId() == R.id.route_sheet_menu_print_route_sheet) {
-                    Snackbar.make(mConstraintLayout, "Printing route sheet not yet available.", Snackbar.LENGTH_SHORT).show();
-                }
-                else if (v.getItemId() == R.id.route_sheet_menu_logout) {
-
-                }
-                return false;
-            });
         } catch (Exception e) {
             Snackbar.make(mConstraintLayout, "Error in loading route sheet, please send log.", Snackbar.LENGTH_LONG).show();
             BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());

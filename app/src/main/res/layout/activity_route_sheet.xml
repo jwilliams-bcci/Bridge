@@ -30,46 +30,18 @@
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
         app:titleTextColor="#FFFFFF" />
 
-    <Button
-        android:id="@+id/route_sheet_button_send_log"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/route_sheet_button_order_route_sheet_text"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/route_sheet_button_print_route_sheet"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
-
     <EditText
         android:id="@+id/route_sheet_text_search_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="2dp"
         android:autofillHints="@string/route_sheet_text_search_community_hint"
         android:ems="10"
         android:hint="@string/route_sheet_text_search_community_hint"
         android:inputType="textPersonName"
         android:singleLine="false"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/route_sheet_switch_search_reinspects"
-        app:layout_constraintStart_toStartOf="@+id/route_sheet_button_send_log"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_button_send_log" />
-
-    <Button
-        android:id="@+id/route_sheet_button_print_route_sheet"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/route_sheet_button_print_route_sheet_text"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/route_sheet_button_send_log"
+        app:layout_constraintEnd_toEndOf="@+id/route_sheet_swipe_refresh"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -114,7 +86,7 @@
         android:textSize="12sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/route_sheet_text_search_community"
-        app:layout_constraintEnd_toEndOf="@+id/route_sheet_button_print_route_sheet"
-        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community" />
+        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community"
+        tools:layout_editor_absoluteX="395dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

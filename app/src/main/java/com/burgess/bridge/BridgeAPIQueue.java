@@ -89,7 +89,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = false;
+        isProd = true;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -558,8 +558,14 @@ public class BridgeAPIQueue {
                 getRequestQueue().add(inspectionHistoryRequests.get(lcv));
             }
         }, error -> {
-            String errorMessage = new String(error.networkResponse.data);
-            BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + errorMessage);
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateRouteSheet.");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateRouteSheet.");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + errorMessage);
+            }
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -625,8 +631,14 @@ public class BridgeAPIQueue {
                 vm.deleteInspection(inspectionId);
             }
         }, error -> {
-            String errorMessage = new String(error.networkResponse.data);
-            BridgeLogger.log('E', TAG, "ERROR in checkExistingInspection: " + errorMessage);
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in checkExistingInspection.");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in checkExistingInspection.");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in checkExistingInspection: " + errorMessage);
+            }
         }) {
             @Override
             public Map<String, String> getHeaders() {
