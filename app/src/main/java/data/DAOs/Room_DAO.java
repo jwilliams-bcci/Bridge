@@ -18,6 +18,6 @@ public interface Room_DAO {
     @Query("DELETE FROM room_table")
     void deleteAll();
 
-    @Query("SELECT * FROM room_table ORDER BY id ASC")
+    @Query("SELECT * FROM room_table ORDER BY room_name ASC")
     List<Room_Table> getRooms();
 }

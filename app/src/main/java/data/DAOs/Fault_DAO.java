@@ -17,6 +17,6 @@ public interface Fault_DAO {
     @Query("DELETE FROM fault_table")
     void deleteAll();
 
-    @Query("SELECT * FROM fault_table ORDER BY id ASC")
+    @Query("SELECT * FROM fault_table ORDER BY text COLLATE NOCASE ASC")
     List<Fault_Table> getFaults();
 }

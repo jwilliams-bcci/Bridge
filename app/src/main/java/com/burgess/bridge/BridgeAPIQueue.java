@@ -89,7 +89,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = true;
+        isProd = false;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -602,7 +602,6 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateInspectionHistory: " + e.getMessage());
                 }
             }
-            BridgeLogger.log('I', TAG, "Inspection histories downloaded.");
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.log('E', TAG, "ERROR in updateInspectionHistory: " + errorMessage);
