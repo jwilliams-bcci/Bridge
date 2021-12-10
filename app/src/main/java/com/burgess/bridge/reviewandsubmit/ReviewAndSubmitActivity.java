@@ -131,119 +131,135 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
         });
         mButtonSubmit.setOnClickListener(v -> {
-            // Prevent double clicking
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
-                return;
+            try {
+                // Prevent double clicking
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                mInspectionStatusId = getInspectionStatusId();
+                String statusMessage;
+                switch (mInspectionStatusId) {
+                    case 11:
+                        statusMessage = "PASSED";
+                        break;
+                    case 12:
+                        statusMessage = "FAILED";
+                        break;
+                    case 26:
+                        statusMessage = "NO DEFICIENCIES OBSERVED";
+                        break;
+                    case 25:
+                        statusMessage = "DEFICIENCIES OBSERVED";
+                        break;
+                    case 0:
+                        Snackbar.make(mConstraintLayout, "Error in getting status, please send Activity log", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    default:
+                        statusMessage = "NA";
+                        break;
+                }
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Is the following resolution accurate?")
+                        .setMessage(statusMessage)
+                        .setPositiveButton("Yes", (dialogInterface, i) -> {
+                            try {
+                                completeInspection();
+                            } catch (Exception e) {
+                                BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
+                                hideProgressSpinner();
+                                Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
+                        .show();
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Supervisor Present?")
+                        .setMessage("Was the supervisor present?")
+                        .setPositiveButton("Yes", (dialogInterface, i) -> mSupervisorPresent = true)
+                        .setNegativeButton("No", (dialogInterface, i) -> mSupervisorPresent = false)
+                        .show();
+            } catch (Exception e) {
+                BridgeLogger.log('E', TAG, "ERROR in mButtonSubmit.click(): " + e.getMessage());
             }
-            mLastClickTime = SystemClock.elapsedRealtime();
-
-            mInspectionStatusId = getInspectionStatusId();
-            String statusMessage;
-            switch (mInspectionStatusId) {
-                case 11:
-                    statusMessage = "PASSED";
-                    break;
-                case 12:
-                    statusMessage = "FAILED";
-                    break;
-                case 26:
-                    statusMessage = "NO DEFICIENCIES OBSERVED";
-                    break;
-                case 25:
-                    statusMessage = "DEFICIENCIES OBSERVED";
-                    break;
-                default:
-                    statusMessage = "NA";
-                    break;
-            }
-
-            new AlertDialog.Builder(this)
-                    .setTitle("Is the following resolution accurate?")
-                    .setMessage(statusMessage)
-                    .setPositiveButton("Yes", (dialogInterface, i) -> {
-                        try {
-                            completeInspection();
-                        } catch (Exception e) {
-                            BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
-                            hideProgressSpinner();
-                            Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
-                        }
-                    })
-                    .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
-                    .show();
-
-            new AlertDialog.Builder(this)
-                    .setTitle("Supervisor Present?")
-                    .setMessage("Was the supervisor present?")
-                    .setPositiveButton("Yes", (dialogInterface, i) -> mSupervisorPresent = true)
-                    .setNegativeButton("No", (dialogInterface, i) -> mSupervisorPresent = false)
-                    .show();
         });
     }
     private void initializeDisplayContent() {
-        // Display address
-        mTextAddress.setText("");
-        mTextAddress.append(mInspection.community + "\n");
-        mTextAddress.append(mInspection.address + "\n");
-        mTextAddress.append(mInspection.inspection_type);
+        try{
+            // Display address
+            mTextAddress.setText("");
+            mTextAddress.append(mInspection.community + "\n");
+            mTextAddress.append(mInspection.address + "\n");
+            mTextAddress.append(mInspection.inspection_type);
 
-        // Populate the recycler view of inspection defects
-        ReviewAndSubmitListAdapter reviewAndSubmitListAdapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
-        mRecyclerInspectionDefects.setAdapter(reviewAndSubmitListAdapter);
-        mRecyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
-        mInspectionDefectList = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
-        reviewAndSubmitListAdapter.submitList(mInspectionDefectList);
+            // Populate the recycler view of inspection defects
+            ReviewAndSubmitListAdapter reviewAndSubmitListAdapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
+            mRecyclerInspectionDefects.setAdapter(reviewAndSubmitListAdapter);
+            mRecyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
+            mInspectionDefectList = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
+            reviewAndSubmitListAdapter.submitList(mInspectionDefectList);
 
-        // If this is not a reinspection, set up the swipe functionality to remove an item
-        if (!mInspection.reinspect) {
-            ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            // If this is not a reinspection, set up the swipe functionality to remove an item
+            if (!mInspection.reinspect) {
+                ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
-                @Override
-                public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
-                    return false;
-                }
+                    @Override
+                    public boolean onMove(@NonNull @NotNull RecyclerView recyclerView, @NonNull @NotNull RecyclerView.ViewHolder viewHolder, @NonNull @NotNull RecyclerView.ViewHolder target) {
+                        return false;
+                    }
 
-                @Override
-                public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
-                    mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
-                }
-            };
-            ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
-            touchHelper.attachToRecyclerView(mRecyclerInspectionDefects);
+                    @Override
+                    public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+                        ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
+                        mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
+                    }
+                };
+                ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);
+                touchHelper.attachToRecyclerView(mRecyclerInspectionDefects);
+            }
+        } catch (Exception e) {
+            BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
         }
     }
 
     private int getInspectionStatusId() {
-        int status;
-        int builderId = mInspection.builder_id;
-        Builder_Table builder = mReviewAndSubmitViewModel.getBuilder(builderId);
-        boolean builderConditionalReinspect = builder.reinspection_required;
+        try {
+            int status;
+            int builderId = mInspection.builder_id;
+            Builder_Table builder = mReviewAndSubmitViewModel.getBuilder(builderId);
+            boolean builderConditionalReinspect = builder.reinspection_required;
 
-        if (mInspectionDefectList.isEmpty()) {
-            status = 11;
-        } else {
-            List<ReviewAndSubmit_View> notAllCs = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
-            if (notAllCs.isEmpty()) {
+            if (mInspectionDefectList.isEmpty()) {
                 status = 11;
             } else {
-                List<ReviewAndSubmit_View> reinspectionRequired = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
-                if (builderConditionalReinspect && reinspectionRequired.isEmpty()) {
+                List<ReviewAndSubmit_View> notAllCs = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
+                if (notAllCs.isEmpty()) {
                     status = 11;
                 } else {
-                    status = 12;
+                    List<ReviewAndSubmit_View> reinspectionRequired = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
+                    if (builderConditionalReinspect && reinspectionRequired.isEmpty()) {
+                        status = 11;
+                    } else {
+                        status = 12;
+                    }
                 }
             }
-        }
 
-        if (mDivisionId == 20) {
-            if (status == 11) {
-                status = 26;
-            } else if (status == 12) {
-                status = 25;
+            if (mDivisionId == 20) {
+                if (status == 11) {
+                    status = 26;
+                } else if (status == 12) {
+                    status = 25;
+                }
             }
+            return status;
+        } catch (Exception e) {
+            BridgeLogger.log('E', TAG, "ERROR in getInspectionStatusId: " + e.getMessage());
+            return 0;
         }
-        return status;
     }
 
     private void completeInspection() throws Exception {
