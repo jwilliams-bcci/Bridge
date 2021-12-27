@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -377,9 +378,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private byte[] getPictureData(int inspectionDefectId) {
         InspectionDefect_Table defect = mReviewAndSubmitViewModel.getInspectionDefect(inspectionDefectId);
         Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
+        Bitmap outBmp;
+        float degrees = 90;
+        Matrix matrix = new Matrix();
+        matrix.setRotate(degrees);
+        outBmp = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        if (image != null) {
-            image.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        if (outBmp != null) {
+            outBmp.compress(Bitmap.CompressFormat.JPEG, 50, stream);
             return stream.toByteArray();
         } else {
             return null;
