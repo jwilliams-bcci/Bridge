@@ -36,6 +36,7 @@ import com.burgess.bridge.login.LoginActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,10 +97,10 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
         BridgeLogger.getInstance(this);
         apiQueue = BridgeAPIQueue.getInstance(this);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         mInspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
         mIsOnline = mSharedPreferences.getBoolean(PREF_IS_ONLINE, true);
-        mUpdateRouteSheetRequest = apiQueue.updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(LocalDateTime.now()));
+        mUpdateRouteSheetRequest = apiQueue.updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(OffsetDateTime.now()));
 
         initializeViews();
         initializeButtonListeners();
