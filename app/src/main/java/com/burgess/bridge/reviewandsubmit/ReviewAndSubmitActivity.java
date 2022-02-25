@@ -60,6 +60,7 @@ import java.util.stream.Collectors;
 
 import data.Enums.IncompleteReason;
 import data.Tables.Builder_Table;
+import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 import data.Tables.MultifamilyDetails_Table;
@@ -295,7 +296,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         }
 
         JSONObject jObj;
-        InspectionDefect_Table defect;
+        InspectionDefect_Table inspectionDefect;
+        DefectItem_Table defectItem;
         BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
         mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime.toString(), (mInspection.trainee_id > 0 ? 1 : 0), mInspection.trainee_id, new ServerCallback() {
             @Override
@@ -325,34 +327,48 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         } else {
             BridgeLogger.log('I', TAG, "Found defects, uploading...");
             for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
-                defect = inspectionDefects.get(lcv);
+                inspectionDefect = inspectionDefects.get(lcv);
+                defectItem = mReviewAndSubmitViewModel.getDefectItem(inspectionDefect.defect_item_id);
+
                 jObj = new JSONObject();
-                jObj.put("InspectionId", defect.inspection_id);
-                jObj.put("DefectItemId", defect.defect_item_id);
-                jObj.put("DefectStatusId", defect.defect_status_id);
-                if (defect.comment != null) {
-                    jObj.put("Comment", defect.comment);
-                } else {
-                    jObj.put("Comment", "");
-                }
-                jObj.put("Comment", defect.comment);
-                if (defect.picture_path != null) {
-                    try{
-                        jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(defect.id)));
-                        jObj.put("ImageFileName", defect.picture_path.substring(defect.picture_path.lastIndexOf("/")+1));
-                    } catch (NullPointerException e) {
-                        Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + defect.defect_item_id, Snackbar.LENGTH_SHORT).show();
-                        hideProgressSpinner();
-                        return;
+                jObj.put("InspectionId", inspectionDefect.inspection_id);
+                if (defectItem.defect_category_name.contains("Observation")) {
+                    jObj.put("DefectItemId", 1);
+                    jObj.put("DefectStatusId", 7);
+                    if (inspectionDefect.comment != null) {
+                        jObj.put("Comment", "#D#" + inspectionDefect.comment);
+                    } else {
+                        jObj.put("Comment", "");
                     }
-                } else {
                     jObj.put("ImageData", null);
                     jObj.put("ImageFileName", null);
+                    jObj.put("PriorInspectionDetailId", null);
+                } else {
+                    jObj.put("DefectItemId", inspectionDefect.defect_item_id);
+                    jObj.put("DefectStatusId", inspectionDefect.defect_status_id);
+                    if (inspectionDefect.comment != null) {
+                        jObj.put("Comment", inspectionDefect.comment);
+                    } else {
+                        jObj.put("Comment", "");
+                    }
+                    if (inspectionDefect.picture_path != null) {
+                        try{
+                            jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id)));
+                            jObj.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
+                        } catch (NullPointerException e) {
+                            Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + inspectionDefect.defect_item_id, Snackbar.LENGTH_SHORT).show();
+                            hideProgressSpinner();
+                            return;
+                        }
+                    } else {
+                        jObj.put("ImageData", null);
+                        jObj.put("ImageFileName", null);
+                    }
+                    jObj.put("PriorInspectionDetailId", inspectionDefect.prior_inspection_detail_id);
                 }
-                jObj.put("PriorInspectionDetailId", defect.prior_inspection_detail_id);
-                InspectionDefect_Table finalDefect = defect;
-                if (!defect.is_uploaded) {
-                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, defect.defect_item_id, defect.inspection_id, new ServerCallback() {
+                InspectionDefect_Table finalDefect = inspectionDefect;
+                if (!inspectionDefect.is_uploaded) {
+                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, new ServerCallback() {
                         @Override
                         public void onSuccess(String message) {
                             mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);

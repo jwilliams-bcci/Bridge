@@ -16,6 +16,7 @@ import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionRepository;
 import data.Repositories.MultifamilyDetailsRepository;
 import data.Tables.Builder_Table;
+import data.Tables.DefectItem_Table;
 import data.Tables.MultifamilyDetails_Table;
 import data.Views.ReviewAndSubmit_View;
 import data.Tables.InspectionDefect_Table;
@@ -95,5 +96,9 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public MultifamilyDetails_Table getMultifamilyDetails(int inspectionId) {
         return mMultifamilyDetailsRepository.getMultifamilyDetails(inspectionId);
+    }
+
+    public DefectItem_Table getDefectItem(int defectItemId) {
+        return mDefectItemRepository.getDefectItemSync(defectItemId);
     }
 }

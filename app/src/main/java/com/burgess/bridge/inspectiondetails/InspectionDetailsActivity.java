@@ -120,9 +120,10 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         });
 
         mEditResolutionButton.setOnClickListener(view -> {
-            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
-            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
-            startActivity(editResolutionIntent);
+            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
+//            Intent editResolutionIntent = new Intent(InspectionDetailsActivity.this, EditResolutionActivity.class);
+//            editResolutionIntent.putExtra(EditResolutionActivity.INSPECTION_ID, mInspectionId);
+//            startActivity(editResolutionIntent);
         });
 
         mAttachmentsButton.setOnClickListener(view -> {
