@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import data.InspectionDefect;
 import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
@@ -75,6 +76,7 @@ public class BridgeAPIQueue {
     private static final String GET_FAULTS_URL = "GetFaults";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
     private static final String POST_TRANSFER_INSPECTION_URL = "TransferInspection?inspectionId=%s&inspectorId=%s";
     private static final String POST_MULTIFAMILY_DETAILS_URL = "InsertMultifamilyDetails";
@@ -89,7 +91,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = true;
+        isProd = false;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -548,6 +550,9 @@ public class BridgeAPIQueue {
                     if (inspection.reinspect) {
                         inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
                     }
+                    if (inspection.division_id == 20) {
+
+                    }
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {
                     BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + e.getMessage());
@@ -605,6 +610,31 @@ public class BridgeAPIQueue {
         }, error -> {
             String errorMessage = new String(error.networkResponse.data);
             BridgeLogger.log('E', TAG, "ERROR in updateInspectionHistory: " + errorMessage);
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+        return request;
+    }
+    public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int locationId) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_MULTIFAMILY_HISTORY_URL, locationId);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int lcv = 0; lcv < response.length(); lcv++) {
+                try {
+                    JSONObject obj = response.getJSONObject(lcv);
+                } catch (JSONException e) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateMultifamilyHistory: " + e.getMessage());
+                }
+            }
+        }, error -> {
+            String errorMessage = new String(error.networkResponse.data);
+            BridgeLogger.log('E', TAG, "ERROR in updateMultifamilyHistory: " + errorMessage);
         }) {
             @Override
             public Map<String, String> getHeaders() {
@@ -725,6 +755,7 @@ public class BridgeAPIQueue {
     public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += POST_INSPECTION_DEFECT_URL;
+        BridgeLogger.log('I', TAG, "URL: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             BridgeLogger.log('I', TAG, "Uploaded DefectItemID " + defectItemId + " for InspectionID " + inspectionId + ".");

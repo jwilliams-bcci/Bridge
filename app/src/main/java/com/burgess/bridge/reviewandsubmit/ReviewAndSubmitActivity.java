@@ -332,20 +332,15 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
                 jObj = new JSONObject();
                 jObj.put("InspectionId", inspectionDefect.inspection_id);
-                if (defectItem.defect_category_name.contains("Observation")) {
-                    jObj.put("DefectItemId", 1);
-                    jObj.put("DefectStatusId", 7);
-                    if (inspectionDefect.comment != null) {
-                        jObj.put("Comment", "#D#" + inspectionDefect.comment);
-                    } else {
-                        jObj.put("Comment", "");
-                    }
+                jObj.put("DefectItemId", inspectionDefect.defect_item_id);
+                jObj.put("DefectStatusId", inspectionDefect.defect_status_id);
+                if (defectItem.defect_category_name.contains("Observation") && inspectionDefect.defect_status_id == 3) {
+                    BridgeLogger.log('I', TAG, "MF defect found in Observation category");
+                    jObj.put("Comment", "");
                     jObj.put("ImageData", null);
                     jObj.put("ImageFileName", null);
                     jObj.put("PriorInspectionDetailId", null);
                 } else {
-                    jObj.put("DefectItemId", inspectionDefect.defect_item_id);
-                    jObj.put("DefectStatusId", inspectionDefect.defect_status_id);
                     if (inspectionDefect.comment != null) {
                         jObj.put("Comment", inspectionDefect.comment);
                     } else {
@@ -372,6 +367,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String message) {
                             mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
+                            BridgeLogger.log('I', TAG, "Defect item uploaded... ID: " + finalDefect.defect_item_id + ", Status: " + finalDefect.defect_status_id);
                             if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
                                 BridgeLogger.log('I', TAG, "All defect items uploaded. Adding mUpdateInspectionStatusRequest");
                                 mUpdateInspectionStatusRequest.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
