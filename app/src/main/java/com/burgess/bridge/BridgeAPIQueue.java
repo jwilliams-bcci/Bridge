@@ -38,6 +38,7 @@ import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
 import data.Tables.Fault_Table;
+import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
 import data.Tables.Inspector_Table;
@@ -91,7 +92,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = false;
+        isProd = true;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -509,6 +510,7 @@ public class BridgeAPIQueue {
         url += String.format(GET_INSPECTIONS_URL, inspectorId, inspectionDate);
 
         ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
+        ArrayList<JsonArrayRequest> multifamilyHistoryRequests = new ArrayList<>();
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int i = 0; i < response.length(); i++) {
                 try {
@@ -550,8 +552,8 @@ public class BridgeAPIQueue {
                     if (inspection.reinspect) {
                         inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
                     }
-                    if (inspection.division_id == 20) {
-
+                    if (inspection.division_id == 20 && inspection.inspection_type_id != 1154) {
+                        multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.id, inspection.location_id));
                     }
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {
@@ -561,6 +563,9 @@ public class BridgeAPIQueue {
             BridgeLogger.log('I', TAG, "Inspections downloaded");
             for (int lcv = 0; lcv < inspectionHistoryRequests.size(); lcv++) {
                 getRequestQueue().add(inspectionHistoryRequests.get(lcv));
+            }
+            for (int lcv = 0; lcv < multifamilyHistoryRequests.size(); lcv++) {
+                getRequestQueue().add(multifamilyHistoryRequests.get(lcv));
             }
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -620,7 +625,7 @@ public class BridgeAPIQueue {
         };
         return request;
     }
-    public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int locationId) {
+    public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int inspectionId, int locationId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_MULTIFAMILY_HISTORY_URL, locationId);
 
@@ -628,6 +633,16 @@ public class BridgeAPIQueue {
             for (int lcv = 0; lcv < response.length(); lcv++) {
                 try {
                     JSONObject obj = response.getJSONObject(lcv);
+                    InspectionDefect_Table newDefect = new InspectionDefect_Table();
+                    newDefect.inspection_id = inspectionId;
+                    newDefect.defect_item_id = obj.optInt("DefectItemID");
+                    newDefect.defect_status_id = 2;
+                    newDefect.comment = obj.optString("Comment");
+                    newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
+                    newDefect.reinspection_required = false;
+                    newDefect.picture_path = null;
+                    newDefect.is_uploaded = false;
+                    vm.insertInspectionDefect(newDefect);
                 } catch (JSONException e) {
                     BridgeLogger.log('E', TAG, "ERROR in updateMultifamilyHistory: " + e.getMessage());
                 }

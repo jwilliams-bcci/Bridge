@@ -46,6 +46,10 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mInspectionRepository.insert(inspection);
     }
 
+    public void insertInspectionDefect(InspectionDefect_Table inspectionDefect) {
+        mInspectionDefectRepository.insert(inspectionDefect);
+    }
+
     public void deleteInspection(int inspectionId) {
         mInspectionRepository.delete(inspectionId);
     }
