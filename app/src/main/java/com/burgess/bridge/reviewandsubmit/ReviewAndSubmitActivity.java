@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -163,27 +165,39 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         break;
                 }
 
-                new AlertDialog.Builder(this)
+                Handler handler = new Handler();
+                AlertDialog resolutionDialog = new AlertDialog.Builder(this)
                         .setTitle("Is the following resolution accurate?")
                         .setMessage(statusMessage)
-                        .setPositiveButton("Yes", (dialogInterface, i) -> {
-                            try {
-                                completeInspection();
-                            } catch (Exception e) {
-                                BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
-                                hideProgressSpinner();
-                                Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
+                        .setPositiveButton("Yes", new android.content.DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    completeInspection();
+                                } catch (Exception e) {
+                                    BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
+                                    hideProgressSpinner();
+                                    Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
+                                }
                             }
                         })
                         .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
-                        .show();
+                        .create();
 
-                new AlertDialog.Builder(this)
+                AlertDialog supervisorDialog = new AlertDialog.Builder(this)
                         .setTitle("Supervisor Present?")
                         .setMessage("Was the supervisor present?")
                         .setPositiveButton("Yes", (dialogInterface, i) -> mSupervisorPresent = true)
                         .setNegativeButton("No", (dialogInterface, i) -> mSupervisorPresent = false)
-                        .show();
+                        .create();
+
+                supervisorDialog.show();
+                resolutionDialog.show();
+
+                final Button button = resolutionDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setVisibility(View.INVISIBLE);
+
+                handler.postDelayed(() -> button.setVisibility(View.VISIBLE), 5000);
             } catch (Exception e) {
                 BridgeLogger.log('E', TAG, "ERROR in mButtonSubmit.click(): " + e.getMessage());
             }

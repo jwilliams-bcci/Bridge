@@ -642,7 +642,9 @@ public class BridgeAPIQueue {
                     newDefect.reinspection_required = false;
                     newDefect.picture_path = null;
                     newDefect.is_uploaded = false;
-                    vm.insertInspectionDefect(newDefect);
+                    if (!vm.multifamilyDefectExists(newDefect.prior_inspection_detail_id, newDefect.inspection_id)) {
+                        vm.insertInspectionDefect(newDefect);
+                    }
                 } catch (JSONException e) {
                     BridgeLogger.log('E', TAG, "ERROR in updateMultifamilyHistory: " + e.getMessage());
                 }

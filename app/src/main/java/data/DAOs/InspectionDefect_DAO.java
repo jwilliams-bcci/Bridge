@@ -29,6 +29,9 @@ public interface InspectionDefect_DAO {
     @Query("SELECT * FROM inspection_defect_table WHERE inspection_id= :inspection_id ORDER BY id ASC")
     List<InspectionDefect_Table> getInspectionDefectsSync(int inspection_id);
 
+    @Query("SELECT COUNT(*) AS NumDefects FROM inspection_defect_table WHERE prior_inspection_detail_id = :prior_inspection_detail_id AND inspection_id = :inspection_id")
+    boolean multifamilyDefectExists(int prior_inspection_detail_id, int inspection_id);
+
     @Query("SELECT * FROM inspection_defect_table WHERE id = :inspection_defect_id")
     InspectionDefect_Table getInspectionDefect(int inspection_defect_id);
 

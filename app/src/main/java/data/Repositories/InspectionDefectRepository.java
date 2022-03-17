@@ -24,6 +24,10 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefect(inspection_defect_id);
     }
 
+    public boolean multifamilyDefectExists(int prior_inspection_detail_id, int inspection_id) {
+        return mInspectionDefectDao.multifamilyDefectExists(prior_inspection_detail_id, inspection_id);
+    }
+
     public LiveData<List<InspectionDefect_Table>> getAllInspectionDefects(int inspection_id) {
         return mInspectionDefectDao.getInspectionDefects(inspection_id);
     }
