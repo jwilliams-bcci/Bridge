@@ -16,8 +16,12 @@ public class ReviewAndSubmit_View {
     public boolean reinspection_required;
     public String picture_path;
 
-    public boolean notAllCs() {
-        return this.defect_status_id == 2 || this.defect_status_id != 6;
+    public boolean isNC() {
+        return this.defect_status_id == 2;
+    }
+
+    public boolean isR() {
+        return this.defect_status_id == 6;
     }
 
     public boolean reinspectionRequired() {

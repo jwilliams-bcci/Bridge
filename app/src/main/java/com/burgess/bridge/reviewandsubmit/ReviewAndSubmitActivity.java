@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -22,7 +21,6 @@ import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -33,8 +31,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RetryPolicy;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
@@ -42,20 +38,14 @@ import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.util.Base64;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -169,16 +159,13 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 AlertDialog resolutionDialog = new AlertDialog.Builder(this)
                         .setTitle("Is the following resolution accurate?")
                         .setMessage(statusMessage)
-                        .setPositiveButton("Yes", new android.content.DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    completeInspection();
-                                } catch (Exception e) {
-                                    BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
-                                    hideProgressSpinner();
-                                    Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
-                                }
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            try {
+                                completeInspection();
+                            } catch (Exception e) {
+                                BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
+                                hideProgressSpinner();
+                                Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
@@ -191,8 +178,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         .setNegativeButton("No", (dialogInterface, i) -> mSupervisorPresent = false)
                         .create();
 
-                supervisorDialog.show();
                 resolutionDialog.show();
+                supervisorDialog.show();
 
                 final Button button = resolutionDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setVisibility(View.INVISIBLE);
@@ -251,8 +238,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             if (mInspectionDefectList.isEmpty()) {
                 status = 11;
             } else {
-                List<ReviewAndSubmit_View> notAllCs = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::notAllCs).collect(Collectors.toList());
-                if (notAllCs.isEmpty()) {
+                List<ReviewAndSubmit_View> ncItems = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::isNC).collect(Collectors.toList());
+                if (ncItems.isEmpty()) {
                     status = 11;
                 } else {
                     List<ReviewAndSubmit_View> reinspectionRequired = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::reinspectionRequired).collect(Collectors.toList());
