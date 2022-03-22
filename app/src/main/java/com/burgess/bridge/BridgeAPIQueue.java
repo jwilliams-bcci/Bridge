@@ -77,7 +77,7 @@ public class BridgeAPIQueue {
     private static final String GET_FAULTS_URL = "GetFaults";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
-    private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s";
+    private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s&inspectionnumber=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
     private static final String POST_TRANSFER_INSPECTION_URL = "TransferInspection?inspectionId=%s&inspectorId=%s";
     private static final String POST_MULTIFAMILY_DETAILS_URL = "InsertMultifamilyDetails";
@@ -553,7 +553,7 @@ public class BridgeAPIQueue {
                         inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
                     }
                     if (inspection.division_id == 20 && inspection.inspection_type_id != 1154) {
-                        multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.id, inspection.location_id));
+                        multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.id, inspection.location_id, inspection.inspection_order));
                     }
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {
@@ -625,9 +625,9 @@ public class BridgeAPIQueue {
         };
         return request;
     }
-    public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int inspectionId, int locationId) {
+    public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int inspectionId, int locationId, int inspectionNumber) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_MULTIFAMILY_HISTORY_URL, locationId);
+        url += String.format(GET_MULTIFAMILY_HISTORY_URL, locationId, inspectionNumber);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {

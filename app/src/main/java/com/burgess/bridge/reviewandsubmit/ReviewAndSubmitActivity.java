@@ -157,7 +157,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
                 Handler handler = new Handler();
                 AlertDialog resolutionDialog = new AlertDialog.Builder(this)
-                        .setTitle("Is the following resolution accurate?")
+                        .setTitle("Is the following resolution accurate? YES button will be active in 5 seconds...")
                         .setMessage(statusMessage)
                         .setPositiveButton("Yes", (dialog, which) -> {
                             try {
@@ -182,9 +182,11 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 supervisorDialog.show();
 
                 final Button button = resolutionDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setVisibility(View.INVISIBLE);
+                button.setEnabled(false);
 
-                handler.postDelayed(() -> button.setVisibility(View.VISIBLE), 5000);
+                handler.postDelayed(() -> {
+                    button.setEnabled(true);
+                }, 5000);
             } catch (Exception e) {
                 BridgeLogger.log('E', TAG, "ERROR in mButtonSubmit.click(): " + e.getMessage());
             }
