@@ -21,4 +21,8 @@ public class MultifamilyDetailsRepository {
     public void insertMultifamilyDetails(MultifamilyDetails_Table multifamilyDetails) {
         mMultifamilyDetailsDao.insert(multifamilyDetails);
     }
+
+    public void updateMultifamilyDetails(int id, String builder_personnel, String burgess_personnel, String area_observed, String temperature, String weather_conditions) {
+        mMultifamilyDetailsDao.updateMultifamilyDetails(id, builder_personnel, burgess_personnel, area_observed, temperature, weather_conditions);
+    }
 }

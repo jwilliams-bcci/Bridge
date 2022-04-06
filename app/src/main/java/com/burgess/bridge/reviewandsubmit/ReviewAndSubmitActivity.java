@@ -218,8 +218,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
                     @Override
                     public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                        ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
-                        mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
+                        if (mInspection.inspection_class == 20) {
+                            Snackbar.make(mConstraintLayout, "Cannot delete previous items from Multifamily inspections!", Snackbar.LENGTH_SHORT).show();
+                        } else {
+                            ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
+                            mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
+                        }
                     }
                 };
                 ItemTouchHelper touchHelper = new ItemTouchHelper(touchHelperCallback);

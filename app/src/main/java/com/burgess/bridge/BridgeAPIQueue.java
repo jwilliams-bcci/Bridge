@@ -77,6 +77,7 @@ public class BridgeAPIQueue {
     private static final String GET_FAULTS_URL = "GetFaults";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String GET_INSPECTION_HISTORY_FOR_MULTIFAMILY_URL = "GetInspectionHistoryForMultifamily?inspectionorder=%s&locationid=%s";
     private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s&inspectionnumber=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
     private static final String POST_TRANSFER_INSPECTION_URL = "TransferInspection?inspectionId=%s&inspectorId=%s";
@@ -92,7 +93,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = true;
+        isProd = false;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -549,11 +550,12 @@ public class BridgeAPIQueue {
                     inspection.route_sheet_order = obj.optInt("Order");
                     inspection.trainee_id = -1;
 
-                    if (inspection.reinspect) {
-                        inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
-                    }
-                    if (inspection.division_id == 20 && inspection.inspection_type_id != 1154) {
-                        multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.id, inspection.location_id, inspection.inspection_order));
+                    if (inspection.division_id == 20) {
+                        multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.id, inspection.location_id, inspection.inspection_order, inspection.inspection_type_id));
+                    } else {
+                        if (inspection.reinspect) {
+                            inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
+                        }
                     }
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {
@@ -588,7 +590,11 @@ public class BridgeAPIQueue {
     }
     public JsonArrayRequest updateInspectionHistory(RouteSheetViewModel vm, int inspectionId, int inspectionOrder, int inspectionTypeId, int locationId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_INSPECTION_HISTORY_URL, inspectionOrder, inspectionTypeId, locationId);
+        if (inspectionTypeId == 1154) {
+            url += String.format(GET_INSPECTION_HISTORY_FOR_MULTIFAMILY_URL, inspectionOrder, locationId);
+        } else {
+            url += String.format(GET_INSPECTION_HISTORY_URL, inspectionOrder, inspectionTypeId, locationId);
+        }
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {
@@ -625,25 +631,59 @@ public class BridgeAPIQueue {
         };
         return request;
     }
-    public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int inspectionId, int locationId, int inspectionNumber) {
+    public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int inspectionId, int locationId, int inspectionNumber, int inspectionTypeId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += String.format(GET_MULTIFAMILY_HISTORY_URL, locationId, inspectionNumber);
+        boolean isReobservation = (inspectionTypeId == 1154);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {
                 try {
                     JSONObject obj = response.getJSONObject(lcv);
-                    InspectionDefect_Table newDefect = new InspectionDefect_Table();
-                    newDefect.inspection_id = inspectionId;
-                    newDefect.defect_item_id = obj.optInt("DefectItemID");
-                    newDefect.defect_status_id = 2;
-                    newDefect.comment = obj.optString("Comment");
-                    newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
-                    newDefect.reinspection_required = false;
-                    newDefect.picture_path = null;
-                    newDefect.is_uploaded = false;
-                    if (!vm.multifamilyDefectExists(newDefect.prior_inspection_detail_id, newDefect.inspection_id)) {
-                        vm.insertInspectionDefect(newDefect);
+                    if (!isReobservation) {
+                        InspectionDefect_Table newDefect = new InspectionDefect_Table();
+                        newDefect.inspection_id = inspectionId;
+                        newDefect.defect_item_id = obj.optInt("DefectItemID");
+                        newDefect.defect_status_id = obj.optInt("DefectStatusID");
+                        newDefect.comment = obj.optString("Comment");
+                        newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
+                        newDefect.reinspection_required = false;
+                        newDefect.picture_path = null;
+                        newDefect.is_uploaded = false;
+                        if (!vm.multifamilyDefectExists(newDefect.prior_inspection_detail_id, newDefect.inspection_id)) {
+                            vm.insertInspectionDefect(newDefect);
+                        }
+                    } else {
+                        InspectionHistory_Table hist = new InspectionHistory_Table();
+                        boolean needsReview = (obj.optInt("DefectStatusID") == 2);
+                        if (needsReview) {
+                            hist.id = obj.optInt("InspectionDetailID");
+                            hist.inspection_id = inspectionId;
+                            hist.previous_inspection_id = obj.optInt("InspectionID");
+                            hist.defect_item_id = obj.optInt("DefectItemID");
+                            hist.defect_item_number = obj.optInt("ItemNumber");
+                            hist.defect_category_id = obj.optInt("DefectCategoryID");
+                            hist.defect_category_name = obj.optString("CategoryName");
+                            hist.defect_item_description = obj.optString("ItemDescription");
+                            hist.comment = obj.optString("Comment");
+                            hist.is_reviewed = false;
+                            hist.reviewed_status = null;
+                            hist.inspection_defect_id = -1;
+                            vm.insertInspectionHistory(hist);
+                        } else {
+                            InspectionDefect_Table newDefect = new InspectionDefect_Table();
+                            newDefect.inspection_id = inspectionId;
+                            newDefect.defect_item_id = obj.optInt("DefectItemID");
+                            newDefect.defect_status_id = obj.optInt("DefectStatusID");
+                            newDefect.comment = obj.optString("Comment");
+                            newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
+                            newDefect.reinspection_required = false;
+                            newDefect.picture_path = null;
+                            newDefect.is_uploaded = false;
+                            if (!vm.multifamilyDefectExists(newDefect.prior_inspection_detail_id, newDefect.inspection_id)) {
+                                vm.insertInspectionDefect(newDefect);
+                            }
+                        }
                     }
                 } catch (JSONException e) {
                     BridgeLogger.log('E', TAG, "ERROR in updateMultifamilyHistory: " + e.getMessage());
