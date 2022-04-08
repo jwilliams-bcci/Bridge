@@ -19,6 +19,7 @@ public class ReviewAndSubmitViewHolder extends RecyclerView.ViewHolder {
     public int mInspectionId;
     public int mInspectionDefectId;
     public int mDefectItemId;
+    public boolean mIsEditable;
     private final TextView mTextDefectItemNumber;
     private final TextView mTextDefectItemDescription;
     private final TextView mTextInspectionDefectComment;
@@ -34,10 +35,11 @@ public class ReviewAndSubmitViewHolder extends RecyclerView.ViewHolder {
         mImageViewShowThumbnail = itemView.findViewById(R.id.item_inspection_defect_imageview);
     }
 
-    public void bind(int inspectionId, int inspectionDefectId, int defectItemId, int defectItemNumber, String defectItemDescription, String comment, String status, boolean showThumbnail) {
+    public void bind(int inspectionId, int inspectionDefectId, int defectItemId, int defectItemNumber, String defectItemDescription, String comment, String status, boolean showThumbnail, boolean isEditable) {
         mInspectionId = inspectionId;
         mInspectionDefectId = inspectionDefectId;
         mDefectItemId = defectItemId;
+        mIsEditable = isEditable;
         mTextDefectItemNumber.setText(String.valueOf(defectItemNumber));
         mTextDefectItemDescription.setText(defectItemDescription);
         mTextInspectionDefectComment.setText(comment);

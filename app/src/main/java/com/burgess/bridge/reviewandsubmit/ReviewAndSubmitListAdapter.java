@@ -35,11 +35,13 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
             showThumbnail = true;
         }
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), DefectItemActivity.class);
-            intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
-            intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
-            intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, holder.mInspectionDefectId);
-            v.getContext().startActivity(intent);
+            if (holder.mIsEditable) {
+                Intent intent = new Intent(v.getContext(), DefectItemActivity.class);
+                intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
+                intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
+                intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, holder.mInspectionDefectId);
+                v.getContext().startActivity(intent);
+            }
         });
 
         String status = "";
@@ -61,7 +63,7 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
                 break;
         }
 
-        holder.bind(current.inspection_id, current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, status, showThumbnail);
+        holder.bind(current.inspection_id, current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, status, showThumbnail, current.is_editable);
     }
 
     public static class ReviewAndSubmitDiff extends DiffUtil.ItemCallback<ReviewAndSubmit_View> {

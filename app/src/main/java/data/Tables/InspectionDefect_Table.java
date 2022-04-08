@@ -15,6 +15,7 @@ public class InspectionDefect_Table {
     public boolean reinspection_required;
     public String picture_path;
     public boolean is_uploaded;
+    public boolean is_editable;
 
     public InspectionDefect_Table(int inspection_id, int defect_item_id, int defect_status_id, String comment, int prior_inspection_detail_id, boolean reinspection_required, String picture_path) {
         this.inspection_id = inspection_id;
@@ -25,6 +26,7 @@ public class InspectionDefect_Table {
         this.reinspection_required = reinspection_required;
         this.picture_path = picture_path;
         this.is_uploaded = false;
+        this.is_editable = true;
     }
 
     public InspectionDefect_Table() {

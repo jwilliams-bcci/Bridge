@@ -93,7 +93,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = false;
+        isProd = true;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -650,6 +650,7 @@ public class BridgeAPIQueue {
                         newDefect.reinspection_required = false;
                         newDefect.picture_path = null;
                         newDefect.is_uploaded = false;
+                        newDefect.is_editable = false;
                         if (!vm.multifamilyDefectExists(newDefect.prior_inspection_detail_id, newDefect.inspection_id)) {
                             vm.insertInspectionDefect(newDefect);
                         }

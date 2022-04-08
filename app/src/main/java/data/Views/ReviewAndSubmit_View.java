@@ -2,7 +2,7 @@ package data.Views;
 
 import androidx.room.DatabaseView;
 
-@DatabaseView("SELECT id.id AS inspection_defect_id, id.inspection_id, d.id AS defect_item_id, d.item_number, id.defect_status_id, d.item_description, id.comment, d.reinspection_required, id.picture_path " +
+@DatabaseView("SELECT id.id AS inspection_defect_id, id.inspection_id, d.id AS defect_item_id, d.item_number, id.defect_status_id, d.item_description, id.comment, d.reinspection_required, id.picture_path, id.is_editable " +
                 "FROM inspection_defect_table id " +
                 "INNER JOIN defect_item_table d ON id.defect_item_id = d.id")
 public class ReviewAndSubmit_View {
@@ -15,6 +15,7 @@ public class ReviewAndSubmit_View {
     public String comment;
     public boolean reinspection_required;
     public String picture_path;
+    public boolean is_editable;
 
     public boolean isNC() {
         return this.defect_status_id == 2;

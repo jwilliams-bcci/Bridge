@@ -208,7 +208,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             reviewAndSubmitListAdapter.submitList(mInspectionDefectList);
 
             // If this is not a reinspection, set up the swipe functionality to remove an item
-            if (!mInspection.reinspect) {
+            if (!mInspection.reinspect || (mInspection.division_id == 20 && mInspection.inspection_type_id != 1154)) {
                 ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
                     @Override
@@ -218,11 +218,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
                     @Override
                     public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                        if (mInspection.inspection_class == 20) {
+                        ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
+                        if (!holder.mIsEditable) {
                             Snackbar.make(mConstraintLayout, "Cannot delete previous items from Multifamily inspections!", Snackbar.LENGTH_SHORT).show();
+                            reviewAndSubmitListAdapter.notifyDataSetChanged();
                         } else {
-                            ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
                             mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
+                            mInspectionDefectList.remove(viewHolder.getAdapterPosition());
+                            reviewAndSubmitListAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                         }
                     }
                 };
