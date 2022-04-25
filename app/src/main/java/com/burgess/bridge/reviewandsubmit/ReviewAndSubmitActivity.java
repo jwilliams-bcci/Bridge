@@ -344,33 +344,26 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 jObj.put("InspectionId", inspectionDefect.inspection_id);
                 jObj.put("DefectItemId", inspectionDefect.defect_item_id);
                 jObj.put("DefectStatusId", inspectionDefect.defect_status_id);
-                if (defectItem.defect_category_name.contains("Observation") && inspectionDefect.defect_status_id == 3) {
-                    BridgeLogger.log('I', TAG, "MF defect found in Observation category");
+
+                if (inspectionDefect.comment != null) {
+                    jObj.put("Comment", inspectionDefect.comment);
+                } else {
                     jObj.put("Comment", "");
+                }
+                if (inspectionDefect.picture_path != null) {
+                    try{
+                        jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id)));
+                        jObj.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
+                    } catch (NullPointerException e) {
+                        Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + inspectionDefect.defect_item_id, Snackbar.LENGTH_SHORT).show();
+                        hideProgressSpinner();
+                        return;
+                    }
+                } else {
                     jObj.put("ImageData", null);
                     jObj.put("ImageFileName", null);
-                    jObj.put("PriorInspectionDetailId", null);
-                } else {
-                    if (inspectionDefect.comment != null) {
-                        jObj.put("Comment", inspectionDefect.comment);
-                    } else {
-                        jObj.put("Comment", "");
-                    }
-                    if (inspectionDefect.picture_path != null) {
-                        try{
-                            jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id)));
-                            jObj.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
-                        } catch (NullPointerException e) {
-                            Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + inspectionDefect.defect_item_id, Snackbar.LENGTH_SHORT).show();
-                            hideProgressSpinner();
-                            return;
-                        }
-                    } else {
-                        jObj.put("ImageData", null);
-                        jObj.put("ImageFileName", null);
-                    }
-                    jObj.put("PriorInspectionDetailId", inspectionDefect.prior_inspection_detail_id);
                 }
+                jObj.put("PriorInspectionDetailId", inspectionDefect.prior_inspection_detail_id);
                 InspectionDefect_Table finalDefect = inspectionDefect;
                 if (!inspectionDefect.is_uploaded) {
                     mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, new ServerCallback() {

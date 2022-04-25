@@ -199,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                     mEditor.apply();
                 }
                 if (loadDatabase) {
+                    BridgeLogger.log('I', TAG, "Reloading database...");
                     queue.add(mUpdateCannedCommentsRequest);
                 } else {
                     Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);

@@ -34,10 +34,6 @@ public class RouteSheetViewModel extends AndroidViewModel {
         return mInspectionRepository.getAllInspectionsForRouteSheet(inspectorId);
     }
 
-    public List<RouteSheet_View> getAllInspectionsForRouteSheetSync(int inspectorId) {
-        return mInspectionRepository.getAllInspectionsForRouteSheetSync(inspectorId);
-    }
-
     public List<Integer> getAllInspectionIds(int inspectorId) {
         return mInspectionRepository.getAllInspectionIds(inspectorId);
     }
@@ -60,10 +56,6 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public void insertInspectionHistory(InspectionHistory_Table inspectionHistory) {
         mInspectionHistoryRepository.insert(inspectionHistory);
-    }
-
-    public List<InspectionDefect_Table> getAllInspectionDefectsSync(int inspectionId) {
-        return mInspectionDefectRepository.getAllInspectionDefectsSync(inspectionId);
     }
 
     public void swapOrder(int inspection_id, int new_order) {

@@ -38,33 +38,17 @@ public interface Inspection_DAO {
                 String inspection_type, boolean reinspect, int inspection_order, String address, int inspection_status_id, String inspection_status,
                 String super_phone, String super_email, int super_present, String incomplete_reason, int incomplete_reason_id, String notes);
 
-    @Query("SELECT * FROM inspection_table WHERE is_complete = 0 AND inspector_id = :inspector_id ORDER BY route_sheet_order ASC")
-    LiveData<List<Inspection_Table>> getInspections(int inspector_id);
-
     @Query("SELECT * FROM routesheet_view " +
-            "WHERE inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 " +
+            "WHERE (inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0) " +
+            "OR (is_uploaded = 0 AND is_complete = 1) " +
             "ORDER BY is_complete DESC, route_sheet_order")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
-
-    @Query("SELECT * FROM routesheet_view " +
-            "WHERE inspector_id = :inspectorId AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 " +
-            "ORDER BY is_complete DESC, route_sheet_order")
-    List<RouteSheet_View> getInspectionsForRouteSheetSync(int inspectorId);
-
-    @Query("SELECT * FROM routesheet_view " +
-            "WHERE inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0 " +
-            "AND community LIKE :communityFilter AND reinspect >= :onlyReinspects " +
-            "ORDER BY is_complete DESC, route_sheet_order")
-    LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet2(int inspector_id, String communityFilter, boolean onlyReinspects);
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
     LiveData<Inspection_Table> getInspection(int inspection_id);
 
     @Query("SELECT * FROM inspection_table WHERE id = :inspection_id")
     Inspection_Table getInspectionSync(int inspection_id);
-
-    @Query("SELECT inspection_type_id FROM inspection_table WHERE id = :inspection_id")
-    LiveData<Integer> getInspectionTypeId(int inspection_id);
 
     @Query("SELECT id FROM inspection_table WHERE inspector_id = :inspector_id")
     List<Integer> getAllInspectionIds(int inspector_id);

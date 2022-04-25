@@ -419,6 +419,7 @@ public class DefectItemActivity extends AppCompatActivity {
         try {
             image = File.createTempFile(imageFileName, ".png", storageDir);
             mCurrentPhotoPath = image.getAbsolutePath();
+            BridgeLogger.log('I', TAG, "Created image for InspectionId: " + mInspectionId + ", DefectId: " + mDefectId);
             return image;
         } catch (IOException e) {
             BridgeLogger.log('E', TAG, "ERROR in createImageFile: " + e.getMessage());

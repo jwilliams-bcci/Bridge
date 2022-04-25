@@ -56,7 +56,10 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
                 intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, mInspectionId);
                 v.getContext().startActivity(intent);
             } else {
-                Toast.makeText(itemView.getContext(), "Cannot edit inspections while uploading!", Toast.LENGTH_LONG).show();
+                BridgeLogger.log('I', TAG, "Trying reupload for ID: " + mInspectionId);
+                Intent reviewAndSubmitIntent = new Intent(v.getContext(), ReviewAndSubmitActivity.class);
+                reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+                v.getContext().startActivity(reviewAndSubmitIntent);
             }
         });
 
