@@ -101,4 +101,12 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
     public DefectItem_Table getDefectItem(int defectItemId) {
         return mDefectItemRepository.getDefectItemSync(defectItemId);
     }
+
+    public void deleteInspectionDefects(int inspection_id) {
+        mInspectionDefectRepository.delete(inspection_id);
+    }
+
+    public void deleteInspection(int id) {
+        mInspectionRepository.delete(id);
+    }
 }

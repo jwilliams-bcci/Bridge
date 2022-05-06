@@ -2,6 +2,7 @@ package data.DAOs;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -19,6 +20,9 @@ public interface InspectionDefect_DAO {
 
     @Update
     void update(InspectionDefect_Table inspectionDefect);
+
+    @Query("DELETE FROM inspection_defect_table WHERE inspection_id = :inspection_id")
+    void delete(int inspection_id);
 
     @Query("DELETE FROM inspection_defect_table")
     void deleteAll();

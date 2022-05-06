@@ -198,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
                     mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
                     mEditor.apply();
                 }
+                queue.add(mUpdateBuildersRequest);
                 if (loadDatabase) {
                     BridgeLogger.log('I', TAG, "Reloading database...");
                     queue.add(mUpdateCannedCommentsRequest);
@@ -257,7 +258,9 @@ public class LoginActivity extends AppCompatActivity {
         mUpdateBuildersRequest = BridgeAPIQueue.getInstance().updateBuilders(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                queue.add(mUpdateInspectorsRequest);
+                if (loadDatabase) {
+                    queue.add(mUpdateInspectorsRequest);
+                }
             }
 
             @Override

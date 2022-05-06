@@ -57,6 +57,10 @@ public class InspectionDefectRepository {
 //        return id.longValue();
     }
 
+    public void delete(int inspection_id) {
+        mInspectionDefectDao.delete(inspection_id);
+    }
+
     public void updateInspectionDefect(InspectionDefect_Table inspectionDefect) {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
             mInspectionDefectDao.update(inspectionDefect);

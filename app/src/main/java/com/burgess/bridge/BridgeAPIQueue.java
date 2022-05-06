@@ -93,7 +93,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = true;
+        isProd = false;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {

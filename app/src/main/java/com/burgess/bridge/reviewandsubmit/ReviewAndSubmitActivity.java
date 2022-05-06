@@ -317,6 +317,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadMultifamilyDetailsRequest);
                 }
                 mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
+                mReviewAndSubmitViewModel.deleteInspectionDefects(mInspectionId);
+                mReviewAndSubmitViewModel.deleteInspection(mInspectionId);
+                BridgeLogger.log('I', TAG, "Deleted defects and inspection " + mInspection);
             }
 
             @Override

@@ -40,7 +40,6 @@ public interface Inspection_DAO {
 
     @Query("SELECT * FROM routesheet_view " +
             "WHERE (inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0) " +
-            "OR (is_uploaded = 0 AND is_complete = 1) " +
             "ORDER BY is_complete DESC, route_sheet_order")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 
