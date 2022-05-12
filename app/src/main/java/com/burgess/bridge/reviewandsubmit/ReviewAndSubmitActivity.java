@@ -296,6 +296,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             mUploadMultifamilyDetailsRequest = BridgeAPIQueue.getInstance().uploadMultifamilyDetails(jObj, mInspectionId, new ServerCallback() {
                 @Override
                 public void onSuccess(String message) {
+                    BridgeLogger.log('I', TAG, "Uploaded multifamily details for " + mInspectionId);
                 }
 
                 @Override
@@ -308,11 +309,11 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         JSONObject jObj;
         InspectionDefect_Table inspectionDefect;
         DefectItem_Table defectItem;
-        BridgeLogger.getInstance().log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
+        BridgeLogger.log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
         mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime.toString(), (mInspection.trainee_id > 0 ? 1 : 0), mInspection.trainee_id, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                BridgeLogger.getInstance().log('I', TAG, "mUpdateInspectionStatusRequest returned success.");
+                BridgeLogger.log('I', TAG, "mUpdateInspectionStatusRequest returned success.");
                 if (mDivisionId == 20) {
                     BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadMultifamilyDetailsRequest);
                 }
@@ -324,7 +325,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                BridgeLogger.getInstance().log('E', TAG, "ERROR in completeInspection: " + message);
+                BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + message);
             }
         });
 
@@ -336,6 +337,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         // If all defects have been previously uploaded
         else if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
             BridgeLogger.log('I', TAG, "All uploaded previously");
+            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
+        }
+        else if (mInspectionStatusId == 3) {
+            BridgeLogger.log('I', TAG, "Not Ready status selected, skip uploading defects.");
             BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateInspectionStatusRequest);
         } else {
             BridgeLogger.log('I', TAG, "Found defects, uploading...");

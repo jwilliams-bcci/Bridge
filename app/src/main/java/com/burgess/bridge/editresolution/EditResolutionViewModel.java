@@ -33,4 +33,12 @@ public class EditResolutionViewModel extends AndroidViewModel {
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
         return mInspectionDefectRepository.getInspectionDefect(inspectionDefectId);
     }
+
+    public void deleteInspectionDefects(int inspection_id) {
+        mInspectionDefectRepository.delete(inspection_id);
+    }
+
+    public void deleteInspection(int id) {
+        mInspectionRepository.delete(id);
+    }
 }

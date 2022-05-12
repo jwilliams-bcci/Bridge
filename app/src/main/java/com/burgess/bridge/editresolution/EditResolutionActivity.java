@@ -115,6 +115,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.edit_resolution_imageview);
         mButtonSubmit = findViewById(R.id.edit_resolution_button_submit);
     }
+
     private void initializeButtonListeners() {
         mButtonCamera.setOnClickListener(view -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -149,6 +150,7 @@ public class EditResolutionActivity extends AppCompatActivity {
             }
         });
     }
+
     private void initializeDisplayContent() {
         mTextAddress.setText("");
         mTextAddress.append(mInspection.community + "\n");
@@ -190,6 +192,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         InspectionDefect_Table newInspectionDefect = mEditResolutionViewModel.getInspectionDefect((int) newId);
         BridgeAPIQueue.getInstance().getRequestQueue().add(getUploadInspectionDefectRequest(newInspectionDefect));
     }
+
     private StringRequest getUploadInspectionDefectRequest(InspectionDefect_Table noteDetails) {
         BridgeLogger.log('I', TAG, "Uploading note...");
         JSONObject jObj = new JSONObject();
@@ -222,7 +225,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         StringRequest request = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, noteDetails.defect_item_id, noteDetails.inspection_id, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                BridgeLogger.log('I', TAG, "Note uploaded");
+                BridgeLogger.log('I', TAG, "Note uploaded for " + mInspectionId);
             }
 
             @Override
@@ -233,22 +236,27 @@ public class EditResolutionActivity extends AppCompatActivity {
 
         return request;
     }
+
     private StringRequest getUpdateInspectionStatusRequest(int resolutionCode, String inspectionTime) {
         StringRequest request = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, resolutionCode, mSharedPreferences.getString(PREF_SECURITY_USER_ID, "NULL"), 0, 0, inspectionTime, inspectionTime, 0, 0, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                BridgeLogger.getInstance().log('I', TAG, "Resolution edited");
+                BridgeLogger.log('I', TAG, "Resolution edited for " + mInspectionId + ": changed to " + resolutionCode);
+                mEditResolutionViewModel.deleteInspectionDefects(mInspectionId);
+                mEditResolutionViewModel.deleteInspection(mInspectionId);
+                BridgeLogger.log('I', TAG, "Deleted defects and inspection " + mInspectionId);
             }
 
             @Override
             public void onFailure(String message) {
-                BridgeLogger.getInstance().log('E', TAG, "ERROR: " + message);
+                BridgeLogger.log('E', TAG, "ERROR: " + message);
                 Snackbar.make(mConstraintLayout, "Error! Please send activity log.", Snackbar.LENGTH_SHORT).show();
             }
         });
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
+
     private byte[] getPictureData(int inspectionDefectId) {
         InspectionDefect_Table defect = mEditResolutionViewModel.getInspectionDefect(inspectionDefectId);
         Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
@@ -270,6 +278,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
     private void displayThumbnail() {
         try {
             Bitmap imageThumbnailBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath), 128, 128);
@@ -286,6 +295,7 @@ public class EditResolutionActivity extends AppCompatActivity {
             mImageView.setImageResource(R.drawable.ic_no_picture);
         }
     }
+
     private void rotateImageFile(String filePath) throws IOException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;
@@ -306,6 +316,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         outBmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         stream.close();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

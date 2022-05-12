@@ -93,7 +93,7 @@ public class BridgeAPIQueue {
         BridgeLogger.getInstance(ctx);
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
-        isProd = false;
+        isProd = true;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -629,6 +629,8 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
     public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int inspectionId, int locationId, int inspectionNumber, int inspectionTypeId) {
@@ -701,6 +703,8 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
     public JsonObjectRequest checkExistingInspection(RouteSheetViewModel vm, int inspectionId, int inspectorId) {
@@ -734,6 +738,8 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
 
