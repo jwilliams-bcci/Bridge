@@ -378,7 +378,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(String message) {
                             mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
-                            BridgeLogger.log('I', TAG, "Defect item uploaded... ID: " + finalDefect.defect_item_id + ", Status: " + finalDefect.defect_status_id);
+                            BridgeLogger.log('I', TAG, "Defect item uploaded... ID: " + finalDefect.defect_item_id + ", Status: " + finalDefect.defect_status_id + ", Comment: " + finalDefect.comment);
                             if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
                                 BridgeLogger.log('I', TAG, "All defect items uploaded. Adding mUpdateInspectionStatusRequest");
                                 mUpdateInspectionStatusRequest.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

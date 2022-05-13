@@ -199,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
                     mEditor.apply();
                 }
                 queue.add(mUpdateBuildersRequest);
+                queue.add(mUpdateInspectorsRequest);
                 if (loadDatabase) {
                     BridgeLogger.log('I', TAG, "Reloading database...");
                     queue.add(mUpdateCannedCommentsRequest);

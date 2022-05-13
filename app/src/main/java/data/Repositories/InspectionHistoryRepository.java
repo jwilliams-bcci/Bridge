@@ -43,6 +43,10 @@ public class InspectionHistoryRepository {
 //        }
     }
 
+    public void deleteForInspection(int inspectionId) {
+        mInspectionHistoryDao.deleteForInspection(inspectionId);
+    }
+
     public String getComment(int inspectionHistoryId) {
         return mInspectionHistoryDao.getComment(inspectionHistoryId);
     }

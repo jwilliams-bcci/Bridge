@@ -13,6 +13,7 @@ import java.util.List;
 import data.Repositories.BuilderRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
+import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Repositories.MultifamilyDetailsRepository;
 import data.Tables.Builder_Table;
@@ -28,6 +29,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
     private InspectionRepository mInspectionRepository;
     private BuilderRepository mBuilderRepository;
     private MultifamilyDetailsRepository mMultifamilyDetailsRepository;
+    private InspectionHistoryRepository mInspectionHistoryRepository;
 
     public ReviewAndSubmitViewModel(@NonNull Application application) {
         super(application);
@@ -36,6 +38,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         mInspectionRepository = new InspectionRepository(application);
         mBuilderRepository = new BuilderRepository(application);
         mMultifamilyDetailsRepository = new MultifamilyDetailsRepository(application);
+        mInspectionHistoryRepository = new InspectionHistoryRepository(application);
     }
 
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
@@ -108,5 +111,9 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public void deleteInspection(int id) {
         mInspectionRepository.delete(id);
+    }
+
+    public void deleteInspectionHistories(int inspection_id) {
+        mInspectionHistoryRepository.deleteForInspection(inspection_id);
     }
 }

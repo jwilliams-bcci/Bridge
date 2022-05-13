@@ -15,6 +15,9 @@ public interface InspectionHistory_DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(InspectionHistory_Table inspectionHistory);
 
+    @Query("DELETE FROM inspection_history_table WHERE inspection_id = :inspection_id")
+    void deleteForInspection(int inspection_id);
+
     @Query("DELETE FROM inspection_history_table")
     void deleteAll();
 
