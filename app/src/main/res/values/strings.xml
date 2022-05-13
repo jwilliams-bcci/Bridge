@@ -83,4 +83,6 @@
     -->
     <string name="pref_stay_logged_in">KeepMeLoggedIn</string>
     <string name="pref_inspector_id">InspectorId</string>
+    <string name="location_button_garage_text">Garage</string>
+    <string name="location_button_unit_text">Unit</string>
 </resources>

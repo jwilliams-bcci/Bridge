@@ -162,8 +162,18 @@ public class LocationFragment extends DialogFragment {
             Button buttonClicked = (Button) v;
             locationResultsDialog.append(buttonClicked.getText() + " ");
         });
+        Button garage = view.findViewById(R.id.location_button_garage);
+        garage.setOnClickListener(v -> {
+            Button buttonClicked = (Button) v;
+            locationResultsDialog.append(buttonClicked.getText() + " ");
+        });
         Button front = view.findViewById(R.id.location_button_front);
         front.setOnClickListener(v -> {
+            Button buttonClicked = (Button) v;
+            locationResultsDialog.append(buttonClicked.getText() + " ");
+        });
+        Button unit = view.findViewById(R.id.location_button_unit);
+        unit.setOnClickListener(v -> {
             Button buttonClicked = (Button) v;
             locationResultsDialog.append(buttonClicked.getText() + " ");
         });
