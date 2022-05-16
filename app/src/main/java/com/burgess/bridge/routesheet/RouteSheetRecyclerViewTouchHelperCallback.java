@@ -5,15 +5,15 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RouteSheetRecyclerViewTouchHelperCallback extends ItemTouchHelper.Callback {
-    private final ItemTouchHelperAdapter mAdapter;
+    private final RouteSheetActivity mAdapter;
 
-    public RouteSheetRecyclerViewTouchHelperCallback(ItemTouchHelperAdapter adapter) {
+    public RouteSheetRecyclerViewTouchHelperCallback(RouteSheetActivity adapter) {
         mAdapter = adapter;
     }
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return false;
+        return true;
     }
 
     @Override

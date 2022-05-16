@@ -16,7 +16,7 @@ import data.Views.RouteSheet_View;
 
 @Dao
 public interface Inspection_DAO {
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(Inspection_Table inspection);
 
     @Query("DELETE FROM inspection_table")

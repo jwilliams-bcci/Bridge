@@ -25,7 +25,6 @@ import data.Views.RouteSheet_View;
 public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter, Filterable {
     private List<RouteSheet_View> currentList;
     private List<RouteSheet_View> dataSet = new ArrayList<>();
-    private OnDragListener mDragListener;
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
@@ -43,7 +42,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         try {
             RouteSheet_View current = getItem(position);
             CardView view = holder.itemView.findViewById(R.id.item_inspection_list_card_view);
-            //Log.i("SEARCH", "Binding " + current.id);
             holder.mInspectionId = current.id;
             holder.mInspectionTypeId = current.inspection_type_id;
             holder.isComplete = current.is_complete;
@@ -54,13 +52,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
                 view.setCardBackgroundColor(Color.YELLOW);
             }
             holder.bind(current.community, current.address, current.inspection_type, current.notes);
-
-            holder.mReorderHandle.setOnTouchListener((v, event) -> {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mDragListener.onStartDrag(holder);
-                }
-                return false;
-            });
         } catch (Exception e) {
             Log.e("SEARCH", e.getMessage());
         }
@@ -75,16 +66,17 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     public void onItemMove(int fromPosition, int toPosition) {
         System.out.println("moved");
 
-        if (fromPosition < toPosition) {
-            for (int i = fromPosition; i < toPosition; i++) {
-                Collections.swap(currentList, i, i + 1);
-            }
-        } else {
-            for (int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(currentList, i, i - 1);
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition);
+
+//        if (fromPosition < toPosition) {
+//            for (int i = fromPosition; i < toPosition; i++) {
+//                Collections.swap(currentList, i, i + 1);
+//            }
+//        } else {
+//            for (int i = fromPosition; i > toPosition; i--) {
+//                Collections.swap(currentList, i, i - 1);
+//            }
+//        }
+//        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
@@ -107,7 +99,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
                 FilterResults results = new FilterResults();
                 results.values = currentList;
                 results.count = currentList.size();
-
                 return results;
             }
 
@@ -125,10 +116,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         dataSet.addAll(currentList);
         submitList(currentList);
         Log.i("SEARCH", "Size of dataSet: " + dataSet.size());
-    }
-
-    public void setDragListener(OnDragListener listener) {
-        mDragListener = listener;
     }
 
     public static class InspectionDiff extends DiffUtil.ItemCallback<RouteSheet_View> {
