@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 public enum IncompleteReason {
     COMPLETE("Complete", 0, false),
     CANCELLED_IN_FIELD_BY_BLDR("Cancelled in field by Bldr", 1, true),
-    NOT_READY("Not Ready", 3, true),
+    NOT_READY("Not Ready", 3, false),
     FAILED("Failed", 12, false),
     PASSED("Passed", 11, false),
     CANCELLED_BEFORE_730("Cancelled Before 7:30", 15, true),

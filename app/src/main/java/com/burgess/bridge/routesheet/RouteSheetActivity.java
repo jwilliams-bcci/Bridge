@@ -217,7 +217,8 @@ public class RouteSheetActivity extends AppCompatActivity implements ItemTouchHe
     }
 
     @Override
-    public void onItemMove(int fromPosition, int toPosition) {
+    public boolean onItemMove(int fromPosition, int toPosition) {
         BridgeLogger.log('I', TAG, "Item moved from " + fromPosition + " to " + toPosition);
+        return true;
     }
 }

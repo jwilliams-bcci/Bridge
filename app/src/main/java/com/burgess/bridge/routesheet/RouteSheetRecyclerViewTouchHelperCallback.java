@@ -5,9 +5,9 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RouteSheetRecyclerViewTouchHelperCallback extends ItemTouchHelper.Callback {
-    private final RouteSheetActivity mAdapter;
+    private final ItemTouchHelperAdapter mAdapter;
 
-    public RouteSheetRecyclerViewTouchHelperCallback(RouteSheetActivity adapter) {
+    public RouteSheetRecyclerViewTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
     }
 

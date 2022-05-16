@@ -22,7 +22,7 @@ import java.util.List;
 
 import data.Views.RouteSheet_View;
 
-public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements ItemTouchHelperAdapter, Filterable {
+public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements Filterable {
     private List<RouteSheet_View> currentList;
     private List<RouteSheet_View> dataSet = new ArrayList<>();
 
@@ -60,23 +60,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     @Override
     public int getItemCount() {
         return currentList == null ? 0 : currentList.size();
-    }
-
-    @Override
-    public void onItemMove(int fromPosition, int toPosition) {
-        System.out.println("moved");
-
-
-//        if (fromPosition < toPosition) {
-//            for (int i = fromPosition; i < toPosition; i++) {
-//                Collections.swap(currentList, i, i + 1);
-//            }
-//        } else {
-//            for (int i = fromPosition; i > toPosition; i--) {
-//                Collections.swap(currentList, i, i - 1);
-//            }
-//        }
-//        notifyItemMoved(fromPosition, toPosition);
     }
 
     @Override
