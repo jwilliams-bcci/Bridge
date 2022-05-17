@@ -273,7 +273,9 @@ public class LoginActivity extends AppCompatActivity {
         mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectors(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                queue.add(mUpdateRoomsRequest);
+                if (loadDatabase) {
+                    queue.add(mUpdateRoomsRequest);
+                }
             }
 
             @Override
