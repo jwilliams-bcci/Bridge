@@ -53,27 +53,17 @@ import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
 
 import data.Views.RouteSheet_View;
 
-public class RouteSheetActivity extends AppCompatActivity implements OnDragListener {
+public class RouteSheetActivity extends AppCompatActivity {
     private RouteSheetViewModel mRouteSheetViewModel;
     private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private ItemTouchHelper mItemTouchHelper;
     private TextView mTextSearchCommunity;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerInspections;
     private Toolbar mToolbar;
 
     private JsonArrayRequest mUpdateRouteSheetRequest;
-    private JsonObjectRequest mCheckInspectionDatesRequest;
-    private JsonArrayRequest mUpdateCannedCommentsRequest;
-    private JsonArrayRequest mUpdateDefectItemsRequest;
-    private JsonArrayRequest mUpdateDIITReferenceRequest;
-    private JsonArrayRequest mUpdateBuildersRequest;
-    private JsonArrayRequest mUpdateInspectorsRequest;
-    private JsonArrayRequest mUpdateRoomsRequest;
-    private JsonArrayRequest mUpdateDirectionsRequest;
-    private JsonArrayRequest mUpdateFaultsRequest;
     private String mInspectorId;
     private boolean mIsOnline;
 
@@ -130,7 +120,7 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
                     Intent emailIntent = BridgeLogger.sendLogFile(mInspectorId, getVersionName());
                     startActivity(Intent.createChooser(emailIntent, "Send activity log..."));
                 } catch (Exception e) {
-                    BridgeLogger.getInstance().log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
+                    BridgeLogger.log('E', TAG, "ERROR in initializeButtonListeners: " + e.getMessage());
                 }
             }
             else if (v.getItemId() == R.id.route_sheet_menu_print_route_sheet) {
@@ -180,17 +170,15 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
             mInspectionList = mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId));
             mRouteSheetListAdapter = new RouteSheetListAdapter(new RouteSheetListAdapter.InspectionDiff());
             mRecyclerInspections.setAdapter(mRouteSheetListAdapter);
-            mRouteSheetListAdapter.setDragListener(this);
             mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerInspections.getItemAnimator().setChangeDuration(0);
+            ItemTouchHelper.Callback callback = new RouteSheetTouchHelper(mRouteSheetListAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+            touchHelper.attachToRecyclerView(mRecyclerInspections);
             mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId)).observe(this, inspections -> {
                 mRouteSheetListAdapter.setCurrentList(inspections);
                 Log.i("SEARCH", "Size of inspections:" + inspections.size());
             });
-
-            ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(mRouteSheetListAdapter);
-            mItemTouchHelper = new ItemTouchHelper(callback);
-            mItemTouchHelper.attachToRecyclerView(mRecyclerInspections);
         } catch (Exception e) {
             Snackbar.make(mConstraintLayout, "Error in loading route sheet, please send log.", Snackbar.LENGTH_LONG).show();
             BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
@@ -227,7 +215,20 @@ public class RouteSheetActivity extends AppCompatActivity implements OnDragListe
     }
 
     @Override
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        mItemTouchHelper.startDrag(viewHolder);
+    protected void onDestroy() {
+        super.onDestroy();
+        List<RouteSheet_View> routeSheetList = mRouteSheetListAdapter.getCurrentList();
+        for (int lcv = 0; lcv < routeSheetList.size(); lcv++) {
+            mRouteSheetViewModel.updateRouteSheetIndex(routeSheetList.get(lcv).id, lcv);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        List<RouteSheet_View> routeSheetList = mRouteSheetListAdapter.getCurrentList();
+        for (int lcv = 0; lcv < routeSheetList.size(); lcv++) {
+            mRouteSheetViewModel.updateRouteSheetIndex(routeSheetList.get(lcv).id, lcv);
+        }
     }
 }

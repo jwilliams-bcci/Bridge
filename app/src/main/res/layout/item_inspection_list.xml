@@ -49,16 +49,6 @@
                 app:layout_constraintStart_toStartOf="@+id/text_recycler_community"
                 app:layout_constraintTop_toBottomOf="@+id/text_recycler_community" />
 
-            <ImageView
-                android:id="@+id/item_inspection_list_imageview_reorder_handle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_baseline_reorder_24" />
-
             <TextView
                 android:id="@+id/text_recycler_uploaded"
                 android:layout_width="wrap_content"
@@ -75,11 +65,11 @@
                 android:id="@+id/item_inspection_list_imageview_reupload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="32dp"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/item_inspection_list_imageview_reorder_handle"
-                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_reorder_handle"
-                app:layout_constraintTop_toTopOf="@+id/item_inspection_list_imageview_reorder_handle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:drawable/ic_menu_upload" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,10 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
-import data.InspectionHistory;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
@@ -58,7 +56,7 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mInspectionHistoryRepository.insert(inspectionHistory);
     }
 
-    public void swapOrder(int inspection_id, int new_order) {
-        mInspectionRepository.swapOrder(inspection_id, new_order);
+    public void updateRouteSheetIndex(int inspection_id, int new_order) {
+        mInspectionRepository.updateRouteSheetIndex(inspection_id, new_order);
     }
 }
