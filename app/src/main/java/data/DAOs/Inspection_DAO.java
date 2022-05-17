@@ -62,7 +62,7 @@ public interface Inspection_DAO {
     void uploadInspection(int inspection_id);
 
     @Query("UPDATE inspection_table SET route_sheet_order = :new_order WHERE id = :inspection_id")
-    void swapOrder(int inspection_id, int new_order);
+    void updateRouteSheetIndex(int inspection_id, int new_order);
 
     @Query("UPDATE inspection_table SET start_time = :start_time WHERE id = :inspection_id")
     void startInspection(OffsetDateTime start_time, int inspection_id);

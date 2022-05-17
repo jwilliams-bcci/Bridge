@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RouteSheetRecyclerViewTouchHelperCallback extends ItemTouchHelper.Callback {
+public class RouteSheetTouchHelper extends ItemTouchHelper.Callback {
     private final ItemTouchHelperAdapter mAdapter;
 
-    public RouteSheetRecyclerViewTouchHelperCallback(ItemTouchHelperAdapter adapter) {
+    public RouteSheetTouchHelper(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
     }
 
@@ -16,13 +16,13 @@ public class RouteSheetRecyclerViewTouchHelperCallback extends ItemTouchHelper.C
         return true;
     }
 
-    @Override
-    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+    public boolean isItemViewSwipeEnabled() {
+        return false;
     }
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.ACTION_STATE_DRAG;
+        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         return makeMovementFlags(dragFlags, 0);
     }
 
@@ -30,5 +30,10 @@ public class RouteSheetRecyclerViewTouchHelperCallback extends ItemTouchHelper.C
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
+    }
+
+    @Override
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+        // do nothing, no swiping on Route Sheet for right now.
     }
 }

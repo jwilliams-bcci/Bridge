@@ -3,7 +3,6 @@ package com.burgess.bridge.routesheet;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -16,13 +15,13 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.burgess.bridge.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import data.Repositories.InspectionRepository;
 import data.Views.RouteSheet_View;
 
-public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements Filterable {
+public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements Filterable, ItemTouchHelperAdapter {
     private List<RouteSheet_View> currentList;
     private List<RouteSheet_View> dataSet = new ArrayList<>();
 
@@ -99,6 +98,25 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         dataSet.addAll(currentList);
         submitList(currentList);
         Log.i("SEARCH", "Size of dataSet: " + dataSet.size());
+    }
+
+    public List<RouteSheet_View> getCurrentList() {
+        return currentList;
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        if (fromPosition < toPosition) {
+            for (int lcv = fromPosition; lcv < toPosition; lcv++) {
+                Collections.swap(currentList, lcv, lcv+1);
+            }
+        } else {
+            for (int lcv = fromPosition; lcv > toPosition; lcv--) {
+                Collections.swap(currentList, lcv, lcv-1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 
     public static class InspectionDiff extends DiffUtil.ItemCallback<RouteSheet_View> {

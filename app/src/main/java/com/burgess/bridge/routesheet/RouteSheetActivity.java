@@ -53,12 +53,11 @@ import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
 
 import data.Views.RouteSheet_View;
 
-public class RouteSheetActivity extends AppCompatActivity implements ItemTouchHelperAdapter {
+public class RouteSheetActivity extends AppCompatActivity {
     private RouteSheetViewModel mRouteSheetViewModel;
     private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private ItemTouchHelper mItemTouchHelper;
     private TextView mTextSearchCommunity;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerInspections;
@@ -173,14 +172,13 @@ public class RouteSheetActivity extends AppCompatActivity implements ItemTouchHe
             mRecyclerInspections.setAdapter(mRouteSheetListAdapter);
             mRecyclerInspections.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerInspections.getItemAnimator().setChangeDuration(0);
+            ItemTouchHelper.Callback callback = new RouteSheetTouchHelper(mRouteSheetListAdapter);
+            ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+            touchHelper.attachToRecyclerView(mRecyclerInspections);
             mRouteSheetViewModel.getAllInspectionsForRouteSheet(Integer.parseInt(mInspectorId)).observe(this, inspections -> {
                 mRouteSheetListAdapter.setCurrentList(inspections);
                 Log.i("SEARCH", "Size of inspections:" + inspections.size());
             });
-
-            ItemTouchHelper.Callback callback = new RouteSheetRecyclerViewTouchHelperCallback(this);
-            mItemTouchHelper = new ItemTouchHelper(callback);
-            mItemTouchHelper.attachToRecyclerView(mRecyclerInspections);
         } catch (Exception e) {
             Snackbar.make(mConstraintLayout, "Error in loading route sheet, please send log.", Snackbar.LENGTH_LONG).show();
             BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
@@ -217,8 +215,11 @@ public class RouteSheetActivity extends AppCompatActivity implements ItemTouchHe
     }
 
     @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
-        BridgeLogger.log('I', TAG, "Item moved from " + fromPosition + " to " + toPosition);
-        return true;
+    protected void onDestroy() {
+        super.onDestroy();
+        List<RouteSheet_View> routeSheetList = mRouteSheetListAdapter.getCurrentList();
+        for (int lcv = 0; lcv < routeSheetList.size(); lcv++) {
+            mRouteSheetViewModel.updateRouteSheetIndex(routeSheetList.get(lcv).id, lcv);
+        }
     }
 }

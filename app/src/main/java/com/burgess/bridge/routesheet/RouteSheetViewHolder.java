@@ -34,7 +34,6 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextInspectionAddress;
     private final TextView mTextInspectionType;
     private final TextView mTextInspectionUploaded;
-    public final ImageView mReorderHandle;
     public final ImageView mReupload;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -45,7 +44,6 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mTextInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
         mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
         mTextInspectionUploaded = itemView.findViewById(R.id.text_recycler_uploaded);
-        mReorderHandle = itemView.findViewById(R.id.item_inspection_list_imageview_reorder_handle);
         mReupload = itemView.findViewById(R.id.item_inspection_list_imageview_reupload);
 
         itemView.setOnClickListener(v -> {

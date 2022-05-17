@@ -1,12 +1,10 @@
 package data.Repositories;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteConstraintException;
 
 import androidx.lifecycle.LiveData;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 
 import data.BridgeRoomDatabase;
@@ -70,8 +68,8 @@ public class InspectionRepository {
         mInspectionDao.uploadInspection(inspection_id);
     }
 
-    public void swapOrder(int inspection_id, int new_order) {
-        mInspectionDao.swapOrder(inspection_id, new_order);
+    public void updateRouteSheetIndex(int inspection_id, int new_order) {
+        mInspectionDao.updateRouteSheetIndex(inspection_id, new_order);
     }
 
     public void startInspection(OffsetDateTime start_time, int inspection_id) {
