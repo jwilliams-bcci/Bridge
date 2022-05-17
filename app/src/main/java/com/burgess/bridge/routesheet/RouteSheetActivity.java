@@ -222,4 +222,13 @@ public class RouteSheetActivity extends AppCompatActivity {
             mRouteSheetViewModel.updateRouteSheetIndex(routeSheetList.get(lcv).id, lcv);
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        List<RouteSheet_View> routeSheetList = mRouteSheetListAdapter.getCurrentList();
+        for (int lcv = 0; lcv < routeSheetList.size(); lcv++) {
+            mRouteSheetViewModel.updateRouteSheetIndex(routeSheetList.get(lcv).id, lcv);
+        }
+    }
 }
