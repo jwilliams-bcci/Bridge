@@ -24,11 +24,7 @@ public class MultifamilyDetailsActivity extends AppCompatActivity {
     private MultifamilyDetails_Table mMultifamilyDetails;
     private MultifamilyDetailsViewModel mMultifamilyDetailsViewModel;
 
-    private TextView mTextBuilderPersonnel;
-    private TextView mTextBurgessPersonnel;
     private TextView mTextAreaObserved;
-    private TextView mTextTemperature;
-    private TextView mTextWeatherConditions;
     private Button mButtonSaveMultifamilyDetails;
 
     @Override
@@ -49,34 +45,22 @@ public class MultifamilyDetailsActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        mTextBuilderPersonnel = findViewById(R.id.multifamily_details_text_builder_personnel);
-        mTextBurgessPersonnel = findViewById(R.id.multifamily_details_text_burgess_personnel);
         mTextAreaObserved = findViewById(R.id.multifamily_details_text_area_observed);
-        mTextTemperature = findViewById(R.id.multifamily_details_text_temperature);
-        mTextWeatherConditions = findViewById(R.id.multifamily_details_text_weather_conditions);
         mButtonSaveMultifamilyDetails = findViewById(R.id.multifamily_details_button_save);
     }
     private void initializeDisplayContent() {
         if (mMultifamilyDetails != null) {
-            mTextBuilderPersonnel.setText(mMultifamilyDetails.builder_personnel);
-            mTextBurgessPersonnel.setText(mMultifamilyDetails.burgess_personnel);
             mTextAreaObserved.setText(mMultifamilyDetails.area_observed);
-            mTextTemperature.setText(mMultifamilyDetails.temperature);
-            mTextWeatherConditions.setText(mMultifamilyDetails.weather_conditions);
         }
     }
     private void initializeButtonListeners() {
         mButtonSaveMultifamilyDetails.setOnClickListener(v -> {
             MultifamilyDetails_Table newDetails = new MultifamilyDetails_Table();
             newDetails.inspection_id = mInspectionId;
-            newDetails.builder_personnel = mTextBuilderPersonnel.getText().toString();
-            newDetails.burgess_personnel = mTextBurgessPersonnel.getText().toString();
             newDetails.area_observed = mTextAreaObserved.getText().toString();
-            newDetails.temperature = mTextTemperature.getText().toString();
-            newDetails.weather_conditions = mTextWeatherConditions.getText().toString();
             if (mMultifamilyDetails != null) {
-                mMultifamilyDetailsViewModel.updateMultifamilyDetails(mMultifamilyDetails.id, newDetails.builder_personnel, newDetails.burgess_personnel,
-                        newDetails.area_observed, newDetails.temperature, newDetails.weather_conditions);
+                mMultifamilyDetailsViewModel.updateMultifamilyDetails(mMultifamilyDetails.id, "", "",
+                        newDetails.area_observed, "", "");
             } else {
                 mMultifamilyDetailsViewModel.insertMultifamilyDetails(newDetails);
             }
