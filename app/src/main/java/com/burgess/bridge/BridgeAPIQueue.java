@@ -25,13 +25,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import data.InspectionDefect;
 import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;

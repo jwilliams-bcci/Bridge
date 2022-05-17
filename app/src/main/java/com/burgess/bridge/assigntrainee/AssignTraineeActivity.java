@@ -14,20 +14,14 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-import data.DataManager;
-import data.Inspection;
-import data.Inspector;
-import data.Location;
 import data.Tables.Inspection_Table;
 import data.Tables.Inspector_Table;
 

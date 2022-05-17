@@ -8,9 +8,7 @@ import java.util.List;
 
 import data.BridgeRoomDatabase;
 import data.DAOs.DefectItem_DAO;
-import data.DefectItem;
 import data.Tables.DefectItem_Table;
-import data.Views.ReinspectDefectList_View;
 
 public class DefectItemRepository {
     private DefectItem_DAO mDefectItemDao;

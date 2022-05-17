@@ -1,7 +1,6 @@
 package data;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -10,33 +9,21 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.burgess.bridge.BridgeAPIQueue;
-import com.burgess.bridge.login.LoginActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import data.DAOs.Builder_DAO;
 import data.DAOs.CannedComment_DAO;
-import data.DAOs.DefectCategory_DAO;
-import data.DAOs.DefectCategory_InspectionType_DAO;
 import data.DAOs.DefectItem_DAO;
 import data.DAOs.DefectItem_InspectionType_DAO;
 import data.DAOs.Direction_DAO;
 import data.DAOs.Fault_DAO;
 import data.DAOs.InspectionDefect_DAO;
 import data.DAOs.InspectionHistory_DAO;
-import data.DAOs.InspectionResolution_DAO;
 import data.DAOs.Inspection_DAO;
 import data.DAOs.Inspector_DAO;
-import data.DAOs.Location_DAO;
 import data.DAOs.MultifamilyDetails_DAO;
 import data.DAOs.Room_DAO;
 import data.Tables.Builder_Table;
@@ -55,7 +42,6 @@ import data.Tables.Inspector_Table;
 import data.Tables.Location_Table;
 import data.Tables.MultifamilyDetails_Table;
 import data.Tables.Room_Table;
-import data.Views.ReinspectDefectList_View;
 import data.Views.ReviewAndSubmit_View;
 import data.Views.RouteSheet_View;
 
@@ -85,15 +71,11 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     private static Context mContext;
     public abstract Builder_DAO mBuilderDao();
     public abstract CannedComment_DAO mCannedCommentDao();
-    public abstract DefectCategory_DAO mDefectCategoryDao();
     public abstract DefectItem_DAO mDefectItemDao();
     public abstract Direction_DAO mDirectionDao();
     public abstract Inspection_DAO mInspectionDao();
     public abstract InspectionDefect_DAO mInspectionDefectDao();
-    public abstract InspectionResolution_DAO mInspectionResolutionDao();
-    public abstract Location_DAO mLocationDao();
     public abstract Room_DAO mRoomDao();
-    public abstract DefectCategory_InspectionType_DAO mDefectCategory_InspectionTypeDao();
     public abstract DefectItem_InspectionType_DAO mDefectItem_InspectionTypeDao();
     public abstract InspectionHistory_DAO mInspectionHistoryDao();
     public abstract MultifamilyDetails_DAO mMultifamilyDetailsDao();

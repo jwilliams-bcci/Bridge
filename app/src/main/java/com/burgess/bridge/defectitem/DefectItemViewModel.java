@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import data.DbInsertCallback;
 import data.Repositories.CannedCommentRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.DirectionRepository;

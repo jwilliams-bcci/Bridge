@@ -8,8 +8,6 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import data.DbInsertCallback;
-import data.InspectionDefect;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;

@@ -9,12 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import java.util.List;
-
-import data.DataManager;
-import data.InspectionHistory;
-import data.Location;
-
 public class InspectionHistoryActivity extends AppCompatActivity {
     public static final String LOCATION_ID = "com.example.bridge.LOCATION_ID";
     public static final int LOCATION_ID_NOT_SET = -1;

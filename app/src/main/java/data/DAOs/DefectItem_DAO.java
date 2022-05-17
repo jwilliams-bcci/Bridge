@@ -28,24 +28,10 @@ public interface DefectItem_DAO {
 
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
-            "INNER JOIN inspection_history_table h ON h.defect_item_id = d.id " +
-            "WHERE h.inspection_id = :inspection_id " +
-            "ORDER BY d.defect_category_id, d.item_number ASC")
-    LiveData<List<DefectItem_Table>> getReinspectionDefectItemsNumberSort(int inspection_id);
-
-    @Query("SELECT d.* " +
-            "FROM defect_item_table d " +
             "INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id " +
             "WHERE x.inspection_type_id = :inspection_type_id " +
             "ORDER BY d.defect_category_id, d.item_description ASC")
     LiveData<List<DefectItem_Table>> getDefectItemsDescriptionSort(int inspection_type_id);
-
-    @Query("SELECT d.* " +
-            "FROM defect_item_table d " +
-            "INNER JOIN inspection_history_table h ON h.defect_item_id = d.id " +
-            "WHERE h.inspection_id = :inspection_id " +
-            "ORDER BY d.defect_category_id, d.item_description ASC")
-    LiveData<List<DefectItem_Table>> getReinspectionDefectItemsDescriptionSort(int inspection_id);
 
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
@@ -56,24 +42,10 @@ public interface DefectItem_DAO {
 
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
-            "INNER JOIN inspection_history_table h ON h.defect_item_id = d.id " +
-            "WHERE d.defect_category_name = :categoryName AND h.inspection_id = :inspection_id " +
-            "ORDER BY d.item_number ASC")
-    LiveData<List<DefectItem_Table>> getReinspectionDefectItemsFilteredNumberSort(String categoryName, int inspection_id);
-
-    @Query("SELECT d.* " +
-            "FROM defect_item_table d " +
             "INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id " +
             "WHERE d.defect_category_name = :categoryName AND x.inspection_type_id = :inspection_type_id " +
             "ORDER BY d.item_description ASC")
     LiveData<List<DefectItem_Table>> getDefectItemsFilteredDescriptionSort(String categoryName, int inspection_type_id);
-
-    @Query("SELECT d.* " +
-            "FROM defect_item_table d " +
-            "INNER JOIN inspection_history_table h ON h.defect_item_id = d.id " +
-            "WHERE d.defect_category_name = :categoryName AND h.inspection_id = :inspection_id " +
-            "ORDER BY d.item_description ASC")
-    LiveData<List<DefectItem_Table>> getReinspectionDefectItemsFilteredDescriptionSort(String categoryName, int inspection_id);
 
     @Query("SELECT 'ALL' AS [category_name] UNION SELECT DISTINCT d.defect_category_name FROM defect_item_table d INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id WHERE x.inspection_type_id = :inspection_type_id ORDER BY category_name ASC")
     LiveData<List<String>> getDefectCategories(int inspection_type_id);

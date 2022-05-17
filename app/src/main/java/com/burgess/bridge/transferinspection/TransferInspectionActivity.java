@@ -12,31 +12,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
-import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
-import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
-import data.DataManager;
-import data.Inspection;
-import data.Inspector;
-import data.Location;
 import data.Tables.Inspection_Table;
 import data.Tables.Inspector_Table;
 

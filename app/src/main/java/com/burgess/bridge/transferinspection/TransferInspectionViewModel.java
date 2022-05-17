@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 
 import java.util.List;
 
-import data.Inspector;
 import data.Repositories.InspectionRepository;
 import data.Repositories.InspectorRepository;
 import data.Tables.Inspection_Table;

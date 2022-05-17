@@ -2,11 +2,9 @@ package com.burgess.bridge.editresolution;
 
 import static com.burgess.bridge.Constants.PREF;
 import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
-import static com.burgess.bridge.defectitem.DefectItemActivity.REQUEST_IMAGE_CAPTURE;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
@@ -47,23 +45,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import data.DataManager;
 import data.Enums.IncompleteReason;
-import data.Inspection;
-import data.InspectionResolution;
-import data.Location;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 
