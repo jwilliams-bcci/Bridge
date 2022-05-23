@@ -591,7 +591,7 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateInspectionHistory(RouteSheetViewModel vm, int inspectionId, int inspectionOrder, int inspectionTypeId, int locationId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         if (inspectionTypeId == 1154) {
-            url += String.format(GET_INSPECTION_HISTORY_FOR_MULTIFAMILY_URL, inspectionOrder, locationId);
+            url += String.format(GET_MULTIFAMILY_HISTORY_URL, inspectionOrder, locationId);
         } else {
             url += String.format(GET_INSPECTION_HISTORY_URL, inspectionOrder, inspectionTypeId, locationId);
         }
