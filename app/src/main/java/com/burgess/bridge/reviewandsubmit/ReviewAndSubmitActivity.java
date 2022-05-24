@@ -319,6 +319,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
                 mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
                 mReviewAndSubmitViewModel.deleteInspectionDefects(mInspectionId);
+                mReviewAndSubmitViewModel.deleteInspectionHistories(mInspectionId);
                 mReviewAndSubmitViewModel.deleteInspection(mInspectionId);
                 BridgeLogger.log('I', TAG, "Deleted defects and inspection " + mInspectionId);
             }
