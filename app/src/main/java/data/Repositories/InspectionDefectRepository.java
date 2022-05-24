@@ -78,4 +78,8 @@ public class InspectionDefectRepository {
     public void deleteInspectionDefect(int inspectionDefectId) {
         mInspectionDefectDao.deleteInspectionDefect(inspectionDefectId);
     }
+
+    public int getInspectionDefectCount(int inspectionId) {
+        return mInspectionDefectDao.getInspectionDefectCount(inspectionId);
+    }
 }

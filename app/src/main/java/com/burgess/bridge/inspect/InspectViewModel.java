@@ -94,4 +94,8 @@ public class InspectViewModel extends AndroidViewModel {
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
         return mInspectionDefectRepository.getInspectionDefect(inspectionDefectId);
     }
+
+    public int getInspectionDefectCount(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectCount(inspectionId);
+    }
 }

@@ -103,7 +103,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/button_rounded_orange"
         android:paddingHorizontal="5dp"
-        android:text="Sort by Defect Number"
+        android:text="Sort by\nDefect Number"
         android:textColor="@color/colorWhite"
         android:textSize="12sp"
         app:layout_constraintHorizontal_weight="0"
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_rounded_orange"
         android:paddingHorizontal="5dp"
-        android:text="Sort by Description"
+        android:text="Sort by\nDescription"
         android:textColor="@color/colorWhite"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/inspect_text_inspection_address"
@@ -137,5 +137,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inspect_button_sort_by_defect_number"
         tools:listitem="@layout/item_defect_item" />
+
+    <TextView
+        android:id="@+id/inspect_text_total_defect_count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Defect Count"
+        app:layout_constraintEnd_toStartOf="@+id/inspect_button_sort_by_description"
+        app:layout_constraintStart_toEndOf="@+id/inspect_button_sort_by_defect_number"
+        app:layout_constraintTop_toBottomOf="@+id/inspect_spinner_defect_category" />
+
+    <TextView
+        android:id="@+id/inspect_text_total_defect_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="##"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/inspect_text_total_defect_count_label"
+        app:layout_constraintStart_toStartOf="@+id/inspect_text_total_defect_count_label"
+        app:layout_constraintTop_toBottomOf="@+id/inspect_text_total_defect_count_label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -56,4 +56,7 @@ public interface InspectionDefect_DAO {
 
     @Query("DELETE FROM inspection_defect_table WHERE id = :inspection_defect_id")
     void deleteInspectionDefect(int inspection_defect_id);
+
+    @Query("SELECT COUNT(*) AS NumDefects FROM inspection_defect_table WHERE inspection_id = :inspection_id")
+    int getInspectionDefectCount(int inspection_id);
 }

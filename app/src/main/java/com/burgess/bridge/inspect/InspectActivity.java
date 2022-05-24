@@ -54,6 +54,8 @@ public class InspectActivity extends AppCompatActivity {
     private InspectListAdapter mInspectListAdapter;
     private ReinspectListAdapter mReinspectListAdapter;
     private TextView mTextAddress;
+    private TextView mTextTotalDefectCountLabel;
+    private TextView mTextTotalDefectCount;
     private Button mButtonReviewAndSubmit;
 
     @Override
@@ -79,6 +81,8 @@ public class InspectActivity extends AppCompatActivity {
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.inspect_constraint_layout);
         mTextAddress = findViewById(R.id.inspect_text_inspection_address);
+        mTextTotalDefectCountLabel = findViewById(R.id.inspect_text_total_defect_count_label);
+        mTextTotalDefectCount = findViewById(R.id.inspect_text_total_defect_count);
         mButtonAddNote = findViewById(R.id.inspect_button_add_note);
         mButtonSaveAndExit = findViewById(R.id.inspect_button_save_and_exit);
         mButtonReviewAndSubmit = findViewById(R.id.inspect_button_review_and_submit);
@@ -132,6 +136,8 @@ public class InspectActivity extends AppCompatActivity {
         mTextAddress.append(mInspection.community + "\n");
         mTextAddress.append(mInspection.address + "\n");
         mTextAddress.append(mInspection.inspection_type);
+
+        mTextTotalDefectCount.setText(Integer.toString(mInspectViewModel.getInspectionDefectCount(mInspectionId)));
 
         if ((mReinspection && mInspection.division_id != 20) || (mInspectionTypeId == 1154)) {
             initializeReinspectDisplayContent();
@@ -188,9 +194,11 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void initializeReinspectDisplayContent() {
-        // Hide sort buttons
+        // Hide sort buttons and defect count
         mButtonSortDescription.setVisibility(View.GONE);
         mButtonSortItemNumber.setVisibility(View.GONE);
+        mTextTotalDefectCountLabel.setVisibility(View.GONE);
+        mTextTotalDefectCount.setVisibility(View.GONE);
 
         // Change constraints
         ConstraintSet constraintSet = new ConstraintSet();
