@@ -103,7 +103,7 @@ public class InspectActivity extends AppCompatActivity {
         mButtonReviewAndSubmit.setOnClickListener(v -> {
             boolean allGood;
             int numberToReview = mInspectViewModel.getItemsToReview(mInspectionId);
-            if (mReinspection && mInspection.division_id != 20) {
+            if (mReinspection) {
                 allGood = numberToReview < 1;
             } else {
                 allGood = true;
