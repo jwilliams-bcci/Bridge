@@ -45,6 +45,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -87,6 +88,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private Button mButtonSubmit;
     private boolean mIsOnline;
     private long mLastClickTime = 0;
+    private ChangeResolutionFragment mChangeResolutionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -414,26 +416,29 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     }
 
     private void showEditResolutionDialog() {
-        View view = getLayoutInflater().inflate(R.layout.dialog_edit_resolution, null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(view);
-        builder.setTitle("Change Resolution");
-        builder.create().show();
-
-        Spinner spinnerResolutions = view.findViewById(R.id.dialog_edit_resolution_spinner_resolutions);
-        spinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, IncompleteReason.values()));
-
-        Button buttonSaveResolution = view.findViewById(R.id.dialog_edit_resolution_button_save);
-        buttonSaveResolution.setOnClickListener(v -> {
-            IncompleteReason selectedItem = (IncompleteReason) spinnerResolutions.getSelectedItem();
-            mInspectionStatusId = selectedItem.code;
-            try {
-                completeInspection();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        mChangeResolutionFragment = ChangeResolutionFragment.newInstance();
+        mChangeResolutionFragment.setResolutionList(Arrays.asList(IncompleteReason.values()));
+        mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
+//        View view = getLayoutInflater().inflate(R.layout.dialog_edit_resolution, null);
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setView(view);
+//        builder.setTitle("Change Resolution");
+//        builder.create().show();
+//
+//        Spinner spinnerResolutions = view.findViewById(R.id.dialog_edit_resolution_spinner_resolutions);
+//        spinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, IncompleteReason.values()));
+//
+//        Button buttonSaveResolution = view.findViewById(R.id.dialog_edit_resolution_button_save);
+//        buttonSaveResolution.setOnClickListener(v -> {
+//            IncompleteReason selectedItem = (IncompleteReason) spinnerResolutions.getSelectedItem();
+//            mInspectionStatusId = selectedItem.code;
+//            try {
+//                completeInspection();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
     }
 
     private void returnToRouteSheet() {

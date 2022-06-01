@@ -2,6 +2,9 @@ package data.Enums;
 
 import androidx.annotation.NonNull;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum IncompleteReason {
     COMPLETE("Complete", 0, false),
     CANCELLED_IN_FIELD_BY_BLDR("Cancelled in field by Bldr", 1, true),
@@ -19,7 +22,7 @@ public enum IncompleteReason {
     DEFERRED_DUE_TO_CANCELLATION("Deferred Due to Cancellation", 31, true)
     ;
 
-    private String description;
+    public String description;
     public int code;
     public boolean editResolutionOnly;
 

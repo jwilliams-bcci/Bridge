@@ -50,7 +50,7 @@
         android:id="@+id/direction_recycler_buttons"
         android:layout_width="wrap_content"
         android:layout_height="500dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/direction_text_result"
         app:layout_constraintEnd_toEndOf="@+id/direction_button_save_and_exit"

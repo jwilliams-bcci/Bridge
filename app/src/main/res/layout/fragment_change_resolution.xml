@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".reviewandsubmit.ChangeResolutionFragment">
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="4dp"
+    tools:context=".reviewandsubmit.ChangeResolutionFragment" >
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/change_resolution_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="2dp"
+        android:text="Change Resolution"
+        android:textAlignment="center"
+        android:textSize="@dimen/fragment_title_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/change_resolution_recycler_resolutions"
+        android:layout_width="wrap_content"
+        android:layout_height="500dp"
+        android:layout_marginTop="8dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/change_resolution_save"
+        app:layout_constraintEnd_toEndOf="@+id/change_resolution_save"
+        app:layout_constraintStart_toStartOf="@+id/change_resolution_save"
+        app:layout_constraintTop_toBottomOf="@+id/change_resolution_title"
+        tools:listitem="@layout/item_gridview" />
+
+    <Button
+        android:id="@+id/change_resolution_save"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/save"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/change_resolution_title"
+        app:layout_constraintStart_toStartOf="@+id/change_resolution_title" />
+</androidx.constraintlayout.widget.ConstraintLayout>
