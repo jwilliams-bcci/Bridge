@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +17,7 @@ import com.burgess.bridge.R;
 
 import java.util.List;
 
-import data.Enums.IncompleteReason;
+import data.Enums.Resolution;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +27,7 @@ import data.Enums.IncompleteReason;
 public class ChangeResolutionFragment extends DialogFragment implements OnButtonClickListener {
     private static ChangeResolutionFragment mFragment;
     private View mView;
-    private List<IncompleteReason> resolutionList;
+    private List<Resolution> resolutionList;
 
     public ChangeResolutionFragment() {
         // Required empty public constructor
@@ -64,7 +63,7 @@ public class ChangeResolutionFragment extends DialogFragment implements OnButton
 
     }
 
-    public void setResolutionList(List<IncompleteReason> resolutionList) {
+    public void setResolutionList(List<Resolution> resolutionList) {
         this.resolutionList = resolutionList;
     }
 }

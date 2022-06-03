@@ -23,11 +23,9 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -51,7 +49,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import data.Enums.IncompleteReason;
+import data.Enums.Resolution;
 import data.Tables.Builder_Table;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
@@ -417,7 +415,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
     private void showEditResolutionDialog() {
         mChangeResolutionFragment = ChangeResolutionFragment.newInstance();
-        mChangeResolutionFragment.setResolutionList(Arrays.asList(IncompleteReason.values()));
+        mChangeResolutionFragment.setResolutionList(Arrays.asList(Resolution.values()));
         mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
 //        View view = getLayoutInflater().inflate(R.layout.dialog_edit_resolution, null);
 //

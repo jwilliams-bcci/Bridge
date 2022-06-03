@@ -2,10 +2,7 @@ package data.Enums;
 
 import androidx.annotation.NonNull;
 
-import java.util.Arrays;
-import java.util.List;
-
-public enum IncompleteReason {
+public enum Resolution {
     COMPLETE("Complete", 0, false),
     CANCELLED_IN_FIELD_BY_BLDR("Cancelled in field by Bldr", 1, true),
     NOT_READY("Not Ready", 3, false),
@@ -26,7 +23,7 @@ public enum IncompleteReason {
     public int code;
     public boolean editResolutionOnly;
 
-    IncompleteReason(String description, int code, boolean editResolutionOnly) {
+    Resolution(String description, int code, boolean editResolutionOnly) {
         this.description = description;
         this.code = code;
         this.editResolutionOnly = editResolutionOnly;

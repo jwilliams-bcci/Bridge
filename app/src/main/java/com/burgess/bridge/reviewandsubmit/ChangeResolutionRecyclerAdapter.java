@@ -15,16 +15,16 @@ import com.burgess.bridge.R;
 
 import java.util.List;
 
-import data.Enums.IncompleteReason;
+import data.Enums.Resolution;
 
 public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<ChangeResolutionRecyclerAdapter.ViewHolder> {
     private final Context mContext;
-    private final List<IncompleteReason> mIncompleteReasons;
+    private final List<Resolution> mIncompleteReasons;
     private final LayoutInflater mLayoutInflater;
     private OnButtonClickListener mOnButtonClickListener;
     private static final String TAG = "CHG_RES_FRAG";
 
-    public ChangeResolutionRecyclerAdapter(Context context, List<IncompleteReason> incompleteReasonList, OnButtonClickListener onButtonClickListener) {
+    public ChangeResolutionRecyclerAdapter(Context context, List<Resolution> incompleteReasonList, OnButtonClickListener onButtonClickListener) {
         mContext = context;
         mIncompleteReasons = incompleteReasonList;
         mLayoutInflater = LayoutInflater.from(mContext);
@@ -40,7 +40,7 @@ public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<Change
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        IncompleteReason reason = mIncompleteReasons.get(position);
+        Resolution reason = mIncompleteReasons.get(position);
         holder.mResolutionCode = reason.code;
         holder.mResolutionButton.setText(reason.toString());
         holder.mResolutionButton.setOnClickListener(v -> {

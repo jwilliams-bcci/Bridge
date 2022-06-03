@@ -54,7 +54,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import data.Enums.IncompleteReason;
+import data.Enums.Resolution;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 
@@ -125,7 +125,7 @@ public class EditResolutionActivity extends AppCompatActivity {
             }
         });
         mButtonSubmit.setOnClickListener(view -> {
-            IncompleteReason selectedItem = (IncompleteReason) mSpinnerResolutions.getSelectedItem();
+            Resolution selectedItem = (Resolution) mSpinnerResolutions.getSelectedItem();
             OffsetDateTime inspectionTime = OffsetDateTime.now();
             if (selectedItem.code == 3 && mCurrentPhotoPath == null) {
                 Snackbar.make(mConstraintLayout, "For \"Not Ready\", please submit a picture", Snackbar.LENGTH_SHORT).show();
@@ -148,11 +148,11 @@ public class EditResolutionActivity extends AppCompatActivity {
         mTextAddress.append(mInspection.address + "\n");
         mTextAddress.append(mInspection.inspection_type + "\n");
 
-        mSpinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, (List<IncompleteReason>) Arrays.stream(IncompleteReason.values()).filter(e -> e.editResolutionOnly).collect(Collectors.toList())));
+        mSpinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, (List<Resolution>) Arrays.stream(Resolution.values()).filter(e -> e.editResolutionOnly).collect(Collectors.toList())));
         mSpinnerResolutions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                IncompleteReason selectedItem = (IncompleteReason) mSpinnerResolutions.getSelectedItem();
+                Resolution selectedItem = (Resolution) mSpinnerResolutions.getSelectedItem();
                 if (selectedItem.code == 3) {
                     mButtonCamera.setVisibility(View.VISIBLE);
                     mImageView.setVisibility(View.VISIBLE);
