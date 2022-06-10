@@ -34,7 +34,7 @@ public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<Change
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = mLayoutInflater.inflate(R.layout.item_gridview, parent, false);
+        View itemView = mLayoutInflater.inflate(R.layout.item_change_resolution, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -45,7 +45,7 @@ public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<Change
         holder.mResolutionButton.setText(reason.toString());
         holder.mResolutionButton.setOnClickListener(v -> {
             Button buttonClicked = (Button) v;
-            BridgeLogger.log('I', TAG, "Button clicked - " + buttonClicked.getText());
+            BridgeLogger.log('I', TAG, "Button clicked - " + buttonClicked.getText() + ", ID: " + reason.code);
         });
     }
 
@@ -60,7 +60,7 @@ public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<Change
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mResolutionButton = (Button) itemView.findViewById(R.id.item_gridview_button);
+            mResolutionButton = (Button) itemView.findViewById(R.id.item_change_resolution_button);
         }
     }
 }

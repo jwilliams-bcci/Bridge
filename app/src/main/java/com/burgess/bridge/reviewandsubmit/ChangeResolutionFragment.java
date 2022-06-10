@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.burgess.bridge.OnButtonClickListener;
@@ -49,11 +51,6 @@ public class ChangeResolutionFragment extends DialogFragment implements OnButton
         RecyclerView recyclerResolutions = (RecyclerView) mView.findViewById(R.id.change_resolution_recycler_resolutions);
         recyclerResolutions.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         recyclerResolutions.setAdapter(new ChangeResolutionRecyclerAdapter(getActivity(), resolutionList, this));
-
-        Button saveResolution = mView.findViewById(R.id.change_resolution_save);
-        saveResolution.setOnClickListener(v -> {
-            mFragment.dismiss();
-        });
 
         return mView;
     }

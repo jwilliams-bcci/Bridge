@@ -45,7 +45,6 @@ public class DirectionsRecyclerAdapter extends RecyclerView.Adapter<DirectionsRe
         holder.mDirection = direction.direction_description;
         holder.mDirectionButton.setText(direction.direction_description);
         holder.mDirectionButton.setOnClickListener(v -> {
-            TextView result = v.findViewById(R.id.direction_text_result);
             Button buttonClicked = (Button) v;
             Log.d("DIRECTION", "Button clicked - " + buttonClicked.getText());
             try {

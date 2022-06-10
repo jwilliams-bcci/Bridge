@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/change_resolution_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
@@ -24,26 +24,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/change_resolution_recycler_resolutions"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="500dp"
         android:layout_marginTop="8dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/change_resolution_save"
-        app:layout_constraintEnd_toEndOf="@+id/change_resolution_save"
-        app:layout_constraintStart_toStartOf="@+id/change_resolution_save"
-        app:layout_constraintTop_toBottomOf="@+id/change_resolution_title"
-        tools:listitem="@layout/item_gridview" />
-
-    <Button
-        android:id="@+id/change_resolution_save"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rounded_orange"
-        android:text="@string/save"
-        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/change_resolution_title"
-        app:layout_constraintStart_toStartOf="@+id/change_resolution_title" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_resolution_title"
+        tools:listitem="@layout/item_change_resolution" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

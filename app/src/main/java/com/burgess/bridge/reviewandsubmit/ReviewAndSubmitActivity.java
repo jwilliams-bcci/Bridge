@@ -65,7 +65,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     private int mInspectionId;
-    private int mInspectionStatusId;
+    public int mInspectionStatusId;
     private boolean mSupervisorPresent;
     private LinearLayout mLockScreen;
     private ProgressBar mProgressBar;
