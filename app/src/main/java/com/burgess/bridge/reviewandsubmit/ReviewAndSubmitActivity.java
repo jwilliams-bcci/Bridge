@@ -34,6 +34,7 @@ import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
+import com.burgess.bridge.ResolutionHelper;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
@@ -50,6 +51,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import data.Enums.Resolution;
+import data.Enums.ResolutionEnergy;
+import data.Enums.ResolutionEnergyWithCP;
 import data.Tables.Builder_Table;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
@@ -274,6 +277,16 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         }
     }
 
+    public void updateInspectionStatus(int statusId) {
+        mInspectionStatusId = statusId;
+        BridgeLogger.log('I', TAG, "Changed Resolution to " + statusId);
+        try {
+            completeInspection();
+        } catch (Exception e) {
+            BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
+        }
+    }
+
     private void completeInspection() throws Exception {
         showProgressSpinner();
         List<InspectionDefect_Table> inspectionDefects = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
@@ -415,7 +428,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
     private void showEditResolutionDialog() {
         mChangeResolutionFragment = ChangeResolutionFragment.newInstance();
-        mChangeResolutionFragment.setResolutionList(Arrays.asList(Resolution.values()));
+        ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type);
+        mChangeResolutionFragment.setResolutionList(resolutionHelper.buildList());
         mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
 //        View view = getLayoutInflater().inflate(R.layout.dialog_edit_resolution, null);
 //

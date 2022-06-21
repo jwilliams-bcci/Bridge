@@ -9,8 +9,6 @@ public enum Resolution {
     FAILED("Failed", 12, false),
     PASSED("Passed", 11, false),
     CANCELLED_BEFORE_730("Cancelled Before 7:30", 15, true),
-    DEFICIENCIES_NOTED("Deficiencies Noted", 25, false),
-    NO_DEFICIENCIES_OBSERVED("No Deficiencies Observed", 26, false),
     BATCH("Batch", 21, false),
     DEFERRED_BY_CONSULTANT("Deferred by Consultant", 22, true),
     BUILDER_TO_VERIFY("Builder to Verify", 24, false),
@@ -22,6 +20,7 @@ public enum Resolution {
     public String description;
     public int code;
     public boolean editResolutionOnly;
+
 
     Resolution(String description, int code, boolean editResolutionOnly) {
         this.description = description;

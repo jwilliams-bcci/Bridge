@@ -7,12 +7,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
 
 import com.burgess.bridge.OnButtonClickListener;
 import com.burgess.bridge.R;
@@ -29,7 +27,8 @@ import data.Enums.Resolution;
 public class ChangeResolutionFragment extends DialogFragment implements OnButtonClickListener {
     private static ChangeResolutionFragment mFragment;
     private View mView;
-    private List<Resolution> resolutionList;
+    private List resolutionList;
+    private ReviewAndSubmitActivity mActivity;
 
     public ChangeResolutionFragment() {
         // Required empty public constructor
@@ -48,19 +47,22 @@ public class ChangeResolutionFragment extends DialogFragment implements OnButton
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_change_resolution, container, false);
 
-        RecyclerView recyclerResolutions = (RecyclerView) mView.findViewById(R.id.change_resolution_recycler_resolutions);
+        RecyclerView recyclerResolutions = mView.findViewById(R.id.change_resolution_recycler_resolutions);
         recyclerResolutions.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        recyclerResolutions.setAdapter(new ChangeResolutionRecyclerAdapter(getActivity(), resolutionList, this));
+        recyclerResolutions.setAdapter(new ChangeResolutionRecyclerAdapter(getActivity(), resolutionList, this, this));
+
+        mActivity = (ReviewAndSubmitActivity) getActivity();
 
         return mView;
     }
 
     @Override
-    public void onButtonClick(String buttonName) {
-
+    public void onButtonClick(String statusCode) {
+        mActivity.updateInspectionStatus(Integer.parseInt(statusCode));
+        dismiss();
     }
 
-    public void setResolutionList(List<Resolution> resolutionList) {
+    public void setResolutionList(List resolutionList) {
         this.resolutionList = resolutionList;
     }
 }

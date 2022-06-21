@@ -1,17 +1,21 @@
 package com.burgess.bridge.reviewandsubmit;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.OnButtonClickListener;
 import com.burgess.bridge.R;
+import com.burgess.bridge.ResolutionHelper;
 
 import java.util.List;
 
@@ -19,16 +23,18 @@ import data.Enums.Resolution;
 
 public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<ChangeResolutionRecyclerAdapter.ViewHolder> {
     private final Context mContext;
-    private final List<Resolution> mIncompleteReasons;
+    private final List<ResolutionHelper.Resolution> mIncompleteReasons;
     private final LayoutInflater mLayoutInflater;
     private OnButtonClickListener mOnButtonClickListener;
+    private DialogFragment mFragment;
     private static final String TAG = "CHG_RES_FRAG";
 
-    public ChangeResolutionRecyclerAdapter(Context context, List<Resolution> incompleteReasonList, OnButtonClickListener onButtonClickListener) {
+    public ChangeResolutionRecyclerAdapter(Context context, List<ResolutionHelper.Resolution> incompleteReasonList, OnButtonClickListener onButtonClickListener, DialogFragment changeResolutionFragment) {
         mContext = context;
         mIncompleteReasons = incompleteReasonList;
         mLayoutInflater = LayoutInflater.from(mContext);
         mOnButtonClickListener = onButtonClickListener;
+        mFragment = changeResolutionFragment;
     }
 
     @NonNull
@@ -40,12 +46,15 @@ public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<Change
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Resolution reason = mIncompleteReasons.get(position);
+        ResolutionHelper.Resolution reason = mIncompleteReasons.get(position);
         holder.mResolutionCode = reason.code;
-        holder.mResolutionButton.setText(reason.toString());
+        holder.mResolutionButton.setText(reason.description);
         holder.mResolutionButton.setOnClickListener(v -> {
-            Button buttonClicked = (Button) v;
-            BridgeLogger.log('I', TAG, "Button clicked - " + buttonClicked.getText() + ", ID: " + reason.code);
+            try {
+                mOnButtonClickListener.onButtonClick(Integer.toString(holder.mResolutionCode));
+            } catch (Exception e) {
+                BridgeLogger.log('E', TAG, "ERROR IN onBindViewHolder: " + e.getMessage());
+            }
         });
     }
 
@@ -60,7 +69,7 @@ public class ChangeResolutionRecyclerAdapter extends RecyclerView.Adapter<Change
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mResolutionButton = (Button) itemView.findViewById(R.id.item_change_resolution_button);
+            mResolutionButton = itemView.findViewById(R.id.item_change_resolution_button);
         }
     }
 }
