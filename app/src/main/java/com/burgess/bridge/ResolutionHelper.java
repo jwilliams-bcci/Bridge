@@ -35,8 +35,6 @@ public class ResolutionHelper {
             resolutionList.add(new Resolution(11, "Passed"));
         }
         resolutionList.add(new Resolution(3, "Not Ready"));
-        resolutionList.add(new Resolution(15, "Cancelled before 7:30"));
-        resolutionList.add(new Resolution(22, "Deferred by Consultant"));
         if (mInspectionClass == 7) {
             resolutionList.add(new Resolution(24, "Builder to Verify"));
             if (mInspectionType.startsWith("HERS Thermal Bypass Rough") || mInspectionType.startsWith("Energy Code Rough")) {
@@ -47,8 +45,6 @@ public class ResolutionHelper {
             }
         }
         resolutionList.add(new Resolution(27, "Performed"));
-        resolutionList.add(new Resolution(30, "Deferred by Weather"));
-        resolutionList.add(new Resolution(31, "Deferred Due to Cancellation"));
 
         return resolutionList;
     }
