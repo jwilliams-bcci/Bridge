@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -174,22 +175,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
                         .create();
 
-                AlertDialog supervisorDialog = new AlertDialog.Builder(this)
-                        .setTitle("Supervisor Present?")
-                        .setMessage("Was the supervisor present?")
-                        .setPositiveButton("Yes", (dialogInterface, i) -> mSupervisorPresent = true)
-                        .setNegativeButton("No", (dialogInterface, i) -> mSupervisorPresent = false)
-                        .create();
-
-                resolutionDialog.show();
-                supervisorDialog.show();
-
-                final Button button = resolutionDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setEnabled(false);
-
-                handler.postDelayed(() -> {
-                    button.setEnabled(true);
-                }, 5000);
+                showSupervisorDialog();
             } catch (Exception e) {
                 BridgeLogger.log('E', TAG, "ERROR in mButtonSubmit.click(): " + e.getMessage());
             }
@@ -270,6 +256,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     status = 25;
                 }
             }
+
+            if (mInspection.inspection_type_id == 785) {
+                status = 27;
+            }
             return status;
         } catch (Exception e) {
             BridgeLogger.log('E', TAG, "ERROR in getInspectionStatusId: " + e.getMessage());
@@ -281,7 +271,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mInspectionStatusId = statusId;
         BridgeLogger.log('I', TAG, "Changed Resolution to " + statusId);
         try {
-            completeInspection();
+            showResolutionCheckDialog(statusId);
         } catch (Exception e) {
             BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
         }
@@ -426,31 +416,59 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         }
     }
 
+    private void showSupervisorDialog() {
+        AlertDialog supervisorDialog = new AlertDialog.Builder(this)
+                .setTitle("Supervisor Present?")
+                .setMessage("Was the supervisor present?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    mSupervisorPresent = true;
+                    showResolutionCheckDialog(getInspectionStatusId());
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    mSupervisorPresent = false;
+                    showResolutionCheckDialog(getInspectionStatusId());
+                })
+                .create();
+
+        supervisorDialog.show();
+    }
+
+    private void showResolutionCheckDialog(int statusId) {
+        String statusMessage = Resolution.findByCode(statusId).toString();
+
+        Handler handler = new Handler();
+        AlertDialog resolutionDialog = new AlertDialog.Builder(this)
+                .setTitle("Is the following resolution accurate? YES button will be active in 5 seconds...")
+                .setMessage(statusMessage)
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    try {
+                        completeInspection();
+                    } catch (Exception e) {
+                        BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
+                        hideProgressSpinner();
+                        Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    showEditResolutionDialog();
+                })
+                .create();
+
+        resolutionDialog.show();
+
+        final Button button = resolutionDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        button.setEnabled(false);
+
+        handler.postDelayed(() -> {
+            button.setEnabled(true);
+        }, 5000);
+    }
+
     private void showEditResolutionDialog() {
         mChangeResolutionFragment = ChangeResolutionFragment.newInstance();
         ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type);
         mChangeResolutionFragment.setResolutionList(resolutionHelper.buildList());
         mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
-//        View view = getLayoutInflater().inflate(R.layout.dialog_edit_resolution, null);
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setView(view);
-//        builder.setTitle("Change Resolution");
-//        builder.create().show();
-//
-//        Spinner spinnerResolutions = view.findViewById(R.id.dialog_edit_resolution_spinner_resolutions);
-//        spinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, IncompleteReason.values()));
-//
-//        Button buttonSaveResolution = view.findViewById(R.id.dialog_edit_resolution_button_save);
-//        buttonSaveResolution.setOnClickListener(v -> {
-//            IncompleteReason selectedItem = (IncompleteReason) spinnerResolutions.getSelectedItem();
-//            mInspectionStatusId = selectedItem.code;
-//            try {
-//                completeInspection();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        });
     }
 
     private void returnToRouteSheet() {
