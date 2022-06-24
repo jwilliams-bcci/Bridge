@@ -2,6 +2,10 @@ package data.Enums;
 
 import androidx.annotation.NonNull;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Resolution {
     COMPLETE("Complete", 0, false),
     CANCELLED_IN_FIELD_BY_BLDR("Cancelled in field by Bldr", 1, true),
@@ -20,7 +24,13 @@ public enum Resolution {
     public String description;
     public int code;
     public boolean editResolutionOnly;
-
+    private static final Map<Integer, Resolution> map;
+    static {
+        map = new HashMap<>();
+        for (Resolution r : Resolution.values()) {
+            map.put(r.code, r);
+        }
+    }
 
     Resolution(String description, int code, boolean editResolutionOnly) {
         this.description = description;
@@ -32,5 +42,9 @@ public enum Resolution {
     @Override
     public String toString() {
         return description;
+    }
+
+    public static Resolution findByCode(int i) {
+        return map.get(i);
     }
 }
