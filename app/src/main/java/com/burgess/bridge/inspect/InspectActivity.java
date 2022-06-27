@@ -78,6 +78,13 @@ public class InspectActivity extends AppCompatActivity {
         initializeDisplayContent();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mTextTotalDefectCount.setText(Integer.toString(mInspectViewModel.getInspectionDefectCount(mInspectionId)));
+    }
+
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.inspect_constraint_layout);
         mTextAddress = findViewById(R.id.inspect_text_inspection_address);
