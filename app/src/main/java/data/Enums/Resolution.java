@@ -16,9 +16,12 @@ public enum Resolution {
     BATCH("Batch", 21, false),
     DEFERRED_BY_CONSULTANT("Deferred by Consultant", 22, true),
     BUILDER_TO_VERIFY("Builder to Verify", 24, false),
+    DEFICIENCIES_NOTED("Deficiencies Noted", 25, false),
+    NO_DEFICIENCIES_OBSERVED("No Deficiencies Observed", 26, false),
     PERFORMED("Performed", 27, false),
     DEFERRED_BY_WEATHER("Deferred by Weather", 30, true),
-    DEFERRED_DUE_TO_CANCELLATION("Deferred Due to Cancellation", 31, true)
+    DEFERRED_DUE_TO_CANCELLATION("Deferred Due to Cancellation", 31, true),
+    CORRECT_AND_PROCEED("Correct & Proceed", 32, false)
     ;
 
     public String description;
