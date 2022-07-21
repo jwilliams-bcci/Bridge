@@ -257,9 +257,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
             }
 
-            if (mInspection.inspection_type_id == 785) {
+            if (mInspection.inspection_type_id == 785 || mInspection.inspection_type_id == 1160) {
                 status = 27;
             }
+
+            if (mInspection.builder_id == 2473 && (mInspection.inspection_type_id == 13 || mInspection.inspection_type_id == 23)) {
+                status = 32;
+            }
+
             return status;
         } catch (Exception e) {
             BridgeLogger.log('E', TAG, "ERROR in getInspectionStatusId: " + e.getMessage());
