@@ -10,12 +10,16 @@ public class ResolutionHelper {
     private int mDivisionId;
     private int mInspectionClass;
     private String mInspectionType;
+    private int mBuilderId;
+    private int mInspectionTypeId;
 
-    public ResolutionHelper(int divisionId, int inspectionClass, String inspectionType) {
+    public ResolutionHelper(int divisionId, int inspectionClass, String inspectionType, int builderId, int inspectionTypeId) {
         resolutionList = new ArrayList<>();
         mDivisionId = divisionId;
         mInspectionClass = inspectionClass;
         mInspectionType = inspectionType;
+        mBuilderId = builderId;
+        mInspectionTypeId = inspectionTypeId;
     }
 
     public List<Resolution> buildList() {
@@ -35,7 +39,7 @@ public class ResolutionHelper {
             resolutionList.add(new Resolution(11, "Passed"));
         }
         resolutionList.add(new Resolution(3, "Not Ready"));
-        if (mInspectionClass == 7) {
+        if (mInspectionClass == 7 || (mBuilderId == 2473 && (mInspectionTypeId == 13 || mInspectionTypeId == 23))) {
             resolutionList.add(new Resolution(24, "Builder to Verify"));
             if (mInspectionType.startsWith("HERS Thermal Bypass Rough") || mInspectionType.startsWith("Energy Code Rough")) {
                 resolutionList.add(new Resolution(32, "Correct & Proceed"));

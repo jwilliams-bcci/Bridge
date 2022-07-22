@@ -261,10 +261,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 status = 27;
             }
 
-            if (mInspection.builder_id == 2473 && (mInspection.inspection_type_id == 13 || mInspection.inspection_type_id == 23)) {
-                status = 32;
-            }
-
             return status;
         } catch (Exception e) {
             BridgeLogger.log('E', TAG, "ERROR in getInspectionStatusId: " + e.getMessage());
@@ -471,7 +467,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
     private void showEditResolutionDialog() {
         mChangeResolutionFragment = ChangeResolutionFragment.newInstance();
-        ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type);
+        ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type, mInspection.builder_id, mInspection.inspection_type_id);
         mChangeResolutionFragment.setResolutionList(resolutionHelper.buildList());
         mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
     }
