@@ -23,11 +23,6 @@ public class ResolutionHelper {
     }
 
     public List<Resolution> buildList() {
-        Pattern patternHERS = Pattern.compile("^HERS Thermal Bypass Rough");
-        Pattern patternEnergy = Pattern.compile("^Energy Code Rough");
-        Matcher matcherHERS = patternHERS.matcher(mInspectionType);
-        Matcher matcherEnergy = patternEnergy.matcher(mInspectionType);
-
         resolutionList.clear();
         resolutionList.add(new Resolution(0, "Complete"));
         resolutionList.add(new Resolution(1, "Cancelled in field by Bldr"));
@@ -39,7 +34,7 @@ public class ResolutionHelper {
             resolutionList.add(new Resolution(11, "Passed"));
         }
         resolutionList.add(new Resolution(3, "Not Ready"));
-        if (mInspectionClass == 7 || (mBuilderId == 2473 && (mInspectionTypeId == 13 || mInspectionTypeId == 23))) {
+        if (mInspectionClass == 7) {
             resolutionList.add(new Resolution(24, "Builder to Verify"));
             if (mInspectionType.startsWith("HERS Thermal Bypass Rough") || mInspectionType.startsWith("Energy Code Rough")) {
                 resolutionList.add(new Resolution(32, "Correct & Proceed"));
@@ -47,6 +42,8 @@ public class ResolutionHelper {
             if (mDivisionId == 5 || mDivisionId == 17) {
                 resolutionList.add(new Resolution(21, "Batch"));
             }
+        } else if (mBuilderId == 2473 && (mInspectionTypeId == 13 || mInspectionTypeId == 23)) {
+            resolutionList.add(new Resolution(32, "Correct & Proceed"));
         }
         resolutionList.add(new Resolution(27, "Performed"));
 
