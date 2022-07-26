@@ -67,6 +67,7 @@ public class BridgeAPIQueue {
     private static final String LOGIN_URL = "Login?userName=%s&password=%s";
     private static final String GET_CANNED_COMMENTS_URL = "GetCannedComments";
     private static final String GET_DEFECT_ITEMS_URL = "GetDefectItems";
+    private static final String GET_DEFECT_ITEMS_FOR_INSPECTOR_URL = "GetDefectItemsForInspector?inspectorid=%s&inspectiondate=%s";
     private static final String GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_URL = "GetDefectItem_InspectionType_XRef";
     private static final String GET_BUILDERS_URL = "GetBuilders";
     private static final String GET_INSPECTORS_URL = "GetInspectors";
@@ -75,7 +76,6 @@ public class BridgeAPIQueue {
     private static final String GET_FAULTS_URL = "GetFaults";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
-    private static final String GET_INSPECTION_HISTORY_FOR_MULTIFAMILY_URL = "GetInspectionHistoryForMultifamily?inspectionorder=%s&locationid=%s";
     private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s&inspectionnumber=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
     private static final String POST_TRANSFER_INSPECTION_URL = "TransferInspection?inspectionId=%s&inspectorId=%s";
@@ -585,6 +585,52 @@ public class BridgeAPIQueue {
             }
         };
 
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+    public JsonArrayRequest updateDefectItemsForInspector(RouteSheetViewModel vm, String inspectorId, String inspectionDate, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += GET_DEFECT_ITEMS_FOR_INSPECTOR_URL;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    DefectItem_Table defectItem = new DefectItem_Table();
+                    defectItem.defect_category_id = obj.optInt("DefectCategoryID");
+                    defectItem.defect_category_name = obj.optString("CategoryName");
+                    defectItem.item_number = obj.optInt("ItemNumber");
+                    defectItem.inspection_type_id = obj.optInt("InspectionTypeID");
+                    defectItem.item_description = obj.optString("ItemDescription");
+                    defectItem.spanish_item_description = obj.optString("SpanishItemDescription");
+                    defectItem.reinspection_required = obj.optBoolean("ReInspectionRequired");
+
+                    vm.insertDefectItem(defectItem);
+                } catch (JSONException e) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateDefectItemsForInspector: " + e.getMessage());
+                }
+            }
+            Log.i(TAG, "Defect Items downloaded");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateDefectItems.");
+                callback.onFailure("Lost connection while getting defect items!");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateDefectItems.");
+                callback.onFailure("Request timed out while getting defect items!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateDefectItems: " + errorMessage);
+                callback.onFailure("Error getting defect items!");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
