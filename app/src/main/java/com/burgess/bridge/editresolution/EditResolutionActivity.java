@@ -19,6 +19,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
@@ -76,6 +77,7 @@ public class EditResolutionActivity extends AppCompatActivity {
     private StringRequest mEditResolutionRequest;
     private String mCurrentPhotoPath;
     private boolean mPictureTaken = false;
+    private long mLastClickTime = 0;
 
     private static final String TAG = "EDIT_RESOLUTION";
     public static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -125,6 +127,12 @@ public class EditResolutionActivity extends AppCompatActivity {
             }
         });
         mButtonSubmit.setOnClickListener(view -> {
+            // Prevent double clicking
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return;
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             Resolution selectedItem = (Resolution) mSpinnerResolutions.getSelectedItem();
             OffsetDateTime inspectionTime = OffsetDateTime.now();
             if (selectedItem.code == 3 && mCurrentPhotoPath == null) {
@@ -248,18 +256,6 @@ public class EditResolutionActivity extends AppCompatActivity {
         return request;
     }
 
-    private byte[] getPictureData(int inspectionDefectId) {
-        InspectionDefect_Table defect = mEditResolutionViewModel.getInspectionDefect(inspectionDefectId);
-        Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        if (image != null) {
-            image.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-            return stream.toByteArray();
-        } else {
-            return null;
-        }
-    }
-
     // Camera functions
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyMMdd_HHmmss").format(new Date());
@@ -269,7 +265,6 @@ public class EditResolutionActivity extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
     private void displayThumbnail() {
         try {
             Bitmap imageThumbnailBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath), 128, 128);
@@ -286,7 +281,6 @@ public class EditResolutionActivity extends AppCompatActivity {
             mImageView.setImageResource(R.drawable.ic_no_picture);
         }
     }
-
     private void rotateImageFile(String filePath) throws IOException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 2;
@@ -307,7 +301,17 @@ public class EditResolutionActivity extends AppCompatActivity {
         outBmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         stream.close();
     }
-
+    private byte[] getPictureData(int inspectionDefectId) {
+        InspectionDefect_Table defect = mEditResolutionViewModel.getInspectionDefect(inspectionDefectId);
+        Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        if (image != null) {
+            image.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+            return stream.toByteArray();
+        } else {
+            return null;
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

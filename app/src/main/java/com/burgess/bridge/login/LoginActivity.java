@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mTextStaging;
     private Button mButtonLogin;
     private CheckBox mCheckBoxRememberCredentials;
-    private CheckBox mCheckBoxReloadInspectionData;
     private LinearLayout mLockScreen;
     private ProgressBar mProgressBar;
 
@@ -66,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
     private String mVersionName;
     private String mUserName;
     private String mPassword;
-    private boolean loadDatabase = false;
 
     private static final String TAG = "LOGIN";
 
@@ -99,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
         mTextStaging = findViewById(R.id.login_text_staging);
         mButtonLogin = findViewById(R.id.login_button_login);
         mCheckBoxRememberCredentials = findViewById(R.id.login_checkbox_remember_credentials);
-        mCheckBoxReloadInspectionData = findViewById(R.id.login_checkbox_reload_inspection_data);
         mConstraintLayout = findViewById(R.id.login_constraint_layout);
         mLockScreen = findViewById(R.id.login_lock_screen);
         mProgressBar = findViewById(R.id.login_progress_bar);
@@ -122,20 +119,6 @@ public class LoginActivity extends AppCompatActivity {
                 mEditor.putBoolean(PREF_IS_ONLINE, true);
                 mEditor.apply();
                 workOnline();
-            }
-        });
-
-        mCheckBoxReloadInspectionData.setOnCheckedChangeListener((v, i) -> {
-            if (v.isChecked()) {
-                new AlertDialog.Builder(this)
-                        .setTitle("Are you sure?")
-                        .setMessage("Please note that this will reload the database from Burgess! This could take a few minutes, please only attempt this while in a good service area. Are you sure you want to reload the database?")
-                        .setPositiveButton("Yes", (dialogInterface, x) -> loadDatabase = true)
-                        .setNegativeButton("No", (dialogInterface, x) -> {
-                            loadDatabase = false;
-                            v.setChecked(false);
-                        })
-                        .show();
             }
         });
     }
@@ -198,16 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                     mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
                     mEditor.apply();
                 }
-                queue.add(mUpdateBuildersRequest);
-                queue.add(mUpdateInspectorsRequest);
-                if (loadDatabase) {
-                    BridgeLogger.log('I', TAG, "Reloading database...");
-                    queue.add(mUpdateCannedCommentsRequest);
-                } else {
-                    Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
-                    startActivity(routeSheetIntent);
-                    hideSpinner();
-                }
+                queue.add(mUpdateCannedCommentsRequest);
             }
 
             @Override
@@ -223,30 +197,6 @@ public class LoginActivity extends AppCompatActivity {
         mUpdateCannedCommentsRequest = BridgeAPIQueue.getInstance().updateCannedComments(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                queue.add(mUpdateDefectItemsRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-        mUpdateDefectItemsRequest = BridgeAPIQueue.getInstance().updateDefectItems(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                queue.add(mUpdateDIITReferenceRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-        mUpdateDIITReferenceRequest = BridgeAPIQueue.getInstance().updateDefectItem_InspectionTypeXRef(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
                 queue.add(mUpdateBuildersRequest);
             }
 
@@ -259,9 +209,7 @@ public class LoginActivity extends AppCompatActivity {
         mUpdateBuildersRequest = BridgeAPIQueue.getInstance().updateBuilders(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                if (loadDatabase) {
-                    queue.add(mUpdateInspectorsRequest);
-                }
+                queue.add(mUpdateInspectorsRequest);
             }
 
             @Override
@@ -273,9 +221,7 @@ public class LoginActivity extends AppCompatActivity {
         mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectors(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                if (loadDatabase) {
                     queue.add(mUpdateRoomsRequest);
-                }
             }
 
             @Override
@@ -327,13 +273,7 @@ public class LoginActivity extends AppCompatActivity {
             BridgeLogger.log('I', TAG, "Token is younger than 12 hours");
             if (checkSavedLogin()) {
                 BridgeLogger.log('I', TAG, "The same user is logging in, bypassing loginRequest.");
-                if (loadDatabase) {
-                    queue.add(mUpdateCannedCommentsRequest);
-                } else {
-                    Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
-                    startActivity(routeSheetIntent);
-                    hideSpinner();
-                }
+                queue.add(mUpdateCannedCommentsRequest);
             } else {
                 BridgeLogger.log('I', TAG, "Different user is logging in, getting new token...");
                 queue.add(mLoginRequest);

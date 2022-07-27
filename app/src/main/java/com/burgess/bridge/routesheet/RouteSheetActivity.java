@@ -64,6 +64,8 @@ public class RouteSheetActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private JsonArrayRequest mUpdateRouteSheetRequest;
+    private JsonArrayRequest mUpdateDefectItemsRequest;
+    private JsonArrayRequest mUpdateDIITRequest;
     private String mInspectorId;
     private boolean mIsOnline;
 
@@ -88,9 +90,12 @@ public class RouteSheetActivity extends AppCompatActivity {
         apiQueue = BridgeAPIQueue.getInstance(this);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        String currentDate = formatter.format(OffsetDateTime.now());
         mInspectorId = mSharedPreferences.getString(PREF_INSPECTOR_ID, "NULL");
         mIsOnline = mSharedPreferences.getBoolean(PREF_IS_ONLINE, true);
-        mUpdateRouteSheetRequest = apiQueue.updateRouteSheet(mRouteSheetViewModel, mInspectorId, formatter.format(OffsetDateTime.now()));
+        mUpdateRouteSheetRequest = apiQueue.updateRouteSheet(mRouteSheetViewModel, mInspectorId, currentDate);
+        mUpdateDefectItemsRequest = apiQueue.updateDefectItemsV2(mRouteSheetViewModel, mInspectorId, currentDate);
+        mUpdateDIITRequest = apiQueue.updateDefectItem_InspectionTypeXRefV2(mRouteSheetViewModel, mInspectorId, currentDate);
 
         initializeViews();
         initializeButtonListeners();
@@ -161,9 +166,7 @@ public class RouteSheetActivity extends AppCompatActivity {
         });
     }
     private void initializeSwipeRefresh() {
-        mSwipeRefreshLayout.setOnRefreshListener(() -> {
-            updateRouteSheet();
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this::updateRouteSheet);
     }
     private void initializeDisplayContent() {
         try {
@@ -199,7 +202,9 @@ public class RouteSheetActivity extends AppCompatActivity {
     private void updateRouteSheet() {
         if (mIsOnline) {
             Snackbar.make(mConstraintLayout, "Route sheet updating...", Snackbar.LENGTH_LONG).show();
-            BridgeAPIQueue.getInstance().getRequestQueue().add(mUpdateRouteSheetRequest);
+            apiQueue.getRequestQueue().add(mUpdateRouteSheetRequest);
+            apiQueue.getRequestQueue().add(mUpdateDefectItemsRequest);
+            apiQueue.getRequestQueue().add(mUpdateDIITRequest);
             List<Integer> allInspectionIds = mRouteSheetViewModel.getAllInspectionIds(Integer.parseInt(mInspectorId));
             ArrayList<JsonObjectRequest> checkDateRequests = new ArrayList<>();
             for (int lcv = 0; lcv < allInspectionIds.size(); lcv++) {

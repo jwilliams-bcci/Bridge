@@ -137,43 +137,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 mLastClickTime = SystemClock.elapsedRealtime();
 
                 mInspectionStatusId = getInspectionStatusId();
-                String statusMessage;
-                switch (mInspectionStatusId) {
-                    case 11:
-                        statusMessage = "PASSED";
-                        break;
-                    case 12:
-                        statusMessage = "FAILED";
-                        break;
-                    case 26:
-                        statusMessage = "NO DEFICIENCIES OBSERVED";
-                        break;
-                    case 25:
-                        statusMessage = "DEFICIENCIES OBSERVED";
-                        break;
-                    case 0:
-                        Snackbar.make(mConstraintLayout, "Error in getting status, please send Activity log", Snackbar.LENGTH_SHORT).show();
-                        return;
-                    default:
-                        statusMessage = "NA";
-                        break;
-                }
-
-                Handler handler = new Handler();
-                AlertDialog resolutionDialog = new AlertDialog.Builder(this)
-                        .setTitle("Is the following resolution accurate? YES button will be active in 5 seconds...")
-                        .setMessage(statusMessage)
-                        .setPositiveButton("Yes", (dialog, which) -> {
-                            try {
-                                completeInspection();
-                            } catch (Exception e) {
-                                BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
-                                hideProgressSpinner();
-                                Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("No", (dialogInterface, i) -> showEditResolutionDialog())
-                        .create();
 
                 showSupervisorDialog();
             } catch (Exception e) {

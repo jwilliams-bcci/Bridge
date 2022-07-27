@@ -9,9 +9,11 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import data.Repositories.DefectItemRepository;
+import data.Repositories.DefectItem_InspectionType_XRefRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
+import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
@@ -23,6 +25,7 @@ public class RouteSheetViewModel extends AndroidViewModel {
     private InspectionHistoryRepository mInspectionHistoryRepository;
     private InspectionDefectRepository mInspectionDefectRepository;
     private DefectItemRepository mDefectItemRepository;
+    private DefectItem_InspectionType_XRefRepository mDIITRepository;
 
     public RouteSheetViewModel(@NonNull Application application) {
         super(application);
@@ -30,6 +33,7 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
         mInspectionDefectRepository = new InspectionDefectRepository(application);
         mDefectItemRepository = new DefectItemRepository(application);
+        mDIITRepository = new DefectItem_InspectionType_XRefRepository(application);
     }
 
     public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet(int inspectorId) {
@@ -66,5 +70,9 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public void insertDefectItem(DefectItem_Table defectItem) {
         mDefectItemRepository.insert(defectItem);
+    }
+
+    public void insertReference(DefectItem_InspectionType_XRef relation) {
+        mDIITRepository.insert(relation);
     }
 }
