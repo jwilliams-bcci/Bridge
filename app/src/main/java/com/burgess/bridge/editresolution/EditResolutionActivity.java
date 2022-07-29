@@ -138,14 +138,14 @@ public class EditResolutionActivity extends AppCompatActivity {
             if (selectedItem.code == 3 && mCurrentPhotoPath == null) {
                 Snackbar.make(mConstraintLayout, "For \"Not Ready\", please submit a picture", Snackbar.LENGTH_SHORT).show();
             } else {
-                addNote();
-                mEditResolutionRequest = getUpdateInspectionStatusRequest(selectedItem.code, inspectionTime.toString());
-                BridgeAPIQueue.getInstance().getRequestQueue().add(mEditResolutionRequest);
-
-                finish();
-                Intent routeSheetIntent = new Intent(EditResolutionActivity.this, RouteSheetActivity.class);
-                routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(routeSheetIntent);
+                try {
+                    addNote();
+                    mEditResolutionRequest = getUpdateInspectionStatusRequest(selectedItem.code, inspectionTime.toString());
+                    BridgeAPIQueue.getInstance().getRequestQueue().add(mEditResolutionRequest);
+                } catch (Exception e) {
+                    BridgeLogger.log('E', TAG, "ERROR in EditResolution: " + e.getMessage());
+                    Snackbar.make(mConstraintLayout, "Error trying to change status! Please send an activity log!", Snackbar.LENGTH_LONG);
+                }
             }
         });
     }
@@ -229,7 +229,7 @@ public class EditResolutionActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                BridgeLogger.log('E', TAG, "ERROR: " + message);
+                BridgeLogger.log('E', TAG, "ERROR in EditResolution: " + message);
             }
         });
 
@@ -244,6 +244,11 @@ public class EditResolutionActivity extends AppCompatActivity {
                 mEditResolutionViewModel.deleteInspectionDefects(mInspectionId);
                 mEditResolutionViewModel.deleteInspection(mInspectionId);
                 BridgeLogger.log('I', TAG, "Deleted defects and inspection " + mInspectionId);
+
+                finish();
+                Intent routeSheetIntent = new Intent(EditResolutionActivity.this, RouteSheetActivity.class);
+                routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(routeSheetIntent);
             }
 
             @Override

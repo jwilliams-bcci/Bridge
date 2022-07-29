@@ -2,6 +2,7 @@ package com.burgess.bridge.defectitem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
@@ -41,6 +42,7 @@ import android.widget.TextView;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.inspect.InspectActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -99,6 +101,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private ImageButton mButtonMicrophone;
     private ImageButton mButtonCamera;
     private Inspection_Table mInspection;
+    private ConstraintLayout mConstraintLayout;
 
     // Fragments
     private LocationFragment mLocationFragment;
@@ -139,6 +142,7 @@ public class DefectItemActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        mConstraintLayout = findViewById(R.id.defect_item_constraint_layout);
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
         mRadioGroupDefectStatus = findViewById(R.id.defect_item_radio_group);
         mDefectItemTextLocation = findViewById(R.id.defect_item_text_location);
@@ -196,6 +200,12 @@ public class DefectItemActivity extends AppCompatActivity {
                 } else if (selectedRadioId == R.id.defect_item_radio_na) {
                     defectStatusId = 4;
                 }
+            }
+
+            // If it's Multifamily and not in Observation categories, require a picture
+            if (mInspection.division_id == 20 && !mDefectItem.defect_category_name.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
+                Snackbar.make(mConstraintLayout, "For MF inspections, you need a photo for this Defect type!", Snackbar.LENGTH_SHORT).show();
+                return;
             }
 
             // Append all text fields together

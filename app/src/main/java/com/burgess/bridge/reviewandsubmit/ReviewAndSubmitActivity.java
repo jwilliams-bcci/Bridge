@@ -328,7 +328,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id)));
                         jObj.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
                     } catch (NullPointerException e) {
-                        Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + inspectionDefect.defect_item_id, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + defectItem.item_number, Snackbar.LENGTH_SHORT).show();
                         hideProgressSpinner();
                         return;
                     }
