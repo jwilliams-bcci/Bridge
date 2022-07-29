@@ -1,5 +1,6 @@
 package com.burgess.bridge.editresolution;
 
+import static android.view.View.GONE;
 import static com.burgess.bridge.Constants.PREF;
 import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
 
@@ -26,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ImageView;
@@ -69,6 +71,7 @@ public class EditResolutionActivity extends AppCompatActivity {
     private ImageView mImageView;
     private TextView mTextComment;
     private Button mButtonSubmit;
+    private ProgressBar mProgressSpinner;
 
     public static final String INSPECTION_ID = "com.example.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
@@ -107,6 +110,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         mButtonCamera = findViewById(R.id.edit_resolution_button_camera);
         mImageView = findViewById(R.id.edit_resolution_imageview);
         mButtonSubmit = findViewById(R.id.edit_resolution_button_submit);
+        mProgressSpinner = findViewById(R.id.edit_resolution_progress_spinner);
     }
 
     private void initializeButtonListeners() {
@@ -132,6 +136,8 @@ public class EditResolutionActivity extends AppCompatActivity {
                 return;
             }
             mLastClickTime = SystemClock.elapsedRealtime();
+            mButtonSubmit.setEnabled(false);
+            mProgressSpinner.setVisibility(View.VISIBLE);
 
             Resolution selectedItem = (Resolution) mSpinnerResolutions.getSelectedItem();
             OffsetDateTime inspectionTime = OffsetDateTime.now();
@@ -155,6 +161,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         mTextAddress.append(mInspection.community + "\n");
         mTextAddress.append(mInspection.address + "\n");
         mTextAddress.append(mInspection.inspection_type + "\n");
+        mProgressSpinner.setVisibility(GONE);
 
         mSpinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, (List<Resolution>) Arrays.stream(Resolution.values()).filter(e -> e.editResolutionOnly).collect(Collectors.toList())));
         mSpinnerResolutions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -165,8 +172,8 @@ public class EditResolutionActivity extends AppCompatActivity {
                     mButtonCamera.setVisibility(View.VISIBLE);
                     mImageView.setVisibility(View.VISIBLE);
                 } else {
-                    mButtonCamera.setVisibility(View.GONE);
-                    mImageView.setVisibility(View.GONE);
+                    mButtonCamera.setVisibility(GONE);
+                    mImageView.setVisibility(GONE);
                 }
             }
 
@@ -255,6 +262,8 @@ public class EditResolutionActivity extends AppCompatActivity {
             public void onFailure(String message) {
                 BridgeLogger.log('E', TAG, "ERROR: " + message);
                 Snackbar.make(mConstraintLayout, "Error! Please send activity log.", Snackbar.LENGTH_SHORT).show();
+                mButtonSubmit.setEnabled(true);
+                mProgressSpinner.setVisibility(GONE);
             }
         });
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

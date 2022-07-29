@@ -76,6 +76,7 @@ public class BridgeAPIQueue {
     private static final String GET_DIRECTIONS_URL = "GetDirections";
     private static final String GET_FAULTS_URL = "GetFaults";
     private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
+    private static final String GET_INSPECTIONS_V2_URL = "GetInspectionsV2?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s&inspectionnumber=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
@@ -507,11 +508,13 @@ public class BridgeAPIQueue {
     // Route Sheet
     public JsonArrayRequest updateRouteSheet(RouteSheetViewModel vm, String inspectorId, String inspectionDate) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_INSPECTIONS_URL, inspectorId, inspectionDate);
+        url += String.format(GET_INSPECTIONS_V2_URL, inspectorId, inspectionDate);
 
         ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
         ArrayList<JsonArrayRequest> multifamilyHistoryRequests = new ArrayList<>();
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            inspectionHistoryRequests.clear();
+            multifamilyHistoryRequests.clear();
             for (int i = 0; i < response.length(); i++) {
                 try {
                     JSONObject obj = response.getJSONObject(i);
@@ -901,7 +904,6 @@ public class BridgeAPIQueue {
     public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += POST_INSPECTION_DEFECT_URL;
-        BridgeLogger.log('I', TAG, "URL: " + url);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             BridgeLogger.log('I', TAG, "Uploaded DefectItemID " + defectItemId + " for InspectionID " + inspectionId + ".");
