@@ -33,7 +33,11 @@
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_defect_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_edit_resolution.xml" value="0.36666666666666664" />
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_inspect.xml" value="0.3591485507246377" />
+        <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_login.xml" value="0.3591485507246377" />
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_route_sheet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/activity_transfer_inspection.xml" value="0.3134057971014493" />
+        <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/item_defect_item.xml" value="0.3591485507246377" />
+        <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/item_gridview.xml" value="0.3591485507246377" />
         <entry key="..\:/Projects/Android/Bridge/app/src/main/res/layout/item_inspection_list.xml" value="0.36666666666666664" />
       </map>
     </option>

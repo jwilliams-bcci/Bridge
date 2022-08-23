@@ -81,9 +81,6 @@ public class AssignTraineeActivity extends AppCompatActivity {
                 mAssignTraineeViewModel.assignTrainee(mTraineeId, mInspectionId);
 
                 finish();
-                Intent routeSheetIntent = new Intent(AssignTraineeActivity.this, RouteSheetActivity.class);
-                routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(routeSheetIntent);
             }
         });
     }
