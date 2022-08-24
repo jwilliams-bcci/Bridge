@@ -214,7 +214,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
             if (mDivisionId == 20) {
                 if (status == 11) {
-                    status = 26;
+                    List<ReviewAndSubmit_View> rItems = mInspectionDefectList.stream().filter(ReviewAndSubmit_View::isR).collect(Collectors.toList());
+                    if (rItems.isEmpty()) {
+                        status = 26;
+                    } else {
+                        status = 25;
+                    }
                 } else if (status == 12) {
                     status = 25;
                 }

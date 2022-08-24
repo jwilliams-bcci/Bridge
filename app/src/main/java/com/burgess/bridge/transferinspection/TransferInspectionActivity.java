@@ -53,7 +53,7 @@ public class TransferInspectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer_inspection);
-        setSupportActionBar((Toolbar) findViewById(R.id.transfer_inspection_toolbar));
+        setSupportActionBar(findViewById(R.id.transfer_inspection_toolbar));
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         mTransferInspectionViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(TransferInspectionViewModel.class);
 

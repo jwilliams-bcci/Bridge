@@ -306,6 +306,11 @@ public class DefectItemActivity extends AppCompatActivity {
             mRadioGroupDefectStatus.setVisibility(View.INVISIBLE);
         }
 
+        // If the category is 128, default to C
+        if (mDefectItem.defect_category_id == 128) {
+            mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
+        }
+
         // If mInspectionDefectId > 0, then we're editing an existing item (coming from Review & Submit screen)
         // So populate the comment box and current status
         if (mInspectionDefectId > 0) {

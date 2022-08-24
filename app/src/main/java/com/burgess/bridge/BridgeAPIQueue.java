@@ -80,6 +80,7 @@ public class BridgeAPIQueue {
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s&inspectionnumber=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
+    private static final String GET_CHECK_EXISTING_INSPECTION_V2_URL = "CheckExistingInspectionV2?inspectionid=%s&inspectorid=%s";
     private static final String POST_TRANSFER_INSPECTION_URL = "TransferInspection?inspectionId=%s&inspectorId=%s";
     private static final String POST_MULTIFAMILY_DETAILS_URL = "InsertMultifamilyDetails";
     private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
@@ -794,16 +795,20 @@ public class BridgeAPIQueue {
     }
     public JsonObjectRequest checkExistingInspection(RouteSheetViewModel vm, int inspectionId, int inspectorId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url +=  String.format(GET_CHECK_EXISTING_INSPECTION_URL, inspectionId, inspectorId);
+        url +=  String.format(GET_CHECK_EXISTING_INSPECTION_V2_URL, inspectionId, inspectorId);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             int futureDated = response.optInt("FutureDated");
             int reassignedInspection = response.optInt("ReassignedInspection");
+            int notAssigned = response.optInt("NotAssigned");
             if (futureDated > 0) {
                 BridgeLogger.log('I', TAG, "Found future-dated inspection for " + inspectionId + ". Removing...");
                 vm.deleteInspection(inspectionId);
             } else if (reassignedInspection > 0) {
                 BridgeLogger.log('I', TAG, "Found reassigned inspection for " + inspectionId + ". Removing...");
+                vm.deleteInspection(inspectionId);
+            } else if (notAssigned > 0) {
+                BridgeLogger.log('I', TAG, "Found not assigned inspection for " + inspectionId + ". Removing...");
                 vm.deleteInspection(inspectionId);
             }
         }, error -> {
