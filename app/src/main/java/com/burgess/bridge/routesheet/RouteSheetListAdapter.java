@@ -1,8 +1,11 @@
 package com.burgess.bridge.routesheet;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -12,16 +15,22 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
+import com.burgess.bridge.inspectiondetails.InspectionDetailsActivity;
+import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import data.Repositories.InspectionRepository;
 import data.Views.RouteSheet_View;
 
 public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements Filterable, ItemTouchHelperAdapter {
+    public static final String TAG = "ROUTE_SHEET";
+
     private List<RouteSheet_View> currentList;
     private List<RouteSheet_View> dataSet = new ArrayList<>();
 
@@ -32,25 +41,52 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     @NonNull
     @Override
     public RouteSheetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return RouteSheetViewHolder.create(parent);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_inspection_list, parent, false);
+        return new RouteSheetViewHolder(view);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull RouteSheetViewHolder holder, int position) {
         try {
-            RouteSheet_View current = getItem(position);
-            CardView view = holder.itemView.findViewById(R.id.item_inspection_list_card_view);
-            holder.mInspectionId = current.id;
-            holder.mInspectionTypeId = current.inspection_type_id;
-            holder.isComplete = current.is_complete;
-            holder.isReinspection = current.reinspect;
-            holder.numberUploaded = current.num_uploaded;
-            holder.numberToUpload = current.num_total;
-            if (current.is_complete) {
-                view.setCardBackgroundColor(Color.YELLOW);
+            RouteSheet_View i = currentList.get(position);
+
+            // Set text fields...
+            String addressDisplay;
+            if (i.job_number.toLowerCase().startsWith("lot")) {
+                addressDisplay = i.address + " - " + i.job_number;
+            } else {
+                addressDisplay = i.address;
             }
-            holder.bind(current.community, current.address, current.inspection_type, current.notes);
+            holder.getTextInspectionAddress().setText(addressDisplay);
+            holder.getTextInspectionCommunity().setText(i.community);
+            holder.getTextInspectionType().setText(i.inspection_type);
+
+            // If the inspection is complete, set the color to yellow and show other view components
+            if (i.is_complete) {
+                holder.getCardView().setBackgroundColor(Color.YELLOW);
+                holder.getTextInspectionUploaded().setVisibility(View.VISIBLE);
+                holder.getTextInspectionUploaded().setText(String.format(Locale.US, "Uploaded %d of %d items.", i.num_uploaded, i.num_total));
+                holder.getImageViewReupload().setVisibility(View.VISIBLE);
+            }
+
+            // If there's a note, show the note icon
+            if (!i.notes.equals("null")) {
+                holder.getImageViewNoteAttached().setVisibility(View.VISIBLE);
+            }
+
+            // Set click listener on the view, depending on whether the inspection is complete or not...
+            holder.itemView.setOnClickListener(v -> {
+                if (i.is_complete) {
+                    BridgeLogger.log('I', TAG, "Trying reupload for ID: " + i.id);
+                    Intent intent = new Intent(v.getContext(), ReviewAndSubmitActivity.class);
+                    intent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, i.id);
+                    v.getContext().startActivity(intent);
+                } else {
+                    Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
+                    intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, i.id);
+                    v.getContext().startActivity(intent);
+                }
+            });
         } catch (Exception e) {
             Log.e("SEARCH", e.getMessage());
         }

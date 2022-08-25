@@ -41,6 +41,7 @@ public class Inspection_Table {
     public String incomplete_reason;
     public int incomplete_reason_id;
     public String notes;
+    public String job_number;
     @TypeConverters({DateConverter.class})
     public OffsetDateTime start_time;
     @TypeConverters({DateConverter.class})
@@ -62,8 +63,9 @@ public class Inspection_Table {
                             String address, int inspection_status_id, String inspection_status,
                             String super_phone, String super_email, int super_present,
                             String incomplete_reason, int incomplete_reason_id, String notes,
-                            OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
-                            boolean is_uploaded, int route_sheet_order, int trainee_id) {
+                            String job_number, OffsetDateTime start_time, OffsetDateTime end_time,
+                            boolean is_complete, boolean is_uploaded, int route_sheet_order,
+                            int trainee_id) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.division_id = division_id;
@@ -90,6 +92,7 @@ public class Inspection_Table {
         this.incomplete_reason = incomplete_reason;
         this.incomplete_reason_id = incomplete_reason_id;
         this.notes = notes;
+        this.job_number = job_number;
         this.start_time = start_time;
         this.end_time = end_time;
         this.is_complete = is_complete;

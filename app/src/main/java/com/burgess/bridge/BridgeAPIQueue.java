@@ -546,6 +546,7 @@ public class BridgeAPIQueue {
                     inspection.incomplete_reason = obj.getString("IncompleteReason");
                     inspection.incomplete_reason_id = obj.optInt("IncompleteReasonID");
                     inspection.notes = obj.getString("Comment");
+                    inspection.job_number = obj.getString("JobNumber");
                     inspection.start_time = null;
                     inspection.end_time = null;
                     inspection.is_complete = false;
