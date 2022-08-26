@@ -5,9 +5,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
 import androidx.room.Update;
 
-@Entity(tableName = "defect_item_table")
+@Entity(tableName = "defect_item_table", primaryKeys = {"id", "defect_category_id"})
 public class DefectItem_Table {
-    @PrimaryKey
     public int id;
     public int defect_category_id;
     public String defect_category_name;
