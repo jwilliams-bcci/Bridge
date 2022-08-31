@@ -151,8 +151,7 @@ public class InspectActivity extends AppCompatActivity {
         } else {
             // Set up defect list
             mInspectListAdapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
-            mInspectListAdapter.setInspectionId(mInspectionId);
-            mInspectListAdapter.setInspectionTypeId(mInspectionTypeId);
+            mInspectListAdapter.setInspection(mInspection);
             mInspectListAdapter.setFilter(mFilter);
             mRecyclerDefectItems.setAdapter(mInspectListAdapter);
             displayDefectItems(mFilter);
@@ -191,7 +190,7 @@ public class InspectActivity extends AppCompatActivity {
 
     private void displayDefectItems(String filter) {
         mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(filter, mInspectionTypeId, mInspectionId).observe(this, defectItems ->
-                mInspectListAdapter.submitList(defectItems));
+                mInspectListAdapter.setCurrentList(defectItems));
     }
     private void displayReinspectItems(int scrollPosition) {
         mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems ->

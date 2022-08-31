@@ -38,6 +38,7 @@
         android:ems="10"
         android:hint="@string/route_sheet_text_search_community_hint"
         android:inputType="textPersonName"
+        android:minHeight="48dp"
         android:singleLine="false"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/route_sheet_swipe_refresh"
@@ -65,28 +66,5 @@
             app:layout_constraintTop_toBottomOf="@+id/route_sheet_text_search_community"
             tools:listitem="@layout/item_inspection_list" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <Button
-        android:id="@+id/route_sheet_button_update_route_sheet"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/button_rounded_orange"
-        android:text="Update Route Sheet"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar"
-        tools:visibility="gone" />
-
-    <Switch
-        android:id="@+id/route_sheet_switch_search_reinspects"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:showText="false"
-        android:splitTrack="false"
-        android:text="Reinspects"
-        android:textSize="12sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/route_sheet_text_search_community"
-        app:layout_constraintTop_toTopOf="@+id/route_sheet_text_search_community"
-        tools:layout_editor_absoluteX="395dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

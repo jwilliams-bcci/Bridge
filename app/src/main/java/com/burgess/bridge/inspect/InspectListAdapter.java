@@ -1,6 +1,8 @@
 package com.burgess.bridge.inspect;
 
 import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,9 +13,17 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
 
+import java.util.List;
+
 import data.Tables.DefectItem_Table;
+import data.Tables.Inspection_Table;
 
 public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectViewHolder> {
+    public static final String TAG = "INSPECT_LIST";
+
+    private List<DefectItem_Table> currentList;
+    private Inspection_Table inspection;
+
     private int mInspectionId;
     private int mInspectionTypeId;
     private String mFilter;
@@ -25,40 +35,56 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
     @NonNull
     @Override
     public InspectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return InspectViewHolder.create(parent);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_defect_item, parent, false);
+        return new InspectViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull InspectViewHolder holder, int position) {
-        DefectItem_Table current = getItem(position);
-        boolean showSection = true;
+        DefectItem_Table defectItem = currentList.get(position);
+
+        // Set text fields
+        holder.getTextDefectItemSection().setText(defectItem.defect_category_name);
+        holder.getTextDefectItemNumber().setText(defectItem.item_number);
+        holder.getTextDefectItemDescription().setText(defectItem.item_description);
+
+        // Hide the section if needed
         if (position > 0) {
             DefectItem_Table previous = getItem(position-1);
-            if (previous.defect_category_name.equals(current.defect_category_name)) {
-                showSection = false;
+            if (previous.defect_category_name.equals(defectItem.defect_category_name)) {
+                holder.getTextDefectItemSection().setVisibility(View.GONE);
             } else {
-                showSection = true;
+                holder.getTextDefectItemSection().setVisibility(View.VISIBLE);
             }
         }
+
+        // Set the click listener
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), DefectItemActivity.class);
-            intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
-            intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
-            intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, holder.mInspectionHistoryId);
-            intent.putExtra(DefectItemActivity.FILTER_OPTION, holder.mFilter);
+            intent.putExtra(DefectItemActivity.INSPECTION_ID, inspection.id);
+            intent.putExtra(DefectItemActivity.DEFECT_ID, defectItem.id);
+            intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, -1);
+            intent.putExtra(DefectItemActivity.FILTER_OPTION, mFilter);
             holder.itemView.getContext().startActivity(intent);
         });
-
-        holder.mDefectItemId = current.id;
-        holder.bind(String.valueOf(current.item_number), String.valueOf(current.item_description), String.valueOf(current.defect_category_name), showSection, mInspectionId, mInspectionTypeId, -1, -1, "", mFilter);
     }
 
-    public void setInspectionId (int inspectionId) {
-        mInspectionId = inspectionId;
+    @Override
+    public int getItemCount() {
+        return currentList == null ? 0 : currentList.size();
     }
 
-    public void setInspectionTypeId (int inspectionTypeId) {
-        mInspectionTypeId = inspectionTypeId;
+    public void setCurrentList(List<DefectItem_Table> list) {
+        currentList = list;
+        submitList(list);
+    }
+
+    public List<DefectItem_Table> getCurrentList() {
+        return currentList;
+    }
+
+    public void setInspection(Inspection_Table i) {
+        inspection = i;
     }
 
     public void setFilter (String filter) {

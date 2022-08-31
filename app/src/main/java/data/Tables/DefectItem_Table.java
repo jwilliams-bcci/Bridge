@@ -1,14 +1,16 @@
 package data.Tables;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.OnConflictStrategy;
 import androidx.room.PrimaryKey;
 import androidx.room.Update;
 
-@Entity(tableName = "defect_item_table", primaryKeys = {"id", "defect_category_id"})
+@Entity(tableName = "defect_item_table", primaryKeys = {"id", "defect_category_id", "defect_category_name"})
 public class DefectItem_Table {
     public int id;
     public int defect_category_id;
+    @NonNull
     public String defect_category_name;
     public int item_number;
     public int inspection_type_id;

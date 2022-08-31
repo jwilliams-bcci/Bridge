@@ -20,52 +20,75 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/text_recycler_community"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="TextView"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_recycler_address" />
-
-            <TextView
                 android:id="@+id/text_recycler_address"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="TextView"
+                android:layout_marginEnd="8dp"
+                android:text="Address"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#000000"
+                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/text_recycler_inspection_type"
-                android:layout_width="wrap_content"
+                android:id="@+id/text_recycler_community"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                app:layout_constraintStart_toStartOf="@+id/text_recycler_community"
+                android:layout_marginEnd="8dp"
+                android:text="Community"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_recycler_address" />
+
+            <TextView
+                android:id="@+id/text_recycler_inspection_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Inspection Type"
+                android:textColor="?android:attr/textColorPrimary"
+                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_recycler_community" />
 
             <TextView
-                android:id="@+id/text_recycler_uploaded"
-                android:layout_width="wrap_content"
+                android:id="@+id/text_recycler_callback_notes"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="TextView"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="marquee"
+                android:focusableInTouchMode="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Callback Notes"
+                android:textColor="?android:attr/textColorPrimary"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_recycler_inspection_type" />
+
+            <TextView
+                android:id="@+id/text_recycler_uploaded"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="Uploaded"
                 android:textSize="12sp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_recycler_inspection_type" />
+                app:layout_constraintTop_toBottomOf="@+id/text_recycler_callback_notes"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
                 android:id="@+id/item_inspection_list_imageview_reupload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="32dp"
+                android:layout_marginEnd="8dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

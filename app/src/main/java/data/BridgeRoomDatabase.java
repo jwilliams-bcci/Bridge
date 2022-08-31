@@ -65,7 +65,7 @@ import data.Views.RouteSheet_View;
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 53, exportSchema = false)
+        }, version = 54, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     private static Context mContext;

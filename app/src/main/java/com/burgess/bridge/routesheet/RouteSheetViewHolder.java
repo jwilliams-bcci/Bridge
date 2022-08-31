@@ -25,6 +25,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextInspectionCommunity;
     private final TextView mTextInspectionAddress;
     private final TextView mTextInspectionType;
+    private final TextView mTextCallbackNotes;
     private final TextView mTextInspectionUploaded;
     private final ImageView mImageViewReupload;
     private final ImageView mImageViewNoteAttached;
@@ -35,6 +36,7 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
         mTextInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
         mTextInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
         mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
+        mTextCallbackNotes = itemView.findViewById(R.id.text_recycler_callback_notes);
         mTextInspectionUploaded = itemView.findViewById(R.id.text_recycler_uploaded);
         mImageViewReupload = itemView.findViewById(R.id.item_inspection_list_imageview_reupload);
         mImageViewNoteAttached = itemView.findViewById(R.id.item_inspection_list_imageview_note_attached);
@@ -56,6 +58,8 @@ public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public TextView getTextInspectionType() {
         return mTextInspectionType;
     }
+
+    public TextView getTextCallbackNotes() { return mTextCallbackNotes; }
 
     public TextView getTextInspectionUploaded() {
         return mTextInspectionUploaded;

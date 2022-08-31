@@ -80,16 +80,6 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         holder.bind(String.valueOf(current.defect_item_number), current.defect_item_description + "\n" + current.comment, String.valueOf(current.defect_category_name), false, mInspectionId, mInspectionTypeId, current.id, current.inspection_defect_id, current.comment, null);
     }
 
-//    @Override
-//    public int getItemCount() {
-//        return getCurrentList().size();
-//    }
-
-//    @Override
-//    public int getItemViewType(int position) {
-//        return position;
-//    }
-
     public static class ReinspectDiff extends DiffUtil.ItemCallback<InspectionHistory_Table> {
         @Override
         public boolean areItemsTheSame(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
@@ -100,11 +90,5 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         public boolean areContentsTheSame(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
             return Objects.equals(oldItem.reviewed_status, newItem.reviewed_status);
         }
-
-//        @Nullable
-//        @Override
-//        public Object getChangePayload(@NonNull InspectionHistory_Table oldItem, @NonNull InspectionHistory_Table newItem) {
-//            return super.getChangePayload(oldItem, newItem);
-//        }
     }
 }

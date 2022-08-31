@@ -72,6 +72,9 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
             // If there's a note, show the note icon
             if (!i.notes.equals("null")) {
                 holder.getImageViewNoteAttached().setVisibility(View.VISIBLE);
+                holder.getTextCallbackNotes().setVisibility(View.VISIBLE);
+                holder.getTextCallbackNotes().setText(i.notes);
+                holder.getTextCallbackNotes().setSelected(true);
             }
 
             // Set click listener on the view, depending on whether the inspection is complete or not...
