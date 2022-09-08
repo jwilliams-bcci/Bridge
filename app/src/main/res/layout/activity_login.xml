@@ -104,6 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:buttonTint="@color/colorWhite"
+        android:minHeight="48dp"
         android:text="Remember Credentials"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"

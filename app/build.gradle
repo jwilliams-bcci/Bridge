@@ -9,14 +9,14 @@ android {
             keyPassword 'burgess'
         }
     }
-    compileSdkVersion 30
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.burgess.bridge"
         minSdkVersion 26
-        targetSdkVersion 30
-        versionCode 3
-        versionName "0.99.02"
+        targetSdkVersion 32
+        versionCode 4
+        versionName "0.99.03"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
