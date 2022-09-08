@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,21 +42,29 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
     @NotNull
     @Override
     public InspectViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        return InspectViewHolder.create(parent);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_defect_item, parent, false);
+        return new InspectViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull InspectViewHolder holder, int position) {
-        InspectionHistory_Table current = getCurrentList().get(position);
+        InspectionHistory_Table inspectionHistory = getCurrentList().get(position);
         Group group = holder.itemView.findViewById(R.id.item_defect_item_group);
-        TextView textDescription = holder.itemView.findViewById(R.id.item_defect_item_text_description);
+
         TextView textNumber = holder.itemView.findViewById(R.id.item_defect_item_text_number);
-        if (!current.is_reviewed) {
+        TextView textDescription = holder.itemView.findViewById(R.id.item_defect_item_text_description);
+
+        // Set text fields
+        textNumber.setText(inspectionHistory.defect_item_number);
+        textDescription.setText(inspectionHistory.defect_item_description);
+
+        // Set the background according to whether it's reviewed or not
+        if (!inspectionHistory.is_reviewed) {
             textNumber.setTextColor(Color.WHITE);
             textDescription.setTextColor(Color.WHITE);
             group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_not_reviewed));
         } else {
-            switch (current.reviewed_status) {
+            switch (inspectionHistory.reviewed_status) {
                 case 2:
                     group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_reviewed_failed));
                     textDescription.setTextColor(Color.WHITE);
@@ -67,17 +77,22 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
                     break;
             }
         }
+
+        // Add click listener for the RecyclerView items
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), DefectItemActivity.class);
-            intent.putExtra(DefectItemActivity.INSPECTION_ID, holder.mInspectionId);
-            intent.putExtra(DefectItemActivity.DEFECT_ID, holder.mDefectItemId);
-            intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, holder.mInspectionHistoryId);
-            intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, holder.mInspectionDefectId);
+            intent.putExtra(DefectItemActivity.INSPECTION_ID, inspectionHistory.inspection_id);
+            intent.putExtra(DefectItemActivity.DEFECT_ID, inspectionHistory.defect_item_id);
+            intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, inspectionHistory.id);
+            intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, inspectionHistory.inspection_defect_id);
             holder.itemView.getContext().startActivity(intent);
         });
 
-        holder.mDefectItemId = current.defect_item_id;
-        holder.bind(String.valueOf(current.defect_item_number), current.defect_item_description + "\n" + current.comment, String.valueOf(current.defect_category_name), false, mInspectionId, mInspectionTypeId, current.id, current.inspection_defect_id, current.comment, null);
+        // Set the variables for swipe functionality in Activity
+        holder.setInspectionHistoryId(inspectionHistory.id);
+        holder.setInspectionDefectId(inspectionHistory.inspection_defect_id);
+        holder.setDefectItemId(inspectionHistory.defect_item_id);
+        holder.setComment(inspectionHistory.comment);
     }
 
     public static class ReinspectDiff extends DiffUtil.ItemCallback<InspectionHistory_Table> {

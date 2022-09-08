@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -43,18 +44,23 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
     public void onBindViewHolder(@NonNull InspectViewHolder holder, int position) {
         DefectItem_Table defectItem = currentList.get(position);
 
+        // Get text fields
+        TextView textSection = holder.getTextDefectItemSection();
+        TextView textItemNumber = holder.getTextDefectItemNumber();
+        TextView textItemDescription = holder.getTextDefectItemDescription();
+
         // Set text fields
-        holder.getTextDefectItemSection().setText(defectItem.defect_category_name);
-        holder.getTextDefectItemNumber().setText(defectItem.item_number);
-        holder.getTextDefectItemDescription().setText(defectItem.item_description);
+        textSection.setText(defectItem.defect_category_name);
+        textItemDescription.setText(defectItem.item_description);
+        textItemNumber.setText(Integer.toString(defectItem.item_number));
 
         // Hide the section if needed
         if (position > 0) {
             DefectItem_Table previous = getItem(position-1);
             if (previous.defect_category_name.equals(defectItem.defect_category_name)) {
-                holder.getTextDefectItemSection().setVisibility(View.GONE);
+                textSection.setVisibility(View.GONE);
             } else {
-                holder.getTextDefectItemSection().setVisibility(View.VISIBLE);
+                textSection.setVisibility(View.VISIBLE);
             }
         }
 
@@ -73,20 +79,17 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
     public int getItemCount() {
         return currentList == null ? 0 : currentList.size();
     }
+    public List<DefectItem_Table> getCurrentList() {
+        return currentList;
+    }
 
     public void setCurrentList(List<DefectItem_Table> list) {
         currentList = list;
         submitList(list);
     }
-
-    public List<DefectItem_Table> getCurrentList() {
-        return currentList;
-    }
-
     public void setInspection(Inspection_Table i) {
         inspection = i;
     }
-
     public void setFilter (String filter) {
         mFilter = filter;
     }

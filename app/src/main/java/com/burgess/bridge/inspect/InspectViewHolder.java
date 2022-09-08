@@ -17,6 +17,10 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
     private final TextView mTextDefectItemSection;
     private final TextView mTextDefectItemNumber;
     private final TextView mTextDefectItemDescription;
+    private int mInspectionHistoryId;
+    private int mDefectItemId;
+    private int mInspectionDefectId;
+    private String mComment;
 
     public InspectViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -36,6 +40,39 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
 
     public TextView getTextDefectItemDescription() {
         return mTextDefectItemDescription;
+    }
+
+    public int getInspectionHistoryId() {
+        return mInspectionHistoryId;
+    }
+
+    public int getDefectItemId() {
+        return mDefectItemId;
+    }
+
+    public int getInspectionDefectId() {
+        return mInspectionDefectId;
+    }
+
+    public String getComment() {
+        return mComment;
+    }
+    //endregion
+    //region SETTERS
+    public void setInspectionHistoryId(int inspectionHistoryId) {
+        mInspectionHistoryId = inspectionHistoryId;
+    }
+
+    public void setDefectItemId(int defectItemId) {
+        mDefectItemId = defectItemId;
+    }
+
+    public void setInspectionDefectId(int inspectionDefectId) {
+        mInspectionDefectId = inspectionDefectId;
+    }
+
+    public void setComment(String comment) {
+        mComment = comment;
     }
     //endregion
 }

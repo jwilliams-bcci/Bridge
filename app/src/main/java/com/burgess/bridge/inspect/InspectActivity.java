@@ -229,10 +229,10 @@ public class InspectActivity extends AppCompatActivity {
             @Override
             public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
                 InspectViewHolder holder = (InspectViewHolder) viewHolder;
-                final int selectedHistoryId = holder.mInspectionHistoryId;
-                final int selectedDefectItemId = holder.mDefectItemId;
-                final int selectedInspectionDefectId = holder.mInspectionDefectId;
-                final String selectedComment = holder.mComment;
+                final int selectedHistoryId = holder.getInspectionHistoryId();
+                final int selectedDefectItemId = holder.getDefectItemId();
+                final int selectedInspectionDefectId = holder.getInspectionDefectId();
+                final String selectedComment = holder.getComment();
                 final long newId;
 
                 switch (direction) {
