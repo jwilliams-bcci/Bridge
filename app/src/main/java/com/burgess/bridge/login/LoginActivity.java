@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeDisplayContent() {
         if (mSharedPreferences.getBoolean(REMEMBER_CREDENTIALS, false)) {
             mCheckBoxRememberCredentials.setChecked(true);
-            mTextUserName.setText(mSharedPreferences.getString(PREF_LOGIN_NAME, "NOT FOUND"));
+            mTextUserName.setText(mSharedPreferences.getString(PREF_LOGIN_NAME, ""));
             mTextPassword.setText(mSharedPreferences.getString(PREF_LOGIN_PASSWORD, ""));
         }
 
