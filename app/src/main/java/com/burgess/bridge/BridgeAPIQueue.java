@@ -945,7 +945,7 @@ public class BridgeAPIQueue {
             }
         };
 
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20), 0, 0));
         return request;
     }
     public StringRequest updateInspectionStatus(int inspectionId, int inspectionStatusId, String userId, int inspectionTotal, int superPresent, String startTime, String endTime, int training, int traineeId, final ServerCallback callback) {

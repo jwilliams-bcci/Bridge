@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import data.Repositories.InspectionRepository;
 import data.Views.RouteSheet_View;
@@ -161,14 +162,12 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     public static class InspectionDiff extends DiffUtil.ItemCallback<RouteSheet_View> {
         @Override
         public boolean areItemsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
-            System.out.println("areItemsTheSame: " + oldItem.address + " -- " + newItem.address + " " + (oldItem.id == newItem.id));
             return oldItem.id == newItem.id;
         }
 
         @SuppressLint("DiffUtilEquals")
         @Override
         public boolean areContentsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
-            System.out.println("areContentsTheSame: " + oldItem.address + " -- " + newItem.address + " " + (oldItem.num_uploaded == newItem.num_uploaded));
             return oldItem.num_uploaded == newItem.num_uploaded;
         }
     }

@@ -1,5 +1,6 @@
 package data.Tables;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -31,5 +32,13 @@ public class InspectionDefect_Table {
 
     public InspectionDefect_Table() {
 
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ID: " + id + ",InspectionId: " + inspection_id + ", DefectItemId: " + defect_item_id +
+                ", DefectStatusId: " + defect_status_id + ", Comment: " + comment + ", PriorInspectionDetailId: " +
+                prior_inspection_detail_id + ", ReinspectionRequired: " + reinspection_required;
     }
 }
