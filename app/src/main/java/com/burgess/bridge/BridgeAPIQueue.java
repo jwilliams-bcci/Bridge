@@ -129,7 +129,6 @@ public class BridgeAPIQueue {
     public JsonObjectRequest loginUser(String userName, String password, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url +=  String.format(LOGIN_URL, userName, password);
-        BridgeLogger.log('I', TAG, "Application is currently in: " + (isProd ? "PRODUCTION" : "STAGING"));
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             mEditor.putString(PREF_AUTH_TOKEN, response.optString("AuthorizationToken"));
@@ -179,7 +178,6 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateCannedComments: " + e.getMessage());
                 }
             }
-            BridgeLogger.log('I', TAG, "Canned Comments downloaded");
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -312,7 +310,6 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateBuilders: " + e.getMessage());
                 }
             }
-            Log.i(TAG, "Builders downloaded");
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -355,7 +352,6 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateBuilders: " + e.getMessage());
                 }
             }
-            Log.i(TAG, "Inspectors downloaded");
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -566,7 +562,7 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + e.getMessage());
                 }
             }
-            BridgeLogger.log('I', TAG, "Inspections downloaded");
+
             for (int lcv = 0; lcv < inspectionHistoryRequests.size(); lcv++) {
                 getRequestQueue().add(inspectionHistoryRequests.get(lcv));
             }
@@ -617,7 +613,6 @@ public class BridgeAPIQueue {
                     BridgeLogger.log('E', TAG, "ERROR in updateDefectItemsForInspector: " + e.getMessage());
                 }
             }
-            Log.i(TAG, "Defect Items downloaded");
         }, error -> {
             if (error instanceof NoConnectionError) {
                 BridgeLogger.log('E', TAG, "Lost connection in updateDefectItems.");
@@ -803,13 +798,10 @@ public class BridgeAPIQueue {
             int reassignedInspection = response.optInt("ReassignedInspection");
             int notAssigned = response.optInt("NotAssigned");
             if (futureDated > 0) {
-                BridgeLogger.log('I', TAG, "Found future-dated inspection for " + inspectionId + ". Removing...");
                 vm.deleteInspection(inspectionId);
             } else if (reassignedInspection > 0) {
-                BridgeLogger.log('I', TAG, "Found reassigned inspection for " + inspectionId + ". Removing...");
                 vm.deleteInspection(inspectionId);
             } else if (notAssigned > 0) {
-                BridgeLogger.log('I', TAG, "Found not assigned inspection for " + inspectionId + ". Removing...");
                 vm.deleteInspection(inspectionId);
             }
         }, error -> {
@@ -840,7 +832,6 @@ public class BridgeAPIQueue {
         url += String.format(POST_TRANSFER_INSPECTION_URL, inspectionId, inspectorId);
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            BridgeLogger.log('I', TAG, "Transferred inspection " + inspectionId + " to " + inspectorId);
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -871,7 +862,6 @@ public class BridgeAPIQueue {
         url += POST_MULTIFAMILY_DETAILS_URL;
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            BridgeLogger.log('I', TAG, "Uploaded Multifamily Details for InspectionID " + inspectionId + ".");
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -912,7 +902,6 @@ public class BridgeAPIQueue {
         url += POST_INSPECTION_DEFECT_URL;
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
-            BridgeLogger.log('I', TAG, "Uploaded DefectItemID " + defectItemId + " for InspectionID " + inspectionId + ".");
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -945,6 +934,7 @@ public class BridgeAPIQueue {
             }
         };
 
+        request.setTag(inspectionId);
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20), 0, 0));
         return request;
     }
@@ -978,6 +968,7 @@ public class BridgeAPIQueue {
             }
         };
 
+        request.setTag(inspectionId);
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }

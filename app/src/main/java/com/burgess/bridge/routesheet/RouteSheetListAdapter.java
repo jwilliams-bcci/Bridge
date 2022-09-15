@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
+import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.inspectiondetails.InspectionDetailsActivity;
@@ -82,6 +83,8 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
             holder.itemView.setOnClickListener(v -> {
                 if (i.is_complete) {
                     BridgeLogger.log('I', TAG, "Trying reupload for ID: " + i.id);
+                    BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(i.id);
+                    BridgeLogger.log('I', TAG, "Cancelled requests for ID: " + i.id);
                     Intent intent = new Intent(v.getContext(), ReviewAndSubmitActivity.class);
                     intent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, i.id);
                     v.getContext().startActivity(intent);

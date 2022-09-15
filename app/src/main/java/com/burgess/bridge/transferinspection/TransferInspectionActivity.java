@@ -91,19 +91,19 @@ public class TransferInspectionActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String message) {
                         BridgeLogger.getInstance().log('I', TAG, "Transferred Inspection " + mInspectionId + " to " + mNewInspectorId);
+
+                        finish();
+                        Intent routeSheetIntent = new Intent(TransferInspectionActivity.this, RouteSheetActivity.class);
+                        routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(routeSheetIntent);
                     }
 
                     @Override
                     public void onFailure(String message) {
-                        BridgeLogger.getInstance().log('E', TAG, "ERROR in TransferInspection: " + message);
+                        Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 BridgeAPIQueue.getInstance().getRequestQueue().add(transferInspectionRequest);
-
-                finish();
-                Intent routeSheetIntent = new Intent(TransferInspectionActivity.this, RouteSheetActivity.class);
-                routeSheetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(routeSheetIntent);
             }
         });
     }
