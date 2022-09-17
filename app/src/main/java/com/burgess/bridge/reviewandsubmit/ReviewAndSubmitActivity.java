@@ -268,7 +268,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String message) {
-                    BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest");
+                    BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(mInspectionId);
+                    BridgeLogger.log('E', TAG, "ERROR in completeInspection. Cancelled requests for Inspection ID: " + mInspectionId);
                 }
             });
         }
@@ -293,7 +294,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + message);
+                BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(mInspectionId);
+                BridgeLogger.log('E', TAG, "ERROR in completeInspection. Cancelled requests for Inspection ID: " + mInspectionId);
             }
         });
 
@@ -352,7 +354,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(String message) {
-                            BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest");
+                            BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(mInspectionId);
+                            BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest. Cancelled requests for Inspection ID: " + mInspectionId);
                         }
                     });
                     BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionDataRequest);
