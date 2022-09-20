@@ -51,11 +51,13 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         InspectionHistory_Table inspectionHistory = getCurrentList().get(position);
         Group group = holder.itemView.findViewById(R.id.item_defect_item_group);
 
-        TextView textNumber = holder.itemView.findViewById(R.id.item_defect_item_text_number);
-        TextView textDescription = holder.itemView.findViewById(R.id.item_defect_item_text_description);
+        TextView textSection = holder.getTextDefectItemSection();
+        TextView textNumber = holder.getTextDefectItemNumber();
+        TextView textDescription = holder.getTextDefectItemDescription();
 
         // Set text fields
-        textNumber.setText(inspectionHistory.defect_item_number);
+        textSection.setVisibility(View.GONE);
+        textNumber.setText(Integer.toString(inspectionHistory.defect_item_number));
         textDescription.setText(inspectionHistory.defect_item_description);
 
         // Set the background according to whether it's reviewed or not
