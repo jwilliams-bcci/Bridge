@@ -130,11 +130,11 @@ public class InspectActivity extends AppCompatActivity {
         });
         mButtonSortItemNumber.setOnClickListener(v -> {
             mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
-                    mInspectListAdapter.submitList(defectItems));
+                    mInspectListAdapter.setCurrentList(defectItems));
         });
         mButtonSortDescription.setOnClickListener(v -> {
             mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
-                    mInspectListAdapter.submitList(defectItems));
+                    mInspectListAdapter.setCurrentList(defectItems));
         });
     }
     private void initializeDisplayContent() {
