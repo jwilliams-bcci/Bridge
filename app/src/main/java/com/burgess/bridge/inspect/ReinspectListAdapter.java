@@ -58,7 +58,7 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         // Set text fields
         textSection.setVisibility(View.GONE);
         textNumber.setText(Integer.toString(inspectionHistory.defect_item_number));
-        textDescription.setText(inspectionHistory.defect_item_description);
+        textDescription.setText(inspectionHistory.defect_item_description + "\n" + inspectionHistory.comment);
 
         // Set the background according to whether it's reviewed or not
         if (!inspectionHistory.is_reviewed) {
