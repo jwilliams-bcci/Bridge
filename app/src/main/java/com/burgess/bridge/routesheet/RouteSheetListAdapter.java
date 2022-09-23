@@ -38,6 +38,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
+        setHasStableIds(true);
     }
 
     @NonNull
@@ -102,6 +103,16 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     @Override
     public int getItemCount() {
         return currentList == null ? 0 : currentList.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
