@@ -263,7 +263,6 @@ public class InspectActivity extends AppCompatActivity {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
                             if (inspectionDefectToUpdate.defect_status_id == 3) {
                                 Snackbar.make(mConstraintLayout, "Defect is already marked C!", Snackbar.LENGTH_SHORT).show();
-                                mRecyclerDefectItems.notifyAll();
                             } else {
                                 inspectionDefectToUpdate.defect_status_id = 3;
                                 mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
