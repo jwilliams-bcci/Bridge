@@ -286,15 +286,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadMultifamilyDetailsRequest);
                 }
                 mReviewAndSubmitViewModel.uploadInspection(mInspectionId);
-                mReviewAndSubmitViewModel.deleteInspectionDefects(mInspectionId);
-                mReviewAndSubmitViewModel.deleteInspectionHistories(mInspectionId);
-                mReviewAndSubmitViewModel.deleteInspection(mInspectionId);
-                BridgeLogger.log('I', TAG, "Deleted defects and inspection " + mInspectionId);
             }
 
             @Override
             public void onFailure(String message) {
                 BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(mInspectionId);
+                mReviewAndSubmitViewModel.markInspectionFailed(mInspectionId);
                 BridgeLogger.log('E', TAG, "ERROR in completeInspection. Cancelled requests for Inspection ID: " + mInspectionId);
             }
         });
@@ -355,6 +352,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(String message) {
                             BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(mInspectionId);
+                            mReviewAndSubmitViewModel.markInspectionFailed(mInspectionId);
                             BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest. Cancelled requests for Inspection ID: " + mInspectionId);
                         }
                     });

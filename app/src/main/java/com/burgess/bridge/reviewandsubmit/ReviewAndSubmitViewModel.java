@@ -81,6 +81,10 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         mInspectionRepository.uploadInspection(inspectionId);
     }
 
+    public void markInspectionFailed(int inspectionId) {
+        mInspectionRepository.markInspectionFailed(inspectionId);
+    }
+
     public void markDefectUploaded(int inspectionDefectId) {
         mInspectionDefectRepository.markDefectUploaded(inspectionDefectId);
     }
@@ -103,17 +107,5 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public DefectItem_Table getDefectItem(int defectItemId) {
         return mDefectItemRepository.getDefectItemSync(defectItemId);
-    }
-
-    public void deleteInspectionDefects(int inspection_id) {
-        mInspectionDefectRepository.delete(inspection_id);
-    }
-
-    public void deleteInspection(int id) {
-        mInspectionRepository.delete(id);
-    }
-
-    public void deleteInspectionHistories(int inspection_id) {
-        mInspectionHistoryRepository.deleteForInspection(inspection_id);
     }
 }

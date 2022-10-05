@@ -39,7 +39,7 @@ public interface Inspection_DAO {
                 String super_phone, String super_email, int super_present, String incomplete_reason, int incomplete_reason_id, String notes);
 
     @Query("SELECT * FROM routesheet_view " +
-            "WHERE (inspector_id = :inspector_id AND inspection_status_id = 2 AND date(inspection_date) = date('now','localtime') AND is_uploaded = 0) " +
+            "WHERE (inspector_id = :inspector_id AND date(inspection_date) = date('now','localtime')) " +
             "ORDER BY is_complete DESC, route_sheet_order")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 
@@ -55,10 +55,13 @@ public interface Inspection_DAO {
     @Query("SELECT reinspect FROM inspection_table WHERE id = :inspection_id")
     boolean getReinspect(int inspection_id);
 
-    @Query("UPDATE inspection_table SET is_complete = 1, end_time = :end_time WHERE id = :inspection_id")
+    @Query("UPDATE inspection_table SET is_complete = 1, is_failed = 0, end_time = :end_time WHERE id = :inspection_id")
     void completeInspection(OffsetDateTime end_time, int inspection_id);
 
-    @Query("UPDATE inspection_table SET is_uploaded = 1, route_sheet_order = -1 WHERE id = :inspection_id")
+    @Query("UPDATE inspection_table SET is_failed = 1 WHERE id = :inspection_id")
+    void markInspectionFailed(int inspection_id);
+
+    @Query("UPDATE inspection_table SET is_uploaded = 1 WHERE id = :inspection_id")
     void uploadInspection(int inspection_id);
 
     @Query("UPDATE inspection_table SET route_sheet_order = :new_order WHERE id = :inspection_id")

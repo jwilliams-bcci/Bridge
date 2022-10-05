@@ -51,6 +51,7 @@ import static com.burgess.bridge.Constants.PREF_LOGIN_NAME;
 import static com.burgess.bridge.Constants.PREF_LOGIN_PASSWORD;
 import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
 
+import data.Tables.Inspection_Table;
 import data.Views.RouteSheet_View;
 
 public class RouteSheetActivity extends AppCompatActivity {
@@ -201,14 +202,21 @@ public class RouteSheetActivity extends AppCompatActivity {
 
     private void updateRouteSheet() {
         if (mIsOnline) {
-            Snackbar.make(mConstraintLayout, "Route sheet updating...", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mConstraintLayout, "Route sheet updating...", Snackbar.LENGTH_SHORT).show();
             apiQueue.getRequestQueue().add(mUpdateRouteSheetRequest);
             apiQueue.getRequestQueue().add(mUpdateDefectItemsRequest);
             apiQueue.getRequestQueue().add(mUpdateDIITRequest);
             List<Integer> allInspectionIds = mRouteSheetViewModel.getAllInspectionIds(Integer.parseInt(mInspectorId));
             ArrayList<JsonObjectRequest> checkDateRequests = new ArrayList<>();
             for (int lcv = 0; lcv < allInspectionIds.size(); lcv++) {
-                checkDateRequests.add(apiQueue.checkExistingInspection(mRouteSheetViewModel, allInspectionIds.get(lcv), Integer.parseInt(mInspectorId)));
+                Inspection_Table inspection = mRouteSheetViewModel.getInspection(allInspectionIds.get(lcv));
+                if (inspection.is_uploaded) {
+                    mRouteSheetViewModel.deleteInspectionDefects(inspection.id);
+                    mRouteSheetViewModel.deleteInspectionHistories(inspection.id);
+                    mRouteSheetViewModel.deleteInspection(inspection.id);
+                } else {
+                    checkDateRequests.add(apiQueue.checkExistingInspection(mRouteSheetViewModel, allInspectionIds.get(lcv), Integer.parseInt(mInspectorId)));
+                }
             }
             for (int lcv = 0; lcv < checkDateRequests.size(); lcv++) {
                 apiQueue.getRequestQueue().add(checkDateRequests.get(lcv));

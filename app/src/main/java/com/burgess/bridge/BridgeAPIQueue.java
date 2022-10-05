@@ -202,96 +202,6 @@ public class BridgeAPIQueue {
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
-    public JsonArrayRequest updateDefectItems(LoginViewModel vm, final ServerCallback callback) {
-        String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += GET_DEFECT_ITEMS_URL;
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
-            for (int i = 0; i < response.length(); i++) {
-                try {
-                    JSONObject obj = response.getJSONObject(i);
-                    DefectItem_Table defectItem = new DefectItem_Table();
-                    defectItem.id = obj.optInt("DefectItemID");
-                    defectItem.defect_category_id = obj.optInt("DefectCategoryID");
-                    defectItem.defect_category_name = obj.optString("CategoryName");
-                    defectItem.item_number = obj.optInt("ItemNumber");
-                    defectItem.inspection_type_id = obj.optInt("InspectionTypeID");
-                    defectItem.item_description = obj.optString("ItemDescription");
-                    defectItem.spanish_item_description = obj.optString("SpanishItemDescription");
-                    defectItem.reinspection_required = obj.optBoolean("ReInspectionRequired");
-
-                    vm.insertDefectItem(defectItem);
-                } catch (JSONException e) {
-                    Log.e(TAG, "ERROR - updateDefectItems: " + e.getMessage());
-                    BridgeLogger.log('E', TAG, "ERROR in updateDefectItems: " + e.getMessage());
-                }
-            }
-            Log.i(TAG, "Defect Items downloaded");
-            callback.onSuccess("Success");
-        }, error -> {
-            if (error instanceof NoConnectionError) {
-                BridgeLogger.log('E', TAG, "Lost connection in updateDefectItems.");
-                callback.onFailure("Lost connection while getting defect items!");
-            } else if (error instanceof TimeoutError) {
-                BridgeLogger.log('E', TAG, "Request timed out in updateDefectItems.");
-                callback.onFailure("Request timed out while getting defect items!");
-            } else {
-                String errorMessage = new String(error.networkResponse.data);
-                BridgeLogger.log('E', TAG, "ERROR in updateDefectItems: " + errorMessage);
-                callback.onFailure("Error getting defect items!");
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
-                return params;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        return request;
-    }
-    public JsonArrayRequest updateDefectItem_InspectionTypeXRef(LoginViewModel vm, final ServerCallback callback) {
-        String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_URL;
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
-            for (int i = 0; i < response.length(); i++) {
-                try {
-                    JSONObject obj = response.getJSONObject(i);
-                    DefectItem_InspectionType_XRef relation = new DefectItem_InspectionType_XRef();
-                    relation.defect_item_id = obj.optInt("DefectItemID");
-                    relation.inspection_type_id = obj.optInt("InspectionTypeID");
-
-                    vm.insertReference(relation);
-                } catch (JSONException e) {
-                    BridgeLogger.log('E', TAG, "ERROR in updateDIIT: " + e.getMessage());
-                }
-            }
-            callback.onSuccess("Success");
-        }, error -> {
-            if (error instanceof NoConnectionError) {
-                BridgeLogger.log('E', TAG, "Lost connection in updateDIIT.");
-                callback.onFailure("Lost connection while getting DIITs!");
-            } else if (error instanceof TimeoutError) {
-                BridgeLogger.log('E', TAG, "Request timed out in updateDIIT.");
-                callback.onFailure("Request timed out while getting DIITs!");
-            } else {
-                String errorMessage = new String(error.networkResponse.data);
-                BridgeLogger.log('E', TAG, "ERROR in updateDIIT: " + errorMessage);
-                callback.onFailure("Error getting DIITs!");
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
-                return params;
-            }
-        };
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        return request;
-    }
     public JsonArrayRequest updateBuilders(LoginViewModel vm, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         url += GET_BUILDERS_URL;
@@ -547,6 +457,7 @@ public class BridgeAPIQueue {
                     inspection.end_time = null;
                     inspection.is_complete = false;
                     inspection.is_uploaded = false;
+                    inspection.is_failed = false;
                     inspection.route_sheet_order = obj.optInt("Order");
                     inspection.trainee_id = -1;
 
@@ -799,10 +710,13 @@ public class BridgeAPIQueue {
             int notAssigned = response.optInt("NotAssigned");
             if (futureDated > 0) {
                 vm.deleteInspection(inspectionId);
+                BridgeLogger.log('I', TAG, "Found future dated for " + inspectionId + " - deleted...");
             } else if (reassignedInspection > 0) {
                 vm.deleteInspection(inspectionId);
+                BridgeLogger.log('I', TAG, "Found reassigned for " + inspectionId + " - deleted...");
             } else if (notAssigned > 0) {
                 vm.deleteInspection(inspectionId);
+                BridgeLogger.log('I', TAG, "Found not assigned for " + inspectionId + " - deleted...");
             }
         }, error -> {
             if (error instanceof NoConnectionError) {

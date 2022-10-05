@@ -56,10 +56,6 @@ public class RouteSheetViewModel extends AndroidViewModel {
         return mInspectionDefectRepository.multifamilyDefectExists(priorInspectionDefectId, inspectionId);
     }
 
-    public void deleteInspection(int inspectionId) {
-        mInspectionRepository.delete(inspectionId);
-    }
-
     public void insertInspectionHistory(InspectionHistory_Table inspectionHistory) {
         mInspectionHistoryRepository.insert(inspectionHistory);
     }
@@ -74,5 +70,21 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public void insertReference(DefectItem_InspectionType_XRef relation) {
         mDIITRepository.insert(relation);
+    }
+
+    public Inspection_Table getInspection(int inspection_id) {
+        return mInspectionRepository.getInspectionSync(inspection_id);
+    }
+
+    public void deleteInspectionDefects(int inspection_id) {
+        mInspectionDefectRepository.delete(inspection_id);
+    }
+
+    public void deleteInspection(int id) {
+        mInspectionRepository.delete(id);
+    }
+
+    public void deleteInspectionHistories(int inspection_id) {
+        mInspectionHistoryRepository.deleteForInspection(inspection_id);
     }
 }

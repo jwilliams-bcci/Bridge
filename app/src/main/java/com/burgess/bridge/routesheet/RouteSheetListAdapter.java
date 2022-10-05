@@ -38,7 +38,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
-        setHasStableIds(true);
+        //setHasStableIds(true);
     }
 
     @NonNull
@@ -70,6 +70,18 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
                 holder.getTextInspectionUploaded().setVisibility(View.VISIBLE);
                 holder.getTextInspectionUploaded().setText(String.format(Locale.US, "Uploaded %d of %d items.", i.num_uploaded, i.num_total));
                 holder.getImageViewReupload().setVisibility(View.VISIBLE);
+            }
+
+            // If the inspection upload failed, set the color to red and show reupload icon
+            if (i.is_failed) {
+                holder.getCardView().setBackgroundColor(Color.RED);
+                holder.getImageViewReupload().setVisibility(View.VISIBLE);
+            }
+
+            // If the inspection is complete, set the color to green
+            if (i.is_uploaded) {
+                holder.getCardView().setBackgroundColor(Color.GREEN);
+                holder.getImageViewReupload().setVisibility(View.GONE);
             }
 
             // If there's a note, show the note icon
@@ -182,7 +194,10 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         @SuppressLint("DiffUtilEquals")
         @Override
         public boolean areContentsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
-            return oldItem.num_uploaded == newItem.num_uploaded;
+            return oldItem.num_uploaded == newItem.num_uploaded
+                    && oldItem.is_complete == newItem.is_complete
+                    && oldItem.is_failed == newItem.is_failed
+                    && oldItem.is_uploaded == newItem.is_uploaded;
         }
     }
 }

@@ -64,6 +64,10 @@ public class InspectionRepository {
         mInspectionDao.completeInspection(end_time, inspection_id);
     }
 
+    public void markInspectionFailed(int inspectionId) {
+        mInspectionDao.markInspectionFailed(inspectionId);
+    }
+
     public void uploadInspection(int inspection_id) {
         mInspectionDao.uploadInspection(inspection_id);
     }
