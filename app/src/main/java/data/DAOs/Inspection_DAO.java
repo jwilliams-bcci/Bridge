@@ -39,7 +39,7 @@ public interface Inspection_DAO {
                 String super_phone, String super_email, int super_present, String incomplete_reason, int incomplete_reason_id, String notes);
 
     @Query("SELECT * FROM routesheet_view " +
-            "WHERE (inspector_id = :inspector_id AND date(inspection_date) = date('now','localtime')) " +
+            "WHERE inspector_id = :inspector_id " +
             "ORDER BY is_complete DESC, route_sheet_order")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 

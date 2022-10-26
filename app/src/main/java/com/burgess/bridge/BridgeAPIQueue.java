@@ -18,6 +18,7 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.burgess.bridge.login.LoginViewModel;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 
@@ -848,7 +849,7 @@ public class BridgeAPIQueue {
             }
         };
 
-        request.setTag(inspectionId);
+        request.setTag(Constants.CANCEL_TAG);
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20), 0, 0));
         return request;
     }
@@ -882,7 +883,7 @@ public class BridgeAPIQueue {
             }
         };
 
-        request.setTag(inspectionId);
+        request.setTag(Constants.CANCEL_TAG);
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }

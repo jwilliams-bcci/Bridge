@@ -351,7 +351,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onFailure(String message) {
-                            BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(mInspectionId);
+                            BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(Constants.CANCEL_TAG);
                             mReviewAndSubmitViewModel.markInspectionFailed(mInspectionId);
                             BridgeLogger.log('E', TAG, "ERROR in uploadInspectionDataRequest. Cancelled requests for Inspection ID: " + mInspectionId);
                         }
