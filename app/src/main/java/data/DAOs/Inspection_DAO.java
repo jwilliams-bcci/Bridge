@@ -16,7 +16,7 @@ import data.Views.RouteSheet_View;
 
 @Dao
 public interface Inspection_DAO {
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Inspection_Table inspection);
 
     @Query("DELETE FROM inspection_table")
@@ -38,7 +38,7 @@ public interface Inspection_DAO {
                 String inspection_type, boolean reinspect, int inspection_order, String address, int inspection_status_id, String inspection_status,
                 String super_phone, String super_email, int super_present, String incomplete_reason, int incomplete_reason_id, String notes);
 
-    @Query("SELECT * FROM routesheet_view " +
+    @Query("SELECT * FROM RouteSheet_View " +
             "WHERE inspector_id = :inspector_id " +
             "ORDER BY is_complete DESC, route_sheet_order")
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
