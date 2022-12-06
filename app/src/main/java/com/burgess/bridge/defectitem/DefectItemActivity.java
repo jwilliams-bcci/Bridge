@@ -3,9 +3,11 @@ package com.burgess.bridge.defectitem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -120,7 +122,7 @@ public class DefectItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect_item);
         setSupportActionBar(findViewById(R.id.defect_item_toolbar));
-        mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
+        mDefectItemViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         checkPermission();
 
         Intent intent = getIntent();
@@ -339,6 +341,12 @@ public class DefectItemActivity extends AppCompatActivity {
 
         // If mInspectionHistoryId > 0, then this is a reinspect and we need to show the previous comment label / text
         if (mInspectionHistoryId > 0) {
+            // Change constraints
+            ConstraintSet constraintSet = new ConstraintSet();
+            constraintSet.clone(mConstraintLayout);
+            constraintSet.connect(R.id.defect_item_button_microphone, ConstraintSet.TOP, R.id.defect_item_text_previous_comment, ConstraintSet.BOTTOM);
+            constraintSet.applyTo(mConstraintLayout);
+
             mDefectItemLabelPreviousComment.setVisibility(View.VISIBLE);
             mDefectItemTextPreviousComment.setVisibility(View.VISIBLE);
             mDefectItemTextPreviousComment.setText(mDefectItemViewModel.getInspectionHistoryComment(mInspectionHistoryId));
