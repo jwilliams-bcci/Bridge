@@ -27,9 +27,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
+import data.Tables.DefectItem_Table;
 import data.Tables.InspectionHistory_Table;
+import data.Tables.Inspection_Table;
 
 public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, InspectViewHolder> {
+    public static final String TAG = "REINSPECT_LIST";
+
+    private List<InspectionHistory_Table> currentList;
+    private Inspection_Table inspection;
+
     public int mInspectionId;
     public int mInspectionHistoryId;
     public int mInspectionTypeId;
@@ -95,6 +102,18 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         holder.setInspectionDefectId(inspectionHistory.inspection_defect_id);
         holder.setDefectItemId(inspectionHistory.defect_item_id);
         holder.setComment(inspectionHistory.comment);
+    }
+
+    @Override
+    public int getItemCount() {
+        return currentList == null ? 0 : currentList.size();
+    }
+    public List<InspectionHistory_Table> getCurrentList() {
+        return currentList;
+    }
+    public void setCurrentList(List<InspectionHistory_Table> list) {
+        currentList = list;
+        notifyDataSetChanged();
     }
 
     public static class ReinspectDiff extends DiffUtil.ItemCallback<InspectionHistory_Table> {

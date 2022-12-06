@@ -3,8 +3,10 @@ package com.burgess.bridge.inspect;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,7 +67,7 @@ public class InspectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_inspect);
         setSupportActionBar(findViewById(R.id.inspect_toolbar));
-        mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
+        mInspectViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
@@ -193,10 +196,11 @@ public class InspectActivity extends AppCompatActivity {
                 mInspectListAdapter.setCurrentList(defectItems));
     }
     private void displayReinspectItems(int scrollPosition) {
-        mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems ->
-                mReinspectListAdapter.submitList(defectItems, () -> {
-                    mRecyclerDefectItems.scrollToPosition(scrollPosition);
-                }));
+        mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems -> {
+            Parcelable recyclerViewState = mRecyclerDefectItems.getLayoutManager().onSaveInstanceState();
+            mReinspectListAdapter.setCurrentList(defectItems);
+            mRecyclerDefectItems.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        });
     }
 
     private void initializeReinspectDisplayContent() {
@@ -216,8 +220,16 @@ public class InspectActivity extends AppCompatActivity {
         mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.ReinspectDiff());
         mReinspectListAdapter.mInspectionId = mInspectionId;
         mReinspectListAdapter.mInspectionTypeId = mInspectionTypeId;
+        mReinspectListAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                super.onItemRangeMoved(fromPosition, toPosition, itemCount);
+                if (fromPosition == 0 || toPosition == 0) {
+                    mRecyclerDefectItems.scrollToPosition(0);
+                }
+            }
+        });
         mRecyclerDefectItems.setAdapter(mReinspectListAdapter);
-        displayReinspectItems(0);
 
         // Add swipe functionality to defect item list
         ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
