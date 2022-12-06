@@ -42,7 +42,7 @@ public class ResolutionHelper {
             if (mDivisionId == 5 || mDivisionId == 17) {
                 resolutionList.add(new Resolution(21, "Batch"));
             }
-        } else if (mBuilderId == 2473 && (mInspectionTypeId == 13 || mInspectionTypeId == 23)) {
+        } else if ((mBuilderId == 2473 || mBuilderId == 2527 || mBuilderId == 1918) && (mInspectionTypeId == 13 || mInspectionTypeId == 23)) {
             resolutionList.add(new Resolution(32, "Correct & Proceed"));
         }
         resolutionList.add(new Resolution(27, "Performed"));
