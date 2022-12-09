@@ -203,6 +203,13 @@ public class RouteSheetActivity extends AppCompatActivity {
 
     private void updateRouteSheet() {
         if (mIsOnline) {
+            List<RouteSheet_View> routeSheetList = mRouteSheetListAdapter.getCurrentList();
+            if (routeSheetList != null) {
+                for (int lcv = 0; lcv < routeSheetList.size(); lcv++) {
+                    mRouteSheetViewModel.updateRouteSheetIndex(routeSheetList.get(lcv).id, lcv);
+                }
+            }
+
             Snackbar.make(mConstraintLayout, "Route sheet updating...", Snackbar.LENGTH_SHORT).show();
             apiQueue.getRequestQueue().add(mUpdateRouteSheetRequest);
             apiQueue.getRequestQueue().add(mUpdateDefectItemsRequest);

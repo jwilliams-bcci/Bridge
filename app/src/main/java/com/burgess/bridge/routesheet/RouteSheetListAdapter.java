@@ -38,7 +38,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
-        //setHasStableIds(true);
     }
 
     @NonNull
@@ -118,11 +117,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
-    @Override
     public long getItemId(int position) {
         return position;
     }
@@ -163,7 +157,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         dataSet.clear();
         dataSet.addAll(currentList);
         submitList(currentList);
-        Log.i("SEARCH", "Size of dataSet: " + dataSet.size());
+        Log.i("SEARCH_DEBUG", "Size of dataSet: " + dataSet.size());
     }
 
     public List<RouteSheet_View> getCurrentList() {
@@ -172,15 +166,8 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        if (fromPosition < toPosition) {
-            for (int lcv = fromPosition; lcv < toPosition; lcv++) {
-                Collections.swap(currentList, lcv, lcv+1);
-            }
-        } else {
-            for (int lcv = fromPosition; lcv > toPosition; lcv--) {
-                Collections.swap(currentList, lcv, lcv-1);
-            }
-        }
+        Collections.swap(currentList, fromPosition, toPosition);
+        Log.i("DRAG_DEBUG", "Item moved from " + fromPosition + " to " + toPosition);
         notifyItemMoved(fromPosition, toPosition);
         return true;
     }
