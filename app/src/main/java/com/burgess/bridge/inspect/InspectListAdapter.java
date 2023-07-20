@@ -71,6 +71,7 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
             intent.putExtra(DefectItemActivity.DEFECT_ID, defectItem.id);
             intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, -1);
             intent.putExtra(DefectItemActivity.FILTER_OPTION, mFilter);
+            intent.putExtra(DefectItemActivity.SCROLL_POSITION, position);
             holder.itemView.getContext().startActivity(intent);
         });
     }

@@ -1,12 +1,15 @@
 package com.burgess.bridge.transferinspection;
 
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_DIVISION_ID;
+import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +37,8 @@ public class TransferInspectionActivity extends AppCompatActivity {
     private TransferInspectionViewModel mTransferInspectionViewModel;
     private SharedPreferences mSharedPreferences;
     private ConstraintLayout mConstraintLayout;
+    private TextView mTextToolbarIndividualRemaining;
+    private TextView mTextToolbarTeamRemaining;
     private TextView mTextAddress;
     private AutoCompleteTextView mTextNewInspector;
     private TextView mTextTransferNote;
@@ -55,7 +60,7 @@ public class TransferInspectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transfer_inspection);
         setSupportActionBar(findViewById(R.id.transfer_inspection_toolbar));
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        mTransferInspectionViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(TransferInspectionViewModel.class);
+        mTransferInspectionViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(TransferInspectionViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
@@ -71,6 +76,8 @@ public class TransferInspectionActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.transfer_inspection_constraint_layout);
+        mTextToolbarIndividualRemaining = findViewById(R.id.toolbar_individual_inspections_remaining);
+        mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mTextAddress = findViewById(R.id.transfer_inspection_text_inspection_address);
         mTextNewInspector = findViewById(R.id.transfer_inspection_text_new_inspector);
         mTextTransferNote = findViewById(R.id.transfer_inspection_text_note);
@@ -108,6 +115,9 @@ public class TransferInspectionActivity extends AppCompatActivity {
         });
     }
     private void initializeDisplayContent() {
+        mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
+        mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
+
         mTextAddress.setText("");
         mTextAddress.append(mInspection.community + "\n");
         mTextAddress.append(mInspection.address + "\n");

@@ -1,11 +1,14 @@
 package com.burgess.bridge.assigntrainee;
 
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_DIVISION_ID;
+import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +32,8 @@ public class AssignTraineeActivity extends AppCompatActivity {
     private AssignTraineeViewModel mAssignTraineeViewModel;
     private SharedPreferences mSharedPreferences;
     private ConstraintLayout mConstraintLayout;
+    private TextView mTextToolbarIndividualRemaining;
+    private TextView mTextToolbarTeamRemaining;
     private TextView mTextAddress;
     private AutoCompleteTextView mTextInspector;
     private Button mButtonAssign;
@@ -47,7 +52,7 @@ public class AssignTraineeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_assign_trainee);
         setSupportActionBar(findViewById(R.id.assign_trainee_toolbar));
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        mAssignTraineeViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(AssignTraineeViewModel.class);
+        mAssignTraineeViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(AssignTraineeViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
@@ -63,6 +68,8 @@ public class AssignTraineeActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.assign_trainee_constraint_layout);
+        mTextToolbarIndividualRemaining = findViewById(R.id.toolbar_individual_inspections_remaining);
+        mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mTextAddress = findViewById(R.id.assign_trainee_text_inspection_address);
         mTextInspector = findViewById(R.id.assign_trainee_text_inspector);
         mButtonAssign = findViewById(R.id.assign_trainee_button_assign);
@@ -85,6 +92,9 @@ public class AssignTraineeActivity extends AppCompatActivity {
         });
     }
     private void initializeDisplayContent() {
+        mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
+        mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
+
         mTextAddress.setText("");
         mTextAddress.append(mInspection.community + "\n");
         mTextAddress.append(mInspection.address + "\n");

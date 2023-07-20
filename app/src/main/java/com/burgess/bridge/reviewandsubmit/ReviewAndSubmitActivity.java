@@ -1,8 +1,14 @@
 package com.burgess.bridge.reviewandsubmit;
 
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
+import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,16 +18,21 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -44,6 +55,14 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Base64;
@@ -54,6 +73,7 @@ import java.util.stream.Collectors;
 import data.Enums.Resolution;
 import data.Enums.ResolutionEnergy;
 import data.Enums.ResolutionEnergyWithCP;
+import data.Tables.Attachment_Table;
 import data.Tables.Builder_Table;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
@@ -76,7 +96,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private RecyclerView mRecyclerInspectionDefects;
     private TextView mTextAddress;
     private ConstraintLayout mConstraintLayout;
+    private TextView mTextToolbarIndividualRemaining;
+    private TextView mTextToolbarTeamRemaining;
     private StringRequest mUploadMultifamilyDetailsRequest;
+    private StringRequest mUploadInspectionAttachmentRequest;
     private StringRequest mUploadInspectionDataRequest;
     private StringRequest mUpdateInspectionStatusRequest;
     private SharedPreferences mSharedPreferences;
@@ -91,13 +114,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private boolean mIsOnline;
     private long mLastClickTime = 0;
     private ChangeResolutionFragment mChangeResolutionFragment;
+    private ActivityResultLauncher<Intent> chooseFileLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_and_submit);
         setSupportActionBar(findViewById(R.id.review_and_submit_toolbar));
-        mReviewAndSubmitViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
+        mReviewAndSubmitViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
 
         // Prepare shared preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -111,12 +135,15 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mIsOnline = mSharedPreferences.getBoolean(PREF_IS_ONLINE, false);
 
         initializeViews();
+        initializeActivityResults();
         initializeButtonListeners();
         initializeDisplayContent();
     }
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.review_and_submit_constraint_layout);
+        mTextToolbarIndividualRemaining = findViewById(R.id.toolbar_individual_inspections_remaining);
+        mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mLockScreen = findViewById(R.id.review_and_submit_lock_screen);
         mProgressBar = findViewById(R.id.review_and_submit_progress_bar);
         mTextAddress = findViewById(R.id.review_and_submit_text_address);
@@ -126,7 +153,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     }
     private void initializeButtonListeners() {
         mButtonAttachFile.setOnClickListener(v -> {
-            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
+            Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            fileIntent.setType("*/*");
+            chooseFileLauncher.launch(fileIntent);
         });
         mButtonSubmit.setOnClickListener(v -> {
             try {
@@ -144,8 +173,30 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             }
         });
     }
+    private void initializeActivityResults() {
+        chooseFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    Attachment_Table attachment = new Attachment_Table();
+                    attachment.inspection_id = mInspectionId;
+                    attachment.location_id = mInspection.location_id;
+                    attachment.file_name = null;
+                    attachment.file_data = null;
+                    attachment.file_path = data.getData().toString();
+                    attachment.is_uploaded = false;
+
+                    mReviewAndSubmitViewModel.insertAttachment(attachment);
+                }
+            }
+        });
+    }
     private void initializeDisplayContent() {
         try{
+            mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
+            mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
+
             // Display address
             mTextAddress.setText("");
             mTextAddress.append(mInspection.community + "\n");
@@ -156,8 +207,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             ReviewAndSubmitListAdapter reviewAndSubmitListAdapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
             mRecyclerInspectionDefects.setAdapter(reviewAndSubmitListAdapter);
             mRecyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
-            mInspectionDefectList = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
-            reviewAndSubmitListAdapter.submitList(mInspectionDefectList);
+            mReviewAndSubmitViewModel.getInspectionDefectsForReview(mInspectionId).observe(this, defectItems -> {
+                reviewAndSubmitListAdapter.submitList(defectItems);
+            });
 
             // If this is not a reinspection, set up the swipe functionality to remove an item
             if (!mInspection.reinspect || (mInspection.division_id == 20 && mInspection.inspection_type_id != 1154)) {
@@ -176,8 +228,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                             reviewAndSubmitListAdapter.notifyDataSetChanged();
                         } else {
                             mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
-                            mInspectionDefectList.remove(viewHolder.getAdapterPosition());
-                            reviewAndSubmitListAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
                         }
                     }
                 };
@@ -195,6 +245,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             int builderId = mInspection.builder_id;
             Builder_Table builder = mReviewAndSubmitViewModel.getBuilder(builderId);
             boolean builderConditionalReinspect = builder.reinspection_required;
+            mInspectionDefectList = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
 
             if (mInspectionDefectList.isEmpty()) {
                 status = 11;
@@ -215,12 +266,20 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             if (mDivisionId == 20) {
                 if (status == 11) {
                     status = 26;
-                } else if (status == 12) {
+                } else {
                     status = 25;
                 }
             }
 
             if (mInspection.inspection_type_id == 785 || mInspection.inspection_type_id == 1160) {
+                status = 27;
+            }
+
+            if (mInspection.inspection_type_id == 1828 && mInspection.builder_id == 2597) {
+                status = 32;
+            }
+
+            if (mInspection.inspection_type_id == 1329 && (status == 11 || status == 26)) {
                 status = 27;
             }
 
@@ -244,6 +303,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private void completeInspection() throws Exception {
         showProgressSpinner();
         List<InspectionDefect_Table> inspectionDefects = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
+        List<Attachment_Table> inspectionAttachments = mReviewAndSubmitViewModel.getAttachmentsToUpload(mInspectionId);
         OffsetDateTime endTime = OffsetDateTime.now();
         if (mInspection.end_time == null) {
             mReviewAndSubmitViewModel.completeInspection(endTime, mInspectionId);
@@ -296,6 +356,36 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             }
         });
 
+        if (inspectionAttachments.isEmpty()) {
+            BridgeLogger.log('I', TAG, "No inspection-level attachments to upload");
+        } else {
+            Attachment_Table attachment;
+            for (int lcv = 0; lcv < inspectionAttachments.size(); lcv++) {
+                attachment = inspectionAttachments.get(lcv);
+                Attachment_Table finalAttachment = attachment;
+                JSONObject jsonAttachment = new JSONObject();
+                jsonAttachment.put("InspectionId", attachment.inspection_id);
+                jsonAttachment.put("UserId", 2806);
+                jsonAttachment.put("ImageData", attachment.file_data);
+                jsonAttachment.put("ImageFileName", attachment.file_name);
+                mUploadInspectionAttachmentRequest = BridgeAPIQueue.getInstance().uploadInspectionAttachment(jsonAttachment, mInspectionId, new ServerCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        BridgeLogger.log('I', TAG, "mUploadInspectionAttachmentRequest returned success.");
+                        mReviewAndSubmitViewModel.updateIsUploaded(finalAttachment.id);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(mInspectionId);
+                        mReviewAndSubmitViewModel.markInspectionFailed(mInspectionId);
+                        BridgeLogger.log('E', TAG, "ERROR in completeInspection when uploading attachments. Cancelled requests for Inspection ID: " + mInspectionId);
+                    }
+                });
+                BridgeAPIQueue.getInstance().getRequestQueue().add(mUploadInspectionAttachmentRequest);
+            }
+        }
+
         // If there are no defects, go ahead and update the status
         if (inspectionDefects.isEmpty()) {
             BridgeLogger.log('I', TAG, "No defects");
@@ -323,8 +413,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     jObj.put("Comment", "");
                 }
                 if (inspectionDefect.picture_path != null) {
-                    try{
-                        jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id)));
+                    try {
+                        jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id, false)));
                         jObj.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
                     } catch (NullPointerException e) {
                         Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + defectItem.item_number, Snackbar.LENGTH_SHORT).show();
@@ -335,7 +425,28 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     jObj.put("ImageData", null);
                     jObj.put("ImageFileName", null);
                 }
+                if (inspectionDefect.attachment_data != null) {
+                    try {
+                        jObj.put("AttachmentData", Base64.getEncoder().encodeToString(inspectionDefect.attachment_data));
+                        jObj.put("AttachmentFileName", mInspectionId + "_" + defectItem.id + "_Attachment.pdf");
+                    } catch (NullPointerException e) {
+                        Snackbar.make(mConstraintLayout, "Attachment is missing! Please check attachment for #" + defectItem.item_number, Snackbar.LENGTH_SHORT).show();
+
+                        hideProgressSpinner();
+                        return;
+                    }
+                } else {
+                    jObj.put("AttachmentData", null);
+                    jObj.put("AttachmentFileName", null);
+                }
                 jObj.put("PriorInspectionDetailId", inspectionDefect.prior_inspection_detail_id);
+                if (mInspection.require_risk_assessment) {
+                    jObj.put("LotNumber", inspectionDefect.lot_number);
+                    jObj.put("StageOfConstruction", inspectionDefect.stage_of_construction);
+                } else {
+                    jObj.put("LotNumber", null);
+                    jObj.put("StageOfConstruction", null);
+                }
                 InspectionDefect_Table finalDefect = inspectionDefect;
                 if (!inspectionDefect.is_uploaded) {
                     mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, new ServerCallback() {
@@ -364,9 +475,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         returnToRouteSheet();
     }
 
-    private byte[] getPictureData(int inspectionDefectId) {
+    private byte[] getPictureData(int inspectionDefectId, boolean isAttachment) {
         InspectionDefect_Table defect = mReviewAndSubmitViewModel.getInspectionDefect(inspectionDefectId);
-        Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
+        Bitmap image;
+        if (isAttachment) {
+            return defect.attachment_data;
+        } else {
+            image = BitmapFactory.decodeFile(defect.picture_path);
+        }
         Bitmap outBmp;
         float degrees = 90;
         Matrix matrix = new Matrix();

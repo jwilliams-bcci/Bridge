@@ -2,13 +2,16 @@ package com.burgess.bridge.editresolution;
 
 import static android.view.View.GONE;
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_SECURITY_USER_ID;
+import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.content.Context;
 import android.content.Intent;
@@ -65,6 +68,8 @@ public class EditResolutionActivity extends AppCompatActivity {
     private EditResolutionViewModel mEditResolutionViewModel;
     private SharedPreferences mSharedPreferences;
     private ConstraintLayout mConstraintLayout;
+    private TextView mTextToolbarIndividualRemaining;
+    private TextView mTextToolbarTeamRemaining;
     private TextView mTextAddress;
     private Spinner mSpinnerResolutions;
     private ImageButton mButtonCamera;
@@ -80,6 +85,7 @@ public class EditResolutionActivity extends AppCompatActivity {
     private StringRequest mEditResolutionRequest;
     private String mCurrentPhotoPath;
     private boolean mPictureTaken = false;
+    private boolean mAttachmentIncluded = false;
     private long mLastClickTime = 0;
 
     private static final String TAG = "EDIT_RESOLUTION";
@@ -91,7 +97,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_resolution);
         setSupportActionBar(findViewById(R.id.edit_resolution_toolbar));
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        mEditResolutionViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(EditResolutionViewModel.class);
+        mEditResolutionViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(EditResolutionViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
@@ -104,6 +110,8 @@ public class EditResolutionActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.edit_resolution_constraint_layout);
+        mTextToolbarIndividualRemaining = findViewById(R.id.toolbar_individual_inspections_remaining);
+        mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mTextAddress = findViewById(R.id.edit_resolution_text_inspection_address);
         mSpinnerResolutions = findViewById(R.id.edit_resolution_spinner_resolutions);
         mTextComment = findViewById(R.id.edit_resolution_text_note);
@@ -157,6 +165,9 @@ public class EditResolutionActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
+        mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
+        mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
+
         mTextAddress.setText("");
         mTextAddress.append(mInspection.community + "\n");
         mTextAddress.append(mInspection.address + "\n");
@@ -188,10 +199,11 @@ public class EditResolutionActivity extends AppCompatActivity {
         InspectionDefect_Table inspectionDefect;
         long newId = 0;
 
-        if (mPictureTaken) {
-            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, false, mCurrentPhotoPath);
+        if (mPictureTaken && !mAttachmentIncluded) {
+            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, null, null, false, mCurrentPhotoPath, null);
         } else {
-            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, false, null);
+            BridgeLogger.log('I', TAG, "problem here in editresolutionactivity 197");
+            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, null, null, false, null, null);
         }
         newId = mEditResolutionViewModel.addInspectionDefect(inspectionDefect);
 

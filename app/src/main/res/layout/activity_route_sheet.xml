@@ -7,8 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".routesheet.RouteSheetActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/route_sheet_fragment_view"
+        android:name="com.burgess.bridge.InspectionsRemainingFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <include
-        android:id="@+id/include"
+        android:id="@+id/route_sheet_include"
         layout="@layout/fragment_inspections_remaining"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -26,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_include"
         app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
         app:titleTextColor="#FFFFFF" />
 

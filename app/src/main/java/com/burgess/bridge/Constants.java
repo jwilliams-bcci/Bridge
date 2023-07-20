@@ -1,7 +1,5 @@
 package com.burgess.bridge;
 
-import java.sql.Time;
-
 public final class Constants {
     private Constants(){}
 
@@ -15,6 +13,8 @@ public final class Constants {
     public static final String PREF_LOGIN_NAME = "LoginName";
     public static final String PREF_LOGIN_PASSWORD = "LoginPassword";
     public static final String PREF_IS_ONLINE = "IsOnline";
+    public static final String PREF_IND_INSPECTIONS_REMAINING = "IndividualInspectionsRemaining";
+    public static final String PREF_TEAM_INSPECTIONS_REMAINING = "InspectionsRemaining";
 
     public static final String API_STAGE_URL = "https://apistage.burgess-inc.com/api/Bridge/";
     public static final String API_PROD_URL = "https://api.burgess-inc.com/api/Bridge/";

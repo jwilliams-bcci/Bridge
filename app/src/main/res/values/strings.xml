@@ -85,4 +85,7 @@
     <string name="pref_inspector_id">InspectorId</string>
     <string name="location_button_garage_text">Garage</string>
     <string name="location_button_unit_text">Unit</string>
+    <string name="title_activity_attachments">AttachmentsActivity</string>
+    <string name="attachments_title">Attachments</string>
+    <string name="lot_number_hint">Lot Number</string>
 </resources>

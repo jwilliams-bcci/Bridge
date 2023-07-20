@@ -1,5 +1,13 @@
 package com.burgess.bridge.defectitem;
 
+import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
+import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,8 +21,13 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 //import android.app.FragmentManager;
 //import android.app.FragmentTransaction;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -26,6 +39,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -46,9 +60,14 @@ import com.burgess.bridge.R;
 import com.burgess.bridge.inspect.InspectActivity;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -73,17 +92,24 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final int INSPECTION_HISTORY_ID_NOT_FOUND = -1;
     public static final String INSPECTION_DEFECT_ID = "com.burgess.bridge.INSPECTION_DEFECT_ID";
     public static final int INSPECTION_DEFECT_ID_NOT_FOUND = -1;
+    public static final String SCROLL_POSITION = "com.burgess.bridge.SCROLL_POSITION";
+    public static final int SCROLL_POSITION_NOT_FOUND = -1;
     public static final int REQUEST_IMAGE_CAPTURE = 1;
     public static final String FILTER_OPTION = "com.burgess.bridge.FILTER_OPTION";
     public boolean mPictureTaken = false;
+    public boolean mAttachmentIncluded = false;
     public final SpeechRecognizer mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
     private String mCurrentPhotoPath;
+    private String mCurrentAttachmentPath;
     private long mLastClickTime = 0;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
 
     private int mInspectionId;
     private int mDefectId;
     private int mInspectionDefectId;
     private int mInspectionHistoryId;
+    private int mScrollPosition;
     private String mFilter;
     private DefectItemViewModel mDefectItemViewModel;
     private DefectItem_Table mDefectItem;
@@ -99,11 +125,27 @@ public class DefectItemActivity extends AppCompatActivity {
     private TextView mDefectItemLabelPreviousComment;
     private Button mButtonCancel;
     private ImageView mImageViewThumbnail;
+    private TextView mTextAttachmentLabel;
+    private Button mButtonAddAttachment;
+    private TextView mTextAttachmentFilename;
     private Button mSaveInspectionDefect;
     private ImageButton mButtonMicrophone;
     private ImageButton mButtonCamera;
     private Inspection_Table mInspection;
     private ConstraintLayout mConstraintLayout;
+    private TextView mTextToolbarIndividualRemaining;
+    private TextView mTextToolbarTeamRemaining;
+    private TextView mLabelLotNumber;
+    private TextView mTextLotNumber;
+    private TextView mLabelConstructionStage;
+    private Spinner mSpinnerConstructionStage;
+    private ArrayAdapter<String> mSpinnerConstructionStageAdapter;
+
+    private InspectionDefect_Table inspectionDefect;
+    private byte[] attachmentData;
+
+    // Activity Results
+    private ActivityResultLauncher<Intent> chooseFileLauncher;
 
     // Fragments
     private LocationFragment mLocationFragment;
@@ -122,14 +164,19 @@ public class DefectItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect_item);
         setSupportActionBar(findViewById(R.id.defect_item_toolbar));
-        mDefectItemViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
+        mDefectItemViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         checkPermission();
+
+        // Prepare shared preferences...
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mInspectionDefectId = intent.getIntExtra(INSPECTION_DEFECT_ID, INSPECTION_DEFECT_ID_NOT_FOUND);
         mInspectionHistoryId = intent.getIntExtra(INSPECTION_HISTORY_ID, INSPECTION_HISTORY_ID_NOT_FOUND);
+        mScrollPosition = intent.getIntExtra(SCROLL_POSITION, SCROLL_POSITION_NOT_FOUND);
         mFilter = intent.getStringExtra(FILTER_OPTION);
         mInspection = mDefectItemViewModel.getInspectionSync(mInspectionId);
         mDefectItem = mDefectItemViewModel.getDefectItemSync(mDefectId);
@@ -138,6 +185,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mFaultList = mDefectItemViewModel.getFaults();
 
         initializeViews();
+        initializeActivityResults();
         initializeButtonListeners();
         initializeTextViewListeners();
         initializeDisplayContent();
@@ -145,6 +193,8 @@ public class DefectItemActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.defect_item_constraint_layout);
+        mTextToolbarIndividualRemaining = findViewById(R.id.toolbar_individual_inspections_remaining);
+        mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
         mRadioGroupDefectStatus = findViewById(R.id.defect_item_radio_group);
         mDefectItemTextLocation = findViewById(R.id.defect_item_text_location);
@@ -156,13 +206,25 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemTextPreviousComment = findViewById(R.id.defect_item_text_previous_comment);
         mButtonMicrophone = findViewById(R.id.defect_item_button_microphone);
         mDefectItemTextComment = findViewById(R.id.defect_item_text_comment);
+        mLabelLotNumber = findViewById(R.id.defect_item_label_lot_number);
+        mTextLotNumber = findViewById(R.id.defect_item_text_lot_number);
+        mLabelConstructionStage = findViewById(R.id.defect_item_label_construction_stage);
+        mSpinnerConstructionStage = findViewById(R.id.defect_item_spinner_construction_stage);
         mImageViewThumbnail = findViewById(R.id.defect_item_imageview_thumbnail);
+        mTextAttachmentLabel = findViewById(R.id.defect_item_text_attachment_label);
+        mButtonAddAttachment = findViewById(R.id.defect_item_button_add_attachment);
+        mTextAttachmentFilename = findViewById(R.id.defect_item_text_attachment_filename);
         mButtonCamera = findViewById(R.id.defect_item_button_camera);
         mSaveInspectionDefect = findViewById(R.id.defect_item_button_save);
         mButtonCancel = findViewById(R.id.defect_item_button_cancel);
     }
     private void initializeButtonListeners() {
         setupVoiceToTextListener();
+        mButtonAddAttachment.setOnClickListener(v -> {
+            Intent fileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            fileIntent.setType("*/*");
+            chooseFileLauncher.launch(fileIntent);
+        });
         mButtonCamera.setOnClickListener(v -> {
             Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (cameraIntent.resolveActivity(getPackageManager()) != null) {
@@ -186,7 +248,8 @@ public class DefectItemActivity extends AppCompatActivity {
             int priorInspectionDetailId = mInspectionHistoryId == -1 ? 0 : mInspectionHistoryId;
             long newId = 0;
             String comment = "";
-            InspectionDefect_Table inspectionDefect;
+            String lotNumber = "";
+            String constructionStage = "";
 
             // If DefectId == 1, it's a note, set appropriate status id. Otherwise, get radio button
             if (mDefectId == 1) {
@@ -210,6 +273,19 @@ public class DefectItemActivity extends AppCompatActivity {
                 return;
             }
 
+            if (mInspection.division_id != 20 && mDefectItem.defect_category_name.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
+                Snackbar.make(mConstraintLayout, "Defect items marked C in this category require a picture.", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
+            if (mInspection.require_risk_assessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--"))) {
+                Snackbar.make(mConstraintLayout, "Must have a lot number and Construction Stage for this inspection type.", Snackbar.LENGTH_LONG).show();
+                return;
+            } else if (mInspection.require_risk_assessment) {
+                lotNumber = mTextLotNumber.getText().toString();
+                constructionStage = mSpinnerConstructionStage.getSelectedItem().toString();
+            }
+
             // Append all text fields together
             comment += mDefectItemTextLocation.getText().toString();
             comment += mDefectItemTextRoom.getText().toString();
@@ -227,10 +303,14 @@ public class DefectItemActivity extends AppCompatActivity {
             }
 
             // If a picture was taken, create a new InspectionDefect_Table with the picture path
-            if (mPictureTaken) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, mDefectItem.reinspection_required, mCurrentPhotoPath);
+            if (mPictureTaken && !mAttachmentIncluded) {
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, null);
+            } else if (mAttachmentIncluded && !mPictureTaken) {
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, attachmentData);
+            } else if (mAttachmentIncluded && mPictureTaken) {
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, attachmentData);
             } else {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, mDefectItem.reinspection_required, null);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, null);
             }
 
             // If mInspectionDefectId > 0, that means this is a previously created item, update the item. Otherwise, create a new one.
@@ -258,6 +338,7 @@ public class DefectItemActivity extends AppCompatActivity {
                 inspectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
                 inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
+                inspectIntent.putExtra(InspectActivity.SCROLL_POSITION, mScrollPosition);
                 startActivity(inspectIntent);
             }
         });
@@ -266,6 +347,7 @@ public class DefectItemActivity extends AppCompatActivity {
             inspectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
             inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
+            inspectIntent.putExtra(InspectActivity.SCROLL_POSITION, mScrollPosition);
             startActivity(inspectIntent);
         });
     }
@@ -299,17 +381,35 @@ public class DefectItemActivity extends AppCompatActivity {
         });
     }
     private void initializeDisplayContent() {
+        mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
+        mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
+
         mDefectItemDetails.append(Integer.toString(mDefectItem.item_number));
         mDefectItemDetails.append(" - ");
         mDefectItemDetails.append(mDefectItem.item_description);
 
-        // If mDefectId == 1, then it's a note, hide the radio buttons.
-        if (mDefectId == 1) {
-            mRadioGroupDefectStatus.setVisibility(View.INVISIBLE);
+        // Set up spinner
+        String[] spinnerItems = new String[]{"--Choose an option--", "Preliminary", "Prime", "Critical"};
+        mSpinnerConstructionStageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerItems);
+        mSpinnerConstructionStage.setAdapter(mSpinnerConstructionStageAdapter);
+
+        if (!mInspection.require_risk_assessment) {
+            mLabelLotNumber.setVisibility(View.GONE);
+            mLabelConstructionStage.setVisibility(View.GONE);
+            mTextLotNumber.setVisibility(View.GONE);
+            mSpinnerConstructionStage.setVisibility(View.GONE);
         }
 
-        // If the category is 128, default to C
-        if (mDefectItem.defect_category_id == 128) {
+        // If mDefectId == 1, then it's a note, hide the radio buttons and show the Add Attachment button.
+        if (mDefectId == 1) {
+            mRadioGroupDefectStatus.setVisibility(View.INVISIBLE);
+            mTextAttachmentLabel.setVisibility(View.VISIBLE);
+            mButtonAddAttachment.setVisibility(View.VISIBLE);
+            mTextAttachmentFilename.setVisibility(View.VISIBLE);
+        }
+
+        // If the category is 128, 131, or 132, default to C
+        if (mDefectItem.defect_category_id == 128 || mDefectItem.defect_category_id == 131 || mDefectItem.defect_category_id == 132) {
             mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
         }
 
@@ -334,6 +434,7 @@ public class DefectItemActivity extends AppCompatActivity {
             mDefectItemTextComment.setText(currentItem.comment);
 
             if (currentItem.picture_path != null) {
+                mPictureTaken = true;
                 mCurrentPhotoPath = currentItem.picture_path;
                 displayThumbnail();
             }
@@ -469,5 +570,28 @@ public class DefectItemActivity extends AppCompatActivity {
             displayThumbnail();
             mPictureTaken = true;
         }
+    }
+
+    private void initializeActivityResults() {
+        chooseFileLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                Uri data = result.getData().getData();
+                BridgeLogger.log('I', TAG, "Attached file for Defect on Inspection: " + mInspectionId);
+                mAttachmentIncluded = true;
+                mTextAttachmentFilename.setText("testpdf");
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(data);
+                    ByteArrayOutputStream os = new ByteArrayOutputStream();
+                    int nextByte = inputStream.read();
+                    while (nextByte != -1) {
+                        os.write(nextByte);
+                        nextByte = inputStream.read();
+                    }
+                    attachmentData = os.toByteArray();
+                } catch (Exception e) {
+                    BridgeLogger.log('E', TAG, e.getMessage());
+                }
+            }
+        });
     }
 }

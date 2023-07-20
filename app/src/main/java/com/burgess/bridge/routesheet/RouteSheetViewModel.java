@@ -13,11 +13,13 @@ import data.Repositories.DefectItem_InspectionType_XRefRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
+import data.Repositories.PastInspectionRepository;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
+import data.Tables.PastInspection_Table;
 import data.Views.RouteSheet_View;
 
 public class RouteSheetViewModel extends AndroidViewModel {
@@ -26,6 +28,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
     private InspectionDefectRepository mInspectionDefectRepository;
     private DefectItemRepository mDefectItemRepository;
     private DefectItem_InspectionType_XRefRepository mDIITRepository;
+    private PastInspectionRepository mPastInspectionRepository;
+    private String reportUrl;
 
     public RouteSheetViewModel(@NonNull Application application) {
         super(application);
@@ -34,6 +38,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mInspectionDefectRepository = new InspectionDefectRepository(application);
         mDefectItemRepository = new DefectItemRepository(application);
         mDIITRepository = new DefectItem_InspectionType_XRefRepository(application);
+        mPastInspectionRepository = new PastInspectionRepository(application);
+        reportUrl = "";
     }
 
     public LiveData<List<RouteSheet_View>> getAllInspectionsForRouteSheet(int inspectorId) {
@@ -86,5 +92,17 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public void deleteInspectionHistories(int inspection_id) {
         mInspectionHistoryRepository.deleteForInspection(inspection_id);
+    }
+
+    public void insertPastInspection(PastInspection_Table pastInspection) {
+        mPastInspectionRepository.insert(pastInspection);
+    }
+
+    public void updateUrl(String newUrl) {
+        reportUrl = newUrl;
+    }
+
+    public String getReportUrl() {
+        return reportUrl;
     }
 }

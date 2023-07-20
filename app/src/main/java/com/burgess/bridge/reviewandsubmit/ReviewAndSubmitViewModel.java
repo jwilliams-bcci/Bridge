@@ -10,12 +10,14 @@ import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.List;
 
+import data.Repositories.AttachmentRepository;
 import data.Repositories.BuilderRepository;
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Repositories.MultifamilyDetailsRepository;
+import data.Tables.Attachment_Table;
 import data.Tables.Builder_Table;
 import data.Tables.DefectItem_Table;
 import data.Tables.MultifamilyDetails_Table;
@@ -30,6 +32,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
     private BuilderRepository mBuilderRepository;
     private MultifamilyDetailsRepository mMultifamilyDetailsRepository;
     private InspectionHistoryRepository mInspectionHistoryRepository;
+    private AttachmentRepository mAttachmentRepository;
 
     public ReviewAndSubmitViewModel(@NonNull Application application) {
         super(application);
@@ -39,6 +42,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         mBuilderRepository = new BuilderRepository(application);
         mMultifamilyDetailsRepository = new MultifamilyDetailsRepository(application);
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
+        mAttachmentRepository = new AttachmentRepository(application);
     }
 
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
@@ -107,5 +111,21 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public DefectItem_Table getDefectItem(int defectItemId) {
         return mDefectItemRepository.getDefectItemSync(defectItemId);
+    }
+
+    public List<Attachment_Table> getAllInspectionAttachments(int inspectionId) {
+        return mAttachmentRepository.getInspectionAttachments(inspectionId);
+    }
+
+    public List<Attachment_Table> getAttachmentsToUpload(int inspectionId) {
+        return mAttachmentRepository.getAttachmentsToUpload(inspectionId);
+    }
+
+    public void updateIsUploaded(int attachmentId) {
+        mAttachmentRepository.updateIsUploaded(attachmentId);
+    }
+
+    public void insertAttachment(Attachment_Table attachment) {
+        mAttachmentRepository.insert(attachment);
     }
 }

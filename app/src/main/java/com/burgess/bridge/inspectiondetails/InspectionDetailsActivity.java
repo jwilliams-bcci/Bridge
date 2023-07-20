@@ -1,6 +1,8 @@
 package com.burgess.bridge.inspectiondetails;
 
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
+import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +17,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.burgess.bridge.BridgeLogger;
+import com.burgess.bridge.attachments.AttachmentsActivity;
+import com.burgess.bridge.pastinspections.PastInspectionsActivity;
 import com.burgess.bridge.R;
 import com.burgess.bridge.assigntrainee.AssignTraineeActivity;
 import com.burgess.bridge.editresolution.EditResolutionActivity;
@@ -35,6 +39,8 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     private int mInspectionId;
     private Inspection_Table mInspection;
     private ConstraintLayout mConstraintLayout;
+    private TextView mTextToolbarIndividualRemaining;
+    private TextView mTextToolbarTeamRemaining;
     private TextView mTextAddress;
     private TextView mTextBuilder;
     private TextView mTextSuperintendent;
@@ -54,7 +60,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inspection_details);
         setSupportActionBar(findViewById(R.id.inspection_details_toolbar));
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        mInspectionDetailsViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectionDetailsViewModel.class);
+        mInspectionDetailsViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectionDetailsViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_SET);
@@ -66,11 +72,12 @@ public class InspectionDetailsActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.inspection_details_constraint_layout);
+        mTextToolbarIndividualRemaining = findViewById(R.id.toolbar_individual_inspections_remaining);
+        mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mTextAddress = findViewById(R.id.inspection_details_text_inspection_address);
         mTextBuilder = findViewById(R.id.inspection_details_text_builder);
         mTextSuperintendent = findViewById(R.id.inspection_details_text_superintendent);
         mTextNotes = findViewById(R.id.inspection_details_text_notes);
-
         mInspectButton = findViewById(R.id.inspection_details_button_inspect);
         mViewInspectionHistoryButton = findViewById(R.id.inspection_details_button_view_inspection_history);
         mTransferInspectionButton = findViewById(R.id.inspection_details_button_transfer_inspection);
@@ -102,9 +109,9 @@ public class InspectionDetailsActivity extends AppCompatActivity {
 
 
         mViewInspectionHistoryButton.setOnClickListener(view -> {
-            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
-//            Intent viewInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, InspectionHistoryActivity.class);
-//            startActivity(viewInspectionHistoryIntent);
+            Intent viewInspectionHistoryIntent = new Intent(InspectionDetailsActivity.this, PastInspectionsActivity.class);
+            viewInspectionHistoryIntent.putExtra(PastInspectionsActivity.INSPECTION_ID, mInspectionId);
+            startActivity(viewInspectionHistoryIntent);
         });
 
         mTransferInspectionButton.setOnClickListener(view -> {
@@ -126,10 +133,16 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         });
 
         mAttachmentsButton.setOnClickListener(view -> {
-            Snackbar.make(mConstraintLayout, "This feature is coming soon!", Snackbar.LENGTH_SHORT).show();
+            Intent attachmentsIntent = new Intent(InspectionDetailsActivity.this, AttachmentsActivity.class);
+            attachmentsIntent.putExtra(AttachmentsActivity.INSPECTION_ID, mInspectionId);
+            attachmentsIntent.putExtra(AttachmentsActivity.LOCATION_ID, mInspection.location_id);
+            startActivity(attachmentsIntent);
         });
     }
     private void initializeDisplayContent() {
+        mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
+        mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
+
         mTextAddress.setText("");
         mTextAddress.append(mInspection.community + "\n");
         mTextAddress.append(mInspection.address + "\n");
@@ -138,6 +151,10 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mTextBuilder.setText(mInspection.builder_name);
         mTextSuperintendent.setText(mInspection.super_name + "\n" + mInspection.super_phone);
         mTextSuperintendent.setMovementMethod(LinkMovementMethod.getInstance());
-        mTextNotes.setText(mInspection.notes);
+        if (mInspection.notes.equals("null") || mInspection.notes.isEmpty()) {
+            mTextNotes.setText("No notes");
+        } else {
+            mTextNotes.setText(mInspection.notes);
+        }
     }
 }

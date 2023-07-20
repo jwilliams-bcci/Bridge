@@ -62,6 +62,11 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
             holder.getTextInspectionAddress().setText(addressDisplay);
             holder.getTextInspectionCommunity().setText(i.community);
             holder.getTextInspectionType().setText(i.inspection_type);
+            holder.getCardView().setBackgroundColor(Color.WHITE);
+            holder.getTextInspectionUploaded().setVisibility(View.GONE);
+            holder.getImageViewReupload().setVisibility(View.GONE);
+            holder.getTextCallbackNotes().setVisibility(View.GONE);
+            holder.getImageViewNoteAttached().setVisibility(View.GONE);
 
             // If the inspection is complete, set the color to yellow and show other view components
             if (i.is_complete) {
@@ -146,7 +151,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                Log.i("SEARCH", "dataSet size: " + dataSet.size() + " currentList size: " + currentList.size());
+                //Log.i("SEARCH", "dataSet size: " + dataSet.size() + " currentList size: " + currentList.size());
             }
         };
         return searchFilter;
@@ -183,7 +188,6 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
         public boolean areContentsTheSame(@NonNull RouteSheet_View oldItem, @NonNull RouteSheet_View newItem) {
             return oldItem.num_uploaded == newItem.num_uploaded
                     && oldItem.is_complete == newItem.is_complete
-                    && oldItem.is_failed == newItem.is_failed
                     && oldItem.is_uploaded == newItem.is_uploaded;
         }
     }

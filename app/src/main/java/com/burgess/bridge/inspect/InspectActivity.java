@@ -1,12 +1,17 @@
 package com.burgess.bridge.inspect;
 
+import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
+import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,14 +43,21 @@ import data.Tables.Inspection_Table;
 public class InspectActivity extends AppCompatActivity {
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
+    public static final String SCROLL_POSITION = "com.burgess.bridge.SCROLL_POSITION";
+    public static final int SCROLL_POSITION_NOT_FOUND = -1;
     public static final String FILTER_OPTION = "com.burgess.bridge.FILTER_OPTION";
     public static final String TAG = "INSPECT";
 
     public int mInspectionId;
+    public int mScrollPosition;
     public int mInspectionTypeId;
     public boolean mReinspection;
     public String mFilter;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.Editor mEditor;
     private ConstraintLayout mConstraintLayout;
+    private TextView mTextToolbarIndividualRemaining;
+    private TextView mTextToolbarTeamRemaining;
     private Spinner mSpinnerDefectCategories;
     private InspectViewModel mInspectViewModel;
     private Inspection_Table mInspection;
@@ -67,10 +79,14 @@ public class InspectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_inspect);
         setSupportActionBar(findViewById(R.id.inspect_toolbar));
-        mInspectViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
+        mInspectViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
+
+        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        mEditor = mSharedPreferences.edit();
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mScrollPosition = intent.getIntExtra(SCROLL_POSITION, SCROLL_POSITION_NOT_FOUND);
         mFilter = intent.getStringExtra(FILTER_OPTION) != null ? intent.getStringExtra(FILTER_OPTION) : "ALL";
         mInspection = mInspectViewModel.getInspectionSync(mInspectionId);
         mReinspection = mInspectViewModel.getReinspect(mInspectionId);
@@ -90,6 +106,8 @@ public class InspectActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.inspect_constraint_layout);
+        mTextToolbarIndividualRemaining = findViewById(R.id.toolbar_individual_inspections_remaining);
+        mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mTextAddress = findViewById(R.id.inspect_text_inspection_address);
         mTextTotalDefectCountLabel = findViewById(R.id.inspect_text_total_defect_count_label);
         mTextTotalDefectCount = findViewById(R.id.inspect_text_total_defect_count);
@@ -141,6 +159,9 @@ public class InspectActivity extends AppCompatActivity {
         });
     }
     private void initializeDisplayContent() {
+        mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
+        mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
+
         // Set address label
         mTextAddress.setText("");
         mTextAddress.append(mInspection.community + "\n");
@@ -160,13 +181,16 @@ public class InspectActivity extends AppCompatActivity {
             displayDefectItems(mFilter);
         }
         mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
+        if(mScrollPosition > 0) {
+            new Handler().postDelayed(() -> mRecyclerDefectItems.scrollToPosition(mScrollPosition), 1000);
+        }
 
         fillCategorySpinner(mFilter);
     }
 
     private void fillCategorySpinner(String initialFilter) {
         mInspectViewModel.getDefectCategories(mInspectionTypeId).observe(this, defectCategories -> {
-            ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, defectCategories);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, defectCategories);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mSpinnerDefectCategories.setAdapter(adapter);
             mSpinnerDefectCategories.setSelection(adapter.getPosition(initialFilter));
@@ -254,6 +278,7 @@ public class InspectActivity extends AppCompatActivity {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
                             if (inspectionDefectToUpdate.defect_status_id == 2) {
                                 Snackbar.make(mConstraintLayout, "Defect is already marked NC!", Snackbar.LENGTH_SHORT).show();
+                                mReinspectListAdapter.notifyItemChanged(viewHolder.getAbsoluteAdapterPosition());
                             } else {
                                 inspectionDefectToUpdate.defect_status_id = 2;
                                 mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
@@ -262,7 +287,7 @@ public class InspectActivity extends AppCompatActivity {
                                 mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
                             }
                         } else {
-                            InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, selectedComment, selectedHistoryId, false, null);
+                            InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, selectedComment, selectedHistoryId, null, null, false, null, null);
                             newId = mInspectViewModel.insertInspectionDefect(newFailedDefect);
                             mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);
@@ -275,6 +300,7 @@ public class InspectActivity extends AppCompatActivity {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
                             if (inspectionDefectToUpdate.defect_status_id == 3) {
                                 Snackbar.make(mConstraintLayout, "Defect is already marked C!", Snackbar.LENGTH_SHORT).show();
+                                mReinspectListAdapter.notifyItemChanged(viewHolder.getAbsoluteAdapterPosition());
                             } else {
                                 inspectionDefectToUpdate.defect_status_id = 3;
                                 mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
@@ -283,7 +309,7 @@ public class InspectActivity extends AppCompatActivity {
                                 mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
                             }
                         } else {
-                            InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, selectedComment, selectedHistoryId, false, null);
+                            InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, selectedComment, selectedHistoryId, null, null, false, null, null);
                             newId = mInspectViewModel.insertInspectionDefect(newCompleteDefect);
                             mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);

@@ -20,9 +20,7 @@
     <uses-feature
         android:name="android.hardware.camera2"
         android:required="false" />
-
-    <uses-feature
-        android:name="android.hardware.camera.any" />
+    <uses-feature android:name="android.hardware.camera.any" />
 
     <application
         android:allowBackup="false"
@@ -34,9 +32,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".login.LoginActivity"
+            android:name=".attachments.AttachmentsActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".login.LoginActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,7 +67,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
-            android:name=".InspectionHistoryActivity"
+            android:name=".pastinspections.PastInspectionsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity

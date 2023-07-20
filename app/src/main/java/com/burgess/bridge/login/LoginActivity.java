@@ -24,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
@@ -72,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mLoginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
+        mLoginViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
 
         // Prepare Shared Preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -164,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
             permissionRequests.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
         if (permissionRequests.size() > 0) {
-            requestPermissions(permissionRequests.toArray(new String[permissionRequests.size()]), 100);
+            ActivityCompat.requestPermissions(this, permissionRequests.toArray(new String[permissionRequests.size()]), 100);
         }
     }
 
