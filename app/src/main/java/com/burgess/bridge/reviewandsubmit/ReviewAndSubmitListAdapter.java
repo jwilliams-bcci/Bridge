@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
 
+import java.util.List;
+
 import data.Views.ReviewAndSubmit_View;
 
 public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View, ReviewAndSubmitViewHolder> {
+    private List<ReviewAndSubmit_View> currentList;
 
     protected ReviewAndSubmitListAdapter(@NonNull DiffUtil.ItemCallback<ReviewAndSubmit_View> diffCallback) {
         super(diffCallback);
@@ -64,6 +67,12 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
         }
 
         holder.bind(current.inspection_id, current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, status, showThumbnail, current.is_editable);
+    }
+
+    public List<ReviewAndSubmit_View> getCurrentList() { return currentList; }
+    public void setCurrentList(List<ReviewAndSubmit_View> list) {
+        currentList = list;
+        submitList(list);
     }
 
     public static class ReviewAndSubmitDiff extends DiffUtil.ItemCallback<ReviewAndSubmit_View> {

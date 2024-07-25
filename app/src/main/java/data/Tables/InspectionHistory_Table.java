@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 public class InspectionHistory_Table {
     @PrimaryKey
     public int id;
+    public int first_inspection_detail_id;
     public int inspection_id;
     public int previous_inspection_id;
     public int defect_item_id;

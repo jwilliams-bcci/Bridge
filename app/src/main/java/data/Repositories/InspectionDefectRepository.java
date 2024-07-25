@@ -24,8 +24,12 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefect(inspection_defect_id);
     }
 
-    public boolean multifamilyDefectExists(int prior_inspection_detail_id, int inspection_id) {
-        return mInspectionDefectDao.multifamilyDefectExists(prior_inspection_detail_id, inspection_id);
+    public int multifamilyDefectExists(int first_inspection_detail_id) {
+        return mInspectionDefectDao.multifamilyDefectExists(first_inspection_detail_id);
+    }
+
+    public void updateExistingMFCDefect(int defect_status_id, String comment, int id) {
+        mInspectionDefectDao.updateExistingMFCDefect(defect_status_id, comment, id);
     }
 
     public LiveData<List<InspectionDefect_Table>> getAllInspectionDefects(int inspection_id) {
@@ -36,8 +40,12 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefectsSync(inspection_id);
     }
 
-    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReview(int inspection_id) {
-        return mInspectionDefectDao.getInspectionDefectsForReview(inspection_id);
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSort(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewDescriptionSort(inspection_id);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSort(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewItemNumberSort(inspection_id);
     }
 
     public List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspection_id) {
@@ -51,10 +59,6 @@ public class InspectionDefectRepository {
     public long insert(InspectionDefect_Table inspectionDefect) {
         AtomicLong id = new AtomicLong();
         return mInspectionDefectDao.insert(inspectionDefect);
-//        BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-//            id.set(mInspectionDefectDao.insert(inspectionDefect));
-//        });
-//        return id.longValue();
     }
 
     public void delete(int inspection_id) {

@@ -48,6 +48,7 @@ import data.Tables.Inspection_Table;
 import data.Tables.Inspector_Table;
 import data.Tables.PastInspection_Table;
 import data.Tables.Room_Table;
+import kotlin.reflect.KCallable;
 
 import static com.burgess.bridge.Constants.API_PROD_URL;
 import static com.burgess.bridge.Constants.API_STAGE_URL;
@@ -75,32 +76,31 @@ public class BridgeAPIQueue {
     private static final String AUTH_BEARER = "Bearer ";
     private static final String LOGIN_URL = "Login?userName=%s&password=%s";
     private static final String GET_CANNED_COMMENTS_URL = "GetCannedComments";
-    private static final String GET_DEFECT_ITEMS_URL = "GetDefectItems";
     private static final String GET_DEFECT_ITEMS_V2_URL = "GetDefectItemsV2?inspectorid=%s&inspectiondate=%s";
-    private static final String GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_URL = "GetDefectItem_InspectionType_XRef";
     private static final String GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_V2_URL = "GetDefectItem_InspectionType_XRefV2?inspectorid=%s&inspectiondate=%s";
     private static final String GET_BUILDERS_URL = "GetBuilders";
     private static final String GET_INSPECTORS_URL = "GetInspectors";
+    private static final String GET_INSPECTORS_V2_URL = "GetInspectorsV2";
     private static final String GET_ROOMS_URL = "GetRooms";
     private static final String GET_DIRECTIONS_URL = "GetDirections";
     private static final String GET_FAULTS_URL = "GetFaults";
-    private static final String GET_INSPECTIONS_URL = "GetInspections?inspectorid=%s&inspectiondate=%s";
-    private static final String GET_INSPECTIONS_V2_URL = "GetInspectionsV2?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTIONS_V3_URL = "GetInspectionsV3?inspectorid=%s&inspectiondate=%s";
     private static final String GET_REMAINING_INSPECTIONS_URL = "GetRemainingInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_PAST_INSPECTIONS_URL = "GetPastInspections?locationid=%s";
     private static final String GET_ATTACHMENTS_URL = "GetAttachments?inspectionid=%s&locationid=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
+    private static final String GET_INSPECTION_HISTORY_V2_URL = "GetInspectionHistoryV2?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
     private static final String GET_MULTIFAMILY_HISTORY_URL = "GetMultifamilyHistory?locationid=%s&inspectionnumber=%s";
-    private static final String GET_CHECK_EXISTING_INSPECTION_URL = "CheckExistingInspection?inspectionid=%s&inspectorid=%s";
+    private static final String GET_MULTIFAMILY_HISTORY_V2_URL = "GetMultifamilyHistoryV2?locationid=%s&inspectionnumber=%s";
     private static final String GET_CHECK_EXISTING_INSPECTION_V2_URL = "CheckExistingInspectionV2?inspectionid=%s&inspectorid=%s";
     private static final String GET_REPORT_DATA_URL = "GetReportData?inspectorId=%s&inspectionDate=%s";
     private static final String POST_TRANSFER_INSPECTION_URL = "TransferInspection?inspectionId=%s&inspectorId=%s";
     private static final String POST_MULTIFAMILY_DETAILS_URL = "InsertMultifamilyDetails";
     private static final String POST_INSPECTION_ATTACHMENT_URL = "InsertInspectionAttachment";
-    private static final String POST_INSPECTION_DEFECT_URL = "InsertInspectionDetails";
     private static final String POST_INSPECTION_DEFECT_V2_URL = "InsertInspectionDetailsV2";
+    private static final String POST_INSPECTION_DEFECT_V3_URL = "InsertInspectionDetailsV3";
     private static final String POST_INSPECTION_STATUS_URL = "UpdateInspectionStatus?InspectionId=%s&StatusId=%s&UserId=%s&InspectionTotal=%s&SuperPresent=%s&StartTime=%s&EndTime=%s&Training=%s&TraineeId=%s";
+    private static final String POST_INSPECTION_STATUS_V2_URL = "UpdateInspectionStatusV2";
 
     private BridgeAPIQueue(Context context) {
         ctx = context;
@@ -277,7 +277,49 @@ public class BridgeAPIQueue {
 
                     vm.insertInspector(inspector);
                 } catch (JSONException e) {
-                    BridgeLogger.log('E', TAG, "ERROR in updateBuilders: " + e.getMessage());
+                    BridgeLogger.log('E', TAG, "ERROR in updateInspectors: " + e.getMessage());
+                }
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateInspectors.");
+                callback.onFailure("Lost connection while getting inspectors!");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateInspectors.");
+                callback.onFailure("Request timed out while getting inspectors!");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateInspectors: " + errorMessage);
+                callback.onFailure("Error getting inspectors!");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+    public JsonArrayRequest updateInspectorsV2(LoginViewModel vm, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += GET_INSPECTORS_V2_URL;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    Inspector_Table inspector = new Inspector_Table();
+                    inspector.id = obj.optInt("InspectorId");
+                    inspector.inspector_name = obj.optString("InspectorName");
+                    inspector.division_id = obj.optInt("DivisionID");
+
+                    vm.insertInspector(inspector);
+                } catch (JSONException e) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateInspectors: " + e.getMessage());
                 }
             }
             callback.onSuccess("Success");
@@ -614,9 +656,9 @@ public class BridgeAPIQueue {
     public JsonArrayRequest updateInspectionHistory(RouteSheetViewModel vm, int inspectionId, int inspectionOrder, int inspectionTypeId, int locationId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
         if (inspectionTypeId == 1154) {
-            url += String.format(GET_MULTIFAMILY_HISTORY_URL, inspectionOrder, locationId);
+            url += String.format(GET_MULTIFAMILY_HISTORY_V2_URL, inspectionOrder, locationId);
         } else {
-            url += String.format(GET_INSPECTION_HISTORY_URL, inspectionOrder, inspectionTypeId, locationId);
+            url += String.format(GET_INSPECTION_HISTORY_V2_URL, inspectionOrder, inspectionTypeId, locationId);
         }
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
@@ -625,6 +667,7 @@ public class BridgeAPIQueue {
                     JSONObject obj = response.getJSONObject(lcv);
                     InspectionHistory_Table hist = new InspectionHistory_Table();
                     hist.id = obj.optInt("InspectionDetailID");
+                    hist.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
                     hist.inspection_id = inspectionId;
                     hist.previous_inspection_id = obj.optInt("InspectionID");
                     hist.defect_item_id = obj.optInt("DefectItemID");
@@ -658,7 +701,7 @@ public class BridgeAPIQueue {
     }
     public JsonArrayRequest updateMultifamilyHistory(RouteSheetViewModel vm, int inspectionId, int locationId, int inspectionNumber, int inspectionTypeId) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_MULTIFAMILY_HISTORY_URL, locationId, inspectionNumber);
+        url += String.format(GET_MULTIFAMILY_HISTORY_V2_URL, locationId, inspectionNumber);
         boolean isReobservation = (inspectionTypeId == 1154);
 
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
@@ -672,11 +715,15 @@ public class BridgeAPIQueue {
                         newDefect.defect_status_id = obj.optInt("DefectStatusID");
                         newDefect.comment = obj.optString("Comment");
                         newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
+                        newDefect.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
                         newDefect.reinspection_required = false;
                         newDefect.picture_path = null;
                         newDefect.is_uploaded = false;
                         newDefect.is_editable = false;
-                        if (!vm.multifamilyDefectExists(newDefect.prior_inspection_detail_id, newDefect.inspection_id)) {
+                        if (vm.multifamilyDefectExists(newDefect.first_inspection_detail_id) > 0) {
+                            int existingId = vm.multifamilyDefectExists(newDefect.first_inspection_detail_id);
+                            vm.updateExistingMFCDefect(newDefect.defect_status_id, newDefect.comment, existingId);
+                        } else {
                             vm.insertInspectionDefect(newDefect);
                         }
                     } else {
@@ -685,6 +732,7 @@ public class BridgeAPIQueue {
                         if (needsReview) {
                             hist.id = obj.optInt("InspectionDetailID");
                             hist.inspection_id = inspectionId;
+                            hist.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
                             hist.previous_inspection_id = obj.optInt("InspectionID");
                             hist.defect_item_id = obj.optInt("DefectItemID");
                             hist.defect_item_number = obj.optInt("ItemNumber");
@@ -703,10 +751,14 @@ public class BridgeAPIQueue {
                             newDefect.defect_status_id = obj.optInt("DefectStatusID");
                             newDefect.comment = obj.optString("Comment");
                             newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
+                            newDefect.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
                             newDefect.reinspection_required = false;
                             newDefect.picture_path = null;
                             newDefect.is_uploaded = false;
-                            if (!vm.multifamilyDefectExists(newDefect.prior_inspection_detail_id, newDefect.inspection_id)) {
+                            if (vm.multifamilyDefectExists(newDefect.first_inspection_detail_id) > 0) {
+                                int existingId = vm.multifamilyDefectExists(newDefect.first_inspection_detail_id);
+                                vm.updateExistingMFCDefect(newDefect.defect_status_id, newDefect.comment, existingId);
+                            } else {
                                 vm.insertInspectionDefect(newDefect);
                             }
                         }
@@ -1018,7 +1070,7 @@ public class BridgeAPIQueue {
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof  NoConnectionError){
-                BridgeLogger.log('E', TAG, "Lose connection in uploadInspectionAttachment.");
+                BridgeLogger.log('E', TAG, "Lost connection in uploadInspectionAttachment.");
                 callback.onFailure("No connection, please try again");
             } else if (error instanceof TimeoutError) {
                 BridgeLogger.log('E', TAG, "Request timed out in uploadInspectionAttachment.");
@@ -1049,7 +1101,7 @@ public class BridgeAPIQueue {
     }
     public StringRequest uploadInspectionDefect(JSONObject inspectionDefect, int defectItemId, int inspectionId, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += POST_INSPECTION_DEFECT_V2_URL;
+        url += POST_INSPECTION_DEFECT_V3_URL;
 
         StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
             callback.onSuccess("Success");
@@ -1120,6 +1172,47 @@ public class BridgeAPIQueue {
 
         request.setTag(Constants.CANCEL_TAG);
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+    public StringRequest updateInspectionStatusV2(JSONObject inspectionStatusRequest, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += POST_INSPECTION_STATUS_V2_URL;
+
+        StringRequest request = new StringRequest(Request.Method.POST, url, response -> {
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateInspectionStatusV2.");
+                callback.onFailure("No connection, please try again.");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateInspectionStatusV2.");
+                callback.onFailure("Request timed out, please try again");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateInspectionStatusV2: " + errorMessage);
+                callback.onFailure("Error! Please contact support...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString(PREF_AUTH_TOKEN, "NULL"));
+                return params;
+            }
+
+            @Override
+            public byte[] getBody() {
+                return inspectionStatusRequest.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+
+        request.setTag(Constants.CANCEL_TAG);
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(20), 0, 0));
         return request;
     }
 }

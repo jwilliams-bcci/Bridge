@@ -10,14 +10,14 @@ android {
             keyPassword 'burgess'
         }
     }
-    compileSdkVersion 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.burgess.bridge"
         minSdkVersion 26
-        targetSdkVersion 33
-        versionCode 24
-        versionName "1.07"
+        targetSdkVersion 34
+        versionCode 30
+        versionName "1.09"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

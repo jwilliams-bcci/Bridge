@@ -13,6 +13,7 @@ public class InspectionDefect_Table {
     public int defect_status_id;
     public String comment;
     public int prior_inspection_detail_id;
+    public int first_inspection_detail_id;
     public String lot_number;
     public String stage_of_construction;
     public boolean reinspection_required;
@@ -22,7 +23,8 @@ public class InspectionDefect_Table {
     public boolean is_editable;
 
     public InspectionDefect_Table(int inspection_id, int defect_item_id, int defect_status_id,
-                                  String comment, int prior_inspection_detail_id, String lot_number,
+                                  String comment, int prior_inspection_detail_id,
+                                  int first_inspection_detail_id, String lot_number,
                                   String stage_of_construction, boolean reinspection_required,
                                   String picture_path, byte[] attachment_data) {
         this.inspection_id = inspection_id;
@@ -30,6 +32,7 @@ public class InspectionDefect_Table {
         this.defect_status_id = defect_status_id;
         this.comment = comment;
         this.prior_inspection_detail_id = prior_inspection_detail_id;
+        this.first_inspection_detail_id = first_inspection_detail_id;
         this.lot_number = lot_number;
         this.stage_of_construction = stage_of_construction;
         this.reinspection_required = reinspection_required;
@@ -48,7 +51,7 @@ public class InspectionDefect_Table {
     public String toString() {
         return "ID: " + id + ",InspectionId: " + inspection_id + ", DefectItemId: " + defect_item_id +
                 ", DefectStatusId: " + defect_status_id + ", Comment: " + comment + ", PriorInspectionDetailId: " +
-                prior_inspection_detail_id + ", ReinspectionRequired: " + reinspection_required + ", PicturePath: " +
-                picture_path;
+                prior_inspection_detail_id + ", FirstInspectionDetailId: " + first_inspection_detail_id +
+                ", ReinspectionRequired: " + reinspection_required + ", PicturePath: " + picture_path;
     }
 }

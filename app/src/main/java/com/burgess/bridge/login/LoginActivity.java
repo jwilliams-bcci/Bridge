@@ -219,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
                 hideSpinner();
             }
         });
-        mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectors(mLoginViewModel, new ServerCallback() {
+        mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectorsV2(mLoginViewModel, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                     queue.add(mUpdateRoomsRequest);

@@ -53,6 +53,7 @@
         android:paddingHorizontal="8dp"
         android:paddingVertical="8dp"
         android:textColor="@color/colorWhite"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,26 +86,28 @@
         android:id="@+id/review_and_submit_button_attach_file"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/button_rounded_orange"
         android:paddingHorizontal="4dp"
         android:text="Attach File"
         android:textColor="@color/colorWhite"
-        app:layout_constraintStart_toStartOf="@+id/review_and_submit_text_address"
-        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_text_address" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_toolbar"
+        tools:visibility="visible" />
 
     <Button
         android:id="@+id/review_and_submit_button_submit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/button_rounded_blue"
         android:text="Submit"
         android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toEndOf="@+id/review_and_submit_text_address"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/review_and_submit_button_attach_file"
-        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_text_address" />
+        app:layout_constraintTop_toTopOf="@+id/review_and_submit_button_attach_file" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/review_and_submit_recycler_inspection_defects"
@@ -113,9 +116,32 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/review_and_submit_text_address"
-        app:layout_constraintStart_toStartOf="@+id/review_and_submit_text_address"
-        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_button_submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_button_sort_description"
         tools:listitem="@layout/item_inspection_defect" />
+
+    <Button
+        android:id="@+id/review_and_submit_button_sort_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_rounded_blue"
+        android:paddingHorizontal="4dp"
+        android:text="Sort By Description"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="@+id/review_and_submit_button_attach_file"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_button_attach_file" />
+
+    <Button
+        android:id="@+id/review_and_submit_button_sort_item_number"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_blue"
+        android:paddingHorizontal="4dp"
+        android:text="Sort By Item Number"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="@+id/review_and_submit_button_submit"
+        app:layout_constraintTop_toTopOf="@+id/review_and_submit_button_sort_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

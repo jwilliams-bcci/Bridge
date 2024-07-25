@@ -58,8 +58,12 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mInspectionDefectRepository.insert(inspectionDefect);
     }
 
-    public boolean multifamilyDefectExists(int priorInspectionDefectId, int inspectionId) {
-        return mInspectionDefectRepository.multifamilyDefectExists(priorInspectionDefectId, inspectionId);
+    public int multifamilyDefectExists(int firstInspectionDetailId) {
+        return mInspectionDefectRepository.multifamilyDefectExists(firstInspectionDetailId);
+    }
+
+    public void updateExistingMFCDefect(int defectStatusId, String comment, int id) {
+        mInspectionDefectRepository.updateExistingMFCDefect(defectStatusId, comment, id);
     }
 
     public void insertInspectionHistory(InspectionHistory_Table inspectionHistory) {

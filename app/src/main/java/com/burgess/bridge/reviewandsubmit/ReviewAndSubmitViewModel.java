@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 
 import data.Repositories.AttachmentRepository;
@@ -61,8 +60,12 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         return mInspectionDefectRepository.getReinspectionRequiredDefects(inspectionId);
     }
 
-    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReview(int inspectionId) {
-        return mInspectionDefectRepository.getInspectionDefectsForReview(inspectionId);
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSort(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewDescriptionSort(inspectionId);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSort(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewItemNumberSort(inspectionId);
     }
 
     public List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspectionId) {
@@ -127,5 +130,13 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public void insertAttachment(Attachment_Table attachment) {
         mAttachmentRepository.insert(attachment);
+    }
+
+    public void updateExistingMFCDefect(int defectStatusId, String comment, int id) {
+        mInspectionDefectRepository.updateExistingMFCDefect(defectStatusId, comment, id);
+    }
+
+    public int multifamilyDefectExists(int firstInspectionDetailId) {
+        return mInspectionDefectRepository.multifamilyDefectExists(firstInspectionDetailId);
     }
 }

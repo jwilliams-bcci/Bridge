@@ -20,19 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -55,24 +50,13 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import data.Enums.Resolution;
-import data.Enums.ResolutionEnergy;
-import data.Enums.ResolutionEnergyWithCP;
 import data.Tables.Attachment_Table;
 import data.Tables.Builder_Table;
 import data.Tables.DefectItem_Table;
@@ -98,6 +82,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private TextView mTextToolbarIndividualRemaining;
     private TextView mTextToolbarTeamRemaining;
+    private TextView mTextChangeReason;
     private StringRequest mUploadMultifamilyDetailsRequest;
     private StringRequest mUploadInspectionAttachmentRequest;
     private StringRequest mUploadInspectionDataRequest;
@@ -111,10 +96,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private List<InspectionDefect_Table> mReinspectionRequiredDefectList;
     private Button mButtonAttachFile;
     private Button mButtonSubmit;
+    private Button mButtonSortDescription;
+    private Button mButtonSortItemNumber;
     private boolean mIsOnline;
+    private boolean mChangedStatus;
     private long mLastClickTime = 0;
     private ChangeResolutionFragment mChangeResolutionFragment;
     private ActivityResultLauncher<Intent> chooseFileLauncher;
+    private ReviewAndSubmitListAdapter mReviewAndSubmitListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +122,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mSecurityUserId = mSharedPreferences.getString(Constants.PREF_SECURITY_USER_ID, "NULL");
         mDivisionId = mInspection.division_id;
         mIsOnline = mSharedPreferences.getBoolean(PREF_IS_ONLINE, false);
+        mChangedStatus = false;
 
         initializeViews();
         initializeActivityResults();
@@ -149,6 +139,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mTextAddress = findViewById(R.id.review_and_submit_text_address);
         mButtonAttachFile = findViewById(R.id.review_and_submit_button_attach_file);
         mButtonSubmit = findViewById(R.id.review_and_submit_button_submit);
+        mButtonSortDescription = findViewById(R.id.review_and_submit_button_sort_description);
+        mButtonSortItemNumber = findViewById(R.id.review_and_submit_button_sort_item_number);
         mRecyclerInspectionDefects = findViewById(R.id.review_and_submit_recycler_inspection_defects);
     }
     private void initializeButtonListeners() {
@@ -171,6 +163,16 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             } catch (Exception e) {
                 BridgeLogger.log('E', TAG, "ERROR in mButtonSubmit.click(): " + e.getMessage());
             }
+        });
+        mButtonSortDescription.setOnClickListener(v -> {
+            Snackbar.make(mConstraintLayout, "Sorting by description...", Snackbar.LENGTH_SHORT).show();
+            mReviewAndSubmitViewModel.getInspectionDefectsForReviewDescriptionSort(mInspectionId).observe(this, defectItems ->
+                    mReviewAndSubmitListAdapter.setCurrentList(defectItems));
+        });
+        mButtonSortItemNumber.setOnClickListener(v -> {
+            Snackbar.make(mConstraintLayout, "Sorting by item number...", Snackbar.LENGTH_SHORT).show();
+            mReviewAndSubmitViewModel.getInspectionDefectsForReviewItemNumberSort(mInspectionId).observe(this, defectItems ->
+                    mReviewAndSubmitListAdapter.setCurrentList(defectItems));
         });
     }
     private void initializeActivityResults() {
@@ -204,11 +206,11 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             mTextAddress.append(mInspection.inspection_type);
 
             // Populate the recycler view of inspection defects
-            ReviewAndSubmitListAdapter reviewAndSubmitListAdapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
-            mRecyclerInspectionDefects.setAdapter(reviewAndSubmitListAdapter);
+            mReviewAndSubmitListAdapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
+            mRecyclerInspectionDefects.setAdapter(mReviewAndSubmitListAdapter);
             mRecyclerInspectionDefects.setLayoutManager(new LinearLayoutManager(this));
-            mReviewAndSubmitViewModel.getInspectionDefectsForReview(mInspectionId).observe(this, defectItems -> {
-                reviewAndSubmitListAdapter.submitList(defectItems);
+            mReviewAndSubmitViewModel.getInspectionDefectsForReviewDescriptionSort(mInspectionId).observe(this, defectItems -> {
+                mReviewAndSubmitListAdapter.submitList(defectItems);
             });
 
             // If this is not a reinspection, set up the swipe functionality to remove an item
@@ -225,7 +227,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         ReviewAndSubmitViewHolder holder = (ReviewAndSubmitViewHolder) viewHolder;
                         if (!holder.mIsEditable) {
                             Snackbar.make(mConstraintLayout, "Cannot delete previous items from Multifamily inspections!", Snackbar.LENGTH_SHORT).show();
-                            reviewAndSubmitListAdapter.notifyDataSetChanged();
+                            mReviewAndSubmitListAdapter.notifyDataSetChanged();
                         } else {
                             mReviewAndSubmitViewModel.deleteInspectionDefect(holder.mInspectionDefectId);
                         }
@@ -271,7 +273,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
             }
 
-            if (mInspection.inspection_type_id == 785 || mInspection.inspection_type_id == 1160) {
+            if (mInspection.inspection_type_id == 785 || mInspection.inspection_type_id == 1160 || mInspection.inspection_type_id == 1148) {
                 status = 27;
             }
 
@@ -293,6 +295,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     public void updateInspectionStatus(int statusId) {
         mInspectionStatusId = statusId;
         BridgeLogger.log('I', TAG, "Changed Resolution to " + statusId);
+        mChangedStatus = true;
         try {
             showResolutionCheckDialog(statusId);
         } catch (Exception e) {
@@ -334,11 +337,26 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             });
         }
 
-        JSONObject jObj;
+        JSONObject defectJSON;
+        JSONObject statusJSON = new JSONObject();
         InspectionDefect_Table inspectionDefect;
         DefectItem_Table defectItem;
         BridgeLogger.log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
-        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatus(mInspectionId, mInspectionStatusId, mSecurityUserId, inspectionDefects.size(), (mSupervisorPresent ? 1 : 0), mInspection.start_time.toString(), endTime.toString(), (mInspection.trainee_id > 0 ? 1 : 0), mInspection.trainee_id, new ServerCallback() {
+        statusJSON.put("InspectionId", mInspectionId);
+        statusJSON.put("StatusId", mInspectionStatusId);
+        statusJSON.put("UserId", mSecurityUserId);
+        statusJSON.put("InspectionTotal", inspectionDefects.size());
+        statusJSON.put("SuperPresent", (mSupervisorPresent ? 1 : 0));
+        statusJSON.put("StartTime", mInspection.start_time.toString());
+        statusJSON.put("EndTime", endTime.toString());
+        statusJSON.put("Training", (mInspection.trainee_id > 0 ? 1 : 0));
+        statusJSON.put("TraineeId", mInspection.trainee_id);
+        if (mChangedStatus) {
+            statusJSON.put("ChangeReason","Changed the resolution.");
+        } else {
+            statusJSON.put("ChangeReason", null);
+        }
+        mUpdateInspectionStatusRequest = BridgeAPIQueue.getInstance().updateInspectionStatusV2(statusJSON, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 BridgeLogger.log('I', TAG, "mUpdateInspectionStatusRequest returned success.");
@@ -402,33 +420,33 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 inspectionDefect = inspectionDefects.get(lcv);
                 defectItem = mReviewAndSubmitViewModel.getDefectItem(inspectionDefect.defect_item_id);
 
-                jObj = new JSONObject();
-                jObj.put("InspectionId", inspectionDefect.inspection_id);
-                jObj.put("DefectItemId", inspectionDefect.defect_item_id);
-                jObj.put("DefectStatusId", inspectionDefect.defect_status_id);
+                defectJSON = new JSONObject();
+                defectJSON.put("InspectionId", inspectionDefect.inspection_id);
+                defectJSON.put("DefectItemId", inspectionDefect.defect_item_id);
+                defectJSON.put("DefectStatusId", inspectionDefect.defect_status_id);
 
                 if (inspectionDefect.comment != null) {
-                    jObj.put("Comment", inspectionDefect.comment);
+                    defectJSON.put("Comment", inspectionDefect.comment);
                 } else {
-                    jObj.put("Comment", "");
+                    defectJSON.put("Comment", "");
                 }
                 if (inspectionDefect.picture_path != null) {
                     try {
-                        jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id, false)));
-                        jObj.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
+                        defectJSON.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id, false)));
+                        defectJSON.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
                     } catch (NullPointerException e) {
                         Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + defectItem.item_number, Snackbar.LENGTH_SHORT).show();
                         hideProgressSpinner();
                         return;
                     }
                 } else {
-                    jObj.put("ImageData", null);
-                    jObj.put("ImageFileName", null);
+                    defectJSON.put("ImageData", null);
+                    defectJSON.put("ImageFileName", null);
                 }
                 if (inspectionDefect.attachment_data != null) {
                     try {
-                        jObj.put("AttachmentData", Base64.getEncoder().encodeToString(inspectionDefect.attachment_data));
-                        jObj.put("AttachmentFileName", mInspectionId + "_" + defectItem.id + "_Attachment.pdf");
+                        defectJSON.put("AttachmentData", Base64.getEncoder().encodeToString(inspectionDefect.attachment_data));
+                        defectJSON.put("AttachmentFileName", mInspectionId + "_" + defectItem.id + "_Attachment.pdf");
                     } catch (NullPointerException e) {
                         Snackbar.make(mConstraintLayout, "Attachment is missing! Please check attachment for #" + defectItem.item_number, Snackbar.LENGTH_SHORT).show();
 
@@ -436,24 +454,30 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                         return;
                     }
                 } else {
-                    jObj.put("AttachmentData", null);
-                    jObj.put("AttachmentFileName", null);
+                    defectJSON.put("AttachmentData", null);
+                    defectJSON.put("AttachmentFileName", null);
                 }
-                jObj.put("PriorInspectionDetailId", inspectionDefect.prior_inspection_detail_id);
+                defectJSON.put("PriorInspectionDetailId", inspectionDefect.prior_inspection_detail_id);
+                defectJSON.put("FirstInspectionDetailId", inspectionDefect.first_inspection_detail_id);
                 if (mInspection.require_risk_assessment) {
-                    jObj.put("LotNumber", inspectionDefect.lot_number);
-                    jObj.put("StageOfConstruction", inspectionDefect.stage_of_construction);
+                    defectJSON.put("LotNumber", inspectionDefect.lot_number);
+                    defectJSON.put("StageOfConstruction", inspectionDefect.stage_of_construction);
                 } else {
-                    jObj.put("LotNumber", null);
-                    jObj.put("StageOfConstruction", null);
+                    defectJSON.put("LotNumber", null);
+                    defectJSON.put("StageOfConstruction", null);
                 }
                 InspectionDefect_Table finalDefect = inspectionDefect;
                 if (!inspectionDefect.is_uploaded) {
-                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, new ServerCallback() {
+                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(defectJSON, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, new ServerCallback() {
                         @Override
                         public void onSuccess(String message) {
                             mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
                             BridgeLogger.log('I', TAG, "Defect item uploaded... " + finalDefect);
+                            if (mReviewAndSubmitViewModel.multifamilyDefectExists(finalDefect.first_inspection_detail_id) > 0) {
+                                int existingId = mReviewAndSubmitViewModel.multifamilyDefectExists(finalDefect.first_inspection_detail_id);
+                                mReviewAndSubmitViewModel.updateExistingMFCDefect(finalDefect.defect_status_id, finalDefect.comment, existingId);
+                                BridgeLogger.log('I', TAG, "Updated existing defect");
+                            }
                             if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
                                 BridgeLogger.log('I', TAG, "All defect items uploaded. Adding mUpdateInspectionStatusRequest");
                                 mUpdateInspectionStatusRequest.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

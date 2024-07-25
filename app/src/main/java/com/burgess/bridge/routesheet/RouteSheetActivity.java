@@ -105,7 +105,6 @@ public class RouteSheetActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-
             }
         });
         mUpdateDefectItemsRequest = apiQueue.updateDefectItemsV2(mRouteSheetViewModel, mInspectorId, currentDate);

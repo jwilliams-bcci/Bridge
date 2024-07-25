@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/inspection_details_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -132,7 +130,7 @@
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:linksClickable="true"
-            android:maxLines="2"
+            android:maxLines="4"
             app:layout_constraintEnd_toEndOf="@+id/divider3"
             app:layout_constraintStart_toStartOf="@+id/inspection_details_text_builder"
             app:layout_constraintTop_toTopOf="@+id/inspection_details_text_superintendent_label" />

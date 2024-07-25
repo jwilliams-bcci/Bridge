@@ -30,8 +30,6 @@ import data.DAOs.PastInspection_DAO;
 import data.DAOs.Room_DAO;
 import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
-import data.Tables.DefectCategory_InspectionType_XRef;
-import data.Tables.DefectCategory_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
@@ -52,7 +50,6 @@ import data.Views.RouteSheet_View;
 @Database(entities = {
         Builder_Table.class,
         CannedComment_Table.class,
-        DefectCategory_Table.class,
         DefectItem_Table.class,
         Direction_Table.class,
         Inspection_Table.class,
@@ -60,7 +57,6 @@ import data.Views.RouteSheet_View;
         InspectionResolution_Table.class,
         Location_Table.class,
         Room_Table.class,
-        DefectCategory_InspectionType_XRef.class,
         DefectItem_InspectionType_XRef.class,
         InspectionHistory_Table.class,
         MultifamilyDetails_Table.class,

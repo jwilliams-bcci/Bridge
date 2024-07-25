@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
+import com.burgess.bridge.ekotropedata.EkotropeDataActivity;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
@@ -65,6 +66,7 @@ public class InspectActivity extends AppCompatActivity {
     private Button mButtonSortItemNumber;
     private Button mButtonSortDescription;
     private Button mButtonAddNote;
+    private Button mButtonViewEkotropeData;
     private RecyclerView mRecyclerDefectItems;
     private InspectListAdapter mInspectListAdapter;
     private ReinspectListAdapter mReinspectListAdapter;
@@ -117,6 +119,7 @@ public class InspectActivity extends AppCompatActivity {
         mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
         mButtonSortItemNumber = findViewById(R.id.inspect_button_sort_by_defect_number);
         mButtonSortDescription = findViewById(R.id.inspect_button_sort_by_description);
+        mButtonViewEkotropeData = findViewById(R.id.inpect_button_view_ekotrope_data);
         mRecyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
     }
     private void initializeButtonListeners() {
@@ -157,6 +160,10 @@ public class InspectActivity extends AppCompatActivity {
             mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
                     mInspectListAdapter.setCurrentList(defectItems));
         });
+        mButtonViewEkotropeData.setOnClickListener(v -> {
+            Intent viewEkotropeDataIntent = new Intent(InspectActivity.this, EkotropeDataActivity.class);
+            startActivity(viewEkotropeDataIntent);
+        });
     }
     private void initializeDisplayContent() {
         mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
@@ -184,7 +191,14 @@ public class InspectActivity extends AppCompatActivity {
         if(mScrollPosition > 0) {
             new Handler().postDelayed(() -> mRecyclerDefectItems.scrollToPosition(mScrollPosition), 1000);
         }
-
+        if(mInspection.inspection_class != 7) {
+            mButtonViewEkotropeData.setVisibility(View.GONE);
+            ConstraintLayout layout = findViewById(R.id.inspect_list_defect_items);
+            ConstraintSet newLayout = new ConstraintSet();
+            newLayout.clone(layout);
+            newLayout.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_button_sort_by_defect_number, ConstraintSet.BOTTOM);
+            newLayout.applyTo(layout);
+        }
         fillCategorySpinner(mFilter);
     }
 
@@ -266,6 +280,7 @@ public class InspectActivity extends AppCompatActivity {
             public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
                 InspectViewHolder holder = (InspectViewHolder) viewHolder;
                 final int selectedHistoryId = holder.getInspectionHistoryId();
+                final int selectedFirstDetailId = holder.getFirstDetailId();
                 final int selectedDefectItemId = holder.getDefectItemId();
                 final int selectedInspectionDefectId = holder.getInspectionDefectId();
                 final String selectedComment = holder.getComment();
@@ -287,7 +302,7 @@ public class InspectActivity extends AppCompatActivity {
                                 mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
                             }
                         } else {
-                            InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, selectedComment, selectedHistoryId, null, null, false, null, null);
+                            InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, selectedComment, selectedHistoryId, selectedFirstDetailId, null, null, false, null, null);
                             newId = mInspectViewModel.insertInspectionDefect(newFailedDefect);
                             mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);
@@ -309,7 +324,7 @@ public class InspectActivity extends AppCompatActivity {
                                 mInspectViewModel.updateInspectionDefectId(selectedInspectionDefectId, selectedHistoryId);
                             }
                         } else {
-                            InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, selectedComment, selectedHistoryId, null, null, false, null, null);
+                            InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, selectedComment, selectedHistoryId, selectedFirstDetailId, null, null, false, null, null);
                             newId = mInspectViewModel.insertInspectionDefect(newCompleteDefect);
                             mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);

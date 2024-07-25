@@ -34,24 +34,12 @@ public class ResolutionHelper {
             resolutionList.add(new Resolution(11, "Passed"));
         }
         resolutionList.add(new Resolution(3, "Not Ready"));
+        resolutionList.add(new Resolution(32, "Correct & Proceed"));
         if (mInspectionClass == 7) {
             resolutionList.add(new Resolution(24, "Builder to Verify"));
-            if (mInspectionType.startsWith("HERS Thermal Bypass Rough") || mInspectionType.startsWith("Energy Code Rough") || mInspectionType.contains("Pre-Insulation")) {
-                resolutionList.add(new Resolution(32, "Correct & Proceed"));
-            }
             if (mDivisionId == 5 || mDivisionId == 17) {
                 resolutionList.add(new Resolution(21, "Batch"));
             }
-        } else if ((mBuilderId == 2473) && (mInspectionTypeId == 13 || mInspectionTypeId == 23)) {
-            resolutionList.add(new Resolution(32, "Correct & Proceed"));
-        } else if (mBuilderId == 1918 && mInspectionTypeId == 1269) {
-            resolutionList.add(new Resolution(32, "Correct & Proceed"));
-        } else if (mBuilderId == 2784) {
-            resolutionList.add(new Resolution(32, "Correct & Proceed"));
-        } else if (mInspectionType.contains("Pre-Insulation")) {
-            resolutionList.add(new Resolution(32, "Correct & Proceed"));
-        } else if (mBuilderId == 2597 && mInspectionTypeId == 1828) {
-            resolutionList.add(new Resolution(32, "Correct & Proceed"));
         }
         resolutionList.add(new Resolution(27, "Performed"));
 

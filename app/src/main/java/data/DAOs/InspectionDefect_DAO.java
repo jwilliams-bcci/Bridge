@@ -2,7 +2,6 @@ package data.DAOs;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -33,14 +32,23 @@ public interface InspectionDefect_DAO {
     @Query("SELECT * FROM inspection_defect_table WHERE inspection_id= :inspection_id ORDER BY id ASC")
     List<InspectionDefect_Table> getInspectionDefectsSync(int inspection_id);
 
-    @Query("SELECT COUNT(*) AS NumDefects FROM inspection_defect_table WHERE prior_inspection_detail_id = :prior_inspection_detail_id AND inspection_id = :inspection_id")
-    boolean multifamilyDefectExists(int prior_inspection_detail_id, int inspection_id);
+    @Query("SELECT id FROM inspection_defect_table WHERE first_inspection_detail_id = :first_inspection_detail_id LIMIT 1")
+    int multifamilyDefectExists(int first_inspection_detail_id);
+
+    @Query("UPDATE inspection_defect_table SET prior_inspection_detail_id = :prior_inspection_detail_id WHERE id = :id")
+    void updatePriorInspectionDetailId(int prior_inspection_detail_id, int id);
+
+    @Query("UPDATE inspection_defect_table SET defect_status_id = :defect_status_id, comment = :comment WHERE id = :id")
+    void updateExistingMFCDefect(int defect_status_id, String comment, int id);
 
     @Query("SELECT * FROM inspection_defect_table WHERE id = :inspection_defect_id")
     InspectionDefect_Table getInspectionDefect(int inspection_defect_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id")
-    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReview(int inspection_id);
+    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_description")
+    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSort(int inspection_id);
+
+    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_number")
+    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSort(int inspection_id);
 
     @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id")
     List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspection_id);

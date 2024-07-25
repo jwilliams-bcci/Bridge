@@ -93,6 +93,7 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
             intent.putExtra(DefectItemActivity.INSPECTION_ID, inspectionHistory.inspection_id);
             intent.putExtra(DefectItemActivity.DEFECT_ID, inspectionHistory.defect_item_id);
             intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, inspectionHistory.id);
+            intent.putExtra(DefectItemActivity.FIRST_DETAIL_ID, inspectionHistory.first_inspection_detail_id);
             intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, inspectionHistory.inspection_defect_id);
             holder.itemView.getContext().startActivity(intent);
         });

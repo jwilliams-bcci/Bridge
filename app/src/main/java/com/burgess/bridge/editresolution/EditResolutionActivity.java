@@ -200,10 +200,10 @@ public class EditResolutionActivity extends AppCompatActivity {
         long newId = 0;
 
         if (mPictureTaken && !mAttachmentIncluded) {
-            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, null, null, false, mCurrentPhotoPath, null);
+            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, 0, null, null, false, mCurrentPhotoPath, null);
         } else {
             BridgeLogger.log('I', TAG, "problem here in editresolutionactivity 197");
-            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, null, null, false, null, null);
+            inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, 0, null, null, false, null, null);
         }
         newId = mEditResolutionViewModel.addInspectionDefect(inspectionDefect);
 

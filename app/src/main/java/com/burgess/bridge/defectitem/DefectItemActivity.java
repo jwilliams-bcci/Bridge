@@ -90,6 +90,8 @@ public class DefectItemActivity extends AppCompatActivity {
     public static final int DEFECT_ID_NOT_FOUND = -1;
     public static final String INSPECTION_HISTORY_ID = "com.burgess.bridge.INSPECTION_HISTORY_ID";
     public static final int INSPECTION_HISTORY_ID_NOT_FOUND = -1;
+    public static final String FIRST_DETAIL_ID = "com.burgess.bridge.FIRST_DETAIL_ID";
+    public static final int FIRST_DETAIL_ID_NOT_FOUND = -1;
     public static final String INSPECTION_DEFECT_ID = "com.burgess.bridge.INSPECTION_DEFECT_ID";
     public static final int INSPECTION_DEFECT_ID_NOT_FOUND = -1;
     public static final String SCROLL_POSITION = "com.burgess.bridge.SCROLL_POSITION";
@@ -109,6 +111,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private int mDefectId;
     private int mInspectionDefectId;
     private int mInspectionHistoryId;
+    private int mFirstDetailId;
     private int mScrollPosition;
     private String mFilter;
     private DefectItemViewModel mDefectItemViewModel;
@@ -176,6 +179,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectId = intent.getIntExtra(DEFECT_ID, DEFECT_ID_NOT_FOUND);
         mInspectionDefectId = intent.getIntExtra(INSPECTION_DEFECT_ID, INSPECTION_DEFECT_ID_NOT_FOUND);
         mInspectionHistoryId = intent.getIntExtra(INSPECTION_HISTORY_ID, INSPECTION_HISTORY_ID_NOT_FOUND);
+        mFirstDetailId = intent.getIntExtra(FIRST_DETAIL_ID, FIRST_DETAIL_ID_NOT_FOUND);
         mScrollPosition = intent.getIntExtra(SCROLL_POSITION, SCROLL_POSITION_NOT_FOUND);
         mFilter = intent.getStringExtra(FILTER_OPTION);
         mInspection = mDefectItemViewModel.getInspectionSync(mInspectionId);
@@ -246,6 +250,7 @@ public class DefectItemActivity extends AppCompatActivity {
             // Initialize local variables for new defect item.
             int defectStatusId = 0;
             int priorInspectionDetailId = mInspectionHistoryId == -1 ? 0 : mInspectionHistoryId;
+            int firstInspectionDetailId = mFirstDetailId == -1 ? 0 : mFirstDetailId;
             long newId = 0;
             String comment = "";
             String lotNumber = "";
@@ -278,8 +283,8 @@ public class DefectItemActivity extends AppCompatActivity {
                 return;
             }
 
-            if (mInspection.require_risk_assessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--"))) {
-                Snackbar.make(mConstraintLayout, "Must have a lot number and Construction Stage for this inspection type.", Snackbar.LENGTH_LONG).show();
+            if (mInspection.require_risk_assessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--") || !mPictureTaken)) {
+                Snackbar.make(mConstraintLayout, "Must have a lot number, construction stage, and picture for this inspection type.", Snackbar.LENGTH_LONG).show();
                 return;
             } else if (mInspection.require_risk_assessment) {
                 lotNumber = mTextLotNumber.getText().toString();
@@ -304,13 +309,13 @@ public class DefectItemActivity extends AppCompatActivity {
 
             // If a picture was taken, create a new InspectionDefect_Table with the picture path
             if (mPictureTaken && !mAttachmentIncluded) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, null);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, null);
             } else if (mAttachmentIncluded && !mPictureTaken) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, attachmentData);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, attachmentData);
             } else if (mAttachmentIncluded && mPictureTaken) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, attachmentData);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, attachmentData);
             } else {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, null);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, null);
             }
 
             // If mInspectionDefectId > 0, that means this is a previously created item, update the item. Otherwise, create a new one.
