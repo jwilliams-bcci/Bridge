@@ -418,6 +418,14 @@ public class DefectItemActivity extends AppCompatActivity {
             mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
         }
 
+        // Engineering Inspections where Defect Items default to Complete
+        if (mInspection.inspection_type_id == 1706 || mInspection.inspection_type_id == 1708 || mInspection.inspection_type_id == 1709 ||
+                mInspection.inspection_type_id == 1710 || mInspection.inspection_type_id == 1711 || mInspection.inspection_type_id == 1851 ||
+                mInspection.inspection_type_id == 1852 || mInspection.inspection_type_id == 1853 || mInspection.inspection_type_id == 1854 ||
+                mInspection.inspection_type_id == 1855) {
+            mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
+        }
+
         // If mInspectionDefectId > 0, then we're editing an existing item (coming from Review & Submit screen)
         // So populate the comment box and current status
         if (mInspectionDefectId > 0) {

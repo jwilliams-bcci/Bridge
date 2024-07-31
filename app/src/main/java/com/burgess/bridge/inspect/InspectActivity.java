@@ -193,7 +193,7 @@ public class InspectActivity extends AppCompatActivity {
         }
         if(mInspection.inspection_class != 7) {
             mButtonViewEkotropeData.setVisibility(View.GONE);
-            ConstraintLayout layout = findViewById(R.id.inspect_list_defect_items);
+            ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
             ConstraintSet newLayout = new ConstraintSet();
             newLayout.clone(layout);
             newLayout.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_button_sort_by_defect_number, ConstraintSet.BOTTOM);

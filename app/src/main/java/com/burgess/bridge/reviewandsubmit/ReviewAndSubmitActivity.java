@@ -285,6 +285,14 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 status = 27;
             }
 
+            // Engineering Inspections that default to Performed
+            if (mInspection.inspection_type_id == 1706 || mInspection.inspection_type_id == 1708 || mInspection.inspection_type_id == 1709 ||
+                    mInspection.inspection_type_id == 1710 || mInspection.inspection_type_id == 1711 || mInspection.inspection_type_id == 1851 ||
+                    mInspection.inspection_type_id == 1852 || mInspection.inspection_type_id == 1853 || mInspection.inspection_type_id == 1854 ||
+                    mInspection.inspection_type_id == 1855) {
+                status = 27;
+            }
+
             return status;
         } catch (Exception e) {
             BridgeLogger.log('E', TAG, "ERROR in getInspectionStatusId: " + e.getMessage());
