@@ -273,10 +273,6 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
             }
 
-            if (mInspection.inspection_type_id == 785 || mInspection.inspection_type_id == 1160 || mInspection.inspection_type_id == 1148) {
-                status = 27;
-            }
-
             if (mInspection.inspection_type_id == 1828 && mInspection.builder_id == 2597) {
                 status = 32;
             }
@@ -285,12 +281,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 status = 27;
             }
 
-            // Engineering Inspections that default to Performed
-            if (mInspection.inspection_type_id == 1706 || mInspection.inspection_type_id == 1708 || mInspection.inspection_type_id == 1709 ||
-                    mInspection.inspection_type_id == 1710 || mInspection.inspection_type_id == 1711 || mInspection.inspection_type_id == 1851 ||
-                    mInspection.inspection_type_id == 1852 || mInspection.inspection_type_id == 1853 || mInspection.inspection_type_id == 1854 ||
-                    mInspection.inspection_type_id == 1855) {
-                status = 27;
+            int[] defaultToPerformed = { 785, 1160, 1148, 918, 1706, 1708, 1709, 1710, 1711, 1851, 1852, 1853, 1854, 1855 };
+            for (int typeId : defaultToPerformed) {
+                if (typeId == mInspection.inspection_type_id) {
+                    status = 27;
+                    break;
+                }
             }
 
             return status;
