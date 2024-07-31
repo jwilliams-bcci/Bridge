@@ -283,6 +283,12 @@ public class DefectItemActivity extends AppCompatActivity {
                 return;
             }
 
+            // If Multifamily and Complete require Photo
+            if (mInspection.division_id == 20 && mRadioGroupDefectStatus.getCheckedRadioButtonId() == R.id.defect_item_radio_c && !mPictureTaken) {
+                Snackbar.make(mConstraintLayout, "MFC Inspections require a photo for items marked C in this category.", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
             if (mInspection.require_risk_assessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--") || !mPictureTaken)) {
                 Snackbar.make(mConstraintLayout, "Must have a lot number, construction stage, and picture for this inspection type.", Snackbar.LENGTH_LONG).show();
                 return;
