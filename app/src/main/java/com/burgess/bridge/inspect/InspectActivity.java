@@ -200,6 +200,7 @@ public class InspectActivity extends AppCompatActivity {
             newLayout.applyTo(layout);
         }
         fillCategorySpinner(mFilter);
+
     }
 
     private void fillCategorySpinner(String initialFilter) {
