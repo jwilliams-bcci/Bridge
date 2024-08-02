@@ -3,6 +3,7 @@ package com.burgess.bridge.base;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.os.Bundle;
 import android.widget.FrameLayout;
@@ -20,7 +21,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setSupportActionBar(findViewById(R.id.base_toolbar));
 
-        mBaseViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(BaseViewModel.class);
+        mBaseViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(BaseViewModel.class);
         mIndividualRemainingInspections = findViewById(R.id.toolbar_individual_inspections_remaining);
     }
 

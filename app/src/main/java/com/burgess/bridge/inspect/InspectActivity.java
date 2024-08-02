@@ -289,7 +289,6 @@ public class InspectActivity extends AppCompatActivity {
 
                 switch (direction) {
                     case ItemTouchHelper.LEFT:
-                        BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as NC using swipe.");
                         if (selectedInspectionDefectId > 0) {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
                             if (inspectionDefectToUpdate.defect_status_id == 2) {
@@ -309,9 +308,18 @@ public class InspectActivity extends AppCompatActivity {
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);
                             mInspectViewModel.updateInspectionDefectId((int) newId, selectedHistoryId);
                         }
+                        BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as NC using swipe.");
                         break;
                     case ItemTouchHelper.RIGHT:
-                        BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as C using swipe.");
+                        int[] builderIds = { 3083, 3084, 3082, 3085 };
+                        for (int builderId : builderIds) {
+                            if (builderId == mInspection.builder_id) {
+                                if (mInspection.reinspect) {
+                                    Snackbar.make(mConstraintLayout, "Cannot swipe to clear for this builder, a picture is required.", Snackbar.LENGTH_LONG).show();
+                                    return;
+                                }
+                            }
+                        }
                         if (selectedInspectionDefectId > 0) {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
                             if (inspectionDefectToUpdate.defect_status_id == 3) {
@@ -331,6 +339,7 @@ public class InspectActivity extends AppCompatActivity {
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);
                             mInspectViewModel.updateInspectionDefectId((int) newId, selectedHistoryId);
                         }
+                        BridgeLogger.log('I', TAG, "Marked Defect ID: " + selectedDefectItemId + " as C using swipe.");
                         break;
                 }
             }

@@ -84,7 +84,7 @@ public class BridgeLogger {
         Uri logFileUri = FileProvider.getUriForFile(ctx, "com.burgess.bridge", logFile);
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setType("vnd.android.cursor.dir/email");
-        String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com"};
+        String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com", "bwallace@burgess-inc.com"};
         emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + inspectorId);
