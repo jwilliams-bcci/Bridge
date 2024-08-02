@@ -51,6 +51,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -117,6 +118,8 @@ public class DefectItemActivity extends AppCompatActivity {
     private DefectItemViewModel mDefectItemViewModel;
     private DefectItem_Table mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
+    private RadioButton mRadioButtonR;
+    private RadioButton mRadioButtonNA;
     private TextView mDefectItemDetails;
     private TextView mDefectItemTextLocation;
     private TextView mDefectItemTextRoom;
@@ -201,6 +204,8 @@ public class DefectItemActivity extends AppCompatActivity {
         mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
         mRadioGroupDefectStatus = findViewById(R.id.defect_item_radio_group);
+        mRadioButtonR = findViewById(R.id.defect_item_radio_r);
+        mRadioButtonNA = findViewById(R.id.defect_item_radio_na);
         mDefectItemTextLocation = findViewById(R.id.defect_item_text_location);
         mDefectItemTextRoom = findViewById(R.id.defect_item_text_room);
         mDefectItemTextDirection = findViewById(R.id.defect_item_text_direction);
@@ -281,6 +286,20 @@ public class DefectItemActivity extends AppCompatActivity {
             if (mInspection.division_id != 20 && mDefectItem.defect_category_name.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
                 Snackbar.make(mConstraintLayout, "Defect items marked C in this category require a picture.", Snackbar.LENGTH_LONG).show();
                 return;
+            }
+
+            int[] builderIds = { 3083, 3084, 3082, 3085 };
+            for (int builderId : builderIds) {
+                if (builderId == mInspection.builder_id) {
+                    if (!mInspection.reinspect && defectStatusId == 2 && !mPictureTaken) {
+                        Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items during 1st time inspections.", Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (mInspection.reinspect && defectStatusId == 3 && !mPictureTaken) {
+                        Snackbar.make(mConstraintLayout, "A picture is required for this builder on C items during reinspections.", Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                }
             }
 
             if (mInspection.require_risk_assessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--") || !mPictureTaken)) {
@@ -416,6 +435,12 @@ public class DefectItemActivity extends AppCompatActivity {
         // If the category is 128, 131, or 132, default to C
         if (mDefectItem.defect_category_id == 128 || mDefectItem.defect_category_id == 131 || mDefectItem.defect_category_id == 132) {
             mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
+        }
+
+        // If MFC inspection, remove R and NC status
+        if (mInspection.division_id == 20) {
+            mRadioButtonR.setVisibility(View.GONE);
+            mRadioButtonNA.setVisibility(View.GONE);
         }
 
         // Engineering Inspections where Defect Items default to Complete
