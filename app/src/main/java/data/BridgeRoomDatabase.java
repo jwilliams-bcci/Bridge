@@ -100,7 +100,6 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
                             .addCallback(sRoomDatabaseCallback)
                             .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()
-                            .createFromAsset(isProd)
                             .build();
                 }
             }

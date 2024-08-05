@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -119,7 +118,7 @@ public class InspectActivity extends AppCompatActivity {
         mSpinnerDefectCategories = findViewById(R.id.inspect_spinner_defect_category);
         mButtonSortItemNumber = findViewById(R.id.inspect_button_sort_by_defect_number);
         mButtonSortDescription = findViewById(R.id.inspect_button_sort_by_description);
-        mButtonViewEkotropeData = findViewById(R.id.inpect_button_view_ekotrope_data);
+        mButtonViewEkotropeData = findViewById(R.id.inspect_button_view_ekotrope_data);
         mRecyclerDefectItems = findViewById(R.id.inspect_list_defect_items);
     }
     private void initializeButtonListeners() {
@@ -180,6 +179,15 @@ public class InspectActivity extends AppCompatActivity {
         if ((mReinspection && mInspection.division_id != 20) || (mInspectionTypeId == 1154)) {
             initializeReinspectDisplayContent();
         } else {
+            if(mInspection.inspection_class != 7) {
+                mButtonViewEkotropeData.setVisibility(View.GONE);
+                ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
+                ConstraintSet newLayout = new ConstraintSet();
+                newLayout.clone(layout);
+                newLayout.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_button_sort_by_defect_number, ConstraintSet.BOTTOM);
+                newLayout.applyTo(layout);
+            }
+
             // Set up defect list
             mInspectListAdapter = new InspectListAdapter(new InspectListAdapter.InspectDiff());
             mInspectListAdapter.setInspection(mInspection);
@@ -191,16 +199,7 @@ public class InspectActivity extends AppCompatActivity {
         if(mScrollPosition > 0) {
             new Handler().postDelayed(() -> mRecyclerDefectItems.scrollToPosition(mScrollPosition), 1000);
         }
-        if(mInspection.inspection_class != 7) {
-            mButtonViewEkotropeData.setVisibility(View.GONE);
-            ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
-            ConstraintSet newLayout = new ConstraintSet();
-            newLayout.clone(layout);
-            newLayout.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_button_sort_by_defect_number, ConstraintSet.BOTTOM);
-            newLayout.applyTo(layout);
-        }
         fillCategorySpinner(mFilter);
-
     }
 
     private void fillCategorySpinner(String initialFilter) {
@@ -248,11 +247,18 @@ public class InspectActivity extends AppCompatActivity {
         mButtonSortItemNumber.setVisibility(View.GONE);
         mTextTotalDefectCountLabel.setVisibility(View.GONE);
         mTextTotalDefectCount.setVisibility(View.GONE);
+        if (mInspection.inspection_class != 7) {
+            mButtonViewEkotropeData.setVisibility(View.GONE);
+        }
 
         // Change constraints
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(mConstraintLayout);
-        constraintSet.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_spinner_defect_category, ConstraintSet.BOTTOM);
+        if(mInspection.inspection_class != 7) {
+            constraintSet.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_spinner_defect_category, ConstraintSet.BOTTOM);
+        } else {
+            constraintSet.connect(R.id.inspect_button_view_ekotrope_data, ConstraintSet.TOP, R.id.inspect_spinner_defect_category, ConstraintSet.BOTTOM);
+        }
         constraintSet.applyTo(mConstraintLayout);
 
         // Set up the defect list
