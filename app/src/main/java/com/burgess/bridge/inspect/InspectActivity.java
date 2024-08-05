@@ -5,6 +5,7 @@ import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -19,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -136,6 +138,7 @@ public class InspectActivity extends AppCompatActivity {
         });
         mButtonReviewAndSubmit.setOnClickListener(v -> {
             boolean allGood;
+            boolean sewerCam = false;
             int numberToReview = mInspectViewModel.getItemsToReview(mInspectionId);
             if (mReinspection) {
                 allGood = numberToReview < 1;
@@ -143,11 +146,21 @@ public class InspectActivity extends AppCompatActivity {
                 allGood = true;
             }
 
-            if (allGood) {
+            // David Weekley Final - Has the sewer cam inspection passed? Yes or No buttons.
+            if ((mInspection.builder_name.toLowerCase().contains("dwh") || mInspection.builder_name.toLowerCase().contains("weekley"))
+                    && mInspection.inspection_type.toLowerCase().contains("final")
+                    && !(mInspection.inspection_type.toLowerCase().contains("roof") || mInspection.inspection_type.toLowerCase().contains("airplus"))
+                    && mInspection.division_id != 20 && mInspection.inspection_class != 7 && allGood) {
+                checkSewerCam();
+            } else {
+                sewerCam = true;
+            }
+
+            if (allGood && sewerCam) {
                 Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
                 reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
                 startActivity(reviewAndSubmitIntent);
-            } else {
+            } else if (sewerCam) {
                 Snackbar.make(mConstraintLayout, "Please review all items", Snackbar.LENGTH_LONG).show();
             }
         });
@@ -363,4 +376,48 @@ public class InspectActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelperCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerDefectItems);
     }
+
+    // Custom action Alert check Sewer Cam passed?
+    public void checkSewerCam() {
+        // Create the object of AlertDialog Builder class
+        AlertDialog.Builder builder = new AlertDialog.Builder(InspectActivity.this);
+
+        // Set the message show for the Alert time
+        builder.setMessage("Has the sewer cam inspection passed?");
+
+        // Set Alert Title
+        builder.setTitle("Alert!");
+
+        // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
+        builder.setCancelable(false);
+
+        // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
+        builder.setPositiveButton("Yes", alertListener);
+
+        // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
+        builder.setNegativeButton("No", alertListener);
+
+        // Create the Alert dialog
+        AlertDialog alertDialog = builder.create();
+        // Show the Alert Dialog box
+        alertDialog.show();
+    }
+    DialogInterface.OnClickListener alertListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    //Yes button clicked
+                    Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
+                    reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+                    startActivity(reviewAndSubmitIntent);
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //No button clicked
+                    Snackbar.make(mConstraintLayout, "Please check Sewer Cam defect present.", Snackbar.LENGTH_LONG).show();
+                    break;
+            }
+        }
+    };
 }
