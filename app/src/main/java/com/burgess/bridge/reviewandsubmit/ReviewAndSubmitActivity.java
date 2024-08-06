@@ -98,6 +98,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private Button mButtonSubmit;
     private Button mButtonSortDescription;
     private Button mButtonSortItemNumber;
+    private Button mButtonSortDefectID;
     private boolean mIsOnline;
     private boolean mChangedStatus;
     private long mLastClickTime = 0;
@@ -106,6 +107,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private ReviewAndSubmitListAdapter mReviewAndSubmitListAdapter;
     private boolean sortDescription;
     private boolean sortItemNumber;
+    private boolean sortDefectID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +145,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mButtonSubmit = findViewById(R.id.review_and_submit_button_submit);
         mButtonSortDescription = findViewById(R.id.review_and_submit_button_sort_description);
         mButtonSortItemNumber = findViewById(R.id.review_and_submit_button_sort_item_number);
+        mButtonSortDefectID = findViewById(R.id.review_and_submit_button_sort_defect_id);
         mRecyclerInspectionDefects = findViewById(R.id.review_and_submit_recycler_inspection_defects);
     }
     private void initializeButtonListeners() {
@@ -190,6 +193,19 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 mReviewAndSubmitViewModel.getInspectionDefectsForReviewItemNumberSortDesc(mInspectionId).observe(this, defectItems ->
                         mReviewAndSubmitListAdapter.setCurrentList(defectItems));
                 sortItemNumber = true;
+            }
+        });
+        mButtonSortDefectID.setOnClickListener(v -> {
+            if(sortDefectID) {
+                Snackbar.make(mConstraintLayout, "Sorting by entry order ascending...", Snackbar.LENGTH_SHORT).show();
+                mReviewAndSubmitViewModel.getInspectionDefectsForReviewDefectIDSortAsc(mInspectionId).observe(this, defectItems ->
+                        mReviewAndSubmitListAdapter.setCurrentList(defectItems));
+                sortDefectID = false;
+            } else {
+                Snackbar.make(mConstraintLayout, "Sorting by entry order descending...", Snackbar.LENGTH_SHORT).show();
+                mReviewAndSubmitViewModel.getInspectionDefectsForReviewDefectIDSortDesc(mInspectionId).observe(this, defectItems ->
+                        mReviewAndSubmitListAdapter.setCurrentList(defectItems));
+                sortDefectID = true;
             }
         });
     }
@@ -615,32 +631,4 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mLockScreen.setVisibility(View.GONE);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
-/*
-    private void sortDescription() {
-        if(sortDescription) {
-            Snackbar.make(mConstraintLayout, "Sorting by description ascending...", Snackbar.LENGTH_SHORT).show();
-            mReviewAndSubmitViewModel.getInspectionDefectsForReviewDescriptionSortAsc(mInspectionId).observe(this, defectItems ->
-                    mReviewAndSubmitListAdapter.setCurrentList(defectItems));
-            sortDescription = false;
-        } else {
-            Snackbar.make(mConstraintLayout, "Sorting by description descending...", Snackbar.LENGTH_SHORT).show();
-            mReviewAndSubmitViewModel.getInspectionDefectsForReviewDescriptionSortDesc(mInspectionId).observe(this, defectItems ->
-                    mReviewAndSubmitListAdapter.setCurrentList(defectItems));
-            sortDescription = true;
-        }
-    }
-
-    private void sortItemNumber() {
-        if(sortItemNumber) {
-            Snackbar.make(mConstraintLayout, "Sorting by item number ascending...", Snackbar.LENGTH_SHORT).show();
-            mReviewAndSubmitViewModel.getInspectionDefectsForReviewItemNumberSortAsc(mInspectionId).observe(this, defectItems ->
-                    mReviewAndSubmitListAdapter.setCurrentList(defectItems));
-            sortItemNumber = false;
-        } else {
-            Snackbar.make(mConstraintLayout, "Sorting by item number descending...", Snackbar.LENGTH_SHORT).show();
-            mReviewAndSubmitViewModel.getInspectionDefectsForReviewItemNumberSortDesc(mInspectionId).observe(this, defectItems ->
-                    mReviewAndSubmitListAdapter.setCurrentList(defectItems));
-            sortItemNumber = true;
-        }
-    }*/
 }

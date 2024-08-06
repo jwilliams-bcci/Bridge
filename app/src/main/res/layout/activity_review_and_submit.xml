@@ -123,25 +123,47 @@
 
     <Button
         android:id="@+id/review_and_submit_button_sort_description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/button_rounded_blue"
         android:paddingHorizontal="4dp"
         android:text="Sort By Description"
         android:textColor="@color/colorWhite"
-        app:layout_constraintStart_toStartOf="@+id/review_and_submit_button_attach_file"
+        app:layout_constraintEnd_toStartOf="@+id/review_and_submit_button_sort_defect_id"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/review_and_submit_button_attach_file" />
 
     <Button
         android:id="@+id/review_and_submit_button_sort_item_number"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/button_rounded_blue"
         android:paddingHorizontal="4dp"
         android:text="Sort By Item Number"
         android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toEndOf="@+id/review_and_submit_button_submit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/review_and_submit_button_sort_defect_id"
         app:layout_constraintTop_toTopOf="@+id/review_and_submit_button_sort_description" />
+
+    <Button
+        android:id="@+id/review_and_submit_button_sort_defect_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_rounded_blue"
+        android:paddingHorizontal="4dp"
+        android:text="Sort By Entry Order"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toStartOf="@+id/review_and_submit_button_sort_item_number"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/review_and_submit_button_sort_description"
+        app:layout_constraintTop_toBottomOf="@+id/review_and_submit_button_attach_file" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

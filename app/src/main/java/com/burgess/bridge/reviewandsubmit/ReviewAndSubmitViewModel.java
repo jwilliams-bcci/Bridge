@@ -76,6 +76,14 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         return mInspectionDefectRepository.getInspectionDefectsForReviewItemNumberSortDesc(inspectionId);
     }
 
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDefectIDSortAsc(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewDefectIDSortAsc(inspectionId);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDefectIDSortDesc(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewDefectIDSortDesc(inspectionId);
+    }
+
     public List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspectionId) {
         return mInspectionDefectRepository.getInspectionDefectsForReviewSync(inspectionId);
     }

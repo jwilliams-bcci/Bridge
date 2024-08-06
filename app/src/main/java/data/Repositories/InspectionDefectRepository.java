@@ -56,6 +56,14 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefectsForReviewItemNumberSortDesc(inspection_id);
     }
 
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDefectIDSortAsc(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewDefectIDSortAsc(inspection_id);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDefectIDSortDesc(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewDefectIDSortDesc(inspection_id);
+    }
+
     public List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspection_id) {
         return mInspectionDefectDao.getInspectionDefectsForReviewSync(inspection_id);
     }
