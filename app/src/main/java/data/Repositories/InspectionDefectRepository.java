@@ -40,12 +40,20 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefectsSync(inspection_id);
     }
 
-    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSort(int inspection_id) {
-        return mInspectionDefectDao.getInspectionDefectsForReviewDescriptionSort(inspection_id);
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortAsc(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewDescriptionSortAsc(inspection_id);
     }
 
-    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSort(int inspection_id) {
-        return mInspectionDefectDao.getInspectionDefectsForReviewItemNumberSort(inspection_id);
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortDesc(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewDescriptionSortDesc(inspection_id);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortAsc(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewItemNumberSortAsc(inspection_id);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortDesc(int inspection_id) {
+        return mInspectionDefectDao.getInspectionDefectsForReviewItemNumberSortDesc(inspection_id);
     }
 
     public List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspection_id) {

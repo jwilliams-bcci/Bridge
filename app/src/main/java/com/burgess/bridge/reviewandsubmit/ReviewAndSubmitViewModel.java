@@ -60,12 +60,20 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         return mInspectionDefectRepository.getReinspectionRequiredDefects(inspectionId);
     }
 
-    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSort(int inspectionId) {
-        return mInspectionDefectRepository.getInspectionDefectsForReviewDescriptionSort(inspectionId);
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortAsc(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewDescriptionSortAsc(inspectionId);
     }
 
-    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSort(int inspectionId) {
-        return mInspectionDefectRepository.getInspectionDefectsForReviewItemNumberSort(inspectionId);
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortDesc(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewDescriptionSortDesc(inspectionId);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortAsc(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewItemNumberSortAsc(inspectionId);
+    }
+
+    public LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortDesc(int inspectionId) {
+        return mInspectionDefectRepository.getInspectionDefectsForReviewItemNumberSortDesc(inspectionId);
     }
 
     public List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspectionId) {

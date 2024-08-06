@@ -44,11 +44,17 @@ public interface InspectionDefect_DAO {
     @Query("SELECT * FROM inspection_defect_table WHERE id = :inspection_defect_id")
     InspectionDefect_Table getInspectionDefect(int inspection_defect_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_description")
-    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSort(int inspection_id);
+    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_description asc")
+    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortAsc(int inspection_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_number")
-    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSort(int inspection_id);
+    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_description desc")
+    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortDesc(int inspection_id);
+
+    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_number asc")
+    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortAsc(int inspection_id);
+
+    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_number desc")
+    LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortDesc(int inspection_id);
 
     @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id")
     List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspection_id);
