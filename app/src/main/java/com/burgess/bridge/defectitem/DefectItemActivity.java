@@ -601,11 +601,30 @@ public class DefectItemActivity extends AppCompatActivity {
             mImageViewThumbnail.setImageResource(R.drawable.ic_no_picture);
         }
     }
+
+    // Takes full size pictures from camera and changes them to specific size
+    private void resizeImage() {
+        BridgeLogger.log('I', TAG, "Image resize Start");
+        try {
+            Bitmap bm = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            FileOutputStream fileOutputStream = new FileOutputStream(mCurrentPhotoPath);
+            if (bm != null) {
+                Bitmap resized = Bitmap.createScaledBitmap(bm, 1080, 1080, true);
+                boolean resizeTest = resized.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            }
+        } catch (IOException e) {
+            BridgeLogger.log('E', TAG, "Image resize Output Failed to save: " + e);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             displayThumbnail();
+            resizeImage();
             mPictureTaken = true;
         }
     }
