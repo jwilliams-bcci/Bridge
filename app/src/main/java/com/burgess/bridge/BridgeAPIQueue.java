@@ -523,6 +523,7 @@ public class BridgeAPIQueue {
                     inspection.is_failed = false;
                     inspection.route_sheet_order = obj.optInt("Order");
                     inspection.trainee_id = -1;
+                    inspection.ekotrope_project_id = "TestNotImplementedInSQL"; // obj.getString("ekotrope_project_id");
 
                     if (inspection.division_id == 20) {
                         multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.id, inspection.location_id, inspection.inspection_order, inspection.inspection_type_id));

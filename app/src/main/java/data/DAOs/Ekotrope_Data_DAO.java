@@ -5,17 +5,15 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
 
 import data.Tables.Inspection_Table;
 import data.Views.RouteSheet_View;
 
 @Dao
-public interface Inspection_DAO {
+public interface Ekotrope_Data_DAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Inspection_Table inspection);
 

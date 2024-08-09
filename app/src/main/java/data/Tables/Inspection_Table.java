@@ -52,6 +52,7 @@ public class Inspection_Table {
     public boolean is_failed;
     public int route_sheet_order;
     public int trainee_id;
+    public String ekotrope_project_id;
 
     public Inspection_Table () {
 
@@ -68,7 +69,7 @@ public class Inspection_Table {
                             String job_number, boolean require_risk_assessment,
                             OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
                             boolean is_uploaded, boolean is_failed, int route_sheet_order,
-                            int trainee_id) {
+                            int trainee_id, String ekotrope_project_id) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.division_id = division_id;
@@ -104,5 +105,6 @@ public class Inspection_Table {
         this.is_failed = is_failed;
         this.route_sheet_order = route_sheet_order;
         this.trainee_id = trainee_id;
+        this.ekotrope_project_id = ekotrope_project_id;
     }
 }
