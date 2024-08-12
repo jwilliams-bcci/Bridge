@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.attachments.AttachmentsViewModel;
+import com.burgess.bridge.ekotropedata.EkotropeDataViewModel;
 import com.burgess.bridge.login.LoginViewModel;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 
@@ -41,6 +42,7 @@ import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
+import data.Tables.Ekotrope_Data_Table;
 import data.Tables.Fault_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
@@ -87,6 +89,7 @@ public class BridgeAPIQueue {
     private static final String GET_INSPECTIONS_V3_URL = "GetInspectionsV3?inspectorid=%s&inspectiondate=%s";
     private static final String GET_INSPECTIONS_V4_URL = "GetInspectionsV4?inspectorid=%s&inspectiondate=%s";
     private static final String GET_REMAINING_INSPECTIONS_URL = "GetRemainingInspections?inspectorid=%s&inspectiondate=%s";
+    private static final String GET_EKOTROPE_DATA_URL = "GetInspectionsV3?inspectorid=%s&inspectiondate=%s"; //ToDo: URL needs to be changed
     private static final String GET_PAST_INSPECTIONS_URL = "GetPastInspections?locationid=%s";
     private static final String GET_ATTACHMENTS_URL = "GetAttachments?inspectionid=%s&locationid=%s";
     private static final String GET_INSPECTION_HISTORY_URL = "GetInspectionHistory?inspectionorder=%s&inspectiontypeid=%s&locationid=%s";
@@ -561,6 +564,101 @@ public class BridgeAPIQueue {
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + errorMessage);
+                callback.onFailure("Error while updating route sheet! Please send activity log...");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
+                return params;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+
+    // Ekotrope Data
+    public JsonArrayRequest updateEkotropeData(EkotropeDataViewModel vm, String inspectorId, String inspectionDate, final ServerCallback callback) {
+        String url = isProd ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(GET_EKOTROPE_DATA_URL, inspectorId, inspectionDate);
+
+        ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
+        ArrayList<JsonArrayRequest> multifamilyHistoryRequests = new ArrayList<>();
+        ArrayList<JsonArrayRequest> pastInspectionRequests = new ArrayList<>();
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
+            inspectionHistoryRequests.clear();
+            multifamilyHistoryRequests.clear();
+            pastInspectionRequests.clear();
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject obj = response.getJSONObject(i);
+                    Ekotrope_Data_Table inspection = new Ekotrope_Data_Table(); //ToDo: Ekotrope Data needs to be pulled
+                    inspection.id = obj.optInt("InspectionID");
+                    inspection.inspection_date = OffsetDateTime.parse(obj.optString("InspectionDate"));
+                    inspection.division_id = obj.optInt("DivisionID");
+                    inspection.location_id = obj.optInt("LocationID");
+                    inspection.builder_name = obj.getString("BuilderName");
+                    inspection.builder_id = obj.optInt("BuilderID");
+                    inspection.super_name = obj.getString("SuperName");
+                    inspection.inspector_id = obj.optInt("InspectorID");
+                    inspection.inspector = obj.getString("Inspector");
+                    inspection.community = obj.getString("Community");
+                    inspection.community_id = obj.optInt("CommunityID");
+                    inspection.inspection_class = obj.optInt("InspectionClass");
+                    inspection.city = obj.getString("City");
+                    inspection.inspection_type_id = obj.optInt("InspectionTypeID");
+                    inspection.inspection_type = obj.getString("InspectionType");
+                    inspection.reinspect = obj.getBoolean("ReInspect");
+                    inspection.inspection_order = obj.optInt("InspectionOrder");
+                    inspection.address = obj.getString("Address1");
+                    inspection.inspection_status_id = obj.optInt("InspectionStatusID");
+                    inspection.inspection_status = obj.getString("InspectionStatus");
+                    inspection.super_phone = obj.getString("SuperPhone");
+                    inspection.super_email = obj.getString("SuperEmailAddress");
+                    inspection.super_present = obj.optInt("SuperintendentPresent");
+                    inspection.incomplete_reason = obj.getString("IncompleteReason");
+                    inspection.incomplete_reason_id = obj.optInt("IncompleteReasonID");
+                    inspection.notes = obj.getString("Comment");
+                    inspection.job_number = obj.getString("JobNumber");
+                    inspection.require_risk_assessment = obj.getBoolean("RequireRiskAssessment");
+                    inspection.start_time = null;
+                    inspection.end_time = null;
+                    inspection.is_complete = false;
+                    inspection.is_uploaded = false;
+                    inspection.is_failed = false;
+                    inspection.route_sheet_order = obj.optInt("Order");
+                    inspection.trainee_id = -1;
+                    inspection.ekotrope_project_id = "TestNotImplementedInSQL"; // obj.getString("ekotrope_project_id");
+
+                    vm.insertInspection(inspection);
+                } catch (JSONException e) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateEkotropeData: " + e.getMessage());
+                    callback.onFailure("Error while updating route sheet! Please send activity log...");
+                }
+            }
+
+            for (int lcv = 0; lcv < inspectionHistoryRequests.size(); lcv++) {
+                getRequestQueue().add(inspectionHistoryRequests.get(lcv));
+            }
+            for (int lcv = 0; lcv < multifamilyHistoryRequests.size(); lcv++) {
+                getRequestQueue().add(multifamilyHistoryRequests.get(lcv));
+            }
+            for (int lcv = 0; lcv < pastInspectionRequests.size(); lcv++) {
+                getRequestQueue().add(pastInspectionRequests.get(lcv));
+            }
+            callback.onSuccess("Success");
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateEkotropeData.");
+                callback.onFailure("Error while updating route sheet! Please send activity log...");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateEkotropeData.");
+                callback.onFailure("Error while updating route sheet! Please send activity log...");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateEkotropeData: " + errorMessage);
                 callback.onFailure("Error while updating route sheet! Please send activity log...");
             }
         }) {

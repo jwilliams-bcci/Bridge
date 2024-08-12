@@ -19,6 +19,7 @@ import data.DAOs.CannedComment_DAO;
 import data.DAOs.DefectItem_DAO;
 import data.DAOs.DefectItem_InspectionType_DAO;
 import data.DAOs.Direction_DAO;
+import data.DAOs.Ekotrope_Data_DAO;
 import data.DAOs.Fault_DAO;
 import data.DAOs.Attachment_DAO;
 import data.DAOs.InspectionDefect_DAO;
@@ -33,6 +34,7 @@ import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
+import data.Tables.Ekotrope_Data_Table;
 import data.Tables.Fault_Table;
 import data.Tables.Attachment_Table;
 import data.Tables.InspectionDefect_Table;
@@ -61,13 +63,14 @@ import data.Views.RouteSheet_View;
         InspectionHistory_Table.class,
         MultifamilyDetails_Table.class,
         PastInspection_Table.class,
+        Ekotrope_Data_Table.class,
         Inspector_Table.class,
         Fault_Table.class,
         Attachment_Table.class,
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 66, exportSchema = false)
+        }, version = 67, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     private static Context mContext;
@@ -75,6 +78,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract CannedComment_DAO mCannedCommentDao();
     public abstract DefectItem_DAO mDefectItemDao();
     public abstract Direction_DAO mDirectionDao();
+    public abstract Ekotrope_Data_DAO mEkotropeDataDao();
     public abstract Inspection_DAO mInspectionDao();
     public abstract InspectionDefect_DAO mInspectionDefectDao();
     public abstract Room_DAO mRoomDao();

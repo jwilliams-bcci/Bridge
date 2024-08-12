@@ -1,18 +1,16 @@
 package data.Tables;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 
 import data.DateConverter;
 
-@Entity(tableName = "inspection_table")
-public class Inspection_Table {
+@Entity(tableName = "ekotrope_data_table")
+public class Ekotrope_Data_Table { //ToDo: Ekotrope data needs to be used
     @PrimaryKey
     public int id;
     public int inspection_type_id;
@@ -52,23 +50,24 @@ public class Inspection_Table {
     public boolean is_failed;
     public int route_sheet_order;
     public int trainee_id;
+    public String ekotrope_project_id;
 
-    public Inspection_Table () {
+    public Ekotrope_Data_Table() {
 
     }
 
-    public Inspection_Table(@NonNull int id, OffsetDateTime inspection_date, int division_id,
-                            int location_id, String builder_name, int builder_id, String super_name,
-                            int inspector_id, String inspector, String community, int community_id,
-                            int inspection_class, String city, int inspection_type_id,
-                            String inspection_type, boolean reinspect, int inspection_order,
-                            String address, int inspection_status_id, String inspection_status,
-                            String super_phone, String super_email, int super_present,
-                            String incomplete_reason, int incomplete_reason_id, String notes,
-                            String job_number, boolean require_risk_assessment,
-                            OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
-                            boolean is_uploaded, boolean is_failed, int route_sheet_order,
-                            int trainee_id) {
+    public Ekotrope_Data_Table(@NonNull int id, OffsetDateTime inspection_date, int division_id,
+                               int location_id, String builder_name, int builder_id, String super_name,
+                               int inspector_id, String inspector, String community, int community_id,
+                               int inspection_class, String city, int inspection_type_id,
+                               String inspection_type, boolean reinspect, int inspection_order,
+                               String address, int inspection_status_id, String inspection_status,
+                               String super_phone, String super_email, int super_present,
+                               String incomplete_reason, int incomplete_reason_id, String notes,
+                               String job_number, boolean require_risk_assessment,
+                               OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
+                               boolean is_uploaded, boolean is_failed, int route_sheet_order,
+                               int trainee_id, String ekotrope_project_id) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.division_id = division_id;
@@ -104,5 +103,6 @@ public class Inspection_Table {
         this.is_failed = is_failed;
         this.route_sheet_order = route_sheet_order;
         this.trainee_id = trainee_id;
+        this.ekotrope_project_id = ekotrope_project_id;
     }
 }
