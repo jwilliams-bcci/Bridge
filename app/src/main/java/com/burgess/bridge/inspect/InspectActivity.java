@@ -180,6 +180,7 @@ public class InspectActivity extends AppCompatActivity {
         });
         mButtonViewEkotropeData.setOnClickListener(v -> {
             Intent viewEkotropeDataIntent = new Intent(InspectActivity.this, EkotropeDataActivity.class);
+            viewEkotropeDataIntent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
             startActivity(viewEkotropeDataIntent);
         });
     }
