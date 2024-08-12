@@ -47,7 +47,7 @@ public class InspectionRepository {
                 mInspectionDao.update(i.id, i.inspection_type_id, i.inspection_date, i.division_id, i.location_id, i.builder_name, i.builder_id,
                         i.super_name, i.inspector_id, i.inspector, i.community, i.community_id, i.city, i.inspection_class, i.inspection_type,
                         i.reinspect, i.inspection_order, i.address, i.inspection_status_id, i.inspection_status, i.super_phone, i.super_email,
-                        i.super_present, i.incomplete_reason, i.incomplete_reason_id, i.notes, i.job_number, i.require_risk_assessment);
+                        i.super_present, i.incomplete_reason, i.incomplete_reason_id, i.notes, i.job_number, i.require_risk_assessment, i.ekotrope_project_id);
             });
         } else {
             BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
