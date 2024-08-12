@@ -85,6 +85,7 @@ public class BridgeAPIQueue {
     private static final String GET_DIRECTIONS_URL = "GetDirections";
     private static final String GET_FAULTS_URL = "GetFaults";
     private static final String GET_INSPECTIONS_V3_URL = "GetInspectionsV3?inspectorid=%s&inspectiondate=%s";
+    private static final String GET_INSPECTIONS_V4_URL = "GetInspectionsV4?inspectorid=%s&inspectiondate=%s";
     private static final String GET_REMAINING_INSPECTIONS_URL = "GetRemainingInspections?inspectorid=%s&inspectiondate=%s";
     private static final String GET_PAST_INSPECTIONS_URL = "GetPastInspections?locationid=%s";
     private static final String GET_ATTACHMENTS_URL = "GetAttachments?inspectionid=%s&locationid=%s";
@@ -475,7 +476,7 @@ public class BridgeAPIQueue {
     // Route Sheet
     public JsonArrayRequest updateRouteSheet(RouteSheetViewModel vm, String inspectorId, String inspectionDate, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_INSPECTIONS_V3_URL, inspectorId, inspectionDate);
+        url += String.format(GET_INSPECTIONS_V4_URL, inspectorId, inspectionDate);
 
         ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
         ArrayList<JsonArrayRequest> multifamilyHistoryRequests = new ArrayList<>();
@@ -516,6 +517,7 @@ public class BridgeAPIQueue {
                     inspection.notes = obj.getString("Comment");
                     inspection.job_number = obj.getString("JobNumber");
                     inspection.require_risk_assessment = obj.getBoolean("RequireRiskAssessment");
+                    inspection.ekotrope_project_id = obj.getString("EkotropeProjectID");
                     inspection.start_time = null;
                     inspection.end_time = null;
                     inspection.is_complete = false;
