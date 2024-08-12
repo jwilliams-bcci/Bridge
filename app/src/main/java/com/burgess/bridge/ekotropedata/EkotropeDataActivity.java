@@ -660,10 +660,10 @@ public class EkotropeDataActivity extends AppCompatActivity {
                 "inspection_class: " + mInspection.inspection_class + "\n";
 
         emailIntent.putExtra(Intent.EXTRA_TEXT,
-            getInfoExample + "\n\n" +
-            getInfoReplyExample + "\n\n" +
-            postInfoExample + "\n\n" +
-            postInfoReplyExample + "\n\n" +
+            //getInfoExample + "\n\n" +
+            //getInfoReplyExample + "\n\n" +
+            //postInfoExample + "\n\n" +
+            //postInfoReplyExample + "\n\n" +
             currentDataExample
         );
         return emailIntent;
