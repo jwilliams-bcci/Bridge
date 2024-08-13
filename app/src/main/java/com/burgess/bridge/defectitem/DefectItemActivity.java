@@ -277,6 +277,12 @@ public class DefectItemActivity extends AppCompatActivity {
                 }
             }
 
+            // Comment length
+            if (mDefectItemTextComment.length() > 250) {
+                Snackbar.make(mConstraintLayout, "Comment is over 250 characters.", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
             // If it's Multifamily and not in Observation categories, require a picture
             if (mInspection.division_id == 20 && !mDefectItem.defect_category_name.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
                 Snackbar.make(mConstraintLayout, "MFC Inspections require a photo for items marked C in this category.", Snackbar.LENGTH_LONG).show();

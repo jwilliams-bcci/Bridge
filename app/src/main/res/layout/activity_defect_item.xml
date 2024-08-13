@@ -159,18 +159,26 @@
             app:layout_constraintTop_toBottomOf="@+id/defect_item_label_previous_comment"
             app:srcCompat="@android:drawable/ic_btn_speak_now" />
 
-        <EditText
-            android:id="@+id/defect_item_text_comment"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textinput_counter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_border"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:minLines="3"
+            app:counterEnabled="true"
+            app:counterMaxLength="250"
+            android:layout_marginTop="-16dp"
             app:layout_constraintEnd_toEndOf="@+id/defect_item_text_canned_comment"
             app:layout_constraintStart_toStartOf="@+id/defect_item_text_canned_comment"
-            app:layout_constraintTop_toTopOf="@+id/defect_item_button_microphone" />
+            app:layout_constraintTop_toTopOf="@+id/defect_item_button_microphone">
+            <EditText
+                android:id="@+id/defect_item_text_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/text_border"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:minLines="3" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/defect_item_text_location"
@@ -285,7 +293,7 @@
             android:id="@+id/defect_item_imageview_thumbnail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/defect_item_text_comment"
+            app:layout_constraintStart_toStartOf="@+id/textinput_counter"
             app:layout_constraintTop_toTopOf="@+id/textView18"
             app:srcCompat="@mipmap/ic_bridge_launcher" />
 
@@ -364,7 +372,7 @@
             android:layout_marginTop="12dp"
             android:text="Lot Number"
             app:layout_constraintStart_toStartOf="@+id/defect_item_button_microphone"
-            app:layout_constraintTop_toBottomOf="@+id/defect_item_text_comment" />
+            app:layout_constraintTop_toBottomOf="@+id/textinput_counter" />
 
         <EditText
             android:id="@+id/defect_item_text_lot_number"
@@ -379,8 +387,8 @@
             android:paddingVertical="4dp"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/defect_item_label_lot_number"
-            app:layout_constraintEnd_toEndOf="@+id/defect_item_text_comment"
-            app:layout_constraintStart_toStartOf="@+id/defect_item_text_comment"
+            app:layout_constraintEnd_toEndOf="@+id/textinput_counter"
+            app:layout_constraintStart_toStartOf="@+id/textinput_counter"
             app:layout_constraintTop_toTopOf="@+id/defect_item_label_lot_number" />
 
         <TextView
