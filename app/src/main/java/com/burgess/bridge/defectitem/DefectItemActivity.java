@@ -277,15 +277,6 @@ public class DefectItemActivity extends AppCompatActivity {
                 }
             }
 
-            // Comment length
-            int dateMaxLength = 9;
-            if ((mDefectItemTextPreviousComment.length() == 0 && mDefectItemTextComment.length() > 250) || (mDefectItemTextPreviousComment.length() > 0 && mDefectItemTextComment.length() > (250-mDefectItemTextPreviousComment.length()-dateMaxLength))) {
-                if (mDefectItemTextPreviousComment.length() == 0) { dateMaxLength = 0; }
-                int commentTotal = mDefectItemTextComment.length() + mDefectItemTextPreviousComment.length() + dateMaxLength;
-                Snackbar.make(mConstraintLayout, "Comment is " + commentTotal + " of 250 max characters.", Snackbar.LENGTH_LONG).show();
-                return;
-            }
-
             // If it's Multifamily and not in Observation categories, require a picture
             if (mInspection.division_id == 20 && !mDefectItem.defect_category_name.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
                 Snackbar.make(mConstraintLayout, "MFC Inspections require a photo for items marked C in this category.", Snackbar.LENGTH_LONG).show();
@@ -333,6 +324,12 @@ public class DefectItemActivity extends AppCompatActivity {
                 comment = mDefectItemTextPreviousComment.getText() + "\n" + currentDate.getMonth().getValue() + "/" + currentDate.getDayOfMonth() + " - " + comment;
             } else if (!mDefectItemTextPreviousComment.getText().equals("") && comment.equals("")) {
                 comment += mDefectItemTextPreviousComment.getText();
+            }
+
+            // Comment length
+            if (comment.length() > 250) {
+                Snackbar.make(mConstraintLayout, "Comment is " + comment.length() + " of 250 max characters.", Snackbar.LENGTH_LONG).show();
+                return;
             }
 
             // If a picture was taken, create a new InspectionDefect_Table with the picture path
