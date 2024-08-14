@@ -278,8 +278,11 @@ public class DefectItemActivity extends AppCompatActivity {
             }
 
             // Comment length
-            if (mDefectItemTextComment.length() > 250) {
-                Snackbar.make(mConstraintLayout, "Comment is over 250 characters.", Snackbar.LENGTH_LONG).show();
+            int dateMaxLength = 9;
+            if ((mDefectItemTextPreviousComment.length() == 0 && mDefectItemTextComment.length() > 250) || (mDefectItemTextPreviousComment.length() > 0 && mDefectItemTextComment.length() > (250-mDefectItemTextPreviousComment.length()-dateMaxLength))) {
+                if (mDefectItemTextPreviousComment.length() == 0) { dateMaxLength = 0; }
+                int commentTotal = mDefectItemTextComment.length() + mDefectItemTextPreviousComment.length() + dateMaxLength;
+                Snackbar.make(mConstraintLayout, "Comment is " + commentTotal + " of 250 max characters.", Snackbar.LENGTH_LONG).show();
                 return;
             }
 
