@@ -430,6 +430,16 @@ public class DefectItemActivity extends AppCompatActivity {
             mSpinnerConstructionStage.setVisibility(View.GONE);
         }
 
+        if (mInspection.division_id == 20) {
+            int[] inspectionTypeIds = {1832,1872,1939,1940,1941,1943,1944,1945,1946,1951,1952,1953,1954,1955,1956,1957,1958,1960,1961,1962,1967,1968,2029};
+            for (int inspectionTypeId : inspectionTypeIds) {
+                if (inspectionTypeId == mInspection.inspection_type_id) {
+                    mSpinnerConstructionStage.setVisibility(View.GONE);
+                    mLabelConstructionStage.setVisibility(View.GONE);
+                }
+            }
+        }
+
         // If mDefectId == 1, then it's a note, hide the radio buttons and show the Add Attachment button.
         if (mDefectId == 1) {
             mRadioGroupDefectStatus.setVisibility(View.INVISIBLE);
