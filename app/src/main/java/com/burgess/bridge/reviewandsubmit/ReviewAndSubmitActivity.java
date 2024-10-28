@@ -54,6 +54,7 @@ import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import data.Enums.Resolution;
@@ -578,6 +579,8 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
     private void showResolutionCheckDialog(int statusId) {
         String statusMessage = Resolution.findByCode(statusId).toString();
+        int[] thermalRoughInspectionTypes = { 1655, 1327, 1305 };
+        AtomicBoolean needsStickerDialog = new AtomicBoolean(false);
 
         Handler handler = new Handler();
         AlertDialog resolutionDialog = new AlertDialog.Builder(this)
@@ -585,7 +588,19 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 .setMessage(statusMessage)
                 .setPositiveButton("Yes", (dialog, which) -> {
                     try {
-                        completeInspection();
+                        if (mDivisionId == 2 & mInspection.builder_name.contains("David Weekley")) {
+                            for (int typeId : thermalRoughInspectionTypes) {
+                                if (mInspection.inspection_type_id == typeId) {
+                                    // Houston, David Weekley Inspection, Thermal Rough, need to check for sticker.
+                                    needsStickerDialog.set(true);
+                                }
+                            }
+                        }
+                        if (needsStickerDialog.get()) {
+                            showStickerCheckDialog(statusId);
+                        } else {
+                            completeInspection();
+                        }
                     } catch (Exception e) {
                         BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
                         hideProgressSpinner();
@@ -612,6 +627,40 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type, mInspection.builder_id, mInspection.inspection_type_id);
         mChangeResolutionFragment.setResolutionList(resolutionHelper.buildList());
         mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
+    }
+
+    private void showStickerCheckDialog(int statusId) {
+        String stickerColor = "";
+        String status = "";
+
+        if (statusId == 11) {
+            stickerColor = "GREEN";
+            status = "PASSED";
+        } else if (statusId == 12) {
+            stickerColor = "RED";
+            status = "FAILED";
+        } else {
+            // Neither passed nor failed, skip
+        }
+
+        AlertDialog stickerDialog = new AlertDialog.Builder(this)
+                .setTitle("Sticker check")
+                .setMessage("Has the " + stickerColor + " sticker been applied for the " + status + " resolution?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    try {
+                        completeInspection();
+                    } catch (Exception e) {
+                        BridgeLogger.log('E', TAG, "ERROR in completeInspection: " + e.getMessage());
+                        hideProgressSpinner();
+                        Snackbar.make(mConstraintLayout, "Error! Please return to route sheet and send activity log", Snackbar.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    Snackbar.make(mConstraintLayout, "Sticker check not completed", Snackbar.LENGTH_LONG).show();
+                })
+                .create();
+
+        stickerDialog.show();
     }
 
     private void returnToRouteSheet() {

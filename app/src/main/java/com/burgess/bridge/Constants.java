@@ -19,5 +19,8 @@ public final class Constants {
     public static final String API_STAGE_URL = "https://apistage.burgess-inc.com/api/Bridge/";
     public static final String API_PROD_URL = "https://api.burgess-inc.com/api/Bridge/";
 
+    public static final String API_EKOTROPE_URL = "https://api.ekotrope.com/api/v1/projects/";
+    public static final String API_EKOTROPE_AUTH = "burgesstestapi:gM5WcwHE";
+
     public static final String CANCEL_TAG = "CANCEL_ALL";
 }

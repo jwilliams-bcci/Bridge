@@ -10,12 +10,14 @@ import java.util.List;
 
 import data.Repositories.DefectItemRepository;
 import data.Repositories.DefectItem_InspectionType_XRefRepository;
+import data.Repositories.Ekotrope_FramedFloorRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Repositories.PastInspectionRepository;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
+import data.Tables.Ekotrope_FramedFloor_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
@@ -29,6 +31,7 @@ public class RouteSheetViewModel extends AndroidViewModel {
     private DefectItemRepository mDefectItemRepository;
     private DefectItem_InspectionType_XRefRepository mDIITRepository;
     private PastInspectionRepository mPastInspectionRepository;
+    private Ekotrope_FramedFloorRepository mEkotropeFramedFloorRepository;
     private String reportUrl;
 
     public RouteSheetViewModel(@NonNull Application application) {
@@ -108,5 +111,13 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public String getReportUrl() {
         return reportUrl;
+    }
+
+    public void updateEkotropePlanId(String planId, int inspectionId) {
+        mInspectionRepository.updateEkotropePlanId(planId, inspectionId);
+    }
+
+    public void insertFramedFloor(Ekotrope_FramedFloor_Table framedFloor) {
+        mEkotropeFramedFloorRepository.insert(framedFloor);
     }
 }

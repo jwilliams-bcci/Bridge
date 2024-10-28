@@ -44,6 +44,7 @@ public class Inspection_Table {
     public String job_number;
     public boolean require_risk_assessment;
     public String ekotrope_project_id;
+    public String ekotrope_plan_id;
     @TypeConverters({DateConverter.class})
     public OffsetDateTime start_time;
     @TypeConverters({DateConverter.class})
@@ -67,9 +68,10 @@ public class Inspection_Table {
                             String super_phone, String super_email, int super_present,
                             String incomplete_reason, int incomplete_reason_id, String notes,
                             String job_number, boolean require_risk_assessment,
-                            String ekotrope_project_id, OffsetDateTime start_time,
-                            OffsetDateTime end_time, boolean is_complete, boolean is_uploaded,
-                            boolean is_failed, int route_sheet_order, int trainee_id) {
+                            String ekotrope_project_id, String ekotrope_plan_id,
+                            OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
+                            boolean is_uploaded, boolean is_failed, int route_sheet_order,
+                            int trainee_id) {
         this.id = id;
         this.inspection_date = inspection_date;
         this.division_id = division_id;
@@ -98,6 +100,8 @@ public class Inspection_Table {
         this.notes = notes;
         this.job_number = job_number;
         this.require_risk_assessment = require_risk_assessment;
+        this.ekotrope_project_id = ekotrope_project_id;
+        this.ekotrope_plan_id = ekotrope_plan_id;
         this.start_time = start_time;
         this.end_time = end_time;
         this.is_complete = is_complete;

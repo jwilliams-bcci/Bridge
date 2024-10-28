@@ -77,4 +77,7 @@ public interface Inspection_DAO {
 
     @Query("UPDATE inspection_table SET trainee_id = :trainee_id WHERE id = :inspection_id")
     void assignTrainee(int trainee_id, int inspection_id);
+
+    @Query("UPDATE inspection_table SET ekotrope_plan_id = :ekotrope_plan_id WHERE id = :inspection_id")
+    void updateEkotropePlanId(String ekotrope_plan_id, int inspection_id);
 }

@@ -152,7 +152,7 @@ public class InspectActivity extends AppCompatActivity {
             if ((mInspection.builder_name.toLowerCase().contains("dwh") || mInspection.builder_name.toLowerCase().contains("weekley"))
                     && mInspection.inspection_type.toLowerCase().contains("final")
                     && !(mInspection.inspection_type.toLowerCase().contains("roof") || mInspection.inspection_type.toLowerCase().contains("airplus"))
-                    && mInspection.division_id != 20 && mInspection.inspection_class != 7 && allGood) {
+                    && mInspection.division_id == 1 && mInspection.inspection_class != 7 && allGood) {
                 needsSewerCam = true;
             } else {
                 needsSewerCam = false;

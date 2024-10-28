@@ -11,9 +11,7 @@ import com.android.volley.Network;
 import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
@@ -25,6 +23,7 @@ import com.burgess.bridge.ekotropedata.EkotropeDataViewModel;
 import com.burgess.bridge.login.LoginViewModel;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,7 +41,7 @@ import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
-import data.Tables.Ekotrope_Data_Table;
+import data.Tables.Ekotrope_FramedFloor_Table;
 import data.Tables.Fault_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
@@ -50,8 +49,9 @@ import data.Tables.Inspection_Table;
 import data.Tables.Inspector_Table;
 import data.Tables.PastInspection_Table;
 import data.Tables.Room_Table;
-import kotlin.reflect.KCallable;
 
+import static com.burgess.bridge.Constants.API_EKOTROPE_AUTH;
+import static com.burgess.bridge.Constants.API_EKOTROPE_URL;
 import static com.burgess.bridge.Constants.API_PROD_URL;
 import static com.burgess.bridge.Constants.API_STAGE_URL;
 import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
@@ -484,6 +484,7 @@ public class BridgeAPIQueue {
         ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
         ArrayList<JsonArrayRequest> multifamilyHistoryRequests = new ArrayList<>();
         ArrayList<JsonArrayRequest> pastInspectionRequests = new ArrayList<>();
+        ArrayList<JsonObjectRequest> ekotropePlansIdRequests = new ArrayList<>();
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             inspectionHistoryRequests.clear();
             multifamilyHistoryRequests.clear();
@@ -521,6 +522,7 @@ public class BridgeAPIQueue {
                     inspection.job_number = obj.getString("JobNumber");
                     inspection.require_risk_assessment = obj.getBoolean("RequireRiskAssessment");
                     inspection.ekotrope_project_id = obj.getString("EkotropeProjectID");
+                    inspection.ekotrope_plan_id = null;
                     inspection.start_time = null;
                     inspection.end_time = null;
                     inspection.is_complete = false;
@@ -535,6 +537,20 @@ public class BridgeAPIQueue {
                         if (inspection.reinspect) {
                             inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
                         }
+                    }
+                    if (inspection.ekotrope_project_id != "null") {
+                        ekotropePlansIdRequests.add(getEkotropePlanId(vm, inspection.ekotrope_project_id, inspection.id, new ServerCallback() {
+                            @Override
+                            public void onSuccess(String message) {
+                                BridgeLogger.log('I', TAG, "Added plan id for " + inspection.id);
+                                callback.onSuccess("Added plan");
+                            }
+                            @Override
+                            public void onFailure(String message) {
+                                BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + message);
+                                callback.onFailure("Error while updating route sheet! Please send activity log...");
+                            }
+                        }));
                     }
                     pastInspectionRequests.add(updatePastInspections(vm, inspection.location_id));
                     vm.insertInspection(inspection);
@@ -553,6 +569,9 @@ public class BridgeAPIQueue {
             for (int lcv = 0; lcv < pastInspectionRequests.size(); lcv++) {
                 getRequestQueue().add(pastInspectionRequests.get(lcv));
             }
+            for (int lcv = 0; lcv < ekotropePlansIdRequests.size(); lcv++) {
+                getRequestQueue().add(ekotropePlansIdRequests.get(lcv));
+            }
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -564,101 +583,6 @@ public class BridgeAPIQueue {
             } else {
                 String errorMessage = new String(error.networkResponse.data);
                 BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + errorMessage);
-                callback.onFailure("Error while updating route sheet! Please send activity log...");
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, AUTH_BEARER + mSharedPreferences.getString("AuthorizationToken", "NULL"));
-                return params;
-            }
-        };
-
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        return request;
-    }
-
-    // Ekotrope Data
-    public JsonArrayRequest updateEkotropeData(EkotropeDataViewModel vm, String inspectorId, String inspectionDate, final ServerCallback callback) {
-        String url = isProd ? API_PROD_URL : API_STAGE_URL;
-        url += String.format(GET_EKOTROPE_DATA_URL, inspectorId, inspectionDate);
-
-        ArrayList<JsonArrayRequest> inspectionHistoryRequests = new ArrayList<>();
-        ArrayList<JsonArrayRequest> multifamilyHistoryRequests = new ArrayList<>();
-        ArrayList<JsonArrayRequest> pastInspectionRequests = new ArrayList<>();
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
-            inspectionHistoryRequests.clear();
-            multifamilyHistoryRequests.clear();
-            pastInspectionRequests.clear();
-            for (int i = 0; i < response.length(); i++) {
-                try {
-                    JSONObject obj = response.getJSONObject(i);
-                    Ekotrope_Data_Table inspection = new Ekotrope_Data_Table(); //ToDo: Ekotrope Data needs to be pulled
-                    inspection.id = obj.optInt("InspectionID");
-                    inspection.inspection_date = OffsetDateTime.parse(obj.optString("InspectionDate"));
-                    inspection.division_id = obj.optInt("DivisionID");
-                    inspection.location_id = obj.optInt("LocationID");
-                    inspection.builder_name = obj.getString("BuilderName");
-                    inspection.builder_id = obj.optInt("BuilderID");
-                    inspection.super_name = obj.getString("SuperName");
-                    inspection.inspector_id = obj.optInt("InspectorID");
-                    inspection.inspector = obj.getString("Inspector");
-                    inspection.community = obj.getString("Community");
-                    inspection.community_id = obj.optInt("CommunityID");
-                    inspection.inspection_class = obj.optInt("InspectionClass");
-                    inspection.city = obj.getString("City");
-                    inspection.inspection_type_id = obj.optInt("InspectionTypeID");
-                    inspection.inspection_type = obj.getString("InspectionType");
-                    inspection.reinspect = obj.getBoolean("ReInspect");
-                    inspection.inspection_order = obj.optInt("InspectionOrder");
-                    inspection.address = obj.getString("Address1");
-                    inspection.inspection_status_id = obj.optInt("InspectionStatusID");
-                    inspection.inspection_status = obj.getString("InspectionStatus");
-                    inspection.super_phone = obj.getString("SuperPhone");
-                    inspection.super_email = obj.getString("SuperEmailAddress");
-                    inspection.super_present = obj.optInt("SuperintendentPresent");
-                    inspection.incomplete_reason = obj.getString("IncompleteReason");
-                    inspection.incomplete_reason_id = obj.optInt("IncompleteReasonID");
-                    inspection.notes = obj.getString("Comment");
-                    inspection.job_number = obj.getString("JobNumber");
-                    inspection.require_risk_assessment = obj.getBoolean("RequireRiskAssessment");
-                    inspection.start_time = null;
-                    inspection.end_time = null;
-                    inspection.is_complete = false;
-                    inspection.is_uploaded = false;
-                    inspection.is_failed = false;
-                    inspection.route_sheet_order = obj.optInt("Order");
-                    inspection.trainee_id = -1;
-                    inspection.ekotrope_project_id = "TestNotImplementedInSQL"; // obj.getString("ekotrope_project_id");
-
-                    vm.insertInspection(inspection);
-                } catch (JSONException e) {
-                    BridgeLogger.log('E', TAG, "ERROR in updateEkotropeData: " + e.getMessage());
-                    callback.onFailure("Error while updating route sheet! Please send activity log...");
-                }
-            }
-
-            for (int lcv = 0; lcv < inspectionHistoryRequests.size(); lcv++) {
-                getRequestQueue().add(inspectionHistoryRequests.get(lcv));
-            }
-            for (int lcv = 0; lcv < multifamilyHistoryRequests.size(); lcv++) {
-                getRequestQueue().add(multifamilyHistoryRequests.get(lcv));
-            }
-            for (int lcv = 0; lcv < pastInspectionRequests.size(); lcv++) {
-                getRequestQueue().add(pastInspectionRequests.get(lcv));
-            }
-            callback.onSuccess("Success");
-        }, error -> {
-            if (error instanceof NoConnectionError) {
-                BridgeLogger.log('E', TAG, "Lost connection in updateEkotropeData.");
-                callback.onFailure("Error while updating route sheet! Please send activity log...");
-            } else if (error instanceof TimeoutError) {
-                BridgeLogger.log('E', TAG, "Request timed out in updateEkotropeData.");
-                callback.onFailure("Error while updating route sheet! Please send activity log...");
-            } else {
-                String errorMessage = new String(error.networkResponse.data);
-                BridgeLogger.log('E', TAG, "ERROR in updateEkotropeData: " + errorMessage);
                 callback.onFailure("Error while updating route sheet! Please send activity log...");
             }
         }) {
@@ -980,6 +904,99 @@ public class BridgeAPIQueue {
                 return params;
             }
         };
+        return request;
+    }
+
+    // Ekotrope API Calls
+    public JsonObjectRequest getEkotropePlanId(RouteSheetViewModel vm, String projectId, int inspectionId, final ServerCallback callback) {
+        String url = API_EKOTROPE_URL + projectId;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            String planId = response.optString("masterPlanId");
+            vm.updateEkotropePlanId(planId, inspectionId);
+
+            getRequestQueue().add(getEkotropePlanData(vm, planId, new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+                    BridgeLogger.log('I', TAG, "Added plan data for " + planId);
+                    callback.onSuccess("Added plan data");
+                }
+                @Override
+                public void onFailure(String message) {
+                    BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + message);
+                    callback.onFailure("Error while updating route sheet! Please send activity log...");
+                }
+            }));
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in getEkotropePlanId.");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in getEkotropePlanId.");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in getEkotropePlanId: " + errorMessage);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH.getBytes(), Base64.DEFAULT));
+                return params;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+    public JsonObjectRequest getEkotropePlanData(RouteSheetViewModel vm, String planId, final ServerCallback callback) {
+        String url = API_EKOTROPE_URL + planId;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            JSONObject thermalEnvelope = response.optJSONObject("thermalEnvelope");
+            JSONArray framedFloorArray = thermalEnvelope.optJSONArray("framedFloors");
+            for (int lcv = 0; lcv < framedFloorArray.length(); lcv++) {
+                JSONObject framedFloorObj = framedFloorArray.optJSONObject(lcv);
+                JSONObject typeObj = framedFloorObj.optJSONObject("type");
+                JSONObject assemblyDetailsObj = typeObj.optJSONObject("assemblyDetails");
+                JSONArray cavityInsulationGradeObj = assemblyDetailsObj.optJSONArray("cavityInsulationGrade");
+                JSONArray studSpacingObj = assemblyDetailsObj.optJSONArray("framingSpacing");
+                JSONArray studWidthObj = assemblyDetailsObj.optJSONArray("framingWidth");
+                JSONArray studDepthObj = assemblyDetailsObj.optJSONArray("framingDepth");
+                JSONArray studMaterialObj = assemblyDetailsObj.optJSONArray("studType");
+
+                Ekotrope_FramedFloor_Table framedFloor = new Ekotrope_FramedFloor_Table();
+                framedFloor.plan_id = planId;
+                framedFloor.index = lcv;
+                framedFloor.name = framedFloorObj.optString("name");
+                framedFloor.cavityInsulationGrade = cavityInsulationGradeObj.optString(0);
+                framedFloor.cavityInsulationR = assemblyDetailsObj.optDouble("cavityR");
+                framedFloor.continuousInsulationR = assemblyDetailsObj.optDouble("continuousR");
+                framedFloor.studSpacing = studSpacingObj.optDouble(0);
+                framedFloor.studWidth = studWidthObj.optDouble(0);
+                framedFloor.studDepth = studDepthObj.optDouble(0);
+                framedFloor.studMaterial = studMaterialObj.optString(0);
+
+                vm.insertFramedFloor(framedFloor);
+            }
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in getEkotropePlanData.");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in getEkotropePlanData.");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in getEkotropePlanData: " + errorMessage);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders () {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH.getBytes(), Base64.DEFAULT));
+                return params;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
 

@@ -294,8 +294,9 @@ public class DefectItemActivity extends AppCompatActivity {
                 return;
             }
 
-            int[] builderIds = { 3083, 3084, 3082, 3085 };
-            for (int builderId : builderIds) {
+            // Custom rules for AHTVX
+            int[] builderIds_AHTVX = { 3083, 3084, 3082, 3085 };
+            for (int builderId : builderIds_AHTVX) {
                 if (builderId == mInspection.builder_id) {
                     if (!mInspection.reinspect && defectStatusId == 2 && !mPictureTaken) {
                         Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items during 1st time inspections.", Snackbar.LENGTH_LONG).show();
@@ -303,6 +304,17 @@ public class DefectItemActivity extends AppCompatActivity {
                     }
                     if (mInspection.reinspect && defectStatusId == 3 && !mPictureTaken) {
                         Snackbar.make(mConstraintLayout, "A picture is required for this builder on C items during reinspections.", Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+            }
+
+            // Custom rules for Coventry / Dreamfinders
+            int[] builderIds_Coventry_Dreamfinders = { 396, 397, 2254, 2255 };
+            for (int builderId : builderIds_Coventry_Dreamfinders) {
+                if (builderId == mInspection.builder_id && (mInspection.inspection_class == 1 || mInspection.inspection_class == 2) ) {
+                    if (!mInspection.reinspect && defectStatusId == 2 && !mPictureTaken) {
+                        Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items during 1st time inspections.", Snackbar.LENGTH_LONG).show();
                         return;
                     }
                 }

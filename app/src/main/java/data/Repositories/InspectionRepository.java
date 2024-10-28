@@ -87,4 +87,8 @@ public class InspectionRepository {
     public void assignTrainee(int traineeId, int inspectionId) {
         mInspectionDao.assignTrainee(traineeId, inspectionId);
     }
+
+    public void updateEkotropePlanId(String ekotropePlanId, int inspectionId) {
+        mInspectionDao.updateEkotropePlanId(ekotropePlanId, inspectionId);
+    }
 }

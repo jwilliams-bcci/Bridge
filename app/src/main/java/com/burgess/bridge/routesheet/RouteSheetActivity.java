@@ -70,6 +70,7 @@ public class RouteSheetActivity extends AppCompatActivity {
     private JsonArrayRequest mUpdateDIITRequest;
     private JsonArrayRequest mUpdatePastInspections;
     private JsonObjectRequest mUpdateInspectionsRemainingRequest;
+    private JsonObjectRequest mUpdateEkotropePlansId;
     private StringRequest mUpdateReportDataRequest;
     private String mInspectorId;
     private boolean mIsOnline;

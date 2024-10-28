@@ -88,4 +88,5 @@
     <string name="title_activity_attachments">AttachmentsActivity</string>
     <string name="attachments_title">Attachments</string>
     <string name="lot_number_hint">Lot Number</string>
+    <string name="title_activity_ekotrope_framed_floors">Ekotrope_FramedFloorsActivity</string>
 </resources>
