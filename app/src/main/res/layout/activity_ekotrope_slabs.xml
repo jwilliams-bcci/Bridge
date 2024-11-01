@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ekotrope_slabs_constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ekotrope_slabs.Ekotrope_SlabsActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/ekotrope_slabs_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:title="Slabs"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:titleTextColor="@color/colorWhite" />
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/fragment_inspections_remaining"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView86"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ekotrope_slabs_toolbar" />
+
+    <TextView
+        android:id="@+id/textView87"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Under Slab Insulation R"
+        app:layout_constraintStart_toStartOf="@+id/textView86"
+        app:layout_constraintTop_toBottomOf="@+id/textView86" />
+
+    <TextView
+        android:id="@+id/textView88"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Fully Insulated?"
+        app:layout_constraintStart_toStartOf="@+id/textView87"
+        app:layout_constraintTop_toBottomOf="@+id/textView87" />
+
+    <TextView
+        android:id="@+id/textView89"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Under Slab Insulation\nWidth"
+        app:layout_constraintStart_toStartOf="@+id/textView88"
+        app:layout_constraintTop_toBottomOf="@+id/textView88" />
+
+    <TextView
+        android:id="@+id/textView90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Perimeter Insulation\nDepth"
+        app:layout_constraintStart_toStartOf="@+id/textView89"
+        app:layout_constraintTop_toBottomOf="@+id/textView89" />
+
+    <TextView
+        android:id="@+id/textView91"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Perimeter Insulation R"
+        app:layout_constraintStart_toStartOf="@+id/textView90"
+        app:layout_constraintTop_toBottomOf="@+id/textView90" />
+
+    <TextView
+        android:id="@+id/textView92"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Thermal Break?"
+        app:layout_constraintStart_toStartOf="@+id/textView91"
+        app:layout_constraintTop_toBottomOf="@+id/textView91" />
+
+    <Button
+        android:id="@+id/ekotrope_slabs_button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_rounded_blue"
+        android:text="Save"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ekotrope_slabs_checkbox_thermal_break" />
+
+    <EditText
+        android:id="@+id/ekotrope_slabs_text_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="S_Name"
+        app:layout_constraintBottom_toBottomOf="@+id/textView86"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView91"
+        app:layout_constraintTop_toTopOf="@+id/textView86" />
+
+    <EditText
+        android:id="@+id/ekotrope_slabs_text_underslab_insulation_r"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="S_USInsR"
+        app:layout_constraintBottom_toBottomOf="@+id/textView87"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_name"
+        app:layout_constraintTop_toTopOf="@+id/textView87" />
+
+    <CheckBox
+        android:id="@+id/ekotrope_slabs_checkbox_fully_insulated"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Yes"
+        app:layout_constraintBottom_toBottomOf="@+id/textView88"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_underslab_insulation_r"
+        app:layout_constraintTop_toTopOf="@+id/textView88" />
+
+    <EditText
+        android:id="@+id/ekotrope_slabs_text_underslab_insulation_width"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="S_USInsWidth"
+        app:layout_constraintBottom_toBottomOf="@+id/textView89"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_checkbox_fully_insulated"
+        app:layout_constraintTop_toTopOf="@+id/textView89" />
+
+    <EditText
+        android:id="@+id/ekotrope_slabs_text_perimeter_insulation_depth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="S_PerInsDepth"
+        app:layout_constraintBottom_toBottomOf="@+id/textView90"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_underslab_insulation_width"
+        app:layout_constraintTop_toTopOf="@+id/textView90" />
+
+    <EditText
+        android:id="@+id/ekotrope_slabs_text_perimeter_insulation_r"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="S_PerInsR"
+        app:layout_constraintBottom_toBottomOf="@+id/textView91"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_perimeter_insulation_depth"
+        app:layout_constraintTop_toTopOf="@+id/textView91" />
+
+    <CheckBox
+        android:id="@+id/ekotrope_slabs_checkbox_thermal_break"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Yes"
+        app:layout_constraintBottom_toBottomOf="@+id/textView92"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_perimeter_insulation_r"
+        app:layout_constraintTop_toTopOf="@+id/textView92" />
+</androidx.constraintlayout.widget.ConstraintLayout>

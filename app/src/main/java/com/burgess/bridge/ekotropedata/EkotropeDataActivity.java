@@ -2,21 +2,33 @@ package com.burgess.bridge.ekotropedata;
 
 import static com.burgess.bridge.Constants.PREF;
 import static com.burgess.bridge.Constants.PREF_INSPECTOR_ID;
+import static com.burgess.bridge.ekotrope_framedfloors.Ekotrope_FramedFloorsActivity.PLAN_ID;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
+import com.burgess.bridge.ekotrope_abovegradewallslist.Ekotrope_AboveGradeWallsListActivity;
+import com.burgess.bridge.ekotrope_ceilingslist.Ekotrope_CeilingsListActivity;
+import com.burgess.bridge.ekotrope_doorslist.Ekotrope_DoorsListActivity;
+import com.burgess.bridge.ekotrope_framedfloorslist.Ekotrope_FramedFloorsListActivity;
+import com.burgess.bridge.ekotrope_rimjoistslist.Ekotrope_RimJoistsListActivity;
+import com.burgess.bridge.ekotrope_slabslist.Ekotrope_SlabsListActivity;
+import com.burgess.bridge.ekotrope_windowslist.Ekotrope_WindowsListActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,9 +50,17 @@ public class EkotropeDataActivity extends AppCompatActivity {
 
     private static BridgeAPIQueue apiQueue;
 
+    private ConstraintLayout mConstraintLayout;
     private Inspection_Table mInspection;
     private TextView mTextEkotropeProjectId;
     private TextView mTextEkotropePlanId;
+    private Button mButtonFramedFloors;
+    private Button mButtonAboveGradeWalls;
+    private Button mButtonWindows;
+    private Button mButtonDoors;
+    private Button mButtonCeilings;
+    private Button mButtonSlabs;
+    private Button mButtonRimJoists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +88,17 @@ public class EkotropeDataActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-
-        mButtonEmail = findViewById(R.id.ekotrope_data_button_email);
+        mConstraintLayout = findViewById(R.id.ekotrope_data_constraint_layout);
+        mButtonEmail = findViewById(R.id.ekotrope_data_button_send_json);
         mTextEkotropeProjectId = findViewById(R.id.ekotrope_text_project_id);
         mTextEkotropePlanId = findViewById(R.id.ekotrope_text_plan_id);
+        mButtonFramedFloors = findViewById(R.id.ekotrope_data_button_framed_floors);
+        mButtonAboveGradeWalls = findViewById(R.id.ekotrope_data_button_above_grade_walls);
+        mButtonWindows = findViewById(R.id.ekotrope_data_button_windows);
+        mButtonDoors = findViewById(R.id.ekotrope_data_button_doors);
+        mButtonCeilings = findViewById(R.id.ekotrope_data_button_ceilings);
+        mButtonSlabs = findViewById(R.id.ekotrope_data_button_slabs);
+        mButtonRimJoists = findViewById(R.id.ekotrope_data_button_rim_joists);
     }
 
     private void initializeDisplayContent() {
@@ -80,12 +107,57 @@ public class EkotropeDataActivity extends AppCompatActivity {
     }
 
     private void initializeButtonListeners() {
+        mButtonFramedFloors.setOnClickListener(view -> {
+            Intent framedFloorsListIntent = new Intent(this, Ekotrope_FramedFloorsListActivity.class);
+            framedFloorsListIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            startActivity(framedFloorsListIntent);
+        });
+
+        mButtonAboveGradeWalls.setOnClickListener(view -> {
+            Intent aboveGradeWallsIntent = new Intent(this, Ekotrope_AboveGradeWallsListActivity.class);
+            aboveGradeWallsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            startActivity(aboveGradeWallsIntent);
+        });
+
+        mButtonWindows.setOnClickListener(view -> {
+            Intent windowsIntent = new Intent(this, Ekotrope_WindowsListActivity.class);
+            windowsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            startActivity(windowsIntent);
+        });
+
+        mButtonDoors.setOnClickListener(view -> {
+            Intent doorsIntent = new Intent(this, Ekotrope_DoorsListActivity.class);
+            doorsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            startActivity(doorsIntent);
+        });
+
+        mButtonCeilings.setOnClickListener(view -> {
+            Intent ceilingsIntent = new Intent(this, Ekotrope_CeilingsListActivity.class);
+            ceilingsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            startActivity(ceilingsIntent);
+        });
+
+        mButtonSlabs.setOnClickListener(view -> {
+            Intent slabsIntent = new Intent(this, Ekotrope_SlabsListActivity.class);
+            slabsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            startActivity(slabsIntent);
+        });
+
+        mButtonRimJoists.setOnClickListener(view -> {
+            Intent rimJoistsIntent = new Intent(this, Ekotrope_RimJoistsListActivity.class);
+            rimJoistsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            startActivity(rimJoistsIntent);
+        });
+
         mButtonEmail.setOnClickListener(view -> {
             // Prevent double clicking
             if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return;
             }
-            mLastClickTime = SystemClock.elapsedRealtime();
+            Intent emailIntent = BridgeLogger.sendEkotropeJson(mEkotropeDataViewModel.getInspectionSyncJson(mInspection.ekotrope_plan_id, mInspection.ekotrope_project_id), mInspectionId);
+            startActivity(emailIntent);
+
+            Snackbar.make(mConstraintLayout, "JSON sent via email", Snackbar.LENGTH_SHORT).show();
         });
     }
 }

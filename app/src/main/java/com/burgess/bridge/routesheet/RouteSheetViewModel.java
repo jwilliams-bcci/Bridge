@@ -10,14 +10,26 @@ import java.util.List;
 
 import data.Repositories.DefectItemRepository;
 import data.Repositories.DefectItem_InspectionType_XRefRepository;
+import data.Repositories.Ekotrope_AboveGradeWallRepository;
+import data.Repositories.Ekotrope_CeilingRepository;
+import data.Repositories.Ekotrope_DoorRepository;
 import data.Repositories.Ekotrope_FramedFloorRepository;
+import data.Repositories.Ekotrope_RimJoistRepository;
+import data.Repositories.Ekotrope_SlabRepository;
+import data.Repositories.Ekotrope_WindowRepository;
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Repositories.PastInspectionRepository;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
+import data.Tables.Ekotrope_AboveGradeWall_Table;
+import data.Tables.Ekotrope_Ceiling_Table;
+import data.Tables.Ekotrope_Door_Table;
 import data.Tables.Ekotrope_FramedFloor_Table;
+import data.Tables.Ekotrope_RimJoist_Table;
+import data.Tables.Ekotrope_Slab_Table;
+import data.Tables.Ekotrope_Window_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
@@ -31,7 +43,13 @@ public class RouteSheetViewModel extends AndroidViewModel {
     private DefectItemRepository mDefectItemRepository;
     private DefectItem_InspectionType_XRefRepository mDIITRepository;
     private PastInspectionRepository mPastInspectionRepository;
-    private Ekotrope_FramedFloorRepository mEkotropeFramedFloorRepository;
+    private Ekotrope_FramedFloorRepository mEkotropeFramedFloorsRepository;
+    private Ekotrope_AboveGradeWallRepository mEkotropeAboveGradeWallsRepository;
+    private Ekotrope_WindowRepository mEkotropeWindowRepository;
+    private Ekotrope_DoorRepository mEkotropeDoorRepository;
+    private Ekotrope_CeilingRepository mEkotropeCeilingRepository;
+    private Ekotrope_SlabRepository mEkotropeSlabRepository;
+    private Ekotrope_RimJoistRepository mEkotropeRimJoistRepository;
     private String reportUrl;
 
     public RouteSheetViewModel(@NonNull Application application) {
@@ -42,6 +60,13 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mDefectItemRepository = new DefectItemRepository(application);
         mDIITRepository = new DefectItem_InspectionType_XRefRepository(application);
         mPastInspectionRepository = new PastInspectionRepository(application);
+        mEkotropeFramedFloorsRepository = new Ekotrope_FramedFloorRepository(application);
+        mEkotropeAboveGradeWallsRepository = new Ekotrope_AboveGradeWallRepository(application);
+        mEkotropeWindowRepository = new Ekotrope_WindowRepository(application);
+        mEkotropeDoorRepository = new Ekotrope_DoorRepository(application);
+        mEkotropeCeilingRepository = new Ekotrope_CeilingRepository(application);
+        mEkotropeSlabRepository = new Ekotrope_SlabRepository(application);
+        mEkotropeRimJoistRepository = new Ekotrope_RimJoistRepository(application);
         reportUrl = "";
     }
 
@@ -118,6 +143,30 @@ public class RouteSheetViewModel extends AndroidViewModel {
     }
 
     public void insertFramedFloor(Ekotrope_FramedFloor_Table framedFloor) {
-        mEkotropeFramedFloorRepository.insert(framedFloor);
+        mEkotropeFramedFloorsRepository.insert(framedFloor);
+    }
+
+    public void insertAboveGradeWall(Ekotrope_AboveGradeWall_Table aboveGradeWall) {
+        mEkotropeAboveGradeWallsRepository.insert(aboveGradeWall);
+    }
+
+    public void insertWindow(Ekotrope_Window_Table window) {
+        mEkotropeWindowRepository.insert(window);
+    }
+
+    public void insertDoor(Ekotrope_Door_Table door) {
+        mEkotropeDoorRepository.insert(door);
+    }
+
+    public void insertCeiling(Ekotrope_Ceiling_Table ceiling) {
+        mEkotropeCeilingRepository.insert(ceiling);
+    }
+
+    public void insertSlab(Ekotrope_Slab_Table slab) {
+        mEkotropeSlabRepository.insert(slab);
+    }
+
+    public void insertRimJoist(Ekotrope_RimJoist_Table rimJoist) {
+        mEkotropeRimJoistRepository.insert(rimJoist);
     }
 }

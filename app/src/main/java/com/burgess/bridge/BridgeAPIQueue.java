@@ -19,7 +19,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.attachments.AttachmentsViewModel;
-import com.burgess.bridge.ekotropedata.EkotropeDataViewModel;
 import com.burgess.bridge.login.LoginViewModel;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 
@@ -41,7 +40,13 @@ import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
+import data.Tables.Ekotrope_AboveGradeWall_Table;
+import data.Tables.Ekotrope_Ceiling_Table;
+import data.Tables.Ekotrope_Door_Table;
 import data.Tables.Ekotrope_FramedFloor_Table;
+import data.Tables.Ekotrope_RimJoist_Table;
+import data.Tables.Ekotrope_Slab_Table;
+import data.Tables.Ekotrope_Window_Table;
 import data.Tables.Fault_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
@@ -51,7 +56,8 @@ import data.Tables.PastInspection_Table;
 import data.Tables.Room_Table;
 
 import static com.burgess.bridge.Constants.API_EKOTROPE_AUTH;
-import static com.burgess.bridge.Constants.API_EKOTROPE_URL;
+import static com.burgess.bridge.Constants.API_EKOTROPE_PLAN_URL;
+import static com.burgess.bridge.Constants.API_EKOTROPE_PROJECT_URL;
 import static com.burgess.bridge.Constants.API_PROD_URL;
 import static com.burgess.bridge.Constants.API_STAGE_URL;
 import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
@@ -909,7 +915,7 @@ public class BridgeAPIQueue {
 
     // Ekotrope API Calls
     public JsonObjectRequest getEkotropePlanId(RouteSheetViewModel vm, String projectId, int inspectionId, final ServerCallback callback) {
-        String url = API_EKOTROPE_URL + projectId;
+        String url = API_EKOTROPE_PROJECT_URL + projectId;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             String planId = response.optString("masterPlanId");
@@ -949,35 +955,25 @@ public class BridgeAPIQueue {
         return request;
     }
     public JsonObjectRequest getEkotropePlanData(RouteSheetViewModel vm, String planId, final ServerCallback callback) {
-        String url = API_EKOTROPE_URL + planId;
+        String url = API_EKOTROPE_PLAN_URL + planId;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             JSONObject thermalEnvelope = response.optJSONObject("thermalEnvelope");
             JSONArray framedFloorArray = thermalEnvelope.optJSONArray("framedFloors");
-            for (int lcv = 0; lcv < framedFloorArray.length(); lcv++) {
-                JSONObject framedFloorObj = framedFloorArray.optJSONObject(lcv);
-                JSONObject typeObj = framedFloorObj.optJSONObject("type");
-                JSONObject assemblyDetailsObj = typeObj.optJSONObject("assemblyDetails");
-                JSONArray cavityInsulationGradeObj = assemblyDetailsObj.optJSONArray("cavityInsulationGrade");
-                JSONArray studSpacingObj = assemblyDetailsObj.optJSONArray("framingSpacing");
-                JSONArray studWidthObj = assemblyDetailsObj.optJSONArray("framingWidth");
-                JSONArray studDepthObj = assemblyDetailsObj.optJSONArray("framingDepth");
-                JSONArray studMaterialObj = assemblyDetailsObj.optJSONArray("studType");
+            JSONArray aboveGradeWallArray = thermalEnvelope.optJSONArray("walls");
+            JSONArray windowArray = thermalEnvelope.optJSONArray("windows");
+            JSONArray doorArray = thermalEnvelope.optJSONArray("doors");
+            JSONArray ceilingArray = thermalEnvelope.optJSONArray("ceilings");
+            JSONArray slabArray = thermalEnvelope.optJSONArray("slabs");
+            JSONArray rimJoistArray = thermalEnvelope.optJSONArray("rimJoists");
 
-                Ekotrope_FramedFloor_Table framedFloor = new Ekotrope_FramedFloor_Table();
-                framedFloor.plan_id = planId;
-                framedFloor.index = lcv;
-                framedFloor.name = framedFloorObj.optString("name");
-                framedFloor.cavityInsulationGrade = cavityInsulationGradeObj.optString(0);
-                framedFloor.cavityInsulationR = assemblyDetailsObj.optDouble("cavityR");
-                framedFloor.continuousInsulationR = assemblyDetailsObj.optDouble("continuousR");
-                framedFloor.studSpacing = studSpacingObj.optDouble(0);
-                framedFloor.studWidth = studWidthObj.optDouble(0);
-                framedFloor.studDepth = studDepthObj.optDouble(0);
-                framedFloor.studMaterial = studMaterialObj.optString(0);
-
-                vm.insertFramedFloor(framedFloor);
-            }
+            addFramedFloors(framedFloorArray, planId, vm);
+            addAboveGradeWalls(aboveGradeWallArray, planId, vm);
+            addWindows(windowArray, planId, vm);
+            addDoors(doorArray, planId, vm);
+            addCeilings(ceilingArray, planId, vm);
+            addSlabs(slabArray, planId, vm);
+            addRimJoists(rimJoistArray, planId, vm);
         }, error -> {
             if (error instanceof NoConnectionError) {
                 BridgeLogger.log('E', TAG, "Lost connection in getEkotropePlanData.");
@@ -998,6 +994,173 @@ public class BridgeAPIQueue {
 
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
+    }
+    public void addFramedFloors(JSONArray framedFloorsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < framedFloorsArray.length(); lcv++) {
+            JSONObject framedFloorObj = framedFloorsArray.optJSONObject(lcv);
+            JSONObject typeObj = framedFloorObj.optJSONObject("type");
+            JSONObject assemblyDetailsObj = typeObj.optJSONObject("assemblyDetails");
+            JSONArray cavityInsulationGradeObj = assemblyDetailsObj.optJSONArray("cavityInsulationGrade");
+            JSONArray studSpacingObj = assemblyDetailsObj.optJSONArray("framingSpacing");
+            JSONArray studWidthObj = assemblyDetailsObj.optJSONArray("framingWidth");
+            JSONArray studDepthObj = assemblyDetailsObj.optJSONArray("framingDepth");
+            JSONArray studMaterialObj = assemblyDetailsObj.optJSONArray("studType");
+
+            Ekotrope_FramedFloor_Table framedFloor = new Ekotrope_FramedFloor_Table();
+            framedFloor.plan_id = planId;
+            framedFloor.index = lcv;
+            framedFloor.name = framedFloorObj.optString("name");
+            framedFloor.typeName = typeObj.optString("name");
+            framedFloor.cavityInsulationGrade = cavityInsulationGradeObj.optString(0);
+            framedFloor.cavityInsulationR = assemblyDetailsObj.optDouble("cavityR");
+            framedFloor.continuousInsulationR = assemblyDetailsObj.optDouble("continuousR");
+            framedFloor.studSpacing = studSpacingObj.optDouble(0);
+            framedFloor.studWidth = studWidthObj.optDouble(0);
+            framedFloor.studDepth = studDepthObj.optDouble(0);
+            framedFloor.studMaterial = studMaterialObj.optString(0);
+
+            vm.insertFramedFloor(framedFloor);
+        }
+    }
+    public void addAboveGradeWalls(JSONArray aboveGradeWallsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < aboveGradeWallsArray.length(); lcv++) {
+            JSONObject aboveGradeWallObj = aboveGradeWallsArray.optJSONObject(lcv);
+            JSONObject typeObj = aboveGradeWallObj.optJSONObject("type");
+            JSONObject assemblyDetailsObj = typeObj.optJSONObject("assemblyDetails");
+            JSONArray cavityInsulationGradeObj = assemblyDetailsObj.optJSONArray("cavityInsulationGrade");
+            JSONArray studSpacingObj = assemblyDetailsObj.optJSONArray("framingSpacing");
+            JSONArray studWidthObj = assemblyDetailsObj.optJSONArray("framingWidth");
+            JSONArray studDepthObj = assemblyDetailsObj.optJSONArray("framingDepth");
+            JSONArray studMaterialObj = assemblyDetailsObj.optJSONArray("studType");
+
+            Ekotrope_AboveGradeWall_Table aboveGradeWall = new Ekotrope_AboveGradeWall_Table();
+            aboveGradeWall.plan_id = planId;
+            aboveGradeWall.index = lcv;
+            aboveGradeWall.name = aboveGradeWallObj.optString("name");
+            aboveGradeWall.typeName = typeObj.optString("name");
+            aboveGradeWall.cavityInsulationGrade = cavityInsulationGradeObj.optString(0);
+            aboveGradeWall.cavityInsulationR = assemblyDetailsObj.optDouble("cavityR");
+            aboveGradeWall.continuousInsulationR = assemblyDetailsObj.optDouble("continuousR");
+            aboveGradeWall.studSpacing = studSpacingObj.optDouble(0);
+            aboveGradeWall.studWidth = studWidthObj.optDouble(0);
+            aboveGradeWall.studDepth = studDepthObj.optDouble(0);
+            aboveGradeWall.studMaterial = studMaterialObj.optString(0);
+
+            vm.insertAboveGradeWall(aboveGradeWall);
+        }
+    }
+    public void addWindows(JSONArray windowsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < windowsArray.length(); lcv++) {
+            JSONObject windowObj = windowsArray.optJSONObject(lcv);
+            JSONObject typeObj = windowObj.optJSONObject("type");
+            JSONObject shadingFactorsObj = windowObj.optJSONObject("shadingFactors");
+            JSONObject adjacentObj = shadingFactorsObj.optJSONObject("adjacent");
+
+            Ekotrope_Window_Table window = new Ekotrope_Window_Table();
+            window.plan_id = planId;
+            window.index = lcv;
+            window.name = windowObj.optString("name");
+            window.typeName = typeObj.optString("name");
+            window.remove = false;
+            window.windowArea = windowObj.optDouble("surfaceArea");
+            window.orientation = windowObj.optString("orientation");
+            window.installedWallIndex = windowObj.optInt("installedWallIndex");
+            window.installedFoundationWallIndex = -1;
+            window.overhangDepth = windowObj.optDouble("overhangDepth");
+            window.distanceOverhangToTop = windowObj.optDouble("distanceOverhangToTop");
+            window.distanceOverhangToBottom = windowObj.optDouble("distanceOverhangToBottom");
+            window.SHGC = typeObj.optDouble("SHGC");
+            window.uFactor = typeObj.optDouble("uFactor");
+            window.adjacentSummerShading = adjacentObj.optDouble("summer");
+            window.adjacentWinterShading = adjacentObj.optDouble("winter");
+            vm.insertWindow(window);
+        }
+    }
+    public void addDoors(JSONArray doorsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < doorsArray.length(); lcv++) {
+            JSONObject doorObj = doorsArray.optJSONObject(lcv);
+            JSONObject typeObj = doorObj.optJSONObject("type");
+
+            Ekotrope_Door_Table door = new Ekotrope_Door_Table();
+            door.plan_id = planId;
+            door.index = lcv;
+            door.name = doorObj.optString("name");
+            door.typeName = typeObj.optString("name");
+            door.remove = false;
+            door.installedWallIndex = doorObj.optInt("installedWallIndex");
+            door.installedFoundationWallIndex = -1;
+            door.doorArea = doorObj.optDouble("surfaceArea");
+            door.uFactor = typeObj.optDouble("uFactor");
+
+            vm.insertDoor(door);
+        }
+    }
+    public void addCeilings(JSONArray ceilingsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < ceilingsArray.length(); lcv++) {
+            JSONObject ceilingObj = ceilingsArray.optJSONObject(lcv);
+            JSONObject typeObj = ceilingObj.optJSONObject("type");
+            JSONObject assemblyDetailsObj = typeObj.optJSONObject("assemblyDetails");
+            JSONArray cavityInsulationGradeObj = assemblyDetailsObj.optJSONArray("cavityInsulationGrade");
+            JSONArray cavityInsulationRObj = assemblyDetailsObj.optJSONArray("cavityInsulationRValues");
+            JSONArray studSpacingObj = assemblyDetailsObj.optJSONArray("framingSpacing");
+            JSONArray studWidthObj = assemblyDetailsObj.optJSONArray("framingWidth");
+            JSONArray studDepthObj = assemblyDetailsObj.optJSONArray("framingDepth");
+            JSONArray studMaterialObj = assemblyDetailsObj.optJSONArray("studType");
+
+            Ekotrope_Ceiling_Table ceiling = new Ekotrope_Ceiling_Table();
+            ceiling.plan_id = planId;
+            ceiling.index = lcv;
+            ceiling.name = ceilingObj.optString("name");
+            ceiling.typeName = typeObj.optString("name");
+            ceiling.cavityInsulationGrade = cavityInsulationGradeObj.optString(0);
+            ceiling.cavityInsulationR = cavityInsulationRObj.optDouble(0);
+            ceiling.continuousInsulationR = assemblyDetailsObj.optDouble("continuousR");
+            ceiling.studSpacing = studSpacingObj.optDouble(0);
+            ceiling.studWidth = studWidthObj.optDouble(0);
+            ceiling.studDepth = studDepthObj.optDouble(0);
+            ceiling.studMaterial = studMaterialObj.optString(0);
+            ceiling.hasRadiantBarrier = typeObj.optBoolean("radiantBarrier");;
+
+            vm.insertCeiling(ceiling);
+        }
+    }
+    public void addSlabs(JSONArray slabsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < slabsArray.length(); lcv++) {
+            JSONObject slabObj = slabsArray.optJSONObject(lcv);
+            JSONObject typeObj = slabObj.optJSONObject("type");
+
+            Ekotrope_Slab_Table slab = new Ekotrope_Slab_Table();
+            slab.plan_id = planId;
+            slab.index = lcv;
+            slab.name = slabObj.optString("name");
+            slab.typeName = typeObj.optString("name");
+            slab.underslabInsulationR = typeObj.optDouble("underSlabRValue");
+            slab.isFullyInsulated = typeObj.optBoolean("slabCompletelyInsulated");
+            slab.underslabInsulationWidth = typeObj.optDouble("underslabInsulationWidth");
+            slab.perimeterInsulationDepth = typeObj.optDouble("perimeterInsulationDepth");
+            slab.perimeterInsulationR = typeObj.optDouble("perimeterRValue");
+            slab.thermalBreak = false;
+
+            vm.insertSlab(slab);
+        }
+    }
+    public void addRimJoists(JSONArray rimJoistsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < rimJoistsArray.length(); lcv++) {
+            JSONObject rimJoistObj = rimJoistsArray.optJSONObject(lcv);
+            JSONObject typeObj = rimJoistObj.optJSONObject("type");
+
+            Ekotrope_RimJoist_Table rimJoint = new Ekotrope_RimJoist_Table();
+            rimJoint.plan_id = planId;
+            rimJoint.index = lcv;
+            rimJoint.name = rimJoistObj.optString("name");
+            rimJoint.typeName = typeObj.optString("name");
+            rimJoint.betweenInteriorAnd = rimJoistObj.optString("betweenInteriorAnd");
+            rimJoint.surfaceArea = rimJoistObj.optDouble("surfaceArea");
+            rimJoint.uFactor = typeObj.optDouble("uFactor");
+            rimJoint.rFactor = typeObj.optDouble("rFactor");
+
+            vm.insertRimJoist(rimJoint);
+        }
     }
 
     // Attachments

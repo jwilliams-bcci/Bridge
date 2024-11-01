@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/above_grade_walls_constraint_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ekotrope_abovegradewalls.Ekotrope_AboveGradeWallsActivity" >
+
+    <Button
+        android:id="@+id/above_grade_walls_button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_rounded_blue"
+        android:text="Save"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView47" />
+
+    <Spinner
+        android:id="@+id/above_grade_walls_spinner_stud_material"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/textView47"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_stud_depth"
+        app:layout_constraintTop_toTopOf="@+id/textView47" />
+
+    <EditText
+        android:id="@+id/above_grade_walls_text_stud_depth"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="FF_StudDepth"
+        app:layout_constraintBottom_toBottomOf="@+id/textView51"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_stud_width"
+        app:layout_constraintTop_toTopOf="@+id/textView51" />
+
+    <EditText
+        android:id="@+id/above_grade_walls_text_stud_width"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="FF_StudWidth"
+        app:layout_constraintBottom_toBottomOf="@+id/textView52"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_stud_spacing"
+        app:layout_constraintTop_toTopOf="@+id/textView52" />
+
+    <EditText
+        android:id="@+id/above_grade_walls_text_stud_spacing"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="FF_StudSpacing"
+        app:layout_constraintBottom_toBottomOf="@+id/textView48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_continuous_insulation_r"
+        app:layout_constraintTop_toTopOf="@+id/textView48" />
+
+    <EditText
+        android:id="@+id/above_grade_walls_text_continuous_insulation_r"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="FF_ContInsR"
+        app:layout_constraintBottom_toBottomOf="@+id/textView50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_cavity_insulation_r"
+        app:layout_constraintTop_toTopOf="@+id/textView50" />
+
+    <EditText
+        android:id="@+id/above_grade_walls_text_cavity_insulation_r"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:text="FF_CavInsR"
+        app:layout_constraintBottom_toBottomOf="@+id/textView49"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_spinner_cavity_insulation_grade"
+        app:layout_constraintTop_toTopOf="@+id/textView49" />
+
+    <Spinner
+        android:id="@+id/above_grade_walls_spinner_cavity_insulation_grade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/textView46"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_name"
+        app:layout_constraintTop_toTopOf="@+id/textView46" />
+
+    <EditText
+        android:id="@+id/above_grade_walls_text_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:editable="false"
+        android:ems="10"
+        android:inputType="text"
+        android:text="FF_Name"
+        app:layout_constraintBottom_toBottomOf="@+id/textView45"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_index"
+        app:layout_constraintTop_toTopOf="@+id/textView45" />
+
+    <EditText
+        android:id="@+id/above_grade_walls_text_index"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:editable="false"
+        android:ems="10"
+        android:inputType="text"
+        android:text="FF_ID"
+        app:layout_constraintBottom_toBottomOf="@+id/textView44"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView50"
+        app:layout_constraintTop_toTopOf="@+id/textView44" />
+
+    <TextView
+        android:id="@+id/textView47"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Stud Material"
+        app:layout_constraintStart_toStartOf="@+id/textView51"
+        app:layout_constraintTop_toBottomOf="@+id/textView51" />
+
+    <TextView
+        android:id="@+id/textView48"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Stud Spacing"
+        app:layout_constraintStart_toStartOf="@+id/textView50"
+        app:layout_constraintTop_toBottomOf="@+id/textView50" />
+
+    <TextView
+        android:id="@+id/textView49"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Cavity Insulation R"
+        app:layout_constraintStart_toStartOf="@+id/textView46"
+        app:layout_constraintTop_toBottomOf="@+id/textView46" />
+
+    <TextView
+        android:id="@+id/textView50"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Continuous Insulation R"
+        app:layout_constraintStart_toStartOf="@+id/textView49"
+        app:layout_constraintTop_toBottomOf="@+id/textView49" />
+
+    <TextView
+        android:id="@+id/textView51"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Stud Depth"
+        app:layout_constraintStart_toStartOf="@+id/textView52"
+        app:layout_constraintTop_toBottomOf="@+id/textView52" />
+
+    <TextView
+        android:id="@+id/textView52"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Stud Width"
+        app:layout_constraintStart_toStartOf="@+id/textView48"
+        app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+    <TextView
+        android:id="@+id/textView46"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Cavity Insulation Grade"
+        app:layout_constraintStart_toStartOf="@+id/textView45"
+        app:layout_constraintTop_toBottomOf="@+id/textView45" />
+
+    <TextView
+        android:id="@+id/textView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Name"
+        app:layout_constraintStart_toStartOf="@+id/textView44"
+        app:layout_constraintTop_toBottomOf="@+id/textView44" />
+
+    <TextView
+        android:id="@+id/textView44"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="ID:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/above_grade_walls_toolbar" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/above_grade_walls_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/burgessOrange"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:title="Above Grade Walls"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:titleTextColor="@color/colorWhite" />
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/fragment_inspections_remaining"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

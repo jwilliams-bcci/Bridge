@@ -1,5 +1,6 @@
 package data.DAOs;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -20,8 +21,14 @@ public interface Ekotrope_FramedFloor_DAO {
     @Query("DELETE FROM ekotrope_framed_floor_table WHERE plan_id = :plan_id AND [index] = :index")
     void delete(String plan_id, int index);
 
+    @Query("SELECT * FROM ekotrope_framed_floor_table WHERE plan_id = :plan_id AND [index] = :index")
+    Ekotrope_FramedFloor_Table getFramedFloor(String plan_id, int index);
+
     @Query("SELECT * FROM ekotrope_framed_floor_table WHERE plan_id = :plan_id")
-    List<Ekotrope_FramedFloor_Table> getFramedFloors(String plan_id);
+    LiveData<List<Ekotrope_FramedFloor_Table>> getFramedFloors(String plan_id);
+
+    @Query("SELECT * FROM ekotrope_framed_floor_table WHERE plan_id = :plan_id")
+    List<Ekotrope_FramedFloor_Table> getFramedFloorsSync(String plan_id);
 
     @Query("UPDATE ekotrope_framed_floor_table SET " +
             "studSpacing = :studSpacing, studWidth = :studWidth, studDepth = :studDepth, " +

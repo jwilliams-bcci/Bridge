@@ -19,7 +19,13 @@ import data.DAOs.CannedComment_DAO;
 import data.DAOs.DefectItem_DAO;
 import data.DAOs.DefectItem_InspectionType_DAO;
 import data.DAOs.Direction_DAO;
+import data.DAOs.Ekotrope_AboveGradeWall_DAO;
+import data.DAOs.Ekotrope_Ceiling_DAO;
+import data.DAOs.Ekotrope_Door_DAO;
 import data.DAOs.Ekotrope_FramedFloor_DAO;
+import data.DAOs.Ekotrope_RimJoist_DAO;
+import data.DAOs.Ekotrope_Slab_DAO;
+import data.DAOs.Ekotrope_Window_DAO;
 import data.DAOs.Fault_DAO;
 import data.DAOs.Attachment_DAO;
 import data.DAOs.InspectionDefect_DAO;
@@ -34,7 +40,13 @@ import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
+import data.Tables.Ekotrope_AboveGradeWall_Table;
+import data.Tables.Ekotrope_Ceiling_Table;
+import data.Tables.Ekotrope_Door_Table;
 import data.Tables.Ekotrope_FramedFloor_Table;
+import data.Tables.Ekotrope_RimJoist_Table;
+import data.Tables.Ekotrope_Slab_Table;
+import data.Tables.Ekotrope_Window_Table;
 import data.Tables.Fault_Table;
 import data.Tables.Attachment_Table;
 import data.Tables.InspectionDefect_Table;
@@ -66,11 +78,17 @@ import data.Views.RouteSheet_View;
         Inspector_Table.class,
         Fault_Table.class,
         Attachment_Table.class,
-        Ekotrope_FramedFloor_Table.class
+        Ekotrope_FramedFloor_Table.class,
+        Ekotrope_AboveGradeWall_Table.class,
+        Ekotrope_Window_Table.class,
+        Ekotrope_Door_Table.class,
+        Ekotrope_Ceiling_Table.class,
+        Ekotrope_Slab_Table.class,
+        Ekotrope_RimJoist_Table.class
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 71, exportSchema = false)
+        }, version = 75, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     private static Context mContext;
@@ -89,6 +107,12 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Fault_DAO mFaultDao();
     public abstract Attachment_DAO mInspectionAttachmentDao();
     public abstract Ekotrope_FramedFloor_DAO mEkotropeFramedFloorDao();
+    public abstract Ekotrope_AboveGradeWall_DAO mEkotropeAboveGradeWallsDao();
+    public abstract Ekotrope_Window_DAO mWindowDao();
+    public abstract Ekotrope_Door_DAO mDoorDao();
+    public abstract Ekotrope_Ceiling_DAO mCeilingDao();
+    public abstract Ekotrope_Slab_DAO mSlabDao();
+    public abstract Ekotrope_RimJoist_DAO mRimJoistDao();
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);

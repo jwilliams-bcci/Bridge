@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/framed_floors_constraint_layout"
+    android:id="@+id/above_grade_walls_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ekotrope_framedfloors.Ekotrope_FramedFloorsActivity">
@@ -113,7 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView33" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/framed_floors_text_index"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -128,7 +128,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView26" />
 
     <Button
-        android:id="@+id/framed_floor_save_button"
+        android:id="@+id/framed_floors_button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -140,7 +140,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/framed_floors_text_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:editable="false"
@@ -149,11 +149,11 @@
         android:text="FF_Name"
         app:layout_constraintBottom_toBottomOf="@+id/textView27"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_index"
         app:layout_constraintTop_toTopOf="@+id/textView27" />
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/framed_floors_text_cavity_insulation_r"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -161,11 +161,11 @@
         android:text="FF_CavInsR"
         app:layout_constraintBottom_toBottomOf="@+id/textView29"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_name"
         app:layout_constraintTop_toTopOf="@+id/textView29" />
 
     <EditText
-        android:id="@+id/editTextText5"
+        android:id="@+id/framed_floors_text_continuous_insulation_r"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -173,11 +173,11 @@
         android:text="FF_ContInsR"
         app:layout_constraintBottom_toBottomOf="@+id/textView30"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText4"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_cavity_insulation_r"
         app:layout_constraintTop_toTopOf="@+id/textView30" />
 
     <EditText
-        android:id="@+id/editTextText6"
+        android:id="@+id/framed_floors_text_stud_spacing"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -185,11 +185,11 @@
         android:text="FF_StudSpacing"
         app:layout_constraintBottom_toBottomOf="@+id/textView31"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText5"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_continuous_insulation_r"
         app:layout_constraintTop_toTopOf="@+id/textView31" />
 
     <EditText
-        android:id="@+id/editTextText7"
+        android:id="@+id/framed_floors_text_stud_width"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -197,11 +197,11 @@
         android:text="FF_StudWidth"
         app:layout_constraintBottom_toBottomOf="@+id/textView32"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText6"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_stud_spacing"
         app:layout_constraintTop_toTopOf="@+id/textView32" />
 
     <EditText
-        android:id="@+id/editTextText8"
+        android:id="@+id/framed_floors_text_stud_depth"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -209,24 +209,24 @@
         android:text="FF_StudDepth"
         app:layout_constraintBottom_toBottomOf="@+id/textView33"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText7"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_stud_width"
         app:layout_constraintTop_toTopOf="@+id/textView33" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/framed_floors_spinner_cavity_insulation_grade"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/textView28"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_name"
         app:layout_constraintTop_toTopOf="@+id/textView28" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/framed_floors_spinner_stud_material"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/textView34"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/editTextText8"
+        app:layout_constraintStart_toStartOf="@+id/framed_floors_text_stud_depth"
         app:layout_constraintTop_toTopOf="@+id/textView34" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -89,6 +91,16 @@ public class BridgeLogger {
         emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(logFileUri)));
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Activity log from Bridge for Inspector " + inspectorId);
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Bridge version: " + versionName);
+        return emailIntent;
+    }
+
+    public static Intent sendEkotropeJson(JSONObject ekotropeJson, int inspectionId) {
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("vnd.android.cursor.dir/email");
+        String to[] = {"jwilliams@burgess-inc.com", "rsandlin@burgess-inc.com", "bwallace@burgess-inc.com", "curbanus@burgess-inc.com"};
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Ekotrope JSON test for " + inspectionId);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, ekotropeJson.toString());
         return emailIntent;
     }
 }
