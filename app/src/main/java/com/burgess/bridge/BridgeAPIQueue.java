@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.attachments.AttachmentsViewModel;
+import com.burgess.bridge.ekotropedata.EkotropeDataViewModel;
 import com.burgess.bridge.login.LoginViewModel;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 
@@ -55,7 +56,9 @@ import data.Tables.Inspector_Table;
 import data.Tables.PastInspection_Table;
 import data.Tables.Room_Table;
 
-import static com.burgess.bridge.Constants.API_EKOTROPE_AUTH;
+import static com.burgess.bridge.Constants.API_EKOTROPE_AUTH_PROD;
+import static com.burgess.bridge.Constants.API_EKOTROPE_AUTH_TEST;
+import static com.burgess.bridge.Constants.API_EKOTROPE_INSPECTION_SYNC;
 import static com.burgess.bridge.Constants.API_EKOTROPE_PLAN_URL;
 import static com.burgess.bridge.Constants.API_EKOTROPE_PROJECT_URL;
 import static com.burgess.bridge.Constants.API_PROD_URL;
@@ -946,7 +949,7 @@ public class BridgeAPIQueue {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH.getBytes(), Base64.DEFAULT));
+                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH_TEST.getBytes(), Base64.DEFAULT));
                 return params;
             }
         };
@@ -987,8 +990,42 @@ public class BridgeAPIQueue {
             @Override
             public Map<String, String> getHeaders () {
                 Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH.getBytes(), Base64.DEFAULT));
+                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH_TEST.getBytes(), Base64.DEFAULT));
                 return params;
+            }
+        };
+
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(90), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
+    public JsonObjectRequest updateEkotropePlanData(EkotropeDataViewModel vm, String planId, String projectId, final ServerCallback callback) {
+        String url = API_EKOTROPE_INSPECTION_SYNC;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+        }, error -> {
+            if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, "Lost connection in updateEkotropePlanData.");
+            } else if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, "Request timed out in updateEkotropePlanData.");
+            } else {
+                String errorMessage = new String(error.networkResponse.data);
+                BridgeLogger.log('E', TAG, "ERROR in updateEkotropePlanData: " + errorMessage);
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH_TEST.getBytes(), Base64.DEFAULT));
+                return params;
+            }
+
+            @Override
+            public byte[] getBody() {
+                return vm.getInspectionSyncJson(planId, projectId).toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
             }
         };
 
@@ -1018,6 +1055,7 @@ public class BridgeAPIQueue {
             framedFloor.studWidth = studWidthObj.optDouble(0);
             framedFloor.studDepth = studDepthObj.optDouble(0);
             framedFloor.studMaterial = studMaterialObj.optString(0);
+            framedFloor.isChanged = false;
 
             vm.insertFramedFloor(framedFloor);
         }
@@ -1045,6 +1083,7 @@ public class BridgeAPIQueue {
             aboveGradeWall.studWidth = studWidthObj.optDouble(0);
             aboveGradeWall.studDepth = studDepthObj.optDouble(0);
             aboveGradeWall.studMaterial = studMaterialObj.optString(0);
+            aboveGradeWall.isChanged = false;
 
             vm.insertAboveGradeWall(aboveGradeWall);
         }
@@ -1073,6 +1112,8 @@ public class BridgeAPIQueue {
             window.uFactor = typeObj.optDouble("uFactor");
             window.adjacentSummerShading = adjacentObj.optDouble("summer");
             window.adjacentWinterShading = adjacentObj.optDouble("winter");
+            window.isChanged = false;
+
             vm.insertWindow(window);
         }
     }
@@ -1091,6 +1132,7 @@ public class BridgeAPIQueue {
             door.installedFoundationWallIndex = -1;
             door.doorArea = doorObj.optDouble("surfaceArea");
             door.uFactor = typeObj.optDouble("uFactor");
+            door.isChanged = false;
 
             vm.insertDoor(door);
         }
@@ -1119,7 +1161,8 @@ public class BridgeAPIQueue {
             ceiling.studWidth = studWidthObj.optDouble(0);
             ceiling.studDepth = studDepthObj.optDouble(0);
             ceiling.studMaterial = studMaterialObj.optString(0);
-            ceiling.hasRadiantBarrier = typeObj.optBoolean("radiantBarrier");;
+            ceiling.hasRadiantBarrier = typeObj.optBoolean("radiantBarrier");
+            ceiling.isChanged = false;
 
             vm.insertCeiling(ceiling);
         }
@@ -1140,6 +1183,7 @@ public class BridgeAPIQueue {
             slab.perimeterInsulationDepth = typeObj.optDouble("perimeterInsulationDepth");
             slab.perimeterInsulationR = typeObj.optDouble("perimeterRValue");
             slab.thermalBreak = false;
+            slab.isChanged = false;
 
             vm.insertSlab(slab);
         }
@@ -1158,6 +1202,7 @@ public class BridgeAPIQueue {
             rimJoint.surfaceArea = rimJoistObj.optDouble("surfaceArea");
             rimJoint.uFactor = typeObj.optDouble("uFactor");
             rimJoint.rFactor = typeObj.optDouble("rFactor");
+            rimJoint.isChanged = false;
 
             vm.insertRimJoist(rimJoint);
         }

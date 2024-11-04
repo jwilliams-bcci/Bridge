@@ -35,6 +35,10 @@ public class Ekotrope_FramedFloorRepository {
         return mFramedFloorsDao.getFramedFloorsSync(plan_id);
     }
 
+    public List<Ekotrope_FramedFloor_Table> getFramedFloorsForUpdate(String plan_id) {
+        return mFramedFloorsDao.getFramedFloorsForUpdate(plan_id);
+    }
+
     public Ekotrope_FramedFloor_Table getFramedFloor(String mPlanId, int mFramedFloorIndex) {
         return mFramedFloorsDao.getFramedFloor(mPlanId, mFramedFloorIndex);
     }

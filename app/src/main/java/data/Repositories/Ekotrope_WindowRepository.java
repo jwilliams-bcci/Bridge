@@ -37,6 +37,10 @@ public class Ekotrope_WindowRepository {
         return mWindowDao.getWindowsSync(plan_id);
     }
 
+    public List<Ekotrope_Window_Table> getWindowsForUpdate(String plan_id) {
+        return mWindowDao.getWindowsForUpdate(plan_id);
+    }
+
     public Ekotrope_Window_Table getWindow(String mPlanId, int mWindowIndex) {
         return mWindowDao.getWindow(mPlanId, mWindowIndex);
     }

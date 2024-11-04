@@ -30,11 +30,14 @@ public interface Ekotrope_Slab_DAO {
     @Query("SELECT * FROM ekotrope_slab_table WHERE plan_id = :plan_id")
     List<Ekotrope_Slab_Table> getSlabsSync(String plan_id);
 
+    @Query("SELECT * FROM ekotrope_slab_table WHERE plan_id = :plan_id AND isChanged = 1")
+    List<Ekotrope_Slab_Table> getSlabsForUpdate(String plan_id);
+
     @Query("UPDATE ekotrope_slab_table SET " +
             "name = :name, typeName = :typeName, underslabInsulationR = :underslabInsulationR, " +
             "isFullyInsulated = :isFullyInsulated, underslabInsulationWidth = :underslabInsulationWidth, " +
             "perimeterInsulationDepth = :perimeterInsulationDepth, perimeterInsulationR = :perimeterInsulationR, " +
-            "thermalBreak = :thermalBreak " +
+            "thermalBreak = :thermalBreak, isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     void update(String plan_id, int index, String name, String typeName, double underslabInsulationR,
                 boolean isFullyInsulated, double underslabInsulationWidth, double perimeterInsulationDepth,

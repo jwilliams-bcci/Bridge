@@ -37,6 +37,10 @@ public class Ekotrope_AboveGradeWallRepository {
         return mAboveGradeWallsDao.getAboveGradeWallsSync(plan_id);
     }
 
+    public List<Ekotrope_AboveGradeWall_Table> getAboveGradeWallsForUpdate(String plan_id) {
+        return mAboveGradeWallsDao.getAboveGradeWallsForUpdate(plan_id);
+    }
+
     public Ekotrope_AboveGradeWall_Table getAboveGradeWall(String mPlanId, int mAboveGradeWallIndex) {
         return mAboveGradeWallsDao.getAboveGradeWall(mPlanId, mAboveGradeWallIndex);
     }

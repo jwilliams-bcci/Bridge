@@ -5,10 +5,10 @@ import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -39,8 +39,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 
@@ -51,8 +49,11 @@ public class InspectActivity extends AppCompatActivity {
     public static final int SCROLL_POSITION_NOT_FOUND = -1;
     public static final String FILTER_OPTION = "com.burgess.bridge.FILTER_OPTION";
     public static final String TAG = "INSPECT";
+    public static final String EKOTROPE_SUBMITTED = "com.burgess.bridge.EKOTROPE_SUBMITTED";
+    public static final boolean EKOTROPE_SUBMITTED_FALSE = false;
 
     public int mInspectionId;
+    public boolean mEkotropeSubmitted = false;
     public int mScrollPosition;
     public int mInspectionTypeId;
     public boolean mReinspection;
@@ -91,6 +92,7 @@ public class InspectActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mEkotropeSubmitted = intent.getBooleanExtra(EKOTROPE_SUBMITTED, EKOTROPE_SUBMITTED_FALSE);
         mScrollPosition = intent.getIntExtra(SCROLL_POSITION, SCROLL_POSITION_NOT_FOUND);
         mFilter = intent.getStringExtra(FILTER_OPTION) != null ? intent.getStringExtra(FILTER_OPTION) : "ALL";
         mInspection = mInspectViewModel.getInspectionSync(mInspectionId);
@@ -199,13 +201,19 @@ public class InspectActivity extends AppCompatActivity {
         if ((mReinspection && mInspection.division_id != 20) || (mInspectionTypeId == 1154)) {
             initializeReinspectDisplayContent();
         } else {
-            if(mInspection.inspection_class != 7) {
+            if(mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) {
                 mButtonViewEkotropeData.setVisibility(View.GONE);
                 ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
                 ConstraintSet newLayout = new ConstraintSet();
                 newLayout.clone(layout);
                 newLayout.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_button_sort_by_defect_number, ConstraintSet.BOTTOM);
                 newLayout.applyTo(layout);
+            }
+
+            if(mEkotropeSubmitted) {
+                mButtonViewEkotropeData.setEnabled(false);
+                mButtonViewEkotropeData.setBackgroundColor(Color.GRAY);
+                mButtonViewEkotropeData.setText("Ekotrope Submitted, please refresh Route Sheet");
             }
 
             // Set up defect list
@@ -267,7 +275,7 @@ public class InspectActivity extends AppCompatActivity {
         mButtonSortItemNumber.setVisibility(View.GONE);
         mTextTotalDefectCountLabel.setVisibility(View.GONE);
         mTextTotalDefectCount.setVisibility(View.GONE);
-        if (mInspection.inspection_class != 7) {
+        if (mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) {
             mButtonViewEkotropeData.setVisibility(View.GONE);
         }
 
@@ -280,6 +288,12 @@ public class InspectActivity extends AppCompatActivity {
             constraintSet.connect(R.id.inspect_button_view_ekotrope_data, ConstraintSet.TOP, R.id.inspect_spinner_defect_category, ConstraintSet.BOTTOM);
         }
         constraintSet.applyTo(mConstraintLayout);
+
+        if(mEkotropeSubmitted) {
+            mButtonViewEkotropeData.setEnabled(false);
+            mButtonViewEkotropeData.setBackgroundColor(Color.GRAY);
+            mButtonViewEkotropeData.setText("Ekotrope Submitted, please refresh Route Sheet");
+        }
 
         // Set up the defect list
         mReinspectListAdapter = new ReinspectListAdapter(new ReinspectListAdapter.ReinspectDiff());

@@ -124,7 +124,7 @@ public class Ekotrope_FramedFloorsActivity extends AppCompatActivity {
             Ekotrope_FramedFloor_Table newFramedFloor = new Ekotrope_FramedFloor_Table(mPlanId,
                     mFramedFloorIndex, mTextName.getText().toString(), mFramedFloor.typeName,
                     newCavityInsulationGrade, newCavityInsulationR, newContinuousInsulationR,
-                    newStudSpacing, newStudWidth, newStudDepth, newStudMaterial);
+                    newStudSpacing, newStudWidth, newStudDepth, newStudMaterial, true);
             Snackbar.make(mConstraintLayout, "Saving...", Snackbar.LENGTH_LONG).show();
             mFramedFloorsViewModel.updateFramedFloor(newFramedFloor);
             finish();

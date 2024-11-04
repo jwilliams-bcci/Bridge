@@ -75,15 +75,16 @@
         app:titleTextColor="@color/colorWhite" />
 
     <Button
-        android:id="@+id/ekotrope_data_button_send_json"
+        android:id="@+id/ekotrope_data_button_email_json"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/button_rounded_blue"
-        android:text="Send JSON"
+        android:paddingVertical="8dp"
+        android:text="Email JSON"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -181,5 +182,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ekotrope_data_button_slabs" />
+
+    <Button
+        android:id="@+id/ekotrope_data_button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_rounded_blue"
+        android:paddingHorizontal="8dp"
+        android:text="Submit JSON"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

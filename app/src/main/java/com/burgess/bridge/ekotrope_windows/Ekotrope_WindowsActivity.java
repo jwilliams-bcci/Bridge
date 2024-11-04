@@ -139,7 +139,7 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
                     mTextName.getText().toString(), mWindow.typeName, newRemove, newWindowArea,
                     newOrientation, newInstalledWallIndex, -1,
                     newOverhangDepth, newDistanceOverhangToTop, newDistanceOverhangToBottom,
-                    newSHGC, newUFactor, newAdjacentSummerShading, newAdjacentWinterShading);
+                    newSHGC, newUFactor, newAdjacentSummerShading, newAdjacentWinterShading, true);
 
             Snackbar.make(mConstraintLayout, "Saving...", Snackbar.LENGTH_LONG).show();
             mWindowsViewModel.updateWindow(newWindow);

@@ -20,6 +20,7 @@ public class Ekotrope_Ceiling_Table {
     public double studDepth;
     public String studMaterial;
     public boolean hasRadiantBarrier;
+    public boolean isChanged;
 
     public Ekotrope_Ceiling_Table() {
     }
@@ -28,7 +29,7 @@ public class Ekotrope_Ceiling_Table {
                                    String cavityInsulationGrade, double cavityInsulationR,
                                    double continuousInsulationR, double studSpacing,
                                    double studWidth, double studDepth, String studMaterial,
-                                   boolean hasRadiantBarrier) {
+                                   boolean hasRadiantBarrier, boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;
@@ -41,6 +42,7 @@ public class Ekotrope_Ceiling_Table {
         this.studDepth = studDepth;
         this.studMaterial = studMaterial;
         this.hasRadiantBarrier = hasRadiantBarrier;
+        this.isChanged = isChanged;
     }
 
     public JSONObject toJsonObj() {

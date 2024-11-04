@@ -14,13 +14,14 @@ public class Ekotrope_RimJoist_Table {
     public double surfaceArea;
     public double uFactor;
     public double rFactor;
+    public boolean isChanged;
 
     public Ekotrope_RimJoist_Table() {
     }
 
     public Ekotrope_RimJoist_Table(String plan_id, int index, String name, String typeName,
                                     String betweenInteriorAnd, double surfaceArea, double uFactor,
-                                    double rFactor) {
+                                    double rFactor, boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;
@@ -29,5 +30,6 @@ public class Ekotrope_RimJoist_Table {
         this.surfaceArea = surfaceArea;
         this.uFactor = uFactor;
         this.rFactor = rFactor;
+        this.isChanged = isChanged;
     }
 }

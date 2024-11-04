@@ -21,7 +21,9 @@ public final class Constants {
 
     public static final String API_EKOTROPE_PROJECT_URL = "https://api.ekotrope.com/api/v1/projects/";
     public static final String API_EKOTROPE_PLAN_URL = "https://api.ekotrope.com/api/v1/houseplans/";
-    public static final String API_EKOTROPE_AUTH = "burgesstestapi:gM5WcwHE";
+    public static final String API_EKOTROPE_INSPECTION_SYNC = "https://api.ekotrope.com/api/v1/inspectionSync/";
+    public static final String API_EKOTROPE_AUTH_TEST = "burgesstestapi:gM5WcwHE";
+    public static final String API_EKOTROPE_AUTH_PROD = "burgessapi:bh&K%gcR";
 
     public static final String CANCEL_TAG = "CANCEL_ALL";
 }

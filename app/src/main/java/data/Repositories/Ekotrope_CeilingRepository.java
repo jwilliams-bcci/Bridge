@@ -38,6 +38,10 @@ public class Ekotrope_CeilingRepository {
         return mCeilingDao.getCeilingsSync(plan_id);
     }
 
+    public List<Ekotrope_Ceiling_Table> getCeilingsForUpdate(String plan_id) {
+        return mCeilingDao.getCeilingsForUpdate(plan_id);
+    }
+
     public Ekotrope_Ceiling_Table getCeiling(String mPlanId, int mCeilingIndex) {
         return mCeilingDao.getCeiling(mPlanId, mCeilingIndex);
     }

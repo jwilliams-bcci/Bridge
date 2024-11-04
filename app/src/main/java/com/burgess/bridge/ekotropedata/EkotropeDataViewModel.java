@@ -59,12 +59,12 @@ public class EkotropeDataViewModel extends AndroidViewModel {
         JSONArray ceilingsJson = new JSONArray();
         JSONArray slabsJson = new JSONArray();
 
-        List<Ekotrope_AboveGradeWall_Table> aboveGradeWalls = mAboveGradeWallsRepository.getAboveGradeWallsSync(plan_id);
-        List<Ekotrope_FramedFloor_Table> framedFloors = mFramedFloorsRepository.getFramedFloorsSync(plan_id);
-        List<Ekotrope_Door_Table> doors = mDoorsRepository.getDoorsSync(plan_id);
-        List<Ekotrope_Window_Table> windows = mWindowsRepository.getWindowsSync(plan_id);
-        List<Ekotrope_Ceiling_Table> ceilings = mCeilingsRepository.getCeilingsSync(plan_id);
-        List<Ekotrope_Slab_Table> slabs = mSlabsRepository.getSlabsSync(plan_id);
+        List<Ekotrope_AboveGradeWall_Table> aboveGradeWalls = mAboveGradeWallsRepository.getAboveGradeWallsForUpdate(plan_id);
+        List<Ekotrope_FramedFloor_Table> framedFloors = mFramedFloorsRepository.getFramedFloorsForUpdate(plan_id);
+        List<Ekotrope_Door_Table> doors = mDoorsRepository.getDoorsForUpdate(plan_id);
+        List<Ekotrope_Window_Table> windows = mWindowsRepository.getWindowsForUpdate(plan_id);
+        List<Ekotrope_Ceiling_Table> ceilings = mCeilingsRepository.getCeilingsForUpdate(plan_id);
+        List<Ekotrope_Slab_Table> slabs = mSlabsRepository.getSlabsForUpdate(plan_id);
 
         try {
             topLevelRequest.put("additionalEmail", "bwallace@burgess-inc.com");

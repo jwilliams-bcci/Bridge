@@ -30,10 +30,14 @@ public interface Ekotrope_AboveGradeWall_DAO {
     @Query("SELECT * FROM ekotrope_above_grade_wall_table WHERE plan_id = :plan_id")
     List<Ekotrope_AboveGradeWall_Table> getAboveGradeWallsSync(String plan_id);
 
+    @Query("SELECT * FROM ekotrope_above_grade_wall_table WHERE plan_id = :plan_id AND isChanged = 1")
+    List<Ekotrope_AboveGradeWall_Table> getAboveGradeWallsForUpdate(String plan_id);
+
     @Query("UPDATE ekotrope_above_grade_wall_table SET " +
             "studSpacing = :studSpacing, studWidth = :studWidth, studDepth = :studDepth, " +
             "studMaterial = :studMaterial, cavityInsulationGrade = :cavityInsulationGrade, " +
-            "cavityInsulationR = :cavityInsulationR, continuousInsulationR = :continuousInsulationR " +
+            "cavityInsulationR = :cavityInsulationR, continuousInsulationR = :continuousInsulationR, " +
+            "isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     void update(String plan_id, int index, String cavityInsulationGrade, double cavityInsulationR,
                 double studSpacing, double continuousInsulationR, double studWidth,

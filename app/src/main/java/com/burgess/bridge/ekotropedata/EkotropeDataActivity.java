@@ -7,7 +7,6 @@ import static com.burgess.bridge.ekotrope_framedfloors.Ekotrope_FramedFloorsActi
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.Button;
@@ -15,12 +14,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.burgess.bridge.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
+import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.ekotrope_abovegradewallslist.Ekotrope_AboveGradeWallsListActivity;
 import com.burgess.bridge.ekotrope_ceilingslist.Ekotrope_CeilingsListActivity;
 import com.burgess.bridge.ekotrope_doorslist.Ekotrope_DoorsListActivity;
@@ -28,6 +27,7 @@ import com.burgess.bridge.ekotrope_framedfloorslist.Ekotrope_FramedFloorsListAct
 import com.burgess.bridge.ekotrope_rimjoistslist.Ekotrope_RimJoistsListActivity;
 import com.burgess.bridge.ekotrope_slabslist.Ekotrope_SlabsListActivity;
 import com.burgess.bridge.ekotrope_windowslist.Ekotrope_WindowsListActivity;
+import com.burgess.bridge.inspect.InspectActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.time.OffsetDateTime;
@@ -39,12 +39,13 @@ import data.Tables.Inspection_Table;
 public class EkotropeDataActivity extends AppCompatActivity {
     private SharedPreferences mSharedPreferences;
     private String mInspectorId;
-    private Button mButtonEmail;
     private static final String TAG = "EKOTROPE_DATA";
     private long mLastClickTime = 0;
 
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
+    public static final String EKOTROPE_SUBMITTED = "com.burgess.bridge.EKOTROPE_SUBMITTED";
+    public static final boolean EKOTROPE_SUBMITTED_TRUE = true;
     public int mInspectionId;
     private EkotropeDataViewModel mEkotropeDataViewModel;
 
@@ -61,6 +62,8 @@ public class EkotropeDataActivity extends AppCompatActivity {
     private Button mButtonCeilings;
     private Button mButtonSlabs;
     private Button mButtonRimJoists;
+    private Button mButtonEmail;
+    private Button mButtonSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +92,6 @@ public class EkotropeDataActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.ekotrope_data_constraint_layout);
-        mButtonEmail = findViewById(R.id.ekotrope_data_button_send_json);
         mTextEkotropeProjectId = findViewById(R.id.ekotrope_text_project_id);
         mTextEkotropePlanId = findViewById(R.id.ekotrope_text_plan_id);
         mButtonFramedFloors = findViewById(R.id.ekotrope_data_button_framed_floors);
@@ -99,6 +101,8 @@ public class EkotropeDataActivity extends AppCompatActivity {
         mButtonCeilings = findViewById(R.id.ekotrope_data_button_ceilings);
         mButtonSlabs = findViewById(R.id.ekotrope_data_button_slabs);
         mButtonRimJoists = findViewById(R.id.ekotrope_data_button_rim_joists);
+        mButtonEmail = findViewById(R.id.ekotrope_data_button_email_json);
+        mButtonSubmit = findViewById(R.id.ekotrope_data_button_submit);
     }
 
     private void initializeDisplayContent() {
@@ -158,6 +162,28 @@ public class EkotropeDataActivity extends AppCompatActivity {
             startActivity(emailIntent);
 
             Snackbar.make(mConstraintLayout, "JSON sent via email", Snackbar.LENGTH_SHORT).show();
+        });
+
+        mButtonSubmit.setOnClickListener(view -> {
+            // Prevent double clicking
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                return;
+            }
+            apiQueue.updateEkotropePlanData(mEkotropeDataViewModel, mInspection.ekotrope_plan_id, mInspection.ekotrope_project_id, new ServerCallback() {
+                @Override
+                public void onSuccess(String message) {
+
+                }
+
+                @Override
+                public void onFailure(String message) {
+                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
+                }
+            });
+            Intent inspectIntent = new Intent(this, InspectActivity.class);
+            inspectIntent.putExtra(INSPECTION_ID, mInspectionId);
+            inspectIntent.putExtra(EKOTROPE_SUBMITTED, EKOTROPE_SUBMITTED_TRUE);
+            startActivity(inspectIntent);
         });
     }
 }

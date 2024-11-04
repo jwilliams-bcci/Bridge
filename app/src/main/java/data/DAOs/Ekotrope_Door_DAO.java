@@ -30,10 +30,13 @@ public interface Ekotrope_Door_DAO {
     @Query("SELECT * FROM ekotrope_door_table WHERE plan_id = :plan_id")
     List<Ekotrope_Door_Table> getDoorsSync(String plan_id);
 
+    @Query("SELECT * FROM ekotrope_door_table WHERE plan_id = :plan_id AND isChanged = 1")
+    List<Ekotrope_Door_Table> getDoorsForUpdate(String plan_id);
+
     @Query("UPDATE ekotrope_door_table SET " +
             "name = :name, typeName = :typeName, remove = :remove, installedWallIndex = :installedWallIndex, " +
             "installedFoundationWallIndex = :installedFoundationWallIndex, doorArea = :doorArea, " +
-            "uFactor = :uFactor " +
+            "uFactor = :uFactor, isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     public void update(String plan_id, int index, String name, String typeName, boolean remove,
                        int installedWallIndex, int installedFoundationWallIndex, double doorArea,

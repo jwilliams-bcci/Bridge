@@ -30,10 +30,14 @@ public interface Ekotrope_FramedFloor_DAO {
     @Query("SELECT * FROM ekotrope_framed_floor_table WHERE plan_id = :plan_id")
     List<Ekotrope_FramedFloor_Table> getFramedFloorsSync(String plan_id);
 
+    @Query("SELECT * FROM ekotrope_framed_floor_table WHERE plan_id = :plan_id AND isChanged = 1")
+    List<Ekotrope_FramedFloor_Table> getFramedFloorsForUpdate(String plan_id);
+
     @Query("UPDATE ekotrope_framed_floor_table SET " +
             "studSpacing = :studSpacing, studWidth = :studWidth, studDepth = :studDepth, " +
             "studMaterial = :studMaterial, cavityInsulationGrade = :cavityInsulationGrade, " +
-            "cavityInsulationR = :cavityInsulationR, continuousInsulationR = :continuousInsulationR " +
+            "cavityInsulationR = :cavityInsulationR, continuousInsulationR = :continuousInsulationR, " +
+            "isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     void update(String plan_id, int index, String cavityInsulationGrade, double cavityInsulationR,
                 double studSpacing, double continuousInsulationR, double studWidth,

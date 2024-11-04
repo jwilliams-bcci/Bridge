@@ -36,6 +36,10 @@ public class Ekotrope_DoorRepository {
         return mDoorDao.getDoorsSync(plan_id);
     }
 
+    public List<Ekotrope_Door_Table> getDoorsForUpdate(String plan_id) {
+        return mDoorDao.getDoorsForUpdate(plan_id);
+    }
+
     public Ekotrope_Door_Table getDoor(String mPlanId, int mDoorIndex) {
         return mDoorDao.getDoor(mPlanId, mDoorIndex);
     }

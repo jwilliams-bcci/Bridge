@@ -30,11 +30,14 @@ public interface Ekotrope_Ceiling_DAO {
     @Query("SELECT * FROM ekotrope_ceiling_table WHERE plan_id = :plan_id")
     List<Ekotrope_Ceiling_Table> getCeilingsSync(String plan_id);
 
+    @Query("SELECT * FROM ekotrope_ceiling_table WHERE plan_id = :plan_id AND isChanged = 1")
+    List<Ekotrope_Ceiling_Table> getCeilingsForUpdate(String plan_id);
+
     @Query("UPDATE ekotrope_ceiling_table SET " +
             "name = :name, typeName = :typeName, cavityInsulationGrade = :cavityInsulationGrade, " +
             "cavityInsulationR = :cavityInsulationR, continuousInsulationR = :continuousInsulationR, " +
             "studSpacing = :studSpacing, studWidth = :studWidth, studDepth = :studDepth, " +
-            "studMaterial = :studMaterial, hasRadiantBarrier = :hasRadiantBarrier " +
+            "studMaterial = :studMaterial, hasRadiantBarrier = :hasRadiantBarrier, isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     public void update(String plan_id, int index, String name, String typeName, String cavityInsulationGrade,
                        double cavityInsulationR, double continuousInsulationR, double studSpacing,

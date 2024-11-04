@@ -36,6 +36,10 @@ public class Ekotrope_SlabRepository {
         return mSlabDao.getSlabsSync(plan_id);
     }
 
+    public List<Ekotrope_Slab_Table> getSlabsForUpdate(String plan_id) {
+        return mSlabDao.getSlabsForUpdate(plan_id);
+    }
+
     public Ekotrope_Slab_Table getSlab(String plan_id, int index) {
         return mSlabDao.getSlab(plan_id, index);
     }

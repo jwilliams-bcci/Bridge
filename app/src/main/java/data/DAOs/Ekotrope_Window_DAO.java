@@ -30,12 +30,16 @@ public interface Ekotrope_Window_DAO {
     @Query("SELECT * FROM ekotrope_window_table WHERE plan_id = :plan_id")
     List<Ekotrope_Window_Table> getWindowsSync(String plan_id);
 
+    @Query("SELECT * FROM ekotrope_window_table WHERE plan_id = :plan_id AND isChanged = 1")
+    List<Ekotrope_Window_Table> getWindowsForUpdate(String plan_id);
+
     @Query("UPDATE ekotrope_window_table SET " +
             "name = :name, remove = :remove, windowArea = :windowArea, orientation = :orientation, " +
             "installedWallIndex = :installedWallIndex, installedFoundationWallIndex = :installedFoundationWallIndex, " +
             "overhangDepth = :overhangDepth, distanceOverhangToTop = :distanceOverhangToTop, " +
             "distanceOverhangToBottom = :distanceOverhangToBottom, SHGC = :SHGC, uFactor = :uFactor, " +
-            "adjacentSummerShading = :adjacentSummerShading, adjacentWinterShading = :adjacentWinterShading " +
+            "adjacentSummerShading = :adjacentSummerShading, adjacentWinterShading = :adjacentWinterShading, " +
+            "isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     void update(String plan_id, int index, String name, boolean remove, double windowArea,
                 String orientation, int installedWallIndex, int installedFoundationWallIndex,

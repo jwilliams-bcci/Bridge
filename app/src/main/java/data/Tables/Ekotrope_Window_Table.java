@@ -24,6 +24,7 @@ public class Ekotrope_Window_Table {
     public double uFactor;
     public double adjacentSummerShading;
     public double adjacentWinterShading;
+    public boolean isChanged;
 
     public Ekotrope_Window_Table() {
     }
@@ -33,7 +34,7 @@ public class Ekotrope_Window_Table {
                                  int installedFoundationWallIndex, double overhangDepth,
                                  double distanceOverhangToTop, double distanceOverhangToBottom,
                                  double SHGC, double uFactor, double adjacentSummerShading,
-                                 double adjacentWinterShading) {
+                                 double adjacentWinterShading, boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;
@@ -50,6 +51,7 @@ public class Ekotrope_Window_Table {
         this.uFactor = uFactor;
         this.adjacentSummerShading = adjacentSummerShading;
         this.adjacentWinterShading = adjacentWinterShading;
+        this.isChanged = isChanged;
     }
 
     public JSONObject toJsonObj() {

@@ -124,7 +124,7 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
             Ekotrope_AboveGradeWall_Table newAboveGradeWall = new Ekotrope_AboveGradeWall_Table(mPlanId,
                     mAboveGradeWallIndex, mTextName.getText().toString(), mAboveGradeWall.typeName,
                     newCavityInsulationGrade, newCavityInsulationR, newContinuousInsulationR,
-                    newStudSpacing, newStudWidth, newStudDepth, newStudMaterial);
+                    newStudSpacing, newStudWidth, newStudDepth, newStudMaterial, true);
             Snackbar.make(mConstraintLayout, "Saving...", Snackbar.LENGTH_LONG).show();
             mAboveGradeWallsViewModel.updateAboveGradeWall(newAboveGradeWall);
             finish();

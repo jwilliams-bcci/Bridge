@@ -17,13 +17,14 @@ public class Ekotrope_Door_Table {
     public int installedFoundationWallIndex;
     public double doorArea;
     public double uFactor;
+    public boolean isChanged;
 
     public Ekotrope_Door_Table() {
     }
 
     public Ekotrope_Door_Table(String plan_id, int index, String name, String typeName, boolean remove,
                                int installedWallIndex, int installedFoundationWallIndex,
-                               double doorArea, double uFactor) {
+                               double doorArea, double uFactor, boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;
@@ -33,6 +34,7 @@ public class Ekotrope_Door_Table {
         this.installedFoundationWallIndex = installedFoundationWallIndex;
         this.doorArea = doorArea;
         this.uFactor = uFactor;
+        this.isChanged = isChanged;
     }
 
     public JSONObject toJsonObj() {

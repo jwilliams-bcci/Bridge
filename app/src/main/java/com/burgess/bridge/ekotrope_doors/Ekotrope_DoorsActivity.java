@@ -98,7 +98,7 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
             Ekotrope_Door_Table newDoor = new Ekotrope_Door_Table(mPlanId, mDoorIndex,
                     mTextName.getText().toString(), mDoor.typeName, newRemove,
                     Integer.parseInt(mTextWallIndex.getText().toString()), -1,
-                    newDoorArea, newUFactor);
+                    newDoorArea, newUFactor, true);
             Snackbar.make(mConstraintLayout, "Saving...", Snackbar.LENGTH_LONG).show();
             mDoorsViewModel.updateDoor(newDoor);
             finish();

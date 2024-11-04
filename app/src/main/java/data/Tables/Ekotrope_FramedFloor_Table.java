@@ -15,13 +15,14 @@ public class Ekotrope_FramedFloor_Table {
     public int index;
     public String name;
     public String typeName;
-    public String cavityInsulationGrade; //gotten from api
-    public double cavityInsulationR; //gotten from api
+    public String cavityInsulationGrade;
+    public double cavityInsulationR;
     public double continuousInsulationR;
-    public double studSpacing; //gotten from api
-    public double studWidth; //gotten from api
-    public double studDepth; //gotten from api
-    public String studMaterial; //gotten from api
+    public double studSpacing;
+    public double studWidth;
+    public double studDepth;
+    public String studMaterial;
+    public boolean isChanged;
 
     public Ekotrope_FramedFloor_Table() {
     }
@@ -29,7 +30,8 @@ public class Ekotrope_FramedFloor_Table {
     public Ekotrope_FramedFloor_Table(String plan_id, int index, String name, String typeName,
                                       String cavityInsulationGrade, double cavityInsulationR,
                                       double continuousInsulationR, double studSpacing,
-                                      double studWidth, double studDepth, String studMaterial) {
+                                      double studWidth, double studDepth, String studMaterial,
+                                      boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;
@@ -41,6 +43,7 @@ public class Ekotrope_FramedFloor_Table {
         this.studWidth = studWidth;
         this.studDepth = studDepth;
         this.studMaterial = studMaterial;
+        this.isChanged = isChanged;
     }
 
     public JSONObject toJsonObj() {

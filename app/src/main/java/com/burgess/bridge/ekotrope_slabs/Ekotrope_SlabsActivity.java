@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -45,6 +47,7 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
     private String mPlanId;
     private int mSlabIndex;
     private Ekotrope_Slab_Table mSlab;
+    private boolean valid = true;
 
     public static final String TAG = "SLABS";
 
@@ -71,6 +74,7 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
         intializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
+        initializeTextValidators();
     }
 
     private void intializeViews() {
@@ -87,6 +91,10 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
 
     private void initializeButtonListeners() {
         mButtonSave.setOnClickListener(v -> {
+            if (!valid) {
+                Snackbar.make(mConstraintLayout, "Please fix errors", Snackbar.LENGTH_LONG).show();
+                return;
+            }
             double newUnderSlabInsulationR = Double.parseDouble(mTextUnderSlabInsulationR.getText().toString());
             double newUnderSlabInsulationWidth = Double.parseDouble(mTextUnderSlabInsulationWidth.getText().toString());
             double newPerimeterInsulationDepth = Double.parseDouble(mTextPerimeterInsulationDepth.getText().toString());
@@ -97,7 +105,7 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
             Ekotrope_Slab_Table newSlab = new Ekotrope_Slab_Table(mPlanId, mSlabIndex,
                     mTextName.getText().toString(), mSlab.typeName, newUnderSlabInsulationR,
                     newFullyInsulated, newUnderSlabInsulationWidth, newPerimeterInsulationDepth,
-                    newPerimeterInsulationR, newThermalBreak);
+                    newPerimeterInsulationR, newThermalBreak, true);
 
             Snackbar.make(mConstraintLayout, "Saving...", Snackbar.LENGTH_LONG).show();
             mSlabsViewModel.updateSlab(newSlab);
@@ -113,5 +121,112 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
         mTextPerimeterInsulationR.setText(Double.toString(mSlab.perimeterInsulationR));
         mTextFullyInsulated.setChecked(mSlab.isFullyInsulated);
         mTextThermalBreak.setChecked(mSlab.thermalBreak);
+    }
+
+    private void initializeTextValidators() {
+        mTextUnderSlabInsulationR.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextUnderSlabInsulationR.getText().toString()) < 0) {
+                        mTextUnderSlabInsulationR.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextUnderSlabInsulationR.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextUnderSlabInsulationWidth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextUnderSlabInsulationWidth.getText().toString()) < 0) {
+                        mTextUnderSlabInsulationWidth.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextUnderSlabInsulationWidth.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextPerimeterInsulationDepth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextPerimeterInsulationDepth.getText().toString()) < 0) {
+                        mTextPerimeterInsulationDepth.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextPerimeterInsulationDepth.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextPerimeterInsulationR.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextPerimeterInsulationR.getText().toString()) < 0) {
+                        mTextPerimeterInsulationR.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                        }
+                } catch (NumberFormatException e) {
+                    mTextPerimeterInsulationR.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
     }
 }
