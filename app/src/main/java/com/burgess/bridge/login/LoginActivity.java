@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences.Editor mEditor;
     private TextView mTextUserName;
     private TextView mTextPassword;
+    private ImageView mImageViewShowPassword;
     private TextView mTextVersionName;
     private TextView mTextStaging;
     private Button mButtonLogin;
@@ -94,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeViews() {
         mTextUserName = findViewById(R.id.login_text_username);
         mTextPassword = findViewById(R.id.login_text_password);
+        mImageViewShowPassword = findViewById(R.id.login_imageview_show_password);
         mTextVersionName = findViewById(R.id.login_text_version_name);
         mTextStaging = findViewById(R.id.login_text_staging);
         mButtonLogin = findViewById(R.id.login_button_login);
@@ -120,6 +123,13 @@ public class LoginActivity extends AppCompatActivity {
                 mEditor.putBoolean(PREF_IS_ONLINE, true);
                 mEditor.apply();
                 workOnline();
+            }
+        });
+        mImageViewShowPassword.setOnClickListener(view -> {
+            if (mTextPassword.getTransformationMethod() == null) {
+                mTextPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
+            } else {
+                mTextPassword.setTransformationMethod(null);
             }
         });
     }

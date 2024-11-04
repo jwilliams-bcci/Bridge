@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +53,7 @@ public class Ekotrope_FramedFloorsActivity extends AppCompatActivity {
     private ArrayAdapter<String> mStudMaterialAdapter;
     private List<String> mInsulationGrades;
     private List<String> mStudMaterials;
+    private boolean valid = true;
 
     public static final String TAG = "FRAMED_FLOORS";
 
@@ -87,6 +90,7 @@ public class Ekotrope_FramedFloorsActivity extends AppCompatActivity {
         initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
+        initializeTextValidators();
     }
 
     private void initializeViews() {
@@ -105,6 +109,10 @@ public class Ekotrope_FramedFloorsActivity extends AppCompatActivity {
 
     private void initializeButtonListeners() {
         mButtonSave.setOnClickListener(v -> {
+            if (!valid) {
+                Snackbar.make(mConstraintLayout, "Please fix errors", Snackbar.LENGTH_LONG).show();
+                return;
+            }
             String newCavityInsulationGrade = mSpinnerCavityInsulationGrade.getSelectedItem().toString();
             double newCavityInsulationR = Double.parseDouble(mTextCavityInsulationR.getText().toString());
             double newContinuousInsulationR = Double.parseDouble(mTextContinuousInsulationR.getText().toString());
@@ -141,7 +149,136 @@ public class Ekotrope_FramedFloorsActivity extends AppCompatActivity {
         mStudMaterialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerStudMaterial.setAdapter(mStudMaterialAdapter);
         mSpinnerStudMaterial.setSelection(mStudMaterials.indexOf(mFramedFloor.studMaterial));
+    }
 
+    private void initializeTextValidators() {
+        mTextCavityInsulationR.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextCavityInsulationR.getText().toString()) < 0) {
+                        mTextCavityInsulationR.setError("Cannot be less than 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextCavityInsulationR.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextContinuousInsulationR.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextCavityInsulationR.getText().toString()) < 0) {
+                        mTextCavityInsulationR.setError("Cannot be less than 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextCavityInsulationR.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextStudSpacing.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextStudSpacing.getText().toString()) < 7) {
+                        mTextStudSpacing.setError("Must be greater or equal to 7");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextStudSpacing.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextStudWidth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextStudWidth.getText().toString()) <= 0) {
+                        mTextStudWidth.setError("Must be greater than 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextStudWidth.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextStudDepth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextStudDepth.getText().toString()) <= 0) {
+                        mTextStudDepth.setError("Must be greater than 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextStudDepth.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
     }
 }

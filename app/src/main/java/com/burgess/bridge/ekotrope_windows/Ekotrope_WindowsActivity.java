@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -57,6 +59,7 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
     private Ekotrope_Window_Table mWindow;
     private ArrayAdapter<String> mOrientationAdapter;
     private List<String> mOrientations;
+    private boolean valid = true;
 
     public static final String TAG = "WINDOWS";
 
@@ -94,6 +97,7 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
         intializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
+        initializeTextValidators();
     }
 
     private void intializeViews() {
@@ -115,6 +119,10 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
 
     private void initializeButtonListeners() {
         mButtonSave.setOnClickListener(v -> {
+            if (!valid) {
+                Snackbar.make(mConstraintLayout, "Please fix errors", Snackbar.LENGTH_LONG).show();
+                return;
+            }
             boolean newRemove = mCheckboxRemove.isChecked();
             double newWindowArea = Double.parseDouble(mTextWindowArea.getText().toString());
             String newOrientation = mSpinnerOrientation.getSelectedItem().toString();
@@ -154,5 +162,219 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
         mOrientationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mOrientations);
         mOrientationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerOrientation.setAdapter(mOrientationAdapter);
+    }
+
+    private void initializeTextValidators() {
+        mTextWindowArea.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextWindowArea.getText().toString()) < 0) {
+                        mTextWindowArea.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                        mTextWindowArea.setError("Must be a number");
+                        valid = false;
+                }
+            }
+        });
+        mTextOverhangDepth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextOverhangDepth.getText().toString()) < 0) {
+                        mTextOverhangDepth.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextOverhangDepth.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextDistanceOverhangToTop.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextDistanceOverhangToTop.getText().toString()) < 0) {
+                        mTextDistanceOverhangToTop.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextDistanceOverhangToTop.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextDistanceOverhangToBottom.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextDistanceOverhangToTop.getText().toString()) < 0) {
+                        mTextDistanceOverhangToTop.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextDistanceOverhangToTop.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextSHGC.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    double shgc = Double.parseDouble(mTextSHGC.getText().toString());
+                    if (shgc < 0 || shgc > 1) {
+                        mTextSHGC.setError("Must be between 0 and 1");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextSHGC.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextUFactor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextUFactor.getText().toString()) <= 0) {
+                        mTextUFactor.setError("Must be greater than 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextUFactor.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextSummerShading.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    double summerShading = Double.parseDouble(mTextSummerShading.getText().toString());
+                    if (summerShading < 0 || summerShading > 1) {
+                        mTextSummerShading.setError("Must be between 0 and 1");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextSummerShading.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextWinterShading.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    double winterShading = Double.parseDouble(mTextWinterShading.getText().toString());
+                    if (winterShading < 0 || winterShading > 1) {
+                        mTextWinterShading.setError("Must be between 0 and 1");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextWinterShading.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
     }
 }

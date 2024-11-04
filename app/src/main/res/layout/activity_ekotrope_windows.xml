@@ -5,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ekotrope_windows_constraint_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ekotrope_windows_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ekotrope_windows.Ekotrope_WindowsActivity">
@@ -144,17 +142,17 @@
         app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_name"
         app:layout_constraintTop_toTopOf="@+id/textView58" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_window_area"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Window_Area"
-        app:layout_constraintBottom_toBottomOf="@+id/textView59"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_checkbox_remove"
-        app:layout_constraintTop_toTopOf="@+id/textView59" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_window_area"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_Window_Area"
+            app:layout_constraintBottom_toBottomOf="@+id/textView59"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_checkbox_remove"
+            app:layout_constraintTop_toTopOf="@+id/textView59" />
 
     <Spinner
         android:id="@+id/ekotrope_windows_spinner_orientation"
@@ -165,65 +163,65 @@
         app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_window_area"
         app:layout_constraintTop_toTopOf="@+id/textView60" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_installed_wall_index"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Installed_Wall_Index"
-        app:layout_constraintBottom_toBottomOf="@+id/textView61"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_spinner_orientation"
-        app:layout_constraintTop_toTopOf="@+id/textView61" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_installed_wall_index"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_Installed_Wall_Index"
+            app:layout_constraintBottom_toBottomOf="@+id/textView61"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_spinner_orientation"
+            app:layout_constraintTop_toTopOf="@+id/textView61" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_overhang_depth"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Overhang_Depth"
-        app:layout_constraintBottom_toBottomOf="@+id/textView62"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_installed_wall_index"
-        app:layout_constraintTop_toTopOf="@+id/textView62" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_overhang_depth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_Overhang_Depth"
+            app:layout_constraintBottom_toBottomOf="@+id/textView62"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_installed_wall_index"
+            app:layout_constraintTop_toTopOf="@+id/textView62" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_distance_overhang_to_top"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Top"
-        app:layout_constraintEnd_toStartOf="@+id/ekotrope_windows_text_distance_overhang_to_bottom"
-        app:layout_constraintStart_toStartOf="@+id/textView62"
-        app:layout_constraintTop_toBottomOf="@+id/textView64" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_distance_overhang_to_top"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_Top"
+            app:layout_constraintEnd_toStartOf="@+id/ekotrope_windows_text_distance_overhang_to_bottom"
+            app:layout_constraintStart_toStartOf="@+id/textView62"
+            app:layout_constraintTop_toBottomOf="@+id/textView64" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_distance_overhang_to_bottom"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Bottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView65" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_distance_overhang_to_bottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_Bottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView65" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_shgc"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_SHGC"
-        app:layout_constraintBottom_toBottomOf="@+id/textView67"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_overhang_depth"
-        app:layout_constraintTop_toTopOf="@+id/textView67" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_shgc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_SHGC"
+            app:layout_constraintBottom_toBottomOf="@+id/textView67"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_overhang_depth"
+            app:layout_constraintTop_toTopOf="@+id/textView67" />
 
     <TextView
         android:id="@+id/textView67"
@@ -243,17 +241,17 @@
         app:layout_constraintStart_toStartOf="@+id/textView67"
         app:layout_constraintTop_toBottomOf="@+id/textView67" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_u_factor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_U_Factor"
-        app:layout_constraintBottom_toBottomOf="@+id/textView68"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_shgc"
-        app:layout_constraintTop_toTopOf="@+id/textView68" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_u_factor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_U_Factor"
+            app:layout_constraintBottom_toBottomOf="@+id/textView68"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_shgc"
+            app:layout_constraintTop_toTopOf="@+id/textView68" />
 
     <TextView
         android:id="@+id/textView69"
@@ -285,28 +283,28 @@
         app:layout_constraintStart_toEndOf="@+id/textView69"
         app:layout_constraintTop_toBottomOf="@+id/textView69" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_adjacent_summer_shading"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Summer_Shading"
-        app:layout_constraintEnd_toStartOf="@+id/ekotrope_windows_text_adjacent_winter_shading"
-        app:layout_constraintStart_toStartOf="@+id/textView68"
-        app:layout_constraintTop_toBottomOf="@+id/textView70" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_adjacent_summer_shading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_Summer_Shading"
+            app:layout_constraintEnd_toStartOf="@+id/ekotrope_windows_text_adjacent_winter_shading"
+            app:layout_constraintStart_toStartOf="@+id/textView68"
+            app:layout_constraintTop_toBottomOf="@+id/textView70" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_adjacent_winter_shading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Winter_Shading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ekotrope_windows_text_adjacent_summer_shading" />
+        <EditText
+            android:id="@+id/ekotrope_windows_text_adjacent_winter_shading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:text="W_Winter_Shading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ekotrope_windows_text_adjacent_summer_shading" />
 
     <Button
         android:id="@+id/ekotrope_windows_button_save"

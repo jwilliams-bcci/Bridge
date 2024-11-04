@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -43,6 +45,7 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
     private String mPlanId;
     private int mDoorIndex;
     private Ekotrope_Door_Table mDoor;
+    private boolean valid = true;
 
     public static final String TAG = "DOORS";
 
@@ -69,6 +72,7 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
         initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
+        initializeTextValidators();
     }
 
     private void initializeViews() {
@@ -83,6 +87,10 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
 
     private void initializeButtonListeners() {
         mButtonSave.setOnClickListener(v -> {
+            if (!valid) {
+                Snackbar.make(mConstraintLayout, "Please fix errors", Snackbar.LENGTH_LONG).show();
+                return;
+            }
             boolean newRemove = mCheckBoxRemove.isChecked();
             double newDoorArea = Double.parseDouble(mTextDoorArea.getText().toString());
             double newUFactor = Double.parseDouble(mTextUFactor.getText().toString());
@@ -102,5 +110,61 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
         mTextWallIndex.setText(Integer.toString(mDoor.installedWallIndex));
         mTextDoorArea.setText(Double.toString(mDoor.doorArea));
         mTextUFactor.setText(Double.toString(mDoor.uFactor));
+    }
+
+    private void initializeTextValidators() {
+        mTextDoorArea.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    if (Double.parseDouble(mTextDoorArea.getText().toString()) < 0) {
+                        mTextDoorArea.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextDoorArea.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
+        mTextUFactor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try {
+                    double uFactor = Double.parseDouble(mTextUFactor.getText().toString());
+                    if (uFactor < 0) {
+                        mTextUFactor.setError("Must be greater than or equal to 0");
+                        valid = false;
+                    } else {
+                        valid = true;
+                    }
+                } catch (NumberFormatException e) {
+                    mTextUFactor.setError("Must be a number");
+                    valid = false;
+                }
+            }
+        });
     }
 }

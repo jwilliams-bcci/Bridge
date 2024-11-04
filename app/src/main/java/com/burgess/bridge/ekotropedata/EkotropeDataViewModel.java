@@ -92,7 +92,7 @@ public class EkotropeDataViewModel extends AndroidViewModel {
             for (Ekotrope_Ceiling_Table ceiling : ceilings) {
                 ceilingsJson.put(ceiling.toJsonObj());
             }
-            inspectionSyncObj.put("ceilings", ceilingsJson);
+            inspectionSyncObj.put("ceilingsAndRoofs", ceilingsJson);
 
             for (Ekotrope_Slab_Table slab : slabs) {
                 slabsJson.put(slab.toJsonObj());
