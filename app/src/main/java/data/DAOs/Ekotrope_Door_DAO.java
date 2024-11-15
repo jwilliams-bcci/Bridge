@@ -39,6 +39,6 @@ public interface Ekotrope_Door_DAO {
             "uFactor = :uFactor, isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     public void update(String plan_id, int index, String name, String typeName, boolean remove,
-                       int installedWallIndex, int installedFoundationWallIndex, double doorArea,
-                       double uFactor);
+                       Integer installedWallIndex, Integer installedFoundationWallIndex, Double doorArea,
+                       Double uFactor);
 }

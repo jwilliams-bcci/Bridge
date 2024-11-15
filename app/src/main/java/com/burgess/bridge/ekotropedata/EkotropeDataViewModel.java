@@ -49,7 +49,7 @@ public class EkotropeDataViewModel extends AndroidViewModel {
         return mInspectionRepository.getInspectionSync(inspection_id);
     }
 
-    public JSONObject getInspectionSyncJson(String plan_id, String project_id) {
+    public JSONObject getInspectionSyncJson_Rough(String plan_id, String project_id) {
         JSONObject topLevelRequest = new JSONObject();
         JSONObject inspectionSyncObj = new JSONObject();
         JSONArray aboveGradeWallsJson = new JSONArray();
@@ -67,7 +67,7 @@ public class EkotropeDataViewModel extends AndroidViewModel {
         List<Ekotrope_Slab_Table> slabs = mSlabsRepository.getSlabsForUpdate(plan_id);
 
         try {
-            topLevelRequest.put("additionalEmail", "bwallace@burgess-inc.com");
+            topLevelRequest.put("additionalEmail", "jwilliams@burgess-inc.com");
             inspectionSyncObj.put("projectId", project_id.trim());
             for (Ekotrope_AboveGradeWall_Table aboveGradeWall : aboveGradeWalls) {
                 aboveGradeWallsJson.put(aboveGradeWall.toJsonObj());
@@ -102,6 +102,13 @@ public class EkotropeDataViewModel extends AndroidViewModel {
             topLevelRequest.put("inspectionSync", inspectionSyncObj);
         } catch (Exception e) {
         }
+        return topLevelRequest;
+    }
+
+    public JSONObject getInspectionSyncJson_Final(String plan_id, String project_id) {
+        JSONObject topLevelRequest = new JSONObject();
+        JSONObject inspectionSyncObj = new JSONObject();
+
         return topLevelRequest;
     }
 }

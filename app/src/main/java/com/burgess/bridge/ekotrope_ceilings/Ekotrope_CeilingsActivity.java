@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_ceilings;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID_NOT_FOUND;
 import static com.burgess.bridge.Constants.PREF;
 
 import android.content.Context;
@@ -13,15 +16,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.burgess.bridge.BridgeHelper;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -30,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.Tables.Ekotrope_Ceiling_Table;
+import data.Tables.Ekotrope_ChangeLog_Table;
 
 public class Ekotrope_CeilingsActivity extends AppCompatActivity {
     public static final String PLAN_ID = "com.burgess.bridge.PLAN_ID";
@@ -40,7 +47,8 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private EditText mTextName;
+    private Toolbar mToolbar;
+    private TextView mTextName;
     private Spinner mSpinnerCavityInsulationGrade;
     private EditText mTextCavityInsulationR;
     private EditText mTextContinuousInsulationR;
@@ -51,11 +59,11 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
     private CheckBox mCheckBoxRadiantBarrier;
     private Button mButtonSave;
 
+    private int mInspectionId;
+    private String mProjectId;
     private String mPlanId;
     private int mCeilingIndex;
     private Ekotrope_Ceiling_Table mCeiling;
-    private ArrayAdapter<String> mCavityInsulationGradeAdapter;
-    private ArrayAdapter<String> mStudMaterialAdapter;
     private List<String> mCavityInsulationGrades;
     private List<String> mStudMaterials;
     private boolean valid = true;
@@ -67,7 +75,7 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ekotrope_ceilings);
         setSupportActionBar(findViewById(R.id.ekotrope_ceilings_toolbar));
-        mCeilingsViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(Ekotrope_CeilingsViewModel.class);
+        mCeilingsViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(Ekotrope_CeilingsViewModel.class);
 
         // Prepare shared preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -78,17 +86,19 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
 
         // Get intent data...
         Intent intent = getIntent();
+        mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mProjectId = intent.getStringExtra(EKOTROPE_PROJECT_ID);
         mPlanId = intent.getStringExtra(PLAN_ID);
         mCeilingIndex = intent.getIntExtra(CEILING_INDEX, CEILING_INDEX_NOT_FOUND);
         mCeiling = mCeilingsViewModel.getCeiling(mPlanId, mCeilingIndex);
 
         // Set spinner lists...
-        mCavityInsulationGrades = new ArrayList<String>();
+        mCavityInsulationGrades = new ArrayList<>();
         mCavityInsulationGrades.add("I");
         mCavityInsulationGrades.add("II");
         mCavityInsulationGrades.add("III");
 
-        mStudMaterials = new ArrayList<String>();
+        mStudMaterials = new ArrayList<>();
         mStudMaterials.add("Wood");
         mStudMaterials.add("Steel");
         mStudMaterials.add("Concrete");
@@ -97,10 +107,12 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
         initializeButtonListeners();
         initializeDisplayContent();
         initializeTextValidators();
+        initializeChangeTracking();
     }
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.ekotrope_ceilings_constraint_layout);
+        mToolbar = findViewById(R.id.ekotrope_ceilings_toolbar);
         mTextName = findViewById(R.id.ekotrope_ceilings_text_name);
         mSpinnerCavityInsulationGrade = findViewById(R.id.ekotrope_ceilings_spinner_cavity_insulation_grade);
         mTextCavityInsulationR = findViewById(R.id.ekotrope_ceilings_text_cavity_insulation_r);
@@ -128,6 +140,64 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
             String newStudMaterial = mSpinnerStudMaterial.getSelectedItem().toString();
             boolean newRadiantBarrier = mCheckBoxRadiantBarrier.isChecked();
 
+            mSpinnerCavityInsulationGrade.clearFocus();
+            mTextCavityInsulationR.clearFocus();
+            mTextContinuousInsulationR.clearFocus();
+            mTextStudSpacing.clearFocus();
+            mTextStudWidth.clearFocus();
+            mTextStudDepth.clearFocus();
+            mSpinnerStudMaterial.clearFocus();
+            mCheckBoxRadiantBarrier.clearFocus();
+
+            if((boolean)mSpinnerCavityInsulationGrade.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Insulation Grade",
+                        mCeiling.cavityInsulationGrade, newCavityInsulationGrade);
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextCavityInsulationR.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Cavity Insulation R",
+                        Double.toString(mCeiling.cavityInsulationR), Double.toString(newCavityInsulationR));
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextContinuousInsulationR.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Continuous Insulation R",
+                        Double.toString(mCeiling.continuousInsulationR), Double.toString(newContinuousInsulationR));
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextStudSpacing.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Stud Spacing",
+                        Double.toString(mCeiling.studSpacing), Double.toString(newStudSpacing));
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextStudWidth.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Stud Width",
+                        Double.toString(mCeiling.studWidth), Double.toString(newStudWidth));
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextStudDepth.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Stud Depth",
+                        Double.toString(mCeiling.studDepth), Double.toString(newStudDepth));
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mSpinnerStudMaterial.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Stud Material",
+                        mCeiling.studMaterial, newStudMaterial);
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mCheckBoxRadiantBarrier.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Ceiling", mCeiling.name, "Radiant Barrier",
+                        Boolean.toString(mCeiling.hasRadiantBarrier), Boolean.toString(newRadiantBarrier));
+                mCeilingsViewModel.insertChangeLog(changeLogEntry);
+            }
+
             Ekotrope_Ceiling_Table newCeiling = new Ekotrope_Ceiling_Table(mPlanId, mCeilingIndex,
                     mTextName.getText().toString(), mCeiling.typeName, newCavityInsulationGrade,
                     newCavityInsulationR, newContinuousInsulationR, newStudSpacing, newStudWidth,
@@ -140,21 +210,24 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
-        mTextName.setText(mCeiling.name);
-        mTextCavityInsulationR.setText(Double.toString(mCeiling.cavityInsulationR));
-        mTextContinuousInsulationR.setText(Double.toString(mCeiling.continuousInsulationR));
-        mTextStudSpacing.setText(Double.toString(mCeiling.studSpacing));
-        mTextStudWidth.setText(Double.toString(mCeiling.studWidth));
-        mTextStudDepth.setText(Double.toString(mCeiling.studDepth));
+        mToolbar.setTitle(String.format("Ceiling - %s", mCeiling.name));
+        mTextName.setText(mCeiling.typeName);
+        mTextCavityInsulationR.setText(String.format(mCeiling.cavityInsulationR.toString()));
+        mTextContinuousInsulationR.setText(String.format(mCeiling.continuousInsulationR.toString()));
+        mTextStudSpacing.setText(String.format(mCeiling.studSpacing.toString()));
+        mTextStudWidth.setText(String.format(mCeiling.studWidth.toString()));
+        mTextStudDepth.setText(String.format(mCeiling.studDepth.toString()));
         mCheckBoxRadiantBarrier.setChecked(mCeiling.hasRadiantBarrier);
 
-        mCavityInsulationGradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mCavityInsulationGrades);
-        mCavityInsulationGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerCavityInsulationGrade.setAdapter(mCavityInsulationGradeAdapter);
+        ArrayAdapter<String> cavityInsulationGradeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mCavityInsulationGrades);
+        cavityInsulationGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerCavityInsulationGrade.setAdapter(cavityInsulationGradeAdapter);
+        mSpinnerCavityInsulationGrade.setSelection(mCavityInsulationGrades.indexOf(mCeiling.cavityInsulationGrade));
 
-        mStudMaterialAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mStudMaterials);
-        mStudMaterialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerStudMaterial.setAdapter(mStudMaterialAdapter);
+        ArrayAdapter<String> studMaterialAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mStudMaterials);
+        studMaterialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerStudMaterial.setAdapter(studMaterialAdapter);
+        mSpinnerStudMaterial.setSelection(mStudMaterials.indexOf(mCeiling.studMaterial));
     }
 
     private void initializeTextValidators() {
@@ -288,5 +361,16 @@ public class Ekotrope_CeilingsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void initializeChangeTracking() {
+        BridgeHelper.setChangeTracker(mSpinnerCavityInsulationGrade, mCeiling.cavityInsulationGrade);
+        BridgeHelper.setChangeTracker(mTextCavityInsulationR, mCeiling.cavityInsulationR);
+        BridgeHelper.setChangeTracker(mTextContinuousInsulationR, mCeiling.continuousInsulationR);
+        BridgeHelper.setChangeTracker(mTextStudSpacing, mCeiling.studSpacing);
+        BridgeHelper.setChangeTracker(mTextStudWidth, mCeiling.studWidth);
+        BridgeHelper.setChangeTracker(mTextStudDepth, mCeiling.studDepth);
+        BridgeHelper.setChangeTracker(mSpinnerStudMaterial, mCeiling.studMaterial);
+        BridgeHelper.setChangeTracker(mCheckBoxRadiantBarrier, mCeiling.hasRadiantBarrier);
     }
 }

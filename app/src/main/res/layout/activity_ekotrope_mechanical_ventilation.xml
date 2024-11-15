@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mechanical_ventilation_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_mechanicalventilation.Ekotrope_MechanicalVentilationActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mechanical_ventilation_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/Component"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView120"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/VentilationType"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_ventilation_toolbar" />
+
+        <TextView
+            android:id="@+id/textView121"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/MeasuredFlowRate"
+            app:layout_constraintStart_toStartOf="@+id/textView120"
+            app:layout_constraintTop_toBottomOf="@+id/textView120" />
+
+        <TextView
+            android:id="@+id/textView122"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/FanWatts"
+            app:layout_constraintStart_toStartOf="@+id/textView121"
+            app:layout_constraintTop_toBottomOf="@+id/textView121" />
+
+        <TextView
+            android:id="@+id/textView123"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/OperationalHoursPerDay"
+            app:layout_constraintStart_toStartOf="@+id/textView122"
+            app:layout_constraintTop_toBottomOf="@+id/textView122" />
+
+        <Button
+            android:id="@+id/mechanical_ventilation_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView123" />
+
+        <Spinner
+            android:id="@+id/mechanical_ventilation_spinner_ventilation_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView120"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView121"
+            app:layout_constraintTop_toTopOf="@+id/textView120" />
+
+        <EditText
+            android:id="@+id/mechanical_ventilation_text_measured_flow_rate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView121"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_ventilation_spinner_ventilation_type"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_ventilation_spinner_ventilation_type"
+            app:layout_constraintTop_toTopOf="@+id/textView121" />
+
+        <EditText
+            android:id="@+id/mechanical_ventilation_text_fan_watts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView122"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_ventilation_text_measured_flow_rate"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_ventilation_text_measured_flow_rate"
+            app:layout_constraintTop_toTopOf="@+id/textView122" />
+
+        <EditText
+            android:id="@+id/mechanical_ventilation_text_operational_hours_per_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView123"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_ventilation_text_fan_watts"
+            app:layout_constraintTop_toTopOf="@+id/textView123" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

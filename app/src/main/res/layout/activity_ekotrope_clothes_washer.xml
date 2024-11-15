@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clothes_washer_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_clotheswasher.Ekotrope_ClothesWasherActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/clothes_washer_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/ClothesWasher"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView146"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/Available"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clothes_washer_toolbar" />
+
+        <TextView
+            android:id="@+id/textView147"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/DefaultsType"
+            app:layout_constraintStart_toStartOf="@+id/textView146"
+            app:layout_constraintTop_toBottomOf="@+id/textView146" />
+
+        <TextView
+            android:id="@+id/textView148"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/LabeledEnergyRating"
+            app:layout_constraintStart_toStartOf="@+id/textView147"
+            app:layout_constraintTop_toBottomOf="@+id/textView150" />
+
+        <TextView
+            android:id="@+id/textView149"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/IntegratedModifiedEnergyFactor"
+            app:layout_constraintStart_toStartOf="@+id/textView148"
+            app:layout_constraintTop_toBottomOf="@+id/textView148" />
+
+        <Button
+            android:id="@+id/clothes_washer_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView149" />
+
+        <CheckBox
+            android:id="@+id/clothes_washer_checkbox_available"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView146"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView148"
+            app:layout_constraintTop_toTopOf="@+id/textView146" />
+
+        <Spinner
+            android:id="@+id/clothes_washer_spinner_defaults_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView147"
+            app:layout_constraintEnd_toEndOf="@+id/clothes_washer_checkbox_available"
+            app:layout_constraintStart_toStartOf="@+id/clothes_washer_checkbox_available"
+            app:layout_constraintTop_toTopOf="@+id/textView147" />
+
+        <TextView
+            android:id="@+id/textView150"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/LoadType"
+            app:layout_constraintStart_toStartOf="@+id/textView147"
+            app:layout_constraintTop_toBottomOf="@+id/textView147" />
+
+        <Spinner
+            android:id="@+id/clothes_washer_spinner_load_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView150"
+            app:layout_constraintEnd_toEndOf="@+id/clothes_washer_spinner_defaults_type"
+            app:layout_constraintStart_toStartOf="@+id/clothes_washer_spinner_defaults_type"
+            app:layout_constraintTop_toTopOf="@+id/textView150" />
+
+        <EditText
+            android:id="@+id/clothes_washer_text_labeled_energy_rating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView148"
+            app:layout_constraintEnd_toEndOf="@+id/clothes_washer_spinner_load_type"
+            app:layout_constraintStart_toStartOf="@+id/clothes_washer_spinner_load_type"
+            app:layout_constraintTop_toTopOf="@+id/textView148" />
+
+        <EditText
+            android:id="@+id/clothes_washer_text_integrated_modified_energy_factor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView149"
+            app:layout_constraintEnd_toEndOf="@+id/clothes_washer_text_labeled_energy_rating"
+            app:layout_constraintStart_toStartOf="@+id/clothes_washer_text_labeled_energy_rating"
+            app:layout_constraintTop_toTopOf="@+id/textView149" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -15,9 +15,9 @@
             android:id="@+id/above_grade_walls_button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:background="@drawable/button_rounded_blue"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@color/colorWhite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,8 +27,9 @@
             android:id="@+id/above_grade_walls_spinner_stud_material"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView47"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/above_grade_walls_text_stud_depth"
             app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_stud_depth"
             app:layout_constraintTop_toTopOf="@+id/textView47" />
 
@@ -37,104 +38,108 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_StudDepth"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView51"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/above_grade_walls_text_stud_width"
             app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_stud_width"
-            app:layout_constraintTop_toTopOf="@+id/textView51" />
+            app:layout_constraintTop_toTopOf="@+id/textView51"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/above_grade_walls_text_stud_width"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_StudWidth"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView52"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/above_grade_walls_text_stud_spacing"
             app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_stud_spacing"
-            app:layout_constraintTop_toTopOf="@+id/textView52" />
+            app:layout_constraintTop_toTopOf="@+id/textView52"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/above_grade_walls_text_stud_spacing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_StudSpacing"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView48"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/above_grade_walls_text_continuous_insulation_r"
             app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_continuous_insulation_r"
-            app:layout_constraintTop_toTopOf="@+id/textView48" />
+            app:layout_constraintTop_toTopOf="@+id/textView48"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/above_grade_walls_text_continuous_insulation_r"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_ContInsR"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView50"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/above_grade_walls_text_cavity_insulation_r"
             app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_cavity_insulation_r"
-            app:layout_constraintTop_toTopOf="@+id/textView50" />
+            app:layout_constraintTop_toTopOf="@+id/textView50"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/above_grade_walls_text_cavity_insulation_r"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_CavInsR"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView49"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/above_grade_walls_spinner_cavity_insulation_grade"
             app:layout_constraintStart_toStartOf="@+id/above_grade_walls_spinner_cavity_insulation_grade"
-            app:layout_constraintTop_toTopOf="@+id/textView49" />
+            app:layout_constraintTop_toTopOf="@+id/textView49"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <Spinner
             android:id="@+id/above_grade_walls_spinner_cavity_insulation_grade"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView46"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/above_grade_walls_text_name"
             app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_name"
             app:layout_constraintTop_toTopOf="@+id/textView46" />
 
-        <EditText
+        <TextView
             android:id="@+id/above_grade_walls_text_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:editable="false"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:inputType="text"
-            android:text="FF_Name"
+            android:text="@string/NoTypeNameFound"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView45"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/above_grade_walls_text_index"
-            app:layout_constraintTop_toTopOf="@+id/textView45" />
-
-        <EditText
-            android:id="@+id/above_grade_walls_text_index"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:editable="false"
-            android:ems="10"
-            android:inputType="text"
-            android:text="FF_ID"
-            app:layout_constraintBottom_toBottomOf="@+id/textView44"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView50"
-            app:layout_constraintTop_toTopOf="@+id/textView44" />
+            app:layout_constraintTop_toTopOf="@+id/textView45"
+            tools:ignore="TextViewEdits,TouchTargetSizeCheck" />
 
         <TextView
             android:id="@+id/textView47"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Material"
+            android:layout_marginTop="36dp"
+            android:text="@string/stud_material"
             app:layout_constraintStart_toStartOf="@+id/textView51"
             app:layout_constraintTop_toBottomOf="@+id/textView51" />
 
@@ -142,8 +147,8 @@
             android:id="@+id/textView48"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Spacing"
+            android:layout_marginTop="36dp"
+            android:text="@string/StudSpacing"
             app:layout_constraintStart_toStartOf="@+id/textView50"
             app:layout_constraintTop_toBottomOf="@+id/textView50" />
 
@@ -151,8 +156,8 @@
             android:id="@+id/textView49"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Cavity Insulation R"
+            android:layout_marginTop="36dp"
+            android:text="@string/CavityInsulationR"
             app:layout_constraintStart_toStartOf="@+id/textView46"
             app:layout_constraintTop_toBottomOf="@+id/textView46" />
 
@@ -160,8 +165,8 @@
             android:id="@+id/textView50"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Continuous Insulation R"
+            android:layout_marginTop="36dp"
+            android:text="@string/ContinuousInsulationR"
             app:layout_constraintStart_toStartOf="@+id/textView49"
             app:layout_constraintTop_toBottomOf="@+id/textView49" />
 
@@ -169,8 +174,8 @@
             android:id="@+id/textView51"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Depth"
+            android:layout_marginTop="36dp"
+            android:text="@string/StudDepth"
             app:layout_constraintStart_toStartOf="@+id/textView52"
             app:layout_constraintTop_toBottomOf="@+id/textView52" />
 
@@ -178,8 +183,8 @@
             android:id="@+id/textView52"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Width"
+            android:layout_marginTop="36dp"
+            android:text="@string/StudWidth"
             app:layout_constraintStart_toStartOf="@+id/textView48"
             app:layout_constraintTop_toBottomOf="@+id/textView48" />
 
@@ -187,8 +192,8 @@
             android:id="@+id/textView46"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Cavity Insulation Grade"
+            android:layout_marginTop="36dp"
+            android:text="@string/cavity_insulation_grade"
             app:layout_constraintStart_toStartOf="@+id/textView45"
             app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
@@ -196,18 +201,9 @@
             android:id="@+id/textView45"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Name"
-            app:layout_constraintStart_toStartOf="@+id/textView44"
-            app:layout_constraintTop_toBottomOf="@+id/textView44" />
-
-        <TextView
-            android:id="@+id/textView44"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="ID:"
+            android:layout_marginTop="36dp"
+            android:text="@string/type_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/above_grade_walls_toolbar" />
 

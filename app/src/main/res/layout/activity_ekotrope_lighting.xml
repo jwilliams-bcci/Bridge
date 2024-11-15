@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lighting_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_lighting.Ekotrope_LightingActivity">
+
+        <TextView
+            android:id="@+id/textView133"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/PercentLED"
+            app:layout_constraintBottom_toBottomOf="@+id/textView130"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toEndOf="@+id/divider19"
+            app:layout_constraintTop_toTopOf="@+id/textView130"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView132"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/PercentFluorescent"
+            app:layout_constraintEnd_toStartOf="@+id/divider19"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView129" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/lighting_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/Lighting"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView125"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/Interior"
+            android:textColor="@color/burgessBlue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lighting_toolbar" />
+
+        <View
+            android:id="@+id/divider16"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/burgessBlue"
+            app:layout_constraintBottom_toBottomOf="@+id/textView125"
+            app:layout_constraintEnd_toStartOf="@+id/textView125"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView125" />
+
+        <View
+            android:id="@+id/divider17"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/burgessBlue"
+            app:layout_constraintBottom_toBottomOf="@+id/textView125"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView125"
+            app:layout_constraintTop_toTopOf="@+id/textView125" />
+
+        <View
+            android:id="@+id/divider19"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView125" />
+
+        <TextView
+            android:id="@+id/textView126"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/PercentFluorescent"
+            app:layout_constraintEnd_toStartOf="@+id/divider19"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/divider19" />
+
+        <TextView
+            android:id="@+id/textView127"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/PercentLED"
+            app:layout_constraintBottom_toBottomOf="@+id/textView126"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/divider19"
+            app:layout_constraintTop_toTopOf="@+id/textView126" />
+
+        <EditText
+            android:id="@+id/lighting_text_interior_f"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/divider19"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView126" />
+
+        <EditText
+            android:id="@+id/lighting_text_interior_l"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/lighting_text_interior_f"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/divider19"
+            app:layout_constraintTop_toTopOf="@+id/lighting_text_interior_f" />
+
+        <TextView
+            android:id="@+id/textView128"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Exterior"
+            android:textColor="@color/burgessBlue"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lighting_text_interior_f" />
+
+        <EditText
+            android:id="@+id/lighting_text_exterior_f"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/divider19"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView130" />
+
+        <EditText
+            android:id="@+id/lighting_text_exterior_l"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/lighting_text_exterior_f"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/divider19"
+            app:layout_constraintTop_toTopOf="@+id/lighting_text_exterior_f" />
+
+        <View
+            android:id="@+id/divider20"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/burgessBlue"
+            app:layout_constraintBottom_toBottomOf="@+id/textView128"
+            app:layout_constraintEnd_toStartOf="@+id/textView128"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView128" />
+
+        <View
+            android:id="@+id/divider21"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/burgessBlue"
+            app:layout_constraintBottom_toBottomOf="@+id/textView128"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView128"
+            app:layout_constraintTop_toTopOf="@+id/textView128" />
+
+        <TextView
+            android:id="@+id/textView129"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Garage"
+            android:textColor="@color/burgessBlue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lighting_text_exterior_f" />
+
+        <View
+            android:id="@+id/divider22"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/burgessBlue"
+            app:layout_constraintBottom_toBottomOf="@+id/textView129"
+            app:layout_constraintEnd_toStartOf="@+id/textView129"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView129" />
+
+        <View
+            android:id="@+id/divider23"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/burgessBlue"
+            app:layout_constraintBottom_toBottomOf="@+id/textView129"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView129"
+            app:layout_constraintTop_toTopOf="@+id/textView129" />
+
+        <TextView
+            android:id="@+id/textView130"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/PercentFluorescent"
+            app:layout_constraintEnd_toStartOf="@+id/divider19"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView128" />
+
+        <TextView
+            android:id="@+id/textView131"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/PercentLED"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toEndOf="@+id/divider19"
+            app:layout_constraintTop_toBottomOf="@+id/textView129" />
+
+        <EditText
+            android:id="@+id/lighting_text_garage_f"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toStartOf="@+id/divider19"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView132" />
+
+        <EditText
+            android:id="@+id/lighting_text_garage_l"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/lighting_text_garage_f"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/divider19"
+            app:layout_constraintTop_toTopOf="@+id/lighting_text_garage_f" />
+
+        <Button
+            android:id="@+id/lighting_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lighting_text_garage_f" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

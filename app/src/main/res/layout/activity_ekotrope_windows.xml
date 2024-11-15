@@ -34,157 +34,146 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView57"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="Name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ekotrope_windows_toolbar" />
+        <TextView
+            android:id="@+id/textView57"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/type_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ekotrope_windows_toolbar" />
 
-    <TextView
-        android:id="@+id/textView58"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Remove?"
-        app:layout_constraintStart_toStartOf="@+id/textView57"
-        app:layout_constraintTop_toBottomOf="@+id/textView57" />
+        <TextView
+            android:id="@+id/textView58"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Remove"
+            app:layout_constraintStart_toStartOf="@+id/textView57"
+            app:layout_constraintTop_toBottomOf="@+id/textView57" />
 
-    <TextView
-        android:id="@+id/textView59"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Window Area"
-        app:layout_constraintStart_toStartOf="@+id/textView58"
-        app:layout_constraintTop_toBottomOf="@+id/textView58" />
+        <TextView
+            android:id="@+id/textView59"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/WindowArea"
+            app:layout_constraintStart_toStartOf="@+id/textView58"
+            app:layout_constraintTop_toBottomOf="@+id/textView58" />
 
-    <TextView
-        android:id="@+id/textView60"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Orientation"
-        app:layout_constraintStart_toStartOf="@+id/textView59"
-        app:layout_constraintTop_toBottomOf="@+id/textView59" />
+        <TextView
+            android:id="@+id/textView60"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Orientation"
+            app:layout_constraintStart_toStartOf="@+id/textView59"
+            app:layout_constraintTop_toBottomOf="@+id/textView59" />
 
-    <TextView
-        android:id="@+id/textView61"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Installed Wall Index"
-        app:layout_constraintStart_toStartOf="@+id/textView60"
-        app:layout_constraintTop_toBottomOf="@+id/textView60" />
+        <TextView
+            android:id="@+id/textView62"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/OverhangDepth"
+            app:layout_constraintStart_toStartOf="@+id/textView60"
+            app:layout_constraintTop_toBottomOf="@+id/textView60" />
 
-    <TextView
-        android:id="@+id/textView62"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Overhang Depth"
-        app:layout_constraintStart_toStartOf="@+id/textView61"
-        app:layout_constraintTop_toBottomOf="@+id/textView61" />
+        <TextView
+            android:id="@+id/textView63"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/DistanceOverhang"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView62" />
 
-    <TextView
-        android:id="@+id/textView63"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Distance Overhang"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView62" />
+        <TextView
+            android:id="@+id/textView64"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/ToTop"
+            app:layout_constraintEnd_toStartOf="@+id/textView63"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView63" />
 
-    <TextView
-        android:id="@+id/textView64"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="To Top"
-        app:layout_constraintEnd_toStartOf="@+id/textView63"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView63" />
+        <TextView
+            android:id="@+id/textView65"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/ToBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView63"
+            app:layout_constraintTop_toBottomOf="@+id/textView63" />
 
-    <TextView
-        android:id="@+id/textView65"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="To Bottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView63"
-        app:layout_constraintTop_toBottomOf="@+id/textView63" />
+        <TextView
+            android:id="@+id/ekotrope_windows_text_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/NoTypeNameFound"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView57"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView62"
+            app:layout_constraintTop_toTopOf="@+id/textView57" />
 
-    <EditText
-        android:id="@+id/ekotrope_windows_text_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:ems="10"
-        android:inputType="text"
-        android:text="W_Name"
-        app:layout_constraintBottom_toBottomOf="@+id/textView57"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView61"
-        app:layout_constraintTop_toTopOf="@+id/textView57" />
-
-    <CheckBox
-        android:id="@+id/ekotrope_windows_checkbox_remove"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Yes"
-        app:layout_constraintBottom_toBottomOf="@+id/textView58"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_name"
-        app:layout_constraintTop_toTopOf="@+id/textView58" />
+        <CheckBox
+            android:id="@+id/ekotrope_windows_checkbox_remove"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView58"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_name"
+            app:layout_constraintTop_toTopOf="@+id/textView58" />
 
         <EditText
             android:id="@+id/ekotrope_windows_text_window_area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_Window_Area"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView59"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_checkbox_remove"
             app:layout_constraintTop_toTopOf="@+id/textView59" />
 
-    <Spinner
-        android:id="@+id/ekotrope_windows_spinner_orientation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/textView60"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_window_area"
-        app:layout_constraintTop_toTopOf="@+id/textView60" />
-
-        <EditText
-            android:id="@+id/ekotrope_windows_text_installed_wall_index"
+        <Spinner
+            android:id="@+id/ekotrope_windows_spinner_orientation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number|numberDecimal"
-            android:text="W_Installed_Wall_Index"
-            app:layout_constraintBottom_toBottomOf="@+id/textView61"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView60"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_spinner_orientation"
-            app:layout_constraintTop_toTopOf="@+id/textView61" />
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_window_area"
+            app:layout_constraintTop_toTopOf="@+id/textView60" />
 
         <EditText
             android:id="@+id/ekotrope_windows_text_overhang_depth"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_Overhang_Depth"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView62"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_installed_wall_index"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_spinner_orientation"
             app:layout_constraintTop_toTopOf="@+id/textView62" />
 
         <EditText
@@ -194,8 +183,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_Top"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toStartOf="@+id/ekotrope_windows_text_distance_overhang_to_bottom"
             app:layout_constraintStart_toStartOf="@+id/textView62"
             app:layout_constraintTop_toBottomOf="@+id/textView64" />
@@ -205,9 +195,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_Bottom"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView65" />
 
@@ -215,73 +207,77 @@
             android:id="@+id/ekotrope_windows_text_shgc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_SHGC"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView67"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_overhang_depth"
             app:layout_constraintTop_toTopOf="@+id/textView67" />
 
-    <TextView
-        android:id="@+id/textView67"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="SHGC"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_distance_overhang_to_top"
-        app:layout_constraintTop_toBottomOf="@+id/ekotrope_windows_text_distance_overhang_to_top" />
+        <TextView
+            android:id="@+id/textView67"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/SHGC"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_distance_overhang_to_top"
+            app:layout_constraintTop_toBottomOf="@+id/ekotrope_windows_text_distance_overhang_to_top" />
 
-    <TextView
-        android:id="@+id/textView68"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="u-Factor"
-        app:layout_constraintStart_toStartOf="@+id/textView67"
-        app:layout_constraintTop_toBottomOf="@+id/textView67" />
+        <TextView
+            android:id="@+id/textView68"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/UFactor"
+            app:layout_constraintStart_toStartOf="@+id/textView67"
+            app:layout_constraintTop_toBottomOf="@+id/textView67" />
 
         <EditText
             android:id="@+id/ekotrope_windows_text_u_factor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_U_Factor"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView68"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ekotrope_windows_text_shgc"
             app:layout_constraintTop_toTopOf="@+id/textView68" />
 
-    <TextView
-        android:id="@+id/textView69"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Adjacent Shading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView68" />
+        <TextView
+            android:id="@+id/textView69"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/AdjacentShading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView68" />
 
-    <TextView
-        android:id="@+id/textView70"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Summer"
-        app:layout_constraintEnd_toStartOf="@+id/textView69"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView69" />
+        <TextView
+            android:id="@+id/textView70"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/Summer"
+            app:layout_constraintEnd_toStartOf="@+id/textView69"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView69" />
 
-    <TextView
-        android:id="@+id/textView71"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Winter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView69"
-        app:layout_constraintTop_toBottomOf="@+id/textView69" />
+        <TextView
+            android:id="@+id/textView71"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/Winter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView69"
+            app:layout_constraintTop_toBottomOf="@+id/textView69" />
 
         <EditText
             android:id="@+id/ekotrope_windows_text_adjacent_summer_shading"
@@ -290,8 +286,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_Summer_Shading"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toStartOf="@+id/ekotrope_windows_text_adjacent_winter_shading"
             app:layout_constraintStart_toStartOf="@+id/textView68"
             app:layout_constraintTop_toBottomOf="@+id/textView70" />
@@ -300,23 +297,27 @@
             android:id="@+id/ekotrope_windows_text_adjacent_winter_shading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="W_Winter_Shading"
+            android:minHeight="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ekotrope_windows_text_adjacent_summer_shading" />
 
-    <Button
-        android:id="@+id/ekotrope_windows_button_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/button_rounded_blue"
-        android:text="Save"
-        android:textColor="@color/colorWhite"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ekotrope_windows_text_adjacent_winter_shading" />
+        <Button
+            android:id="@+id/ekotrope_windows_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ekotrope_windows_text_adjacent_winter_shading" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -13,21 +13,24 @@ public class Ekotrope_AboveGradeWall_Table {
     public String name;
     public String typeName;
     public String cavityInsulationGrade;
-    public double cavityInsulationR;
-    public double continuousInsulationR;
-    public double studSpacing;
-    public double studWidth;
-    public double studDepth;
+    public Double cavityInsulationR;
+    public Double continuousInsulationR;
+    public Double studSpacing;
+    public Double studWidth;
+    public Double studDepth;
     public String studMaterial;
     public boolean isChanged;
 
     public Ekotrope_AboveGradeWall_Table() {
+        plan_id = "";
+        index = -1;
+        isChanged = false;
     }
 
-    public Ekotrope_AboveGradeWall_Table(String plan_id, int index, String name, String typeName,
-                                         String cavityInsulationGrade, double cavityInsulationR,
-                                         double continuousInsulationR, double studSpacing,
-                                         double studWidth, double studDepth, String studMaterial,
+    public Ekotrope_AboveGradeWall_Table(@NonNull String plan_id, int index, String name, String typeName,
+                                         String cavityInsulationGrade, Double cavityInsulationR,
+                                         Double continuousInsulationR, Double studSpacing,
+                                         Double studWidth, Double studDepth, String studMaterial,
                                          boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
@@ -47,7 +50,6 @@ public class Ekotrope_AboveGradeWall_Table {
         JSONObject jsonObj = new JSONObject();
         try {
             jsonObj.put("index", index);
-            jsonObj.put("name", typeName);
             jsonObj.put("cavityInsulationGrade", cavityInsulationGrade);
             jsonObj.put("cavityInsulationR", cavityInsulationR);
             jsonObj.put("continuousInsulationR", continuousInsulationR);

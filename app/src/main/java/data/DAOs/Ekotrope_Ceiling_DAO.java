@@ -40,7 +40,7 @@ public interface Ekotrope_Ceiling_DAO {
             "studMaterial = :studMaterial, hasRadiantBarrier = :hasRadiantBarrier, isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
     public void update(String plan_id, int index, String name, String typeName, String cavityInsulationGrade,
-                       double cavityInsulationR, double continuousInsulationR, double studSpacing,
-                       double studWidth, double studDepth, String studMaterial,
+                       Double cavityInsulationR, Double continuousInsulationR, Double studSpacing,
+                       Double studWidth, Double studDepth, String studMaterial,
                        boolean hasRadiantBarrier);
 }

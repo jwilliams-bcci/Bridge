@@ -85,7 +85,7 @@ public class InspectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_inspect);
         setSupportActionBar(findViewById(R.id.inspect_toolbar));
-        mInspectViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
+        mInspectViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectViewModel.class);
 
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
@@ -201,7 +201,8 @@ public class InspectActivity extends AppCompatActivity {
         if ((mReinspection && mInspection.division_id != 20) || (mInspectionTypeId == 1154)) {
             initializeReinspectDisplayContent();
         } else {
-            if(mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) {
+            if((mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) ||
+                    (mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Final"))) {
                 mButtonViewEkotropeData.setVisibility(View.GONE);
                 ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
                 ConstraintSet newLayout = new ConstraintSet();
@@ -280,14 +281,15 @@ public class InspectActivity extends AppCompatActivity {
         }
 
         // Change constraints
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(mConstraintLayout);
-        if(mInspection.inspection_class != 7) {
-            constraintSet.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_spinner_defect_category, ConstraintSet.BOTTOM);
-        } else {
-            constraintSet.connect(R.id.inspect_button_view_ekotrope_data, ConstraintSet.TOP, R.id.inspect_spinner_defect_category, ConstraintSet.BOTTOM);
+        if ((mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) ||
+                (mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Final"))) {
+            mButtonViewEkotropeData.setVisibility(View.GONE);
+            ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
+            ConstraintSet newLayout = new ConstraintSet();
+            newLayout.clone(layout);
+            newLayout.connect(R.id.inspect_list_defect_items, ConstraintSet.TOP, R.id.inspect_button_sort_by_defect_number, ConstraintSet.BOTTOM);
+            newLayout.applyTo(layout);
         }
-        constraintSet.applyTo(mConstraintLayout);
 
         if(mEkotropeSubmitted) {
             mButtonViewEkotropeData.setEnabled(false);

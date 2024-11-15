@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_slabslist;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID_NOT_FOUND;
 import static com.burgess.bridge.ekotrope_framedfloors.Ekotrope_FramedFloorsActivity.PLAN_ID;
 
 import android.content.Intent;
@@ -19,6 +22,8 @@ import com.burgess.bridge.R;
 public class Ekotrope_SlabsListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerSlabs;
 
+    private int mInspectionId;
+    private String mProjectId;
     private String mPlanId;
     private Ekotrope_SlabsListViewModel mEkotropeSlabsListViewModel;
     private Ekotrope_SlabsListAdapter mSlabsListAdapter;
@@ -32,6 +37,8 @@ public class Ekotrope_SlabsListActivity extends AppCompatActivity {
         mEkotropeSlabsListViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(Ekotrope_SlabsListViewModel.class);
 
         Intent intent = getIntent();
+        mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mProjectId = intent.getStringExtra(EKOTROPE_PROJECT_ID);
         mPlanId = intent.getStringExtra(PLAN_ID);
 
         initializeViews();
@@ -45,6 +52,8 @@ public class Ekotrope_SlabsListActivity extends AppCompatActivity {
     private void initializeDisplayContent() {
         mSlabsListAdapter = new Ekotrope_SlabsListAdapter(new Ekotrope_SlabsListAdapter.Ekotrope_SlabsDiff());
         mRecyclerSlabs.setAdapter(mSlabsListAdapter);
+        mSlabsListAdapter.setInspectionId(mInspectionId);
+        mSlabsListAdapter.setEkotropeProjectId(mProjectId);
         mRecyclerSlabs.setLayoutManager(new LinearLayoutManager(this));
         mEkotropeSlabsListViewModel.getSlabs(mPlanId).observe(this, slabs -> {
             mSlabsListAdapter.setCurrentList(slabs);

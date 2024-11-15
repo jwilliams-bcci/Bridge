@@ -85,7 +85,7 @@ public class RouteSheetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_sheet);
         setSupportActionBar(findViewById(R.id.route_sheet_toolbar));
-        mRouteSheetViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
+        mRouteSheetViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(RouteSheetViewModel.class);
 
         // Prepare shared preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);

@@ -39,8 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:text="Name"
+            android:layout_marginTop="36dp"
+            android:text="@string/type_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ekotrope_doors_toolbar" />
 
@@ -48,70 +48,52 @@
             android:id="@+id/textView53"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Remove?"
+            android:layout_marginTop="36dp"
+            android:text="@string/Remove"
             app:layout_constraintStart_toStartOf="@+id/textView42"
             app:layout_constraintTop_toBottomOf="@+id/textView42" />
-
-        <TextView
-            android:id="@+id/textView54"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Installed Wall Index"
-            app:layout_constraintStart_toStartOf="@+id/textView53"
-            app:layout_constraintTop_toBottomOf="@+id/textView53" />
 
         <TextView
             android:id="@+id/textView55"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Door Area"
-            app:layout_constraintStart_toStartOf="@+id/textView54"
-            app:layout_constraintTop_toBottomOf="@+id/textView54" />
+            android:layout_marginTop="36dp"
+            android:text="@string/DoorArea"
+            app:layout_constraintStart_toStartOf="@+id/textView53"
+            app:layout_constraintTop_toBottomOf="@+id/textView53" />
 
         <TextView
             android:id="@+id/textView56"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="u-Factor"
+            android:layout_marginTop="36dp"
+            android:text="@string/UFactor"
             app:layout_constraintStart_toStartOf="@+id/textView55"
             app:layout_constraintTop_toBottomOf="@+id/textView55" />
 
-        <EditText
+        <TextView
             android:id="@+id/ekotrope_doors_text_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
             android:editable="false"
             android:ems="10"
+            android:hint="@string/NoTypeNameFound"
             android:inputType="text"
-            android:text="D_Name"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView42"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView54"
+            app:layout_constraintStart_toEndOf="@+id/textView55"
             app:layout_constraintTop_toTopOf="@+id/textView42" />
-
-        <EditText
-            android:id="@+id/ekotrope_doors_text_wall_index"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:ems="10"
-            android:inputType="text"
-            android:text="D_Wall_Index"
-            app:layout_constraintBottom_toBottomOf="@+id/textView54"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/ekotrope_doors_text_name"
-            app:layout_constraintTop_toTopOf="@+id/textView54" />
 
         <CheckBox
             android:id="@+id/ekotrope_doors_checkbox_remove"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Yes"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
             app:layout_constraintBottom_toBottomOf="@+id/textView53"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ekotrope_doors_text_name"
@@ -121,21 +103,25 @@
             android:id="@+id/ekotrope_doors_text_door_area"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="D_Door_Area"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView55"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/ekotrope_doors_text_wall_index"
+            app:layout_constraintStart_toStartOf="@+id/ekotrope_doors_checkbox_remove"
             app:layout_constraintTop_toTopOf="@+id/textView55" />
 
         <EditText
             android:id="@+id/ekotrope_doors_text_u_factor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
-            android:text="D_U_Factor"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView56"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ekotrope_doors_text_door_area"
@@ -145,9 +131,9 @@
             android:id="@+id/ekotrope_doors_button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:background="@drawable/button_rounded_blue"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@color/colorWhite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

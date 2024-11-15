@@ -13,18 +13,18 @@ public class Ekotrope_Door_Table {
     public String name;
     public String typeName;
     public boolean remove;
-    public int installedWallIndex;
-    public int installedFoundationWallIndex;
-    public double doorArea;
-    public double uFactor;
+    public Integer installedWallIndex;
+    public Integer installedFoundationWallIndex;
+    public Double doorArea;
+    public Double uFactor;
     public boolean isChanged;
 
     public Ekotrope_Door_Table() {
     }
 
     public Ekotrope_Door_Table(String plan_id, int index, String name, String typeName, boolean remove,
-                               int installedWallIndex, int installedFoundationWallIndex,
-                               double doorArea, double uFactor, boolean isChanged) {
+                               Integer installedWallIndex, Integer installedFoundationWallIndex,
+                               Double doorArea, Double uFactor, boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;

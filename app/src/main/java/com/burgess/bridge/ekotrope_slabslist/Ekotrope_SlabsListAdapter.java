@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_slabslist;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,8 @@ import data.Tables.Ekotrope_Slab_Table;
 public class Ekotrope_SlabsListAdapter extends ListAdapter<Ekotrope_Slab_Table, Ekotrope_SlabsListViewHolder> {
     public static final String TAG = "SLABS_LIST";
 
+    private int mInspectionId;
+    private String mEkotropeProjectId;
     private List<Ekotrope_Slab_Table> currentList;
 
     protected Ekotrope_SlabsListAdapter(@NonNull DiffUtil.ItemCallback<Ekotrope_Slab_Table> diffCallback) {
@@ -47,15 +52,23 @@ public class Ekotrope_SlabsListAdapter extends ListAdapter<Ekotrope_Slab_Table, 
 
         // Set the click listener
         holder.itemView.setOnClickListener(v -> {
-            Intent slabIntent = new Intent(holder.itemView.getContext(), Ekotrope_SlabsActivity.class);
-            slabIntent.putExtra(Ekotrope_SlabsActivity.PLAN_ID, slab.plan_id);
-            slabIntent.putExtra(Ekotrope_SlabsActivity.SLAB_INDEX, slab.index);
-            holder.itemView.getContext().startActivity(slabIntent);
+            Intent intent = new Intent(holder.itemView.getContext(), Ekotrope_SlabsActivity.class);
+            intent.putExtra(INSPECTION_ID, mInspectionId);
+            intent.putExtra(EKOTROPE_PROJECT_ID, mEkotropeProjectId);
+            intent.putExtra(Ekotrope_SlabsActivity.PLAN_ID, slab.plan_id);
+            intent.putExtra(Ekotrope_SlabsActivity.SLAB_INDEX, slab.index);
+            holder.itemView.getContext().startActivity(intent);
         });
     }
     @Override
     public int getItemCount() {
         return currentList == null ? 0 : currentList.size();
+    }
+    public void setInspectionId(int inspectionId) {
+        mInspectionId = inspectionId;
+    }
+    public void setEkotropeProjectId(String ekotropeProjectId) {
+        mEkotropeProjectId = ekotropeProjectId;
     }
     public List<Ekotrope_Slab_Table> getCurrentList() {
         return currentList;

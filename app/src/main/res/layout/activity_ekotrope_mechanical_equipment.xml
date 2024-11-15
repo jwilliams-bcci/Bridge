@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mechanical_equipment_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_mechanicalequipment.Ekotrope_MechanicalEquipmentActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mechanical_equipment_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/Component"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView101"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/ModelNumber"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_toolbar" />
+
+        <TextView
+            android:id="@+id/textView102"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Location"
+            app:layout_constraintStart_toStartOf="@+id/textView101"
+            app:layout_constraintTop_toBottomOf="@+id/textView101" />
+
+        <TextView
+            android:id="@+id/textView103"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/HeatingLoad"
+            app:layout_constraintStart_toStartOf="@+id/textView102"
+            app:layout_constraintTop_toBottomOf="@+id/textView102" />
+
+        <TextView
+            android:id="@+id/textView104"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/CoolingLoad"
+            app:layout_constraintStart_toStartOf="@+id/textView103"
+            app:layout_constraintTop_toBottomOf="@+id/textView103" />
+
+        <TextView
+            android:id="@+id/textView105"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/PercentHotWaterLoad"
+            app:layout_constraintStart_toStartOf="@+id/textView104"
+            app:layout_constraintTop_toBottomOf="@+id/textView104" />
+
+        <TextView
+            android:id="@+id/textView106"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/AHRIRefNumber"
+            app:layout_constraintStart_toStartOf="@+id/textView105"
+            app:layout_constraintTop_toBottomOf="@+id/textView105" />
+
+        <TextView
+            android:id="@+id/textView107"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/AHRIRefFuelType"
+            app:layout_constraintStart_toStartOf="@+id/textView106"
+            app:layout_constraintTop_toBottomOf="@+id/textView106" />
+
+        <TextView
+            android:id="@+id/textView108"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/TestConducted"
+            app:layout_constraintStart_toStartOf="@+id/textView107"
+            app:layout_constraintTop_toBottomOf="@+id/textView109" />
+
+        <TextView
+            android:id="@+id/textView109"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/RefrigerantCharge"
+            android:textColor="@color/burgessBlue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView107" />
+
+        <View
+            android:id="@+id/divider14"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toBottomOf="@+id/textView109"
+            app:layout_constraintEnd_toStartOf="@+id/textView109"
+            app:layout_constraintStart_toStartOf="@+id/textView107"
+            app:layout_constraintTop_toTopOf="@+id/textView109" />
+
+        <View
+            android:id="@+id/divider15"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toBottomOf="@+id/textView109"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView109"
+            app:layout_constraintTop_toTopOf="@+id/textView109" />
+
+        <TextView
+            android:id="@+id/mechanical_equipment_label_test_method"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/TestMethod"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/textView108"
+            app:layout_constraintTop_toBottomOf="@+id/textView108" />
+
+        <TextView
+            android:id="@+id/mechanical_equipment_label_metering_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/MeteringDevice"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_label_test_method"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_label_test_method" />
+
+        <TextView
+            android:id="@+id/mechanical_equipment_label_difference_dtd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/DifferenceDTD"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_label_metering_device"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_label_metering_device" />
+
+        <TextView
+            android:id="@+id/mechanical_equipment_label_difference_ctoa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/DifferenceCTOA"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_label_difference_dtd"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_label_difference_dtd" />
+
+        <TextView
+            android:id="@+id/mechanical_equipment_label_weight_deviation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/WeightDeviation"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_label_difference_ctoa"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_label_difference_ctoa" />
+
+        <Button
+            android:id="@+id/mechanical_equipment_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_label_weight_deviation" />
+
+        <TextView
+            android:id="@+id/mechanical_equipment_text_model_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/NoModelNumberFound"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView101"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView107"
+            app:layout_constraintTop_toTopOf="@+id/textView101" />
+
+        <Spinner
+            android:id="@+id/mechanical_equipment_spinner_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView102"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_model_number"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_model_number"
+            app:layout_constraintTop_toTopOf="@+id/textView102" />
+
+        <EditText
+            android:id="@+id/mechanical_equipment_text_heating_load"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView103"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_spinner_location"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_spinner_location"
+            app:layout_constraintTop_toTopOf="@+id/textView103" />
+
+        <EditText
+            android:id="@+id/mechanical_equipment_text_cooling_load"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView104"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_heating_load"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_heating_load"
+            app:layout_constraintTop_toTopOf="@+id/textView104" />
+
+        <EditText
+            android:id="@+id/mechanical_equipment_text_hot_water_load"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView105"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_cooling_load"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_cooling_load"
+            app:layout_constraintTop_toTopOf="@+id/textView105" />
+
+        <EditText
+            android:id="@+id/mechanical_equipment_text_ahri_ref_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView106"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_hot_water_load"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_hot_water_load"
+            app:layout_constraintTop_toTopOf="@+id/textView106" />
+
+        <Spinner
+            android:id="@+id/mechanical_equipment_spinner_ahri_ref_fuel_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView107"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_ahri_ref_number"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_ahri_ref_number"
+            app:layout_constraintTop_toTopOf="@+id/textView107" />
+
+        <CheckBox
+            android:id="@+id/mechanical_equipment_checkbox_test_conducted"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView108"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_spinner_ahri_ref_fuel_type"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_spinner_ahri_ref_fuel_type"
+            app:layout_constraintTop_toTopOf="@+id/textView108" />
+
+        <Spinner
+            android:id="@+id/mechanical_equipment_spinner_test_method"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_test_method"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_checkbox_test_conducted"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_checkbox_test_conducted"
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_test_method" />
+
+        <Spinner
+            android:id="@+id/mechanical_equipment_spinner_metering_device"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_metering_device"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_spinner_test_method"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_spinner_test_method"
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_metering_device" />
+
+        <EditText
+            android:id="@+id/mechanical_equipment_text_difference_dtd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_difference_dtd"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_spinner_metering_device"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_spinner_metering_device"
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_difference_dtd" />
+
+        <EditText
+            android:id="@+id/mechanical_equipment_text_difference_ctoa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_difference_ctoa"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_difference_dtd"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_difference_dtd"
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_difference_ctoa" />
+
+        <EditText
+            android:id="@+id/mechanical_equipment_text_weight_deviation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_weight_deviation"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_difference_ctoa"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_difference_ctoa"
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_weight_deviation"
+            android:visibility="gone" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

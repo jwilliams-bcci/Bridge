@@ -19,6 +19,8 @@ import com.burgess.bridge.R;
 public class Ekotrope_DoorsListActivity extends AppCompatActivity {
     private RecyclerView mRecyclerDoors;
 
+    private int mInspectionId;
+    private String mProjectId;
     private String mPlanId;
     private Ekotrope_DoorsListViewModel mEkotropeDoorsListViewModel;
     private Ekotrope_DoorsListAdapter mDoorsListAdapter;
@@ -45,6 +47,8 @@ public class Ekotrope_DoorsListActivity extends AppCompatActivity {
     private void initializeDisplayContent() {
         mDoorsListAdapter = new Ekotrope_DoorsListAdapter(new Ekotrope_DoorsListAdapter.Ekotrope_DoorsDiff());
         mRecyclerDoors.setAdapter(mDoorsListAdapter);
+        mDoorsListAdapter.setInspectionId(mInspectionId);
+        mDoorsListAdapter.setEkotropeProjectId(mProjectId);
         mRecyclerDoors.setLayoutManager(new LinearLayoutManager(this));
         mEkotropeDoorsListViewModel.getDoors(mPlanId).observe(this, doors -> {
             mDoorsListAdapter.setCurrentList(doors);

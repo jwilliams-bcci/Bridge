@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clothes_dryer_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_clothesdryer.Ekotrope_ClothesDryerActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/clothes_dryer_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/ClothesDryer"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView142"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/Available"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clothes_dryer_toolbar" />
+
+        <TextView
+            android:id="@+id/textView143"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/DefaultsType"
+            app:layout_constraintStart_toStartOf="@+id/textView142"
+            app:layout_constraintTop_toBottomOf="@+id/textView142" />
+
+        <TextView
+            android:id="@+id/textView144"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/CombinedEnergyFactor"
+            app:layout_constraintStart_toStartOf="@+id/textView143"
+            app:layout_constraintTop_toBottomOf="@+id/textView143" />
+
+        <TextView
+            android:id="@+id/textView145"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/UtilizationFactor"
+            app:layout_constraintStart_toStartOf="@+id/textView144"
+            app:layout_constraintTop_toBottomOf="@+id/textView144" />
+
+        <Button
+            android:id="@+id/clothes_dryer_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView145" />
+
+        <CheckBox
+            android:id="@+id/clothes_dryer_checkbox_available"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView142"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView144"
+            app:layout_constraintTop_toTopOf="@+id/textView142" />
+
+        <Spinner
+            android:id="@+id/clothes_dryer_spinner_defaults_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView143"
+            app:layout_constraintEnd_toEndOf="@+id/clothes_dryer_checkbox_available"
+            app:layout_constraintStart_toStartOf="@+id/clothes_dryer_checkbox_available"
+            app:layout_constraintTop_toTopOf="@+id/textView143" />
+
+        <EditText
+            android:id="@+id/clothes_dryer_text_combined_energy_factor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView144"
+            app:layout_constraintEnd_toEndOf="@+id/clothes_dryer_spinner_defaults_type"
+            app:layout_constraintStart_toStartOf="@+id/clothes_dryer_spinner_defaults_type"
+            app:layout_constraintTop_toTopOf="@+id/textView144" />
+
+        <Spinner
+            android:id="@+id/clothes_dryer_spinner_utilization_factor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView145"
+            app:layout_constraintEnd_toEndOf="@+id/clothes_dryer_text_combined_energy_factor"
+            app:layout_constraintStart_toStartOf="@+id/clothes_dryer_text_combined_energy_factor"
+            app:layout_constraintTop_toTopOf="@+id/textView145" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

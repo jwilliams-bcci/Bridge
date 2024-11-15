@@ -21,8 +21,20 @@ import data.DAOs.DefectItem_InspectionType_DAO;
 import data.DAOs.Direction_DAO;
 import data.DAOs.Ekotrope_AboveGradeWall_DAO;
 import data.DAOs.Ekotrope_Ceiling_DAO;
+import data.DAOs.Ekotrope_ChangeLog_DAO;
+import data.DAOs.Ekotrope_ClothesDryer_DAO;
+import data.DAOs.Ekotrope_ClothesWasher_DAO;
+import data.DAOs.Ekotrope_Dishwasher_DAO;
+import data.DAOs.Ekotrope_DistributionSystem_DAO;
 import data.DAOs.Ekotrope_Door_DAO;
+import data.DAOs.Ekotrope_Duct_DAO;
 import data.DAOs.Ekotrope_FramedFloor_DAO;
+import data.DAOs.Ekotrope_Infiltration_DAO;
+import data.DAOs.Ekotrope_Lighting_DAO;
+import data.DAOs.Ekotrope_MechanicalEquipment_DAO;
+import data.DAOs.Ekotrope_MechanicalVentilation_DAO;
+import data.DAOs.Ekotrope_RangeOven_DAO;
+import data.DAOs.Ekotrope_Refrigerator_DAO;
 import data.DAOs.Ekotrope_RimJoist_DAO;
 import data.DAOs.Ekotrope_Slab_DAO;
 import data.DAOs.Ekotrope_Window_DAO;
@@ -42,8 +54,20 @@ import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
 import data.Tables.Ekotrope_AboveGradeWall_Table;
 import data.Tables.Ekotrope_Ceiling_Table;
+import data.Tables.Ekotrope_ChangeLog_Table;
+import data.Tables.Ekotrope_ClothesDryer_Table;
+import data.Tables.Ekotrope_ClothesWasher_Table;
+import data.Tables.Ekotrope_Dishwasher_Table;
+import data.Tables.Ekotrope_DistributionSystem_Table;
 import data.Tables.Ekotrope_Door_Table;
+import data.Tables.Ekotrope_Duct_Table;
 import data.Tables.Ekotrope_FramedFloor_Table;
+import data.Tables.Ekotrope_Infiltration_Table;
+import data.Tables.Ekotrope_Lighting_Table;
+import data.Tables.Ekotrope_MechanicalEquipment_Table;
+import data.Tables.Ekotrope_MechanicalVentilation_Table;
+import data.Tables.Ekotrope_RangeOven_Table;
+import data.Tables.Ekotrope_Refrigerator_Table;
 import data.Tables.Ekotrope_RimJoist_Table;
 import data.Tables.Ekotrope_Slab_Table;
 import data.Tables.Ekotrope_Window_Table;
@@ -84,14 +108,25 @@ import data.Views.RouteSheet_View;
         Ekotrope_Door_Table.class,
         Ekotrope_Ceiling_Table.class,
         Ekotrope_Slab_Table.class,
-        Ekotrope_RimJoist_Table.class
+        Ekotrope_RimJoist_Table.class,
+        Ekotrope_ChangeLog_Table.class,
+        Ekotrope_MechanicalEquipment_Table.class,
+        Ekotrope_DistributionSystem_Table.class,
+        Ekotrope_Duct_Table.class,
+        Ekotrope_MechanicalVentilation_Table.class,
+        Ekotrope_Lighting_Table.class,
+        Ekotrope_Refrigerator_Table.class,
+        Ekotrope_Dishwasher_Table.class,
+        Ekotrope_ClothesDryer_Table.class,
+        Ekotrope_ClothesWasher_Table.class,
+        Ekotrope_RangeOven_Table.class,
+        Ekotrope_Infiltration_Table.class
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 76, exportSchema = false)
+        }, version = 82, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
-    private static Context mContext;
     public abstract Builder_DAO mBuilderDao();
     public abstract CannedComment_DAO mCannedCommentDao();
     public abstract DefectItem_DAO mDefectItemDao();
@@ -113,13 +148,24 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Ekotrope_Ceiling_DAO mCeilingDao();
     public abstract Ekotrope_Slab_DAO mSlabDao();
     public abstract Ekotrope_RimJoist_DAO mRimJoistDao();
+    public abstract Ekotrope_ChangeLog_DAO mEkotropeChangeLogDao();
+    public abstract Ekotrope_MechanicalEquipment_DAO mEkotropeMechanicalEquipmentDao();
+    public abstract Ekotrope_DistributionSystem_DAO mEkotropeDistributionSystemDao();
+    public abstract Ekotrope_Duct_DAO mEkotropeDuctDao();
+    public abstract Ekotrope_MechanicalVentilation_DAO mEkotropeMechanicalVentilationDao();
+    public abstract Ekotrope_Lighting_DAO mEkotropeLightingDao();
+    public abstract Ekotrope_Refrigerator_DAO mEkotropeRefrigeratorDao();
+    public abstract Ekotrope_Dishwasher_DAO mEkotropeDishwasherDao();
+    public abstract Ekotrope_ClothesDryer_DAO mEkotropeClothesDryerDao();
+    public abstract Ekotrope_ClothesWasher_DAO mEkotropeClothesWasherDao();
+    public abstract Ekotrope_RangeOven_DAO mEkotropeRangeOvenDao();
+    public abstract Ekotrope_Infiltration_DAO mEkotropeInfiltrationDao();
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
         String isProd = BridgeAPIQueue.getInstance(context).isProd() ? "bridge_database_prod.db" : "bridge_database_stage.db";
-        mContext = context;
 
         if (INSTANCE == null) {
             synchronized (BridgeRoomDatabase.class) {

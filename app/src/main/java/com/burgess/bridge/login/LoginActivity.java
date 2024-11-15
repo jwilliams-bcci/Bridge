@@ -56,16 +56,12 @@ public class LoginActivity extends AppCompatActivity {
     private LinearLayout mLockScreen;
     private ProgressBar mProgressBar;
 
-    private JsonObjectRequest mLoginRequest;
     private JsonArrayRequest mUpdateCannedCommentsRequest;
-    private JsonArrayRequest mUpdateDefectItemsRequest;
-    private JsonArrayRequest mUpdateDIITReferenceRequest;
     private JsonArrayRequest mUpdateBuildersRequest;
     private JsonArrayRequest mUpdateInspectorsRequest;
     private JsonArrayRequest mUpdateRoomsRequest;
     private JsonArrayRequest mUpdateDirectionsRequest;
     private JsonArrayRequest mUpdateFaultsRequest;
-    private String mVersionName;
     private String mUserName;
     private String mPassword;
 
@@ -75,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mLoginViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
+        mLoginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
 
         // Prepare Shared Preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -142,13 +138,14 @@ public class LoginActivity extends AppCompatActivity {
 
         // Set the version label to display the version number...
         PackageInfo pInfo = null;
+        String versionName = "NOT FOUND";
         try {
             pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+            versionName = pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
         }
-        mVersionName = pInfo.versionName;
-        mTextVersionName.setText("Version " + mVersionName);
+        mTextVersionName.setText(String.format("Version %s", versionName));
 
         if (!BridgeAPIQueue.getInstance().isProd()) {
             mTextStaging.setVisibility(View.VISIBLE);
@@ -168,14 +165,8 @@ public class LoginActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             permissionRequests.add(Manifest.permission.CAMERA);
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionRequests.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissionRequests.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        }
-        if (permissionRequests.size() > 0) {
-            ActivityCompat.requestPermissions(this, permissionRequests.toArray(new String[permissionRequests.size()]), 100);
+        if (!permissionRequests.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionRequests.toArray(new String[0]), 100);
         }
     }
 
@@ -185,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueue queue = BridgeAPIQueue.getInstance(LoginActivity.this).getRequestQueue();
         long tokenAge = mSharedPreferences.getLong(PREF_AUTH_TOKEN_AGE, 0);
 
-        mLoginRequest = BridgeAPIQueue.getInstance().loginUser(mUserName, mPassword, new ServerCallback() {
+        JsonObjectRequest loginRequest = BridgeAPIQueue.getInstance().loginUser(mUserName, mPassword, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 if (mCheckBoxRememberCredentials.isChecked()) {
@@ -287,11 +278,11 @@ public class LoginActivity extends AppCompatActivity {
                 queue.add(mUpdateCannedCommentsRequest);
             } else {
                 BridgeLogger.log('I', TAG, "Different user is logging in, getting new token...");
-                queue.add(mLoginRequest);
+                queue.add(loginRequest);
             }
         } else {
             BridgeLogger.log('I', TAG, "Token is older than 12 hours, getting new one...");
-            queue.add(mLoginRequest);
+            queue.add(loginRequest);
         }
     }
     private void workOffline() {

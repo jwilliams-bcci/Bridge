@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_abovegradewalls;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID_NOT_FOUND;
 import static com.burgess.bridge.Constants.PREF;
 
 import android.content.Context;
@@ -12,11 +15,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.burgess.bridge.BridgeHelper;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.Tables.Ekotrope_AboveGradeWall_Table;
+import data.Tables.Ekotrope_ChangeLog_Table;
 
 public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
     public static final String PLAN_ID = "com.burgess.bridge.PLAN_ID";
@@ -35,8 +43,8 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private EditText mTextIndex;
-    private EditText mTextName;
+    private Toolbar mToolbar;
+    private TextView mTextName;
     private EditText mTextCavityInsulationR;
     private EditText mTextContinuousInsulationR;
     private EditText mTextStudSpacing;
@@ -46,11 +54,11 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
     private Spinner mSpinnerStudMaterial;
     private Button mButtonSave;
 
+    private int mInspectionId;
+    private String mProjectId;
     private String mPlanId;
     private int mAboveGradeWallIndex;
     private Ekotrope_AboveGradeWall_Table mAboveGradeWall;
-    ArrayAdapter<String> mInsulationGradeAdapter;
-    ArrayAdapter<String> mStudMaterialAdapter;
     List<String> mInsulationGrades;
     List<String> mStudMaterials;
     private boolean valid = true;
@@ -62,7 +70,7 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ekotrope_above_grade_walls);
         setSupportActionBar(findViewById(R.id.above_grade_walls_toolbar));
-        mAboveGradeWallsViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(Ekotrope_AboveGradeWallsViewModel.class);
+        mAboveGradeWallsViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(Ekotrope_AboveGradeWallsViewModel.class);
 
         // Prepare shared preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -73,13 +81,15 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
 
         // Get intent data...
         Intent intent = getIntent();
+        mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mProjectId = intent.getStringExtra(EKOTROPE_PROJECT_ID);
         mPlanId = intent.getStringExtra(PLAN_ID);
         mAboveGradeWallIndex = intent.getIntExtra(ABOVE_GRADE_WALLS_INDEX, ABOVE_GRADE_WALLS_INDEX_NOT_FOUND);
         mAboveGradeWall = mAboveGradeWallsViewModel.getAboveGradeWall(mPlanId, mAboveGradeWallIndex);
 
         // Set spinner lists...
-        mInsulationGrades = new ArrayList<String>();
-        mStudMaterials = new ArrayList<String>();
+        mInsulationGrades = new ArrayList<>();
+        mStudMaterials = new ArrayList<>();
         mInsulationGrades.add("I");
         mInsulationGrades.add("II");
         mInsulationGrades.add("III");
@@ -90,12 +100,13 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
         initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
-        intializeTextValidators();
+        initializeTextValidators();
+        initializeChangeTracking();
     }
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.above_grade_walls_constraint_layout);
-        mTextIndex = findViewById(R.id.above_grade_walls_text_index);
+        mToolbar = findViewById(R.id.above_grade_walls_toolbar);
         mTextName = findViewById(R.id.above_grade_walls_text_name);
         mTextCavityInsulationR = findViewById(R.id.above_grade_walls_text_cavity_insulation_r);
         mTextContinuousInsulationR = findViewById(R.id.above_grade_walls_text_continuous_insulation_r);
@@ -121,6 +132,63 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
             double newStudDepth = Double.parseDouble(mTextStudDepth.getText().toString());
             String newStudMaterial = mSpinnerStudMaterial.getSelectedItem().toString();
 
+            mSpinnerCavityInsulationGrade.clearFocus();
+            mTextCavityInsulationR.clearFocus();
+            mTextContinuousInsulationR.clearFocus();
+            mTextStudSpacing.clearFocus();
+            mTextStudWidth.clearFocus();
+            mTextStudDepth.clearFocus();
+            mSpinnerStudMaterial.clearFocus();
+
+            if ((boolean)mSpinnerCavityInsulationGrade.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Above Grade Wall", mAboveGradeWall.name,
+                        "Insulation Grade", mAboveGradeWall.cavityInsulationGrade,
+                        newCavityInsulationGrade);
+                mAboveGradeWallsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if ((boolean)mTextCavityInsulationR.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Above Grade Wall", mAboveGradeWall.name,
+                        "Cavity Insulation R", Double.toString(mAboveGradeWall.cavityInsulationR),
+                        Double.toString(newCavityInsulationR));
+                mAboveGradeWallsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if ((boolean)mTextContinuousInsulationR.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Above Grade Wall", mAboveGradeWall.name,
+                        "Continuous Insulation R", Double.toString(mAboveGradeWall.continuousInsulationR),
+                        Double.toString(newContinuousInsulationR));
+                mAboveGradeWallsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if ((boolean)mTextStudSpacing.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Above Grade Wall", mAboveGradeWall.name,
+                        "Stud Spacing", Double.toString(mAboveGradeWall.studSpacing),
+                        Double.toString(newStudSpacing));
+                mAboveGradeWallsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if ((boolean)mTextStudWidth.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Above Grade Wall", mAboveGradeWall.name,
+                        "Stud Width", Double.toString(mAboveGradeWall.studWidth),
+                        Double.toString(newStudWidth));
+                mAboveGradeWallsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if ((boolean)mTextStudDepth.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Above Grade Wall", mAboveGradeWall.name,
+                        "Stud Depth", Double.toString(mAboveGradeWall.studDepth),
+                        Double.toString(newStudDepth));
+                mAboveGradeWallsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if ((boolean)mSpinnerStudMaterial.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Above Grade Wall", mAboveGradeWall.name,
+                        "Stud Material", mAboveGradeWall.studMaterial, newStudMaterial);
+                mAboveGradeWallsViewModel.insertChangeLog(changeLogEntry);
+            }
+
             Ekotrope_AboveGradeWall_Table newAboveGradeWall = new Ekotrope_AboveGradeWall_Table(mPlanId,
                     mAboveGradeWallIndex, mTextName.getText().toString(), mAboveGradeWall.typeName,
                     newCavityInsulationGrade, newCavityInsulationR, newContinuousInsulationR,
@@ -132,36 +200,32 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
-        mTextIndex.setText(Integer.toString(mAboveGradeWall.index));
-        mTextName.setText(mAboveGradeWall.name);
-        mTextCavityInsulationR.setText(Double.toString(mAboveGradeWall.cavityInsulationR));
-        mTextContinuousInsulationR.setText(Double.toString(mAboveGradeWall.continuousInsulationR));
-        mTextStudSpacing.setText(Double.toString(mAboveGradeWall.studSpacing));
-        mTextStudWidth.setText(Double.toString(mAboveGradeWall.studWidth));
-        mTextStudDepth.setText(Double.toString(mAboveGradeWall.studDepth));
+        mToolbar.setTitle(String.format("Above Grade Wall - %s", mAboveGradeWall.name));
+        mTextName.setText(mAboveGradeWall.typeName);
+        mTextCavityInsulationR.setText(String.format(mAboveGradeWall.cavityInsulationR.toString()));
+        mTextContinuousInsulationR.setText(String.format(mAboveGradeWall.continuousInsulationR.toString()));
+        mTextStudSpacing.setText(String.format(mAboveGradeWall.studSpacing.toString()));
+        mTextStudWidth.setText(String.format(mAboveGradeWall.studWidth.toString()));
+        mTextStudDepth.setText(String.format(mAboveGradeWall.studDepth.toString()));
 
-        mInsulationGradeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mInsulationGrades);
-        mInsulationGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerCavityInsulationGrade.setAdapter(mInsulationGradeAdapter);
+        ArrayAdapter<String> insulationGradeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mInsulationGrades);
+        insulationGradeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerCavityInsulationGrade.setAdapter(insulationGradeAdapter);
         mSpinnerCavityInsulationGrade.setSelection(mInsulationGrades.indexOf(mAboveGradeWall.cavityInsulationGrade));
 
-        mStudMaterialAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mStudMaterials);
-        mStudMaterialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerStudMaterial.setAdapter(mStudMaterialAdapter);
+        ArrayAdapter<String> studMaterialAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mStudMaterials);
+        studMaterialAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerStudMaterial.setAdapter(studMaterialAdapter);
         mSpinnerStudMaterial.setSelection(mStudMaterials.indexOf(mAboveGradeWall.studMaterial));
     }
 
-    private void intializeTextValidators() {
+    private void initializeTextValidators() {
         mTextCavityInsulationR.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -280,5 +344,15 @@ public class Ekotrope_AboveGradeWallsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void initializeChangeTracking() {
+        BridgeHelper.setChangeTracker(mSpinnerCavityInsulationGrade, mAboveGradeWall.cavityInsulationGrade);
+        BridgeHelper.setChangeTracker(mTextCavityInsulationR, mAboveGradeWall.cavityInsulationR);
+        BridgeHelper.setChangeTracker(mTextContinuousInsulationR, mAboveGradeWall.continuousInsulationR);
+        BridgeHelper.setChangeTracker(mTextStudSpacing, mAboveGradeWall.studSpacing);
+        BridgeHelper.setChangeTracker(mTextStudWidth, mAboveGradeWall.studWidth);
+        BridgeHelper.setChangeTracker(mTextStudDepth, mAboveGradeWall.studDepth);
+        BridgeHelper.setChangeTracker(mSpinnerStudMaterial, mAboveGradeWall.studMaterial);
     }
 }

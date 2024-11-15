@@ -2,11 +2,7 @@ package data.Tables;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import org.json.JSONObject;
-
-import data.Enums.Ekotrope_StudMaterial;
 
 @Entity(tableName = "ekotrope_framed_floor_table", primaryKeys = {"plan_id", "index"})
 public class Ekotrope_FramedFloor_Table {
@@ -16,11 +12,11 @@ public class Ekotrope_FramedFloor_Table {
     public String name;
     public String typeName;
     public String cavityInsulationGrade;
-    public double cavityInsulationR;
-    public double continuousInsulationR;
-    public double studSpacing;
-    public double studWidth;
-    public double studDepth;
+    public Double cavityInsulationR;
+    public Double continuousInsulationR;
+    public Double studSpacing;
+    public Double studWidth;
+    public Double studDepth;
     public String studMaterial;
     public boolean isChanged;
 
@@ -28,9 +24,9 @@ public class Ekotrope_FramedFloor_Table {
     }
 
     public Ekotrope_FramedFloor_Table(String plan_id, int index, String name, String typeName,
-                                      String cavityInsulationGrade, double cavityInsulationR,
-                                      double continuousInsulationR, double studSpacing,
-                                      double studWidth, double studDepth, String studMaterial,
+                                      String cavityInsulationGrade, Double cavityInsulationR,
+                                      Double continuousInsulationR, Double studSpacing,
+                                      Double studWidth, Double studDepth, String studMaterial,
                                       boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
@@ -50,7 +46,6 @@ public class Ekotrope_FramedFloor_Table {
         JSONObject jsonObj = new JSONObject();
         try {
             jsonObj.put("index", index);
-            jsonObj.put("name", typeName);
             jsonObj.put("cavityInsulationGrade", cavityInsulationGrade);
             jsonObj.put("cavityInsulationR", cavityInsulationR);
             jsonObj.put("continuousInsulationR", continuousInsulationR);

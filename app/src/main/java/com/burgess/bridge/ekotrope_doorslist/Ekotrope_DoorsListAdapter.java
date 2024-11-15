@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_doorslist;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,8 @@ import data.Tables.Ekotrope_Door_Table;
 public class Ekotrope_DoorsListAdapter extends ListAdapter<Ekotrope_Door_Table, Ekotrope_DoorsListViewHolder> {
     public static final String TAG = "DOORS_LIST";
 
+    private int mInspectionId;
+    private String mEkotropeProjectId;
     private List<Ekotrope_Door_Table> currentList;
 
     protected Ekotrope_DoorsListAdapter(@NonNull DiffUtil.ItemCallback<Ekotrope_Door_Table> diffCallback) {
@@ -47,10 +52,12 @@ public class Ekotrope_DoorsListAdapter extends ListAdapter<Ekotrope_Door_Table, 
 
         // Set the click listener
         holder.itemView.setOnClickListener(v -> {
-            Intent doorIntent = new Intent(holder.itemView.getContext(), Ekotrope_DoorsActivity.class);
-            doorIntent.putExtra(Ekotrope_DoorsActivity.PLAN_ID, door.plan_id);
-            doorIntent.putExtra(Ekotrope_DoorsActivity.DOOR_INDEX, door.index);
-            holder.itemView.getContext().startActivity(doorIntent);
+            Intent intent = new Intent(holder.itemView.getContext(), Ekotrope_DoorsActivity.class);
+            intent.putExtra(INSPECTION_ID, mInspectionId);
+            intent.putExtra(EKOTROPE_PROJECT_ID, mEkotropeProjectId);
+            intent.putExtra(Ekotrope_DoorsActivity.PLAN_ID, door.plan_id);
+            intent.putExtra(Ekotrope_DoorsActivity.DOOR_INDEX, door.index);
+            holder.itemView.getContext().startActivity(intent);
         });
     }
     @Override
@@ -59,6 +66,12 @@ public class Ekotrope_DoorsListAdapter extends ListAdapter<Ekotrope_Door_Table, 
     }
     public List<Ekotrope_Door_Table> getCurrentList() {
         return currentList;
+    }
+    public void setInspectionId(int inspectionId) {
+        mInspectionId = inspectionId;
+    }
+    public void setEkotropeProjectId(String ekotropeProjectId) {
+        mEkotropeProjectId = ekotropeProjectId;
     }
     public void setCurrentList(List<Ekotrope_Door_Table> list) {
         currentList = list;

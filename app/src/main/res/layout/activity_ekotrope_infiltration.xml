@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infiltration_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_infiltration.Ekotrope_InfiltrationActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/infiltration_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="Infiltration"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView154"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/InfiltrationUnit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/infiltration_toolbar" />
+
+        <TextView
+            android:id="@+id/textView155"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/InfiltrationValue"
+            app:layout_constraintStart_toStartOf="@+id/textView154"
+            app:layout_constraintTop_toBottomOf="@+id/textView154" />
+
+        <Button
+            android:id="@+id/infiltration_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView156" />
+
+        <Spinner
+            android:id="@+id/infiltration_spinner_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView154"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView156"
+            app:layout_constraintTop_toTopOf="@+id/textView154" />
+
+        <EditText
+            android:id="@+id/infiltration_text_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView155"
+            app:layout_constraintEnd_toEndOf="@+id/infiltration_spinner_unit"
+            app:layout_constraintStart_toStartOf="@+id/infiltration_spinner_unit"
+            app:layout_constraintTop_toTopOf="@+id/textView155" />
+
+        <TextView
+            android:id="@+id/textView156"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="Infiltration Measurement\nType"
+            app:layout_constraintStart_toStartOf="@+id/textView155"
+            app:layout_constraintTop_toBottomOf="@+id/textView155" />
+
+        <Spinner
+            android:id="@+id/infiltration_spinner_measurement_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView156"
+            app:layout_constraintEnd_toEndOf="@+id/infiltration_text_value"
+            app:layout_constraintStart_toStartOf="@+id/infiltration_text_value"
+            app:layout_constraintTop_toTopOf="@+id/textView156" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

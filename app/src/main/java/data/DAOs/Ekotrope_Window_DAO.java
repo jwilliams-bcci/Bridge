@@ -41,9 +41,9 @@ public interface Ekotrope_Window_DAO {
             "adjacentSummerShading = :adjacentSummerShading, adjacentWinterShading = :adjacentWinterShading, " +
             "isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
-    void update(String plan_id, int index, String name, boolean remove, double windowArea,
-                String orientation, int installedWallIndex, int installedFoundationWallIndex,
-                double overhangDepth, double distanceOverhangToTop, double distanceOverhangToBottom,
-                double SHGC, double uFactor, double adjacentSummerShading, double adjacentWinterShading);
+    void update(String plan_id, int index, String name, boolean remove, Double windowArea,
+                String orientation, Integer installedWallIndex, Integer installedFoundationWallIndex,
+                Double overhangDepth, Double distanceOverhangToTop, Double distanceOverhangToBottom,
+                Double SHGC, Double uFactor, Double adjacentSummerShading, Double adjacentWinterShading);
 
 }

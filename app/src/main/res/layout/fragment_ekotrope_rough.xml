@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/ThermalEnvelope"
+        android:textColor="@color/burgessBlue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/burgessBlue"
+        app:layout_constraintBottom_toBottomOf="@+id/textView26"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView26"
+        app:layout_constraintTop_toTopOf="@+id/textView26" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_rough_button_framed_floors"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/FramedFloors"
+        app:layout_constraintEnd_toStartOf="@+id/divider7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_rough_button_rim_joists"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_rough_button_above_grade_walls"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/AboveGradeWalls"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_rough_button_framed_floors"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/divider7"
+        app:layout_constraintTop_toTopOf="@+id/fragment_ekotrope_rough_button_framed_floors" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_rough_button_windows"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/Windows"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_rough_button_framed_floors"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_rough_button_framed_floors"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_rough_button_framed_floors" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_rough_button_doors"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/Doors"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_rough_button_windows"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_rough_button_above_grade_walls"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_rough_button_above_grade_walls"
+        app:layout_constraintTop_toTopOf="@+id/fragment_ekotrope_rough_button_windows" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_rough_button_ceilings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/CeilingsRoof"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_rough_button_windows"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_rough_button_windows"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_rough_button_windows" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_rough_button_slabs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/Slabs"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_rough_button_ceilings"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_rough_button_doors"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_rough_button_doors"
+        app:layout_constraintTop_toTopOf="@+id/fragment_ekotrope_rough_button_ceilings" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_rough_button_rim_joists"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/RimJoists"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_rough_button_ceilings"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_rough_button_ceilings"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_rough_button_ceilings" />
+</androidx.constraintlayout.widget.ConstraintLayout>

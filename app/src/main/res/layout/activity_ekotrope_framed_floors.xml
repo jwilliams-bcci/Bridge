@@ -8,7 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/above_grade_walls_constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".ekotrope_framedfloors.Ekotrope_FramedFloorsActivity">
 
         <include
@@ -32,33 +32,25 @@
             app:layout_constraintTop_toBottomOf="@+id/include2"
             app:title="Framed Floors"
             app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
-            app:titleTextColor="@color/colorWhite" />
-
-        <TextView
-            android:id="@+id/textView26"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="ID:"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/framed_floors_toolbar" />
+            app:titleTextColor="@color/colorWhite"
+            tools:ignore="TextSizeCheck" />
 
         <TextView
             android:id="@+id/textView27"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Name"
-            app:layout_constraintStart_toStartOf="@+id/textView26"
-            app:layout_constraintTop_toBottomOf="@+id/textView26" />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/type_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/framed_floors_toolbar" />
 
         <TextView
             android:id="@+id/textView28"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Cavity Insulation Grade"
+            android:layout_marginTop="36dp"
+            android:text="@string/cavity_insulation_grade"
             app:layout_constraintStart_toStartOf="@+id/textView27"
             app:layout_constraintTop_toBottomOf="@+id/textView27" />
 
@@ -66,8 +58,8 @@
             android:id="@+id/textView29"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Cavity Insulation R"
+            android:layout_marginTop="36dp"
+            android:text="@string/cavity_insulation_r"
             app:layout_constraintStart_toStartOf="@+id/textView28"
             app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
@@ -75,8 +67,8 @@
             android:id="@+id/textView30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Continuous Insulation R"
+            android:layout_marginTop="36dp"
+            android:text="@string/continuous_insulation_r"
             app:layout_constraintStart_toStartOf="@+id/textView29"
             app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
@@ -84,8 +76,8 @@
             android:id="@+id/textView31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Spacing"
+            android:layout_marginTop="36dp"
+            android:text="@string/stud_spacing"
             app:layout_constraintStart_toStartOf="@+id/textView30"
             app:layout_constraintTop_toBottomOf="@+id/textView30" />
 
@@ -93,8 +85,8 @@
             android:id="@+id/textView32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Width"
+            android:layout_marginTop="36dp"
+            android:text="@string/stud_width"
             app:layout_constraintStart_toStartOf="@+id/textView31"
             app:layout_constraintTop_toBottomOf="@+id/textView31" />
 
@@ -102,8 +94,8 @@
             android:id="@+id/textView33"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Depth"
+            android:layout_marginTop="36dp"
+            android:text="@string/stud_depth"
             app:layout_constraintStart_toStartOf="@+id/textView32"
             app:layout_constraintTop_toBottomOf="@+id/textView32" />
 
@@ -111,115 +103,126 @@
             android:id="@+id/textView34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Stud Material"
+            android:layout_marginTop="36dp"
+            android:text="@string/stud_material"
             app:layout_constraintStart_toStartOf="@+id/textView33"
             app:layout_constraintTop_toBottomOf="@+id/textView33" />
-
-        <EditText
-            android:id="@+id/framed_floors_text_index"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:editable="false"
-            android:ems="10"
-            android:inputType="text"
-            android:text="FF_ID"
-            app:layout_constraintBottom_toBottomOf="@+id/textView26"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView30"
-            app:layout_constraintTop_toTopOf="@+id/textView26" />
 
         <Button
             android:id="@+id/framed_floors_button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="36dp"
             android:background="@drawable/button_rounded_blue"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@color/colorWhite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
-        <EditText
+        <TextView
             android:id="@+id/framed_floors_text_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:editable="false"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:inputType="text"
-            android:text="FF_Name"
+            android:text="@string/NoTypeNameFound"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView27"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/framed_floors_text_index"
-            app:layout_constraintTop_toTopOf="@+id/textView27" />
+            app:layout_constraintStart_toEndOf="@+id/textView30"
+            app:layout_constraintTop_toTopOf="@+id/textView27"
+            tools:ignore="TextViewEdits,TouchTargetSizeCheck" />
 
         <EditText
             android:id="@+id/framed_floors_text_cavity_insulation_r"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_CavInsR"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView29"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/framed_floors_text_name"
-            app:layout_constraintTop_toTopOf="@+id/textView29" />
+            app:layout_constraintTop_toTopOf="@+id/textView29"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/framed_floors_text_continuous_insulation_r"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_ContInsR"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView30"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/framed_floors_text_cavity_insulation_r"
-            app:layout_constraintTop_toTopOf="@+id/textView30" />
+            app:layout_constraintTop_toTopOf="@+id/textView30"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/framed_floors_text_stud_spacing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_StudSpacing"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView31"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/framed_floors_text_continuous_insulation_r"
-            app:layout_constraintTop_toTopOf="@+id/textView31" />
+            app:layout_constraintTop_toTopOf="@+id/textView31"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/framed_floors_text_stud_width"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_StudWidth"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView32"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/framed_floors_text_stud_spacing"
-            app:layout_constraintTop_toTopOf="@+id/textView32" />
+            app:layout_constraintTop_toTopOf="@+id/textView32"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <EditText
             android:id="@+id/framed_floors_text_stud_depth"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:ems="10"
+            android:hint="@string/NotFound"
+            android:importantForAccessibility="no"
             android:inputType="number|numberDecimal"
-            android:text="FF_StudDepth"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView33"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/framed_floors_text_stud_width"
-            app:layout_constraintTop_toTopOf="@+id/textView33" />
+            app:layout_constraintTop_toTopOf="@+id/textView33"
+            tools:ignore="Autofill,VisualLintTextFieldSize" />
 
         <Spinner
             android:id="@+id/framed_floors_spinner_cavity_insulation_grade"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:importantForAccessibility="no"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView28"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/framed_floors_text_name"
@@ -229,6 +232,9 @@
             android:id="@+id/framed_floors_spinner_stud_material"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:importantForAccessibility="no"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView34"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/framed_floors_text_stud_depth"

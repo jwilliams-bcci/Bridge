@@ -33,6 +33,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import data.Tables.Attachment_Table;
@@ -43,8 +44,18 @@ import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
 import data.Tables.Ekotrope_AboveGradeWall_Table;
 import data.Tables.Ekotrope_Ceiling_Table;
+import data.Tables.Ekotrope_ClothesDryer_Table;
+import data.Tables.Ekotrope_ClothesWasher_Table;
+import data.Tables.Ekotrope_Dishwasher_Table;
+import data.Tables.Ekotrope_DistributionSystem_Table;
 import data.Tables.Ekotrope_Door_Table;
+import data.Tables.Ekotrope_Duct_Table;
 import data.Tables.Ekotrope_FramedFloor_Table;
+import data.Tables.Ekotrope_Lighting_Table;
+import data.Tables.Ekotrope_MechanicalEquipment_Table;
+import data.Tables.Ekotrope_MechanicalVentilation_Table;
+import data.Tables.Ekotrope_RangeOven_Table;
+import data.Tables.Ekotrope_Refrigerator_Table;
 import data.Tables.Ekotrope_RimJoist_Table;
 import data.Tables.Ekotrope_Slab_Table;
 import data.Tables.Ekotrope_Window_Table;
@@ -56,7 +67,6 @@ import data.Tables.Inspector_Table;
 import data.Tables.PastInspection_Table;
 import data.Tables.Room_Table;
 
-import static com.burgess.bridge.Constants.API_EKOTROPE_AUTH_PROD;
 import static com.burgess.bridge.Constants.API_EKOTROPE_AUTH_TEST;
 import static com.burgess.bridge.Constants.API_EKOTROPE_INSPECTION_SYNC;
 import static com.burgess.bridge.Constants.API_EKOTROPE_PLAN_URL;
@@ -961,6 +971,8 @@ public class BridgeAPIQueue {
         String url = API_EKOTROPE_PLAN_URL + planId;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            JSONObject appliances = response.optJSONObject("appliances");
+            JSONObject mechanicals = response.optJSONObject("mechanicals");
             JSONObject thermalEnvelope = response.optJSONObject("thermalEnvelope");
             JSONArray framedFloorArray = thermalEnvelope.optJSONArray("framedFloors");
             JSONArray aboveGradeWallArray = thermalEnvelope.optJSONArray("walls");
@@ -969,6 +981,14 @@ public class BridgeAPIQueue {
             JSONArray ceilingArray = thermalEnvelope.optJSONArray("ceilings");
             JSONArray slabArray = thermalEnvelope.optJSONArray("slabs");
             JSONArray rimJoistArray = thermalEnvelope.optJSONArray("rimJoists");
+            JSONArray mechanicalEquipmentArray = mechanicals.optJSONArray("mechanicalEquipment");
+            JSONArray distributionSystemArray = mechanicals.optJSONArray("distributionSystems");
+            JSONArray mechanicalVentilationArray = mechanicals.optJSONArray("mechanicalVentilation");
+            JSONObject lighting = response.optJSONObject("lighting");
+            JSONObject dishwasher = appliances.optJSONObject("dishwasher");
+            JSONObject clothesDryer = appliances.optJSONObject("clothesDryer");
+            JSONObject clothesWasher = appliances.optJSONObject("clothesWasher");
+            JSONObject rangeOven = appliances.optJSONObject("rangeOven");
 
             addFramedFloors(framedFloorArray, planId, vm);
             addAboveGradeWalls(aboveGradeWallArray, planId, vm);
@@ -977,6 +997,15 @@ public class BridgeAPIQueue {
             addCeilings(ceilingArray, planId, vm);
             addSlabs(slabArray, planId, vm);
             addRimJoists(rimJoistArray, planId, vm);
+            addMechanicalEquipments(mechanicalEquipmentArray, planId, vm);
+            addDistributionSystems(distributionSystemArray, planId, vm);
+            addMechanicalVentilations(mechanicalVentilationArray, planId, vm);
+            addLighting(lighting, planId, vm);
+            addRefrigerator(appliances, planId, vm);
+            addDishwasher(dishwasher, planId, vm);
+            addClothesDryer(clothesDryer, planId, vm);
+            addClothesWasher(clothesWasher, planId, vm);
+            addRangeOven(rangeOven, planId, vm);
         }, error -> {
             if (error instanceof NoConnectionError) {
                 BridgeLogger.log('E', TAG, "Lost connection in getEkotropePlanData.");
@@ -1020,7 +1049,7 @@ public class BridgeAPIQueue {
 
             @Override
             public byte[] getBody() {
-                return vm.getInspectionSyncJson(planId, projectId).toString().getBytes();
+                return vm.getInspectionSyncJson_Rough(planId, projectId).toString().getBytes();
             }
 
             @Override
@@ -1036,8 +1065,8 @@ public class BridgeAPIQueue {
         for (int lcv = 0; lcv < framedFloorsArray.length(); lcv++) {
             JSONObject framedFloorObj = framedFloorsArray.optJSONObject(lcv);
             JSONObject typeObj = framedFloorObj.optJSONObject("type");
-            JSONObject assemblyDetailsObj = typeObj.optJSONObject("assemblyDetails");
-            JSONArray cavityInsulationGradeObj = assemblyDetailsObj.optJSONArray("cavityInsulationGrade");
+            JSONObject assemblyDetailsObj = Objects.requireNonNull(typeObj).optJSONObject("assemblyDetails");
+            JSONArray cavityInsulationGradeObj = Objects.requireNonNull(assemblyDetailsObj).optJSONArray("cavityInsulationGrade");
             JSONArray studSpacingObj = assemblyDetailsObj.optJSONArray("framingSpacing");
             JSONArray studWidthObj = assemblyDetailsObj.optJSONArray("framingWidth");
             JSONArray studDepthObj = assemblyDetailsObj.optJSONArray("framingDepth");
@@ -1048,13 +1077,13 @@ public class BridgeAPIQueue {
             framedFloor.index = lcv;
             framedFloor.name = framedFloorObj.optString("name");
             framedFloor.typeName = typeObj.optString("name");
-            framedFloor.cavityInsulationGrade = cavityInsulationGradeObj.optString(0);
+            framedFloor.cavityInsulationGrade = Objects.requireNonNull(cavityInsulationGradeObj).optString(0);
             framedFloor.cavityInsulationR = assemblyDetailsObj.optDouble("cavityR");
             framedFloor.continuousInsulationR = assemblyDetailsObj.optDouble("continuousR");
-            framedFloor.studSpacing = studSpacingObj.optDouble(0);
-            framedFloor.studWidth = studWidthObj.optDouble(0);
-            framedFloor.studDepth = studDepthObj.optDouble(0);
-            framedFloor.studMaterial = studMaterialObj.optString(0);
+            framedFloor.studSpacing = Objects.requireNonNull(studSpacingObj).optDouble(0);
+            framedFloor.studWidth = Objects.requireNonNull(studWidthObj).optDouble(0);
+            framedFloor.studDepth = Objects.requireNonNull(studDepthObj).optDouble(0);
+            framedFloor.studMaterial = Objects.requireNonNull(studMaterialObj).optString(0);
             framedFloor.isChanged = false;
 
             vm.insertFramedFloor(framedFloor);
@@ -1206,6 +1235,175 @@ public class BridgeAPIQueue {
 
             vm.insertRimJoist(rimJoint);
         }
+    }
+    public void addMechanicalEquipments(JSONArray mechanicalEquipmentsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < mechanicalEquipmentsArray.length(); lcv++) {
+            JSONObject mechanicalEquipmentObj = mechanicalEquipmentsArray.optJSONObject(lcv);
+            JSONObject typeObj = mechanicalEquipmentObj.optJSONObject("type");
+
+            Ekotrope_MechanicalEquipment_Table mechanicalEquipment = new Ekotrope_MechanicalEquipment_Table();
+            mechanicalEquipment.plan_id = planId;
+            mechanicalEquipment.index = lcv;
+            mechanicalEquipment.name = mechanicalEquipmentObj.optString("name");
+            mechanicalEquipment.model_number = typeObj.optString("modelNumber");
+            mechanicalEquipment.location = mechanicalEquipmentObj.optString("location");
+            mechanicalEquipment.percent_heating_load = mechanicalEquipmentObj.optDouble("heatingPercentLoad");
+            mechanicalEquipment.percent_cooling_load = mechanicalEquipmentObj.optDouble("coolingPercentLoad");
+            mechanicalEquipment.percent_hot_water_load = mechanicalEquipmentObj.optDouble("hotWaterPercentLoad");
+            mechanicalEquipment.ahri_reference_number = typeObj.optString("ahriReferenceNumber");
+            mechanicalEquipment.ahri_reference_fuel_type = typeObj.optString("fuel");
+            mechanicalEquipment.rc_test_conducted = false;
+            mechanicalEquipment.rc_test_method = "NON_INVASIVE";
+            mechanicalEquipment.rc_metering_device = "PISTON_CAP_TUBE";
+            mechanicalEquipment.rc_difference_dtd = 0.0;
+            mechanicalEquipment.rc_difference_ctoa = 0.0;
+            mechanicalEquipment.rc_weight_deviation = 0.0;
+            mechanicalEquipment.is_changed = false;
+
+            vm.insertMechanicalEquipment(mechanicalEquipment);
+        }
+    }
+    public void addDistributionSystems(JSONArray distributionSystemsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < distributionSystemsArray.length(); lcv++) {
+            JSONObject distributionSystemObj = distributionSystemsArray.optJSONObject(lcv);
+            JSONObject testedDetailsObj = distributionSystemObj.optJSONObject("testedDetails");
+            JSONArray ductsArray = testedDetailsObj.optJSONArray("ducts");
+
+            Ekotrope_DistributionSystem_Table distributionSystem = new Ekotrope_DistributionSystem_Table();
+            distributionSystem.plan_id = planId;
+            distributionSystem.index = lcv;
+            distributionSystem.system_type = distributionSystemObj.optString("systemType");
+            distributionSystem.is_leakage_to_outside_tested = testedDetailsObj.optBoolean("isLeakageToOutsideTested");
+            distributionSystem.leakage_to_outside = testedDetailsObj.optDouble("leakageToOutside");
+            distributionSystem.total_leakage = testedDetailsObj.optDouble("totalLeakage");
+            distributionSystem.total_duct_leakage_test_condition = testedDetailsObj.optString("totalLeakageTestCondition");
+            distributionSystem.number_of_returns = testedDetailsObj.optInt("numberOfReturnGrilles");
+            distributionSystem.sq_feet_served = testedDetailsObj.optDouble("sqFtServed");
+            addDucts(ductsArray, planId, lcv, vm);
+            distributionSystem.is_changed = false;
+
+            vm.insertDistributionSystem(distributionSystem);
+        }
+    }
+    public void addDucts(JSONArray ductsArray, String planId, int ds_id, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < ductsArray.length(); lcv++) {
+            JSONObject ductObj = ductsArray.optJSONObject(lcv);
+
+            Ekotrope_Duct_Table duct = new Ekotrope_Duct_Table();
+            duct.plan_id = planId;
+            duct.index = lcv;
+            duct.ds_id = ds_id;
+            duct.location = ductObj.optString("location");
+            duct.percent_supply_area = ductObj.optDouble("percentSupplyArea");
+            duct.percent_return_area = ductObj.optDouble("percentReturnArea");
+            duct.is_changed = false;
+
+            vm.insertDuct(duct);
+        }
+    }
+    public void addMechanicalVentilations(JSONArray mechanicalVentilationsArray, String planId, RouteSheetViewModel vm) {
+        for (int lcv = 0; lcv < mechanicalVentilationsArray.length(); lcv++) {
+            JSONObject mechanicalVentilationObj = mechanicalVentilationsArray.optJSONObject(lcv);
+
+            Ekotrope_MechanicalVentilation_Table mechanicalVentilation = new Ekotrope_MechanicalVentilation_Table();
+            mechanicalVentilation.plan_id = planId;
+            mechanicalVentilation.index = lcv;
+            mechanicalVentilation.motor_type = mechanicalVentilationObj.optString("motorType");
+            mechanicalVentilation.ventilation_type = mechanicalVentilationObj.optString("ventilationType");
+            mechanicalVentilation.measured_flow_rate = mechanicalVentilationObj.optDouble("ventilationRate");
+            mechanicalVentilation.fan_watts = mechanicalVentilationObj.optDouble("watts");
+            mechanicalVentilation.operational_hours_per_day = mechanicalVentilationObj.optDouble("operationalHoursPerDay");
+            mechanicalVentilation.is_changed = false;
+
+            vm.insertMechanicalVentilation(mechanicalVentilation);
+        }
+    }
+    public void addLighting(JSONObject lightingObj, String planId, RouteSheetViewModel vm) {
+        JSONObject percentEfficientObj = lightingObj.optJSONObject("percentEfficient");
+        JSONObject percentLEDObj = lightingObj.optJSONObject("percentLED");
+
+        Ekotrope_Lighting_Table lighting = new Ekotrope_Lighting_Table();
+        lighting.plan_id = planId;
+        lighting.percent_interior_fluorescent = percentEfficientObj.optDouble("interior");
+        lighting.percent_interior_led = percentLEDObj.optDouble("interior");
+        lighting.percent_exterior_fluorescent = percentEfficientObj.optDouble("exterior");
+        lighting.percent_exterior_led = percentLEDObj.optDouble("exterior");
+        lighting.percent_garage_fluorescent = percentEfficientObj.optDouble("garage");
+        lighting.percent_garage_led = percentLEDObj.optDouble("garage");
+        lighting.is_changed = false;
+
+        vm.insertLighting(lighting);
+    }
+    public void addRefrigerator(JSONObject applianceObj, String planId, RouteSheetViewModel vm) {
+        Ekotrope_Refrigerator_Table refrigerator = new Ekotrope_Refrigerator_Table();
+        refrigerator.plan_id = planId;
+        refrigerator.refrigerator_consumption = applianceObj.optDouble("refrigeratorConsumption");
+        refrigerator.is_changed = false;
+
+        vm.insertRefrigerator(refrigerator);
+    }
+    public void addDishwasher(JSONObject dishwasherObj, String planId, RouteSheetViewModel vm) {
+        Ekotrope_Dishwasher_Table dishwasher = new Ekotrope_Dishwasher_Table();
+        dishwasher.plan_id = planId;
+        dishwasher.dishwasher_available = dishwasherObj.optBoolean("isAvailable");
+        dishwasher.dishwasher_defaults_type = dishwasherObj.optString("defaultsType");
+        dishwasher.dishwasher_size = dishwasherObj.optString("size");
+        dishwasher.dishwasher_efficiency_type = dishwasherObj.optString("efficiencyType");
+        dishwasher.dishwasher_efficiency = dishwasherObj.optDouble("efficiency");
+        dishwasher.dishwasher_annual_gas_cost = dishwasherObj.optDouble("annualGasCost");
+        dishwasher.dishwasher_gas_rate = dishwasherObj.optDouble("gasRate");
+        dishwasher.dishwasher_electric_rate = dishwasherObj.optDouble("electricRate");
+        dishwasher.is_changed = false;
+
+        vm.insertDishwasher(dishwasher);
+    }
+    public void addClothesDryer(JSONObject clothesDryerObj, String planId, RouteSheetViewModel vm) {
+        Ekotrope_ClothesDryer_Table clothesDryer = new Ekotrope_ClothesDryer_Table();
+        clothesDryer.plan_id = planId;
+        if (clothesDryerObj.length() == 0) {
+            clothesDryer.available = false;
+            clothesDryer.defaults_type = null;
+            clothesDryer.combined_energy_factor = null;
+            clothesDryer.utilization_factor = null;
+        } else {
+            clothesDryer.available = true;
+            clothesDryer.defaults_type = clothesDryerObj.optString("defaultsType");
+            clothesDryer.combined_energy_factor = clothesDryerObj.optDouble("combinedEfficiencyFactor");
+            clothesDryer.utilization_factor = clothesDryerObj.optString("utilizationFactor");
+        }
+        clothesDryer.is_changed = false;
+
+        vm.insertClothesDryer(clothesDryer);
+    }
+    public void addClothesWasher(JSONObject clothesWasherObj, String planId, RouteSheetViewModel vm) {
+        Ekotrope_ClothesWasher_Table clothesWasher = new Ekotrope_ClothesWasher_Table();
+        clothesWasher.plan_id = planId;
+        if (clothesWasherObj.length() == 0) {
+            clothesWasher.available = false;
+            clothesWasher.defaults_type = null;
+            clothesWasher.load_type = null;
+            clothesWasher.labeled_energy_rating = null;
+            clothesWasher.integrated_modified_energy_factor = null;
+        } else {
+            clothesWasher.available = true;
+            clothesWasher.defaults_type = clothesWasherObj.optString("defaultsType");
+            clothesWasher.load_type = clothesWasherObj.optString("loadType");
+            clothesWasher.labeled_energy_rating = clothesWasherObj.optDouble("labeledEnergyRating");
+            clothesWasher.integrated_modified_energy_factor = clothesWasherObj.optDouble("integratedModifiedEnergyFactor");
+        }
+        clothesWasher.is_changed = false;
+
+        vm.insertClothesWasher(clothesWasher);
+    }
+    public void addRangeOven(JSONObject rangeOvenObj, String planId, RouteSheetViewModel vm) {
+        Ekotrope_RangeOven_Table rangeOven = new Ekotrope_RangeOven_Table();
+        rangeOven.plan_id = planId;
+        rangeOven.fuel_type = rangeOvenObj.optString("fuel");
+        rangeOven.is_induction_range = rangeOvenObj.optBoolean("isInductionStove");
+        rangeOven.is_convection_oven = rangeOvenObj.optBoolean("isOvenConvection");
+        rangeOven.is_changed = false;
+
+        vm.insertRangeOven(rangeOven);
     }
 
     // Attachments

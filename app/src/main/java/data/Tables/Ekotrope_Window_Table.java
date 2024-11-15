@@ -13,28 +13,28 @@ public class Ekotrope_Window_Table {
     public String name;
     public String typeName;
     public boolean remove;
-    public double windowArea;
+    public Double windowArea;
     public String orientation;
-    public int installedWallIndex;
-    public int installedFoundationWallIndex;
-    public double overhangDepth;
-    public double distanceOverhangToTop;
-    public double distanceOverhangToBottom;
-    public double SHGC;
-    public double uFactor;
-    public double adjacentSummerShading;
-    public double adjacentWinterShading;
+    public Integer installedWallIndex;
+    public Integer installedFoundationWallIndex;
+    public Double overhangDepth;
+    public Double distanceOverhangToTop;
+    public Double distanceOverhangToBottom;
+    public Double SHGC;
+    public Double uFactor;
+    public Double adjacentSummerShading;
+    public Double adjacentWinterShading;
     public boolean isChanged;
 
     public Ekotrope_Window_Table() {
     }
 
     public Ekotrope_Window_Table(String plan_id, int index, String name, String typeName, boolean remove,
-                                 double windowArea, String orientation, int installedWallIndex,
-                                 int installedFoundationWallIndex, double overhangDepth,
-                                 double distanceOverhangToTop, double distanceOverhangToBottom,
-                                 double SHGC, double uFactor, double adjacentSummerShading,
-                                 double adjacentWinterShading, boolean isChanged) {
+                                 Double windowArea, String orientation, Integer installedWallIndex,
+                                 Integer installedFoundationWallIndex, Double overhangDepth,
+                                 Double distanceOverhangToTop, Double distanceOverhangToBottom,
+                                 Double SHGC, Double uFactor, Double adjacentSummerShading,
+                                 Double adjacentWinterShading, boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;

@@ -12,11 +12,11 @@ public class Ekotrope_Slab_Table {
     public int index;
     public String name;
     public String typeName;
-    public double underslabInsulationR;
+    public Double underslabInsulationR;
     public boolean isFullyInsulated;
-    public double underslabInsulationWidth;
-    public double perimeterInsulationDepth;
-    public double perimeterInsulationR;
+    public Double underslabInsulationWidth;
+    public Double perimeterInsulationDepth;
+    public Double perimeterInsulationR;
     public boolean thermalBreak;
     public boolean isChanged;
 
@@ -24,9 +24,9 @@ public class Ekotrope_Slab_Table {
     }
 
     public Ekotrope_Slab_Table(String plan_id, int index, String name, String typeName,
-                               double underslabInsulationR, boolean isFullyInsulated,
-                               double underslabInsulationWidth, double perimeterInsulationDepth,
-                               double perimeterInsulationR, boolean thermalBreak,
+                               Double underslabInsulationR, boolean isFullyInsulated,
+                               Double underslabInsulationWidth, Double perimeterInsulationDepth,
+                               Double perimeterInsulationR, boolean thermalBreak,
                                boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
@@ -45,7 +45,6 @@ public class Ekotrope_Slab_Table {
         JSONObject jsonObj = new JSONObject();
         try {
             jsonObj.put("index", index);
-            jsonObj.put("name", typeName);
             jsonObj.put("underslabInsulationR", underslabInsulationR);
             jsonObj.put("isFullyInsulated", isFullyInsulated);
             jsonObj.put("underslabInsulationWidth", underslabInsulationWidth);

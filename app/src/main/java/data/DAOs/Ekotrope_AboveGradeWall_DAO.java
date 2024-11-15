@@ -39,7 +39,7 @@ public interface Ekotrope_AboveGradeWall_DAO {
             "cavityInsulationR = :cavityInsulationR, continuousInsulationR = :continuousInsulationR, " +
             "isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
-    void update(String plan_id, int index, String cavityInsulationGrade, double cavityInsulationR,
-                double studSpacing, double continuousInsulationR, double studWidth,
-                double studDepth, String studMaterial);
+    void update(String plan_id, int index, String cavityInsulationGrade, Double cavityInsulationR,
+                Double studSpacing, Double continuousInsulationR, Double studWidth,
+                Double studDepth, String studMaterial);
 }

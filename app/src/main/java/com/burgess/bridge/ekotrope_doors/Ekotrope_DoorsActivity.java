@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_doors;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID_NOT_FOUND;
 import static com.burgess.bridge.Constants.PREF;
 
 import android.content.Context;
@@ -11,19 +14,23 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.burgess.bridge.BridgeHelper;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import data.Tables.Ekotrope_ChangeLog_Table;
 import data.Tables.Ekotrope_Door_Table;
 
 public class Ekotrope_DoorsActivity extends AppCompatActivity {
@@ -35,13 +42,15 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private EditText mTextName;
-    private EditText mTextWallIndex;
+    private Toolbar mToolbar;
+    private TextView mTextName;
     private EditText mTextDoorArea;
     private EditText mTextUFactor;
     private CheckBox mCheckBoxRemove;
     private Button mButtonSave;
 
+    private int mInspectionId;
+    private String mProjectId;
     private String mPlanId;
     private int mDoorIndex;
     private Ekotrope_Door_Table mDoor;
@@ -65,6 +74,8 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
 
         // Get intent data...
         Intent intent = getIntent();
+        mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mProjectId = intent.getStringExtra(EKOTROPE_PROJECT_ID);
         mPlanId = intent.getStringExtra(PLAN_ID);
         mDoorIndex = intent.getIntExtra(DOOR_INDEX, DOOR_INDEX_NOT_FOUND);
         mDoor = mDoorsViewModel.getDoor(mPlanId, mDoorIndex);
@@ -73,12 +84,13 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
         initializeButtonListeners();
         initializeDisplayContent();
         initializeTextValidators();
+        initializeChangeTracking();
     }
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.ekotrope_doors_constraint_layout);
+        mToolbar = findViewById(R.id.ekotrope_doors_toolbar);
         mTextName = findViewById(R.id.ekotrope_doors_text_name);
-        mTextWallIndex = findViewById(R.id.ekotrope_doors_text_wall_index);
         mCheckBoxRemove = findViewById(R.id.ekotrope_doors_checkbox_remove);
         mTextDoorArea = findViewById(R.id.ekotrope_doors_text_door_area);
         mTextUFactor = findViewById(R.id.ekotrope_doors_text_u_factor);
@@ -95,9 +107,32 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
             double newDoorArea = Double.parseDouble(mTextDoorArea.getText().toString());
             double newUFactor = Double.parseDouble(mTextUFactor.getText().toString());
 
+            mCheckBoxRemove.clearFocus();
+            mTextDoorArea.clearFocus();
+            mTextUFactor.clearFocus();
+
+            if((boolean)mCheckBoxRemove.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Door", mDoor.name, "Remove",
+                        Boolean.toString(mDoor.remove), Boolean.toString(newRemove));
+                mDoorsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextDoorArea.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Door", mDoor.name, "Door Area",
+                        Double.toString(mDoor.doorArea), Double.toString(newDoorArea));
+                mDoorsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextUFactor.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Door", mDoor.name, "U Factor",
+                        Double.toString(mDoor.uFactor), Double.toString(newUFactor));
+                mDoorsViewModel.insertChangeLog(changeLogEntry);
+            }
+
             Ekotrope_Door_Table newDoor = new Ekotrope_Door_Table(mPlanId, mDoorIndex,
                     mTextName.getText().toString(), mDoor.typeName, newRemove,
-                    Integer.parseInt(mTextWallIndex.getText().toString()), -1,
+                    mDoor.installedWallIndex, mDoor.installedFoundationWallIndex,
                     newDoorArea, newUFactor, true);
             Snackbar.make(mConstraintLayout, "Saving...", Snackbar.LENGTH_LONG).show();
             mDoorsViewModel.updateDoor(newDoor);
@@ -106,10 +141,10 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
-        mTextName.setText(mDoor.name);
-        mTextWallIndex.setText(Integer.toString(mDoor.installedWallIndex));
-        mTextDoorArea.setText(Double.toString(mDoor.doorArea));
-        mTextUFactor.setText(Double.toString(mDoor.uFactor));
+        mToolbar.setTitle(String.format("Door - %s", mDoor.name));
+        mTextName.setText(mDoor.typeName);
+        mTextDoorArea.setText(String.format(mDoor.doorArea.toString()));
+        mTextUFactor.setText(String.format(mDoor.uFactor.toString()));
     }
 
     private void initializeTextValidators() {
@@ -166,5 +201,11 @@ public class Ekotrope_DoorsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void initializeChangeTracking() {
+        BridgeHelper.setChangeTracker(mCheckBoxRemove, mDoor.remove);
+        BridgeHelper.setChangeTracker(mTextDoorArea, mDoor.doorArea);
+        BridgeHelper.setChangeTracker(mTextUFactor, mDoor.uFactor);
     }
 }

@@ -1,27 +1,32 @@
 package com.burgess.bridge.ekotrope_windows;
 
 import static com.burgess.bridge.Constants.PREF;
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID_NOT_FOUND;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.burgess.bridge.BridgeHelper;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import data.Tables.Ekotrope_ChangeLog_Table;
 import data.Tables.Ekotrope_Window_Table;
 
 public class Ekotrope_WindowsActivity extends AppCompatActivity {
@@ -40,9 +46,9 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private EditText mTextName;
+    private Toolbar mToolbar;
+    private TextView mTextName;
     private EditText mTextWindowArea;
-    private EditText mTextInstalledWallIndex;
     private EditText mTextOverhangDepth;
     private EditText mTextDistanceOverhangToTop;
     private EditText mTextDistanceOverhangToBottom;
@@ -54,10 +60,11 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
     private Spinner mSpinnerOrientation;
     private Button mButtonSave;
 
+    private int mInspectionId;
+    private String mProjectId;
     private String mPlanId;
     private int mWindowIndex;
     private Ekotrope_Window_Table mWindow;
-    private ArrayAdapter<String> mOrientationAdapter;
     private List<String> mOrientations;
     private boolean valid = true;
 
@@ -68,7 +75,7 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ekotrope_windows);
         setSupportActionBar(findViewById(R.id.ekotrope_windows_toolbar));
-        mWindowsViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(Ekotrope_WindowsViewModel.class);
+        mWindowsViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(Ekotrope_WindowsViewModel.class);
 
         // Prepare shared preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -79,12 +86,14 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
 
         // Get intent data...
         Intent intent = getIntent();
+        mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mProjectId = intent.getStringExtra(EKOTROPE_PROJECT_ID);
         mPlanId = intent.getStringExtra(PLAN_ID);
         mWindowIndex = intent.getIntExtra(WINDOW_INDEX, WINDOW_INDEX_NOT_FOUND);
         mWindow = mWindowsViewModel.getWindow(mPlanId, mWindowIndex);
 
         // Set spinner lists...
-        mOrientations = new ArrayList<String>();
+        mOrientations = new ArrayList<>();
         mOrientations.add("North");
         mOrientations.add("Northeast");
         mOrientations.add("East");
@@ -94,17 +103,18 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
         mOrientations.add("West");
         mOrientations.add("Northwest");
 
-        intializeViews();
+        initializeViews();
         initializeButtonListeners();
         initializeDisplayContent();
         initializeTextValidators();
+        initializeChangeTracking();
     }
 
-    private void intializeViews() {
+    private void initializeViews() {
         mConstraintLayout = findViewById(R.id.ekotrope_windows_constraint_layout);
+        mToolbar = findViewById(R.id.ekotrope_windows_toolbar);
         mTextName = findViewById(R.id.ekotrope_windows_text_name);
         mTextWindowArea = findViewById(R.id.ekotrope_windows_text_window_area);
-        mTextInstalledWallIndex = findViewById(R.id.ekotrope_windows_text_installed_wall_index);
         mTextOverhangDepth = findViewById(R.id.ekotrope_windows_text_overhang_depth);
         mTextDistanceOverhangToTop = findViewById(R.id.ekotrope_windows_text_distance_overhang_to_top);
         mTextDistanceOverhangToBottom = findViewById(R.id.ekotrope_windows_text_distance_overhang_to_bottom);
@@ -126,7 +136,6 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
             boolean newRemove = mCheckboxRemove.isChecked();
             double newWindowArea = Double.parseDouble(mTextWindowArea.getText().toString());
             String newOrientation = mSpinnerOrientation.getSelectedItem().toString();
-            int newInstalledWallIndex = Integer.parseInt(mTextInstalledWallIndex.getText().toString());
             double newOverhangDepth = Double.parseDouble(mTextOverhangDepth.getText().toString());
             double newDistanceOverhangToTop = Double.parseDouble(mTextDistanceOverhangToTop.getText().toString());
             double newDistanceOverhangToBottom = Double.parseDouble(mTextDistanceOverhangToBottom.getText().toString());
@@ -135,9 +144,81 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
             double newAdjacentSummerShading = Double.parseDouble(mTextSummerShading.getText().toString());
             double newAdjacentWinterShading = Double.parseDouble(mTextWinterShading.getText().toString());
 
+            mCheckboxRemove.clearFocus();
+            mTextWindowArea.clearFocus();
+            mSpinnerOrientation.clearFocus();
+            mTextOverhangDepth.clearFocus();
+            mTextDistanceOverhangToTop.clearFocus();
+            mTextDistanceOverhangToBottom.clearFocus();
+            mTextSHGC.clearFocus();
+            mTextUFactor.clearFocus();
+            mTextSummerShading.clearFocus();
+            mTextWinterShading.clearFocus();
+
+            if((boolean)mCheckboxRemove.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Remove",
+                        Boolean.toString(mWindow.remove), Boolean.toString(newRemove));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextWindowArea.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Window Area",
+                        Double.toString(mWindow.windowArea), Double.toString(newWindowArea));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mSpinnerOrientation.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Orientation",
+                        mWindow.orientation, newOrientation);
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextOverhangDepth.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Overhang Depth",
+                        Double.toString(mWindow.overhangDepth), Double.toString(newOverhangDepth));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextDistanceOverhangToTop.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Distance Overhang To Top",
+                        Double.toString(mWindow.distanceOverhangToTop), Double.toString(newDistanceOverhangToTop));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextDistanceOverhangToBottom.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Distance Overhang To Bottom",
+                        Double.toString(mWindow.distanceOverhangToBottom), Double.toString(newDistanceOverhangToBottom));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextSHGC.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "SHGC",
+                        Double.toString(mWindow.SHGC), Double.toString(newSHGC));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextUFactor.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "U Factor",
+                        Double.toString(mWindow.uFactor), Double.toString(newUFactor));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextSummerShading.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Adjacent Summer Shading",
+                        Double.toString(mWindow.adjacentSummerShading), Double.toString(newAdjacentSummerShading));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+            if((boolean)mTextWinterShading.getTag()) {
+                Ekotrope_ChangeLog_Table changeLogEntry = new Ekotrope_ChangeLog_Table(mInspectionId,
+                        mProjectId, mPlanId, "Window", mWindow.name, "Adjacent Winter Shading",
+                        Double.toString(mWindow.adjacentWinterShading), Double.toString(newAdjacentWinterShading));
+                mWindowsViewModel.insertChangeLog(changeLogEntry);
+            }
+
             Ekotrope_Window_Table newWindow = new Ekotrope_Window_Table(mPlanId, mWindowIndex,
                     mTextName.getText().toString(), mWindow.typeName, newRemove, newWindowArea,
-                    newOrientation, newInstalledWallIndex, -1,
+                    newOrientation, mWindow.installedWallIndex, mWindow.installedFoundationWallIndex,
                     newOverhangDepth, newDistanceOverhangToTop, newDistanceOverhangToBottom,
                     newSHGC, newUFactor, newAdjacentSummerShading, newAdjacentWinterShading, true);
 
@@ -148,20 +229,21 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
-        mTextName.setText(mWindow.name);
-        mTextWindowArea.setText(Double.toString(mWindow.windowArea));
-        mTextInstalledWallIndex.setText(Integer.toString(mWindow.installedWallIndex));
-        mTextOverhangDepth.setText(Double.toString(mWindow.overhangDepth));
-        mTextDistanceOverhangToTop.setText(Double.toString(mWindow.distanceOverhangToTop));
-        mTextDistanceOverhangToBottom.setText(Double.toString(mWindow.distanceOverhangToBottom));
-        mTextSHGC.setText(Double.toString(mWindow.SHGC));
-        mTextUFactor.setText(Double.toString(mWindow.uFactor));
-        mTextSummerShading.setText(Double.toString(mWindow.adjacentSummerShading));
-        mTextWinterShading.setText(Double.toString(mWindow.adjacentWinterShading));
+        mToolbar.setTitle(String.format("Window - %s", mWindow.name));
+        mTextName.setText(mWindow.typeName);
+        mTextWindowArea.setText(String.format(Double.toString(mWindow.windowArea)));
+        mTextOverhangDepth.setText(String.format(Double.toString(mWindow.overhangDepth)));
+        mTextDistanceOverhangToTop.setText(String.format(Double.toString(mWindow.distanceOverhangToTop)));
+        mTextDistanceOverhangToBottom.setText(String.format(Double.toString(mWindow.distanceOverhangToBottom)));
+        mTextSHGC.setText(String.format(Double.toString(mWindow.SHGC)));
+        mTextUFactor.setText(String.format(Double.toString(mWindow.uFactor)));
+        mTextSummerShading.setText(String.format(Double.toString(mWindow.adjacentSummerShading)));
+        mTextWinterShading.setText(String.format(Double.toString(mWindow.adjacentWinterShading)));
 
-        mOrientationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mOrientations);
-        mOrientationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerOrientation.setAdapter(mOrientationAdapter);
+        ArrayAdapter<String> orientationAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mOrientations);
+        orientationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerOrientation.setAdapter(orientationAdapter);
+        mSpinnerOrientation.setSelection(mOrientations.indexOf(mWindow.orientation));
     }
 
     private void initializeTextValidators() {
@@ -376,5 +458,18 @@ public class Ekotrope_WindowsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void initializeChangeTracking() {
+        BridgeHelper.setChangeTracker(mCheckboxRemove, mWindow.remove);
+        BridgeHelper.setChangeTracker(mTextWindowArea, mWindow.windowArea);
+        BridgeHelper.setChangeTracker(mSpinnerOrientation, mWindow.orientation);
+        BridgeHelper.setChangeTracker(mTextOverhangDepth, mWindow.overhangDepth);
+        BridgeHelper.setChangeTracker(mTextDistanceOverhangToTop, mWindow.distanceOverhangToTop);
+        BridgeHelper.setChangeTracker(mTextDistanceOverhangToBottom, mWindow.distanceOverhangToBottom);
+        BridgeHelper.setChangeTracker(mTextSHGC, mWindow.SHGC);
+        BridgeHelper.setChangeTracker(mTextUFactor, mWindow.uFactor);
+        BridgeHelper.setChangeTracker(mTextSummerShading, mWindow.adjacentSummerShading);
+        BridgeHelper.setChangeTracker(mTextWinterShading, mWindow.adjacentWinterShading);
     }
 }

@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_framedfloorslist;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,8 @@ import data.Tables.Ekotrope_FramedFloor_Table;
 public class Ekotrope_FramedFloorsListAdapter extends ListAdapter<Ekotrope_FramedFloor_Table, Ekotrope_FramedFloorsViewHolder> {
     public static final String TAG = "FRAMED_FLOORS_LIST";
 
+    private int mInspectionId;
+    private String mEkotropeProjectId;
     private List<Ekotrope_FramedFloor_Table> currentList;
 
     protected Ekotrope_FramedFloorsListAdapter(@NonNull DiffUtil.ItemCallback<Ekotrope_FramedFloor_Table> diffCallback) {
@@ -48,6 +53,8 @@ public class Ekotrope_FramedFloorsListAdapter extends ListAdapter<Ekotrope_Frame
         // Set the click listener
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), Ekotrope_FramedFloorsActivity.class);
+            intent.putExtra(INSPECTION_ID, mInspectionId);
+            intent.putExtra(EKOTROPE_PROJECT_ID, mEkotropeProjectId);
             intent.putExtra(Ekotrope_FramedFloorsActivity.PLAN_ID, framedFloor.plan_id);
             intent.putExtra(Ekotrope_FramedFloorsActivity.FRAMED_FLOOR_INDEX, framedFloor.index);
             holder.itemView.getContext().startActivity(intent);
@@ -59,6 +66,12 @@ public class Ekotrope_FramedFloorsListAdapter extends ListAdapter<Ekotrope_Frame
     }
     public List<Ekotrope_FramedFloor_Table> getCurrentList() {
         return currentList;
+    }
+    public void setInspectionId(int inspectionId) {
+        mInspectionId = inspectionId;
+    }
+    public void setEkotropeProjectId(String ekotropeProjectId) {
+        mEkotropeProjectId = ekotropeProjectId;
     }
     public void setCurrentList(List<Ekotrope_FramedFloor_Table> list) {
         currentList = list;

@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_ceilingslist;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,8 @@ import data.Tables.Ekotrope_Ceiling_Table;
 public class Ekotrope_CeilingsListAdapter extends ListAdapter<Ekotrope_Ceiling_Table, Ekotrope_CeilingsListViewHolder> {
     public static final String TAG = "CEILINGS_LIST";
 
+    private int mInspectionId;
+    private String mEkotropeProjectId;
     private List<Ekotrope_Ceiling_Table> currentList;
 
     protected Ekotrope_CeilingsListAdapter(@NonNull DiffUtil.ItemCallback<Ekotrope_Ceiling_Table> diffCallback) {
@@ -47,10 +52,12 @@ public class Ekotrope_CeilingsListAdapter extends ListAdapter<Ekotrope_Ceiling_T
 
         // Set on click listeners
         holder.itemView.setOnClickListener(v -> {
-            Intent ceilingIntent = new Intent(holder.itemView.getContext(), Ekotrope_CeilingsActivity.class);
-            ceilingIntent.putExtra(Ekotrope_CeilingsActivity.PLAN_ID, ceiling.plan_id);
-            ceilingIntent.putExtra(Ekotrope_CeilingsActivity.CEILING_INDEX, ceiling.index);
-            holder.itemView.getContext().startActivity(ceilingIntent);
+            Intent intent = new Intent(holder.itemView.getContext(), Ekotrope_CeilingsActivity.class);
+            intent.putExtra(INSPECTION_ID, mInspectionId);
+            intent.putExtra(EKOTROPE_PROJECT_ID, mEkotropeProjectId);
+            intent.putExtra(Ekotrope_CeilingsActivity.PLAN_ID, ceiling.plan_id);
+            intent.putExtra(Ekotrope_CeilingsActivity.CEILING_INDEX, ceiling.index);
+            holder.itemView.getContext().startActivity(intent);
         });
     }
     @Override
@@ -59,6 +66,12 @@ public class Ekotrope_CeilingsListAdapter extends ListAdapter<Ekotrope_Ceiling_T
     }
     public List<Ekotrope_Ceiling_Table> getCurrentList() {
         return currentList;
+    }
+    public void setInspectionId(int inspectionId) {
+        mInspectionId = inspectionId;
+    }
+    public void setEkotropeProjectId(String ekotropeProjectId) {
+        mEkotropeProjectId = ekotropeProjectId;
     }
     public void setCurrentList(List<Ekotrope_Ceiling_Table> list) {
         currentList = list;

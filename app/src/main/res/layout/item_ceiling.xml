@@ -11,7 +11,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/item_ceiling_card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:backgroundTint="#032196F3"
         android:paddingVertical="4dp"
         app:cardElevation="2dp">

@@ -12,8 +12,18 @@ import data.Repositories.DefectItemRepository;
 import data.Repositories.DefectItem_InspectionType_XRefRepository;
 import data.Repositories.Ekotrope_AboveGradeWallRepository;
 import data.Repositories.Ekotrope_CeilingRepository;
+import data.Repositories.Ekotrope_ClothesDryerRepository;
+import data.Repositories.Ekotrope_ClothesWasherRepository;
+import data.Repositories.Ekotrope_DishwasherRepository;
+import data.Repositories.Ekotrope_DistributionSystemRepository;
 import data.Repositories.Ekotrope_DoorRepository;
+import data.Repositories.Ekotrope_DuctRepository;
 import data.Repositories.Ekotrope_FramedFloorRepository;
+import data.Repositories.Ekotrope_LightingRepository;
+import data.Repositories.Ekotrope_MechanicalEquipmentRepository;
+import data.Repositories.Ekotrope_MechanicalVentilationRepository;
+import data.Repositories.Ekotrope_RangeOvenRepository;
+import data.Repositories.Ekotrope_RefrigeratorRepository;
 import data.Repositories.Ekotrope_RimJoistRepository;
 import data.Repositories.Ekotrope_SlabRepository;
 import data.Repositories.Ekotrope_WindowRepository;
@@ -25,8 +35,18 @@ import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Ekotrope_AboveGradeWall_Table;
 import data.Tables.Ekotrope_Ceiling_Table;
+import data.Tables.Ekotrope_ClothesDryer_Table;
+import data.Tables.Ekotrope_ClothesWasher_Table;
+import data.Tables.Ekotrope_Dishwasher_Table;
+import data.Tables.Ekotrope_DistributionSystem_Table;
 import data.Tables.Ekotrope_Door_Table;
+import data.Tables.Ekotrope_Duct_Table;
 import data.Tables.Ekotrope_FramedFloor_Table;
+import data.Tables.Ekotrope_Lighting_Table;
+import data.Tables.Ekotrope_MechanicalEquipment_Table;
+import data.Tables.Ekotrope_MechanicalVentilation_Table;
+import data.Tables.Ekotrope_RangeOven_Table;
+import data.Tables.Ekotrope_Refrigerator_Table;
 import data.Tables.Ekotrope_RimJoist_Table;
 import data.Tables.Ekotrope_Slab_Table;
 import data.Tables.Ekotrope_Window_Table;
@@ -50,6 +70,16 @@ public class RouteSheetViewModel extends AndroidViewModel {
     private Ekotrope_CeilingRepository mEkotropeCeilingRepository;
     private Ekotrope_SlabRepository mEkotropeSlabRepository;
     private Ekotrope_RimJoistRepository mEkotropeRimJoistRepository;
+    private Ekotrope_MechanicalEquipmentRepository mEkotropeMechanicalEquipmentRepository;
+    private Ekotrope_DistributionSystemRepository mEkotropeDistributionSystemRepository;
+    private Ekotrope_DuctRepository mEkotropeDuctRepository;
+    private Ekotrope_MechanicalVentilationRepository mEkotropeMechanicalVentilationRepository;
+    private Ekotrope_LightingRepository mEkotropeLightingRepository;
+    private Ekotrope_RefrigeratorRepository mEkotropeRefrigeratorRepository;
+    private Ekotrope_DishwasherRepository mEkotropeDishwasherRepository;
+    private Ekotrope_ClothesDryerRepository mEkotropeClothesDryerRepository;
+    private Ekotrope_ClothesWasherRepository mEkotropeClothesWasherRepository;
+    private Ekotrope_RangeOvenRepository mEkotropeRangeOvenRepository;
     private String reportUrl;
 
     public RouteSheetViewModel(@NonNull Application application) {
@@ -67,6 +97,16 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mEkotropeCeilingRepository = new Ekotrope_CeilingRepository(application);
         mEkotropeSlabRepository = new Ekotrope_SlabRepository(application);
         mEkotropeRimJoistRepository = new Ekotrope_RimJoistRepository(application);
+        mEkotropeMechanicalEquipmentRepository = new Ekotrope_MechanicalEquipmentRepository(application);
+        mEkotropeDistributionSystemRepository = new Ekotrope_DistributionSystemRepository(application);
+        mEkotropeDuctRepository = new Ekotrope_DuctRepository(application);
+        mEkotropeMechanicalVentilationRepository = new Ekotrope_MechanicalVentilationRepository(application);
+        mEkotropeLightingRepository = new Ekotrope_LightingRepository(application);
+        mEkotropeRefrigeratorRepository = new Ekotrope_RefrigeratorRepository(application);
+        mEkotropeDishwasherRepository = new Ekotrope_DishwasherRepository(application);
+        mEkotropeClothesDryerRepository = new Ekotrope_ClothesDryerRepository(application);
+        mEkotropeClothesWasherRepository = new Ekotrope_ClothesWasherRepository(application);
+        mEkotropeRangeOvenRepository = new Ekotrope_RangeOvenRepository(application);
         reportUrl = "";
     }
 
@@ -168,5 +208,45 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public void insertRimJoist(Ekotrope_RimJoist_Table rimJoist) {
         mEkotropeRimJoistRepository.insert(rimJoist);
+    }
+
+    public void insertMechanicalEquipment(Ekotrope_MechanicalEquipment_Table mechanicalEquipment) {
+        mEkotropeMechanicalEquipmentRepository.insert(mechanicalEquipment);
+    }
+
+    public void insertDistributionSystem(Ekotrope_DistributionSystem_Table distributionSystem) {
+        mEkotropeDistributionSystemRepository.insert(distributionSystem);
+    }
+
+    public void insertDuct(Ekotrope_Duct_Table duct) {
+        mEkotropeDuctRepository.insert(duct);
+    }
+
+    public void insertMechanicalVentilation(Ekotrope_MechanicalVentilation_Table mechanicalVentilation) {
+        mEkotropeMechanicalVentilationRepository.insert(mechanicalVentilation);
+    }
+
+    public void insertLighting(Ekotrope_Lighting_Table lighting) {
+        mEkotropeLightingRepository.insert(lighting);
+    }
+
+    public void insertRefrigerator(Ekotrope_Refrigerator_Table refrigerator) {
+        mEkotropeRefrigeratorRepository.insert(refrigerator);
+    }
+
+    public void insertDishwasher(Ekotrope_Dishwasher_Table dishwasher) {
+        mEkotropeDishwasherRepository.insert(dishwasher);
+    }
+
+    public void insertClothesDryer(Ekotrope_ClothesDryer_Table clothesDryer) {
+        mEkotropeClothesDryerRepository.insert(clothesDryer);
+    }
+
+    public void insertClothesWasher(Ekotrope_ClothesWasher_Table clothesWasher) {
+        mEkotropeClothesWasherRepository.insert(clothesWasher);
+    }
+
+    public void insertRangeOven(Ekotrope_RangeOven_Table rangeOven) {
+        mEkotropeRangeOvenRepository.insert(rangeOven);
     }
 }

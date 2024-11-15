@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView44"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/ThermalEnvelope"
+        android:textColor="@color/burgessBlue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider8"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/burgessBlue"
+        app:layout_constraintBottom_toBottomOf="@+id/textView44"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView44"
+        app:layout_constraintTop_toTopOf="@+id/textView44" />
+
+    <View
+        android:id="@+id/divider9"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_final_button_ceilings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView44" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_ceilings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/CeilingsRoof"
+        app:layout_constraintEnd_toStartOf="@+id/divider9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView44" />
+
+    <TextView
+        android:id="@+id/textView61"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/Mechanicals"
+        android:textColor="@color/burgessBlue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView44"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_final_button_ceilings" />
+
+    <View
+        android:id="@+id/divider10"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/burgessBlue"
+        app:layout_constraintBottom_toBottomOf="@+id/textView61"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView61"
+        app:layout_constraintTop_toTopOf="@+id/textView61" />
+
+    <View
+        android:id="@+id/divider11"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_final_button_mechanical_ventilation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView61" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_mechanical_equipment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/MechanicalEquipment"
+        app:layout_constraintEnd_toStartOf="@+id/divider11"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView61" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_distribution_systems"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/DistributionSystems"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_final_button_mechanical_equipment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/divider11"
+        app:layout_constraintTop_toTopOf="@+id/fragment_ekotrope_final_button_mechanical_equipment" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_mechanical_ventilation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/MechanicalVentilation"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_final_button_mechanical_equipment"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_final_button_mechanical_equipment"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_final_button_mechanical_equipment" />
+
+    <TextView
+        android:id="@+id/textView99"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/LightingAndAppliances"
+        android:textColor="@color/burgessBlue"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/textView61"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_final_button_mechanical_ventilation" />
+
+    <View
+        android:id="@+id/divider12"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        android:backgroundTint="@color/burgessBlue"
+        app:layout_constraintBottom_toBottomOf="@+id/textView99"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView99"
+        app:layout_constraintTop_toTopOf="@+id/textView99" />
+
+    <View
+        android:id="@+id/divider13"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_final_button_infiltration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView99" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_lighting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/Lighting"
+        app:layout_constraintEnd_toStartOf="@+id/divider13"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView99" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_refrigerator"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/Refrigerator"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_final_button_lighting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/divider13"
+        app:layout_constraintTop_toTopOf="@+id/fragment_ekotrope_final_button_lighting" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_dishwasher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/Dishwasher"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_final_button_lighting"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_final_button_lighting"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_final_button_lighting" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_clothes_dryer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/ClothesDryer"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_final_button_dishwasher"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_final_button_refrigerator"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_final_button_refrigerator"
+        app:layout_constraintTop_toTopOf="@+id/fragment_ekotrope_final_button_dishwasher" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_clothes_washer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/ClothesWasher"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_final_button_dishwasher"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_final_button_dishwasher"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_final_button_dishwasher" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_range_oven"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/RangeOven"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_ekotrope_final_button_clothes_washer"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_final_button_clothes_dryer"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_final_button_clothes_dryer"
+        app:layout_constraintTop_toTopOf="@+id/fragment_ekotrope_final_button_clothes_washer" />
+
+    <Button
+        android:id="@+id/fragment_ekotrope_final_button_infiltration"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded_orange"
+        android:text="@string/Infiltration"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ekotrope_final_button_clothes_washer"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ekotrope_final_button_clothes_washer"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ekotrope_final_button_clothes_washer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

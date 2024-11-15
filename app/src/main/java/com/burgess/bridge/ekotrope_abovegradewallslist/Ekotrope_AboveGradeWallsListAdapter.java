@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_abovegradewallslist;
 
+import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
+import static com.burgess.bridge.Constants.INSPECTION_ID;
+
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,8 @@ import data.Tables.Ekotrope_AboveGradeWall_Table;
 public class Ekotrope_AboveGradeWallsListAdapter extends ListAdapter<Ekotrope_AboveGradeWall_Table, Ekotrope_AboveGradeWallsListViewHolder> {
     public static final String TAG = "ABOVE_GRADE_WALLS_LIST";
 
+    private int mInspectionId;
+    private String mEkotropeProjectId;
     private List<Ekotrope_AboveGradeWall_Table> currentList;
 
     protected Ekotrope_AboveGradeWallsListAdapter(@NonNull DiffUtil.ItemCallback<Ekotrope_AboveGradeWall_Table> diffCallback) {
@@ -37,10 +42,6 @@ public class Ekotrope_AboveGradeWallsListAdapter extends ListAdapter<Ekotrope_Ab
     public void onBindViewHolder(@NonNull Ekotrope_AboveGradeWallsListViewHolder holder, int position) {
         Ekotrope_AboveGradeWall_Table aboveGradeWall = currentList.get(position);
 
-        // Get text fields
-        TextView textIndex = holder.getTextIndex();
-        TextView textName = holder.getTextName();
-
         // Set text fields
         holder.setTextIndex(Integer.toString(aboveGradeWall.index));
         holder.setTextName(aboveGradeWall.name);
@@ -48,6 +49,8 @@ public class Ekotrope_AboveGradeWallsListAdapter extends ListAdapter<Ekotrope_Ab
         // Set the click listener
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), Ekotrope_AboveGradeWallsActivity.class);
+            intent.putExtra(INSPECTION_ID, mInspectionId);
+            intent.putExtra(EKOTROPE_PROJECT_ID, mEkotropeProjectId);
             intent.putExtra(Ekotrope_AboveGradeWallsActivity.PLAN_ID, aboveGradeWall.plan_id);
             intent.putExtra(Ekotrope_AboveGradeWallsActivity.ABOVE_GRADE_WALLS_INDEX, aboveGradeWall.index);
             holder.itemView.getContext().startActivity(intent);
@@ -59,6 +62,12 @@ public class Ekotrope_AboveGradeWallsListAdapter extends ListAdapter<Ekotrope_Ab
         return currentList == null ? 0 : currentList.size();
     }
 
+    public void setInspectionId(int inspectionId) {
+        mInspectionId = inspectionId;
+    }
+    public void setEkotropeProjectId(String ekotropeProjectId) {
+        mEkotropeProjectId = ekotropeProjectId;
+    }
     public List<Ekotrope_AboveGradeWall_Table> getCurrentList() {
         return currentList;
     }

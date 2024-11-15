@@ -39,7 +39,7 @@ public interface Ekotrope_Slab_DAO {
             "perimeterInsulationDepth = :perimeterInsulationDepth, perimeterInsulationR = :perimeterInsulationR, " +
             "thermalBreak = :thermalBreak, isChanged = 1 " +
             "WHERE plan_id = :plan_id AND [index] = :index")
-    void update(String plan_id, int index, String name, String typeName, double underslabInsulationR,
-                boolean isFullyInsulated, double underslabInsulationWidth, double perimeterInsulationDepth,
-                double perimeterInsulationR, boolean thermalBreak);
+    void update(String plan_id, int index, String name, String typeName, Double underslabInsulationR,
+                boolean isFullyInsulated, Double underslabInsulationWidth, Double perimeterInsulationDepth,
+                Double perimeterInsulationR, boolean thermalBreak);
 }

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dishwasher_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_dishwasher.Ekotrope_DishwasherActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/dishwasher_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/Dishwasher"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView134"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/Available"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dishwasher_toolbar" />
+
+        <TextView
+            android:id="@+id/textView135"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/DefaultsType"
+            app:layout_constraintStart_toStartOf="@+id/textView134"
+            app:layout_constraintTop_toBottomOf="@+id/textView134" />
+
+        <TextView
+            android:id="@+id/textView136"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Size"
+            app:layout_constraintStart_toStartOf="@+id/textView135"
+            app:layout_constraintTop_toBottomOf="@+id/textView135" />
+
+        <TextView
+            android:id="@+id/textView137"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/EfficiencyType"
+            app:layout_constraintStart_toStartOf="@+id/textView136"
+            app:layout_constraintTop_toBottomOf="@+id/textView136" />
+
+        <TextView
+            android:id="@+id/textView138"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Efficiency"
+            app:layout_constraintStart_toStartOf="@+id/textView137"
+            app:layout_constraintTop_toBottomOf="@+id/textView137" />
+
+        <TextView
+            android:id="@+id/textView139"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/AnnualGasCost"
+            app:layout_constraintStart_toStartOf="@+id/textView138"
+            app:layout_constraintTop_toBottomOf="@+id/textView138" />
+
+        <TextView
+            android:id="@+id/textView140"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/GasRate"
+            app:layout_constraintStart_toStartOf="@+id/textView139"
+            app:layout_constraintTop_toBottomOf="@+id/textView139" />
+
+        <TextView
+            android:id="@+id/textView141"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/ElectricRate"
+            app:layout_constraintStart_toStartOf="@+id/textView140"
+            app:layout_constraintTop_toBottomOf="@+id/textView140" />
+
+        <Button
+            android:id="@+id/dishwasher_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView141" />
+
+        <CheckBox
+            android:id="@+id/dishwasher_checkbox_available"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView134"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView139"
+            app:layout_constraintTop_toTopOf="@+id/textView134" />
+
+        <Spinner
+            android:id="@+id/dishwasher_spinner_defaults_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView135"
+            app:layout_constraintEnd_toEndOf="@+id/dishwasher_checkbox_available"
+            app:layout_constraintStart_toStartOf="@+id/dishwasher_checkbox_available"
+            app:layout_constraintTop_toTopOf="@+id/textView135" />
+
+        <Spinner
+            android:id="@+id/dishwasher_spinner_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView136"
+            app:layout_constraintEnd_toEndOf="@+id/dishwasher_spinner_defaults_type"
+            app:layout_constraintStart_toStartOf="@+id/dishwasher_spinner_defaults_type"
+            app:layout_constraintTop_toTopOf="@+id/textView136" />
+
+        <Spinner
+            android:id="@+id/dishwasher_spinner_efficiency_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView137"
+            app:layout_constraintEnd_toEndOf="@+id/dishwasher_spinner_size"
+            app:layout_constraintStart_toStartOf="@+id/dishwasher_spinner_size"
+            app:layout_constraintTop_toTopOf="@+id/textView137" />
+
+        <EditText
+            android:id="@+id/dishwasher_text_efficiency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView138"
+            app:layout_constraintEnd_toEndOf="@+id/dishwasher_spinner_efficiency_type"
+            app:layout_constraintStart_toStartOf="@+id/dishwasher_spinner_efficiency_type"
+            app:layout_constraintTop_toTopOf="@+id/textView138" />
+
+        <EditText
+            android:id="@+id/dishwasher_text_annual_gas_cost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView139"
+            app:layout_constraintEnd_toEndOf="@+id/dishwasher_text_efficiency"
+            app:layout_constraintStart_toStartOf="@+id/dishwasher_text_efficiency"
+            app:layout_constraintTop_toTopOf="@+id/textView139" />
+
+        <EditText
+            android:id="@+id/dishwasher_text_gas_rate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView140"
+            app:layout_constraintEnd_toEndOf="@+id/dishwasher_text_annual_gas_cost"
+            app:layout_constraintStart_toStartOf="@+id/dishwasher_text_annual_gas_cost"
+            app:layout_constraintTop_toTopOf="@+id/textView140" />
+
+        <EditText
+            android:id="@+id/dishwasher_text_electric_rate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView141"
+            app:layout_constraintEnd_toEndOf="@+id/dishwasher_text_gas_rate"
+            app:layout_constraintStart_toStartOf="@+id/dishwasher_text_gas_rate"
+            app:layout_constraintTop_toTopOf="@+id/textView141" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

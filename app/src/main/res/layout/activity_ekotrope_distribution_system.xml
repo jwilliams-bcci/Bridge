@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/distribution_system_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_distributionsystem.Ekotrope_DistributionSystemActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/distribution_system_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/Component"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/distribution_system_checkbox_leakage_to_outside_tested"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView110"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView113"
+            app:layout_constraintTop_toTopOf="@+id/textView110" />
+
+        <TextView
+            android:id="@+id/textView110"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/LeakageToOutsideTested"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/distribution_system_toolbar" />
+
+        <TextView
+            android:id="@+id/textView111"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/LeakageToOutside"
+            app:layout_constraintStart_toStartOf="@+id/textView110"
+            app:layout_constraintTop_toBottomOf="@+id/textView110" />
+
+        <TextView
+            android:id="@+id/textView112"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/TotalLeakage"
+            app:layout_constraintStart_toStartOf="@+id/textView111"
+            app:layout_constraintTop_toBottomOf="@+id/textView111" />
+
+        <TextView
+            android:id="@+id/textView113"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/TotalDuctLeakageTestCondition"
+            app:layout_constraintStart_toStartOf="@+id/textView112"
+            app:layout_constraintTop_toBottomOf="@+id/textView112" />
+
+        <TextView
+            android:id="@+id/textView114"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/NumberOfReturns"
+            app:layout_constraintStart_toStartOf="@+id/textView113"
+            app:layout_constraintTop_toBottomOf="@+id/textView113" />
+
+        <TextView
+            android:id="@+id/textView115"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/SqFeetServed"
+            app:layout_constraintStart_toStartOf="@+id/textView114"
+            app:layout_constraintTop_toBottomOf="@+id/textView114" />
+
+        <TextView
+            android:id="@+id/textView116"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/Ducts"
+            app:layout_constraintStart_toStartOf="@+id/textView115"
+            app:layout_constraintTop_toBottomOf="@+id/textView115" />
+
+        <Button
+            android:id="@+id/distribution_system_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView116" />
+
+        <EditText
+            android:id="@+id/distribution_system_text_leakage_to_outside"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/NotFound"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView111"
+            app:layout_constraintEnd_toEndOf="@+id/distribution_system_checkbox_leakage_to_outside_tested"
+            app:layout_constraintStart_toStartOf="@+id/distribution_system_checkbox_leakage_to_outside_tested"
+            app:layout_constraintTop_toTopOf="@+id/textView111" />
+
+        <EditText
+            android:id="@+id/distribution_system_text_total_leakage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView112"
+            app:layout_constraintEnd_toEndOf="@+id/distribution_system_text_leakage_to_outside"
+            app:layout_constraintStart_toStartOf="@+id/distribution_system_text_leakage_to_outside"
+            app:layout_constraintTop_toTopOf="@+id/textView112" />
+
+        <Spinner
+            android:id="@+id/distribution_system_spinner_test_condition"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView113"
+            app:layout_constraintEnd_toEndOf="@+id/distribution_system_text_total_leakage"
+            app:layout_constraintStart_toStartOf="@+id/distribution_system_text_total_leakage"
+            app:layout_constraintTop_toTopOf="@+id/textView113" />
+
+        <EditText
+            android:id="@+id/distribution_system_text_number_of_returns"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView114"
+            app:layout_constraintEnd_toEndOf="@+id/distribution_system_spinner_test_condition"
+            app:layout_constraintStart_toStartOf="@+id/distribution_system_spinner_test_condition"
+            app:layout_constraintTop_toTopOf="@+id/textView114" />
+
+        <EditText
+            android:id="@+id/distribution_system_text_sq_feet_served"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/NotFound"
+            android:inputType="number|numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView115"
+            app:layout_constraintEnd_toEndOf="@+id/distribution_system_text_number_of_returns"
+            app:layout_constraintStart_toStartOf="@+id/distribution_system_text_number_of_returns"
+            app:layout_constraintTop_toTopOf="@+id/textView115" />
+
+        <Button
+            android:id="@+id/distribution_system_button_ducts_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_rounded_orange"
+            android:text="Ducts List"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="@+id/textView116"
+            app:layout_constraintEnd_toEndOf="@+id/distribution_system_text_sq_feet_served"
+            app:layout_constraintStart_toStartOf="@+id/distribution_system_text_sq_feet_served"
+            app:layout_constraintTop_toTopOf="@+id/textView116" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

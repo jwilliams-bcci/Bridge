@@ -11,17 +11,17 @@ public class Ekotrope_RimJoist_Table {
     public String name;
     public String typeName;
     public String betweenInteriorAnd;
-    public double surfaceArea;
-    public double uFactor;
-    public double rFactor;
+    public Double surfaceArea;
+    public Double uFactor;
+    public Double rFactor;
     public boolean isChanged;
 
     public Ekotrope_RimJoist_Table() {
     }
 
     public Ekotrope_RimJoist_Table(String plan_id, int index, String name, String typeName,
-                                    String betweenInteriorAnd, double surfaceArea, double uFactor,
-                                    double rFactor, boolean isChanged) {
+                                   String betweenInteriorAnd, Double surfaceArea, Double uFactor,
+                                   Double rFactor, boolean isChanged) {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;

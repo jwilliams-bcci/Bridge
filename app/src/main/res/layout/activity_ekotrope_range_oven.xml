@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/range_oven_constraint_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ekotrope_rangeoven.Ekotrope_RangeOvenActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/range_oven_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/toolbar_height"
+            android:background="@color/burgessOrange"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include2"
+            app:title="@string/RangeOven"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:titleTextColor="@color/colorWhite" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/fragment_inspections_remaining"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView153"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/FuelType"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/range_oven_toolbar" />
+
+        <TextView
+            android:id="@+id/textView151"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/InductionRange"
+            app:layout_constraintStart_toStartOf="@+id/textView153"
+            app:layout_constraintTop_toBottomOf="@+id/textView153" />
+
+        <TextView
+            android:id="@+id/textView152"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/ConvectionOven"
+            app:layout_constraintStart_toStartOf="@+id/textView151"
+            app:layout_constraintTop_toBottomOf="@+id/textView151" />
+
+        <Button
+            android:id="@+id/range_oven_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/button_rounded_blue"
+            android:text="@string/save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView152" />
+
+        <Spinner
+            android:id="@+id/range_oven_spinner_fuel_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView153"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView152"
+            app:layout_constraintTop_toTopOf="@+id/textView153" />
+
+        <CheckBox
+            android:id="@+id/range_oven_checkbox_induction_range"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView151"
+            app:layout_constraintEnd_toEndOf="@+id/range_oven_spinner_fuel_type"
+            app:layout_constraintStart_toStartOf="@+id/range_oven_spinner_fuel_type"
+            app:layout_constraintTop_toTopOf="@+id/textView151" />
+
+        <CheckBox
+            android:id="@+id/range_oven_checkbox_convection_oven"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/remove_yes"
+            app:layout_constraintBottom_toBottomOf="@+id/textView152"
+            app:layout_constraintEnd_toEndOf="@+id/range_oven_checkbox_induction_range"
+            app:layout_constraintStart_toStartOf="@+id/range_oven_checkbox_induction_range"
+            app:layout_constraintTop_toTopOf="@+id/textView152" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
