@@ -52,6 +52,10 @@ public class Ekotrope_MechanicalEquipmentActivity extends AppCompatActivity {
     private EditText mTextHotWaterLoad;
     private EditText mTextAHRIReferenceNumber;
     private Spinner mSpinnerAHRIReferenceFuelType;
+    private View mDividerLeft;
+    private View mDividerRight;
+    private TextView mLabelRefrigerantCharge;
+    private TextView mLabelTestConducted;
     private CheckBox mCheckBoxTestConducted;
     private TextView mLabelTestMethod;
     private TextView mLabelMeteringDevice;
@@ -140,6 +144,10 @@ public class Ekotrope_MechanicalEquipmentActivity extends AppCompatActivity {
         mTextHotWaterLoad = findViewById(R.id.mechanical_equipment_text_hot_water_load);
         mTextAHRIReferenceNumber = findViewById(R.id.mechanical_equipment_text_ahri_ref_number);
         mSpinnerAHRIReferenceFuelType = findViewById(R.id.mechanical_equipment_spinner_ahri_ref_fuel_type);
+        mDividerLeft = findViewById(R.id.mechanical_equipment_divider_left);
+        mDividerRight = findViewById(R.id.mechanical_equipment_divider_right);
+        mLabelRefrigerantCharge = findViewById(R.id.mechanical_equipment_label_refrigerant_charge);
+        mLabelTestConducted = findViewById(R.id.mechanical_equipment_label_test_conducted);
         mCheckBoxTestConducted = findViewById(R.id.mechanical_equipment_checkbox_test_conducted);
         mLabelTestMethod = findViewById(R.id.mechanical_equipment_label_test_method);
         mLabelMeteringDevice = findViewById(R.id.mechanical_equipment_label_metering_device);
@@ -277,7 +285,8 @@ public class Ekotrope_MechanicalEquipmentActivity extends AppCompatActivity {
             }
 
             Ekotrope_MechanicalEquipment_Table newMechanicalEquipment = new Ekotrope_MechanicalEquipment_Table(
-                    mPlanId, mMechanicalEquipmentIndex, mMechanicalEquipment.name, mMechanicalEquipment.model_number,
+                    mPlanId, mMechanicalEquipmentIndex, mMechanicalEquipment.name,
+                    mMechanicalEquipment.equipment_type, mMechanicalEquipment.model_number,
                     newLocation, newHeatingLoad, newCoolingLoad, newHotWaterLoad, newAHRIReferenceNumber,
                     newAHRIReferenceFuelType, newTestConducted, newTestMethod, newMeteringDevice,
                     newDifferenceDTD, newDifferenceCTOA, newWeightDeviation, true);
@@ -304,6 +313,14 @@ public class Ekotrope_MechanicalEquipmentActivity extends AppCompatActivity {
         ahriReferenceFuelTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerAHRIReferenceFuelType.setAdapter(ahriReferenceFuelTypeAdapter);
         mSpinnerAHRIReferenceFuelType.setSelection(ahriReferenceFuelTypeAdapter.getPosition(mMechanicalEquipment.ahri_reference_fuel_type));
+
+        if (mMechanicalEquipment.equipment_type.equals("AIR_CONDITIONER") || mMechanicalEquipment.equipment_type.equals("AIR_SOURCE_HEAT_PUMP")) {
+            mDividerLeft.setVisibility(View.GONE);
+            mDividerRight.setVisibility(View.GONE);
+            mLabelRefrigerantCharge.setVisibility(View.GONE);
+            mLabelTestConducted.setVisibility(View.GONE);
+            mCheckBoxTestConducted.setVisibility(View.GONE);
+        }
 
         if (mCheckBoxTestConducted.isChecked()) {
             setRefrigerantChangeVisibility(true);

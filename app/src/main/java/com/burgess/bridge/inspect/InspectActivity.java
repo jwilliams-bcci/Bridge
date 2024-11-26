@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
-import com.burgess.bridge.ekotropedata.EkotropeDataActivity;
+import com.burgess.bridge.ekotrope_data.Ekotrope_DataActivity;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
@@ -181,9 +181,13 @@ public class InspectActivity extends AppCompatActivity {
                     mInspectListAdapter.setCurrentList(defectItems));
         });
         mButtonViewEkotropeData.setOnClickListener(v -> {
-            Intent viewEkotropeDataIntent = new Intent(InspectActivity.this, EkotropeDataActivity.class);
-            viewEkotropeDataIntent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
-            startActivity(viewEkotropeDataIntent);
+            if (mInspection.ekotrope_project_id.isEmpty() || mInspection.ekotrope_plan_id.isEmpty()) {
+                Snackbar.make(mConstraintLayout, "Ekotrope data not available, refresh route sheet or contact support", Snackbar.LENGTH_LONG).show();
+            } else {
+                Intent viewEkotropeDataIntent = new Intent(InspectActivity.this, Ekotrope_DataActivity.class);
+                viewEkotropeDataIntent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
+                startActivity(viewEkotropeDataIntent);
+            }
         });
     }
     private void initializeDisplayContent() {

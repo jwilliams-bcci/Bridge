@@ -45,14 +45,16 @@ public class Ekotrope_Dishwasher_Table {
     public JSONObject toJsonObj() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("dishwasherAvailable", dishwasher_available);
-            jsonObject.put("dishwasherDefaultsType", dishwasher_defaults_type);
-            jsonObject.put("dishwasherSize", dishwasher_size);
-            jsonObject.put("dishwasherEfficiencyType", dishwasher_efficiency_type);
-            jsonObject.put("dishwasherEfficiency", dishwasher_efficiency);
-            jsonObject.put("dishwasherAnnualGasCost", dishwasher_annual_gas_cost);
-            jsonObject.put("dishwasherGasRate", dishwasher_gas_rate);
-            jsonObject.put("dishwasherElectricRate", dishwasher_electric_rate);
+            if (is_changed) {
+                jsonObject.put("dishwasherAvailable", dishwasher_available);
+                jsonObject.put("dishwasherDefaultsType", dishwasher_defaults_type);
+                jsonObject.put("dishwasherSize", dishwasher_size);
+                jsonObject.put("dishwasherEfficiencyType", dishwasher_efficiency_type);
+                jsonObject.put("dishwasherEfficiency", dishwasher_efficiency);
+                jsonObject.put("dishwasherAnnualGasCost", dishwasher_annual_gas_cost);
+                jsonObject.put("dishwasherGasRate", dishwasher_gas_rate);
+                jsonObject.put("dishwasherElectricRate", dishwasher_electric_rate);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

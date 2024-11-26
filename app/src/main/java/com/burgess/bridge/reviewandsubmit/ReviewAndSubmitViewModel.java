@@ -16,10 +16,12 @@ import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Repositories.MultifamilyDetailsRepository;
+import data.Repositories.SubmitRequestRepository;
 import data.Tables.Attachment_Table;
 import data.Tables.Builder_Table;
 import data.Tables.DefectItem_Table;
 import data.Tables.MultifamilyDetails_Table;
+import data.Tables.SubmitRequest_Table;
 import data.Views.ReviewAndSubmit_View;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
@@ -32,6 +34,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
     private MultifamilyDetailsRepository mMultifamilyDetailsRepository;
     private InspectionHistoryRepository mInspectionHistoryRepository;
     private AttachmentRepository mAttachmentRepository;
+    private final SubmitRequestRepository submitRequestRepository;
 
     public ReviewAndSubmitViewModel(@NonNull Application application) {
         super(application);
@@ -42,6 +45,7 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         mMultifamilyDetailsRepository = new MultifamilyDetailsRepository(application);
         mInspectionHistoryRepository = new InspectionHistoryRepository(application);
         mAttachmentRepository = new AttachmentRepository(application);
+        submitRequestRepository = new SubmitRequestRepository(application);
     }
 
     public InspectionDefect_Table getInspectionDefect(int inspectionDefectId) {
@@ -154,5 +158,9 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
 
     public int multifamilyDefectExists(int firstInspectionDetailId) {
         return mInspectionDefectRepository.multifamilyDefectExists(firstInspectionDetailId);
+    }
+
+    public void insertSubmitRequest(SubmitRequest_Table submitRequest) {
+        submitRequestRepository.insert(submitRequest);
     }
 }

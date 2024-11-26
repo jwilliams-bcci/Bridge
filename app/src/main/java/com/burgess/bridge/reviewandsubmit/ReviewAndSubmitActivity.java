@@ -37,7 +37,7 @@ import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.toolbox.StringRequest;
-import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.Constants;
 import com.burgess.bridge.R;
@@ -507,7 +507,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
                 InspectionDefect_Table finalDefect = inspectionDefect;
                 if (!inspectionDefect.is_uploaded) {
-                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(defectJSON, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, new ServerCallback() {
+                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(defectJSON, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, mReviewAndSubmitViewModel, new ServerCallback() {
                         @Override
                         public void onSuccess(String message) {
                             mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
@@ -624,7 +624,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
     private void showEditResolutionDialog() {
         mChangeResolutionFragment = ChangeResolutionFragment.newInstance();
-        ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type, mInspection.builder_id, mInspection.inspection_type_id);
+        ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type, mInspection.builder_id, mInspection.inspection_type_id, mInspection.reinspect);
         mChangeResolutionFragment.setResolutionList(resolutionHelper.buildList());
         mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
     }

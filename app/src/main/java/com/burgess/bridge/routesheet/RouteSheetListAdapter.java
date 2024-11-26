@@ -11,23 +11,21 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.inspectiondetails.InspectionDetailsActivity;
 import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
-import data.Repositories.InspectionRepository;
 import data.Views.RouteSheet_View;
 
 public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteSheetViewHolder> implements Filterable, ItemTouchHelperAdapter {
@@ -35,6 +33,8 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
 
     private List<RouteSheet_View> currentList;
     private List<RouteSheet_View> dataSet = new ArrayList<>();
+
+    private boolean showMenu = false;
 
     protected RouteSheetListAdapter(@NonNull InspectionDiff diffCallback) {
         super(diffCallback);
@@ -59,46 +59,77 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
             } else {
                 addressDisplay = i.address;
             }
-            holder.getTextInspectionAddress().setText(addressDisplay);
-            holder.getTextInspectionCommunity().setText(i.community);
-            holder.getTextInspectionType().setText(i.inspection_type);
-            holder.getCardView().setBackgroundColor(Color.WHITE);
-            holder.getTextInspectionUploaded().setVisibility(View.GONE);
-            holder.getImageViewReupload().setVisibility(View.GONE);
-            holder.getTextCallbackNotes().setVisibility(View.GONE);
-            holder.getImageViewNoteAttached().setVisibility(View.GONE);
+            holder.textAddress.setText(addressDisplay);
+            holder.textCommunity.setText(i.community);
+            holder.textInspectionType.setText(i.inspection_type);
+            holder.cardView.setBackgroundColor(Color.WHITE);
+            holder.textUploaded.setVisibility(View.GONE);
+            holder.imageViewReupload.setVisibility(View.GONE);
+            holder.imageViewNoteAttached.setVisibility(View.GONE);
+            holder.textCallbackNotes.setVisibility(View.GONE);
+            holder.constraintLayoutMenu.setVisibility(View.GONE);
+            holder.verticalDivider.setVisibility(View.GONE);
+            holder.buttonReupload.setVisibility(View.GONE);
+            holder.buttonResetInspection.setVisibility(View.VISIBLE);
+            holder.buttonViewQueue.setVisibility(View.GONE);
 
             // If the inspection is complete, set the color to yellow and show other view components
             if (i.is_complete) {
-                holder.getCardView().setBackgroundColor(Color.YELLOW);
-                holder.getTextInspectionUploaded().setVisibility(View.VISIBLE);
-                holder.getTextInspectionUploaded().setText(String.format(Locale.US, "Uploaded %d of %d items.", i.num_uploaded, i.num_total));
-                holder.getImageViewReupload().setVisibility(View.VISIBLE);
+                holder.cardView.setBackgroundColor(Color.YELLOW);
+                holder.textUploaded.setVisibility(View.VISIBLE);
+                holder.textUploaded.setText(String.format(Locale.US, "Uploaded %d of %d items.", i.num_uploaded, i.num_total));
+                holder.buttonReupload.setVisibility(View.VISIBLE);
+                holder.verticalDivider.setVisibility(View.VISIBLE);
+                holder.buttonViewQueue.setVisibility(View.VISIBLE);
             }
 
-            // If the inspection upload failed, set the color to red and show reupload icon
+            // If the inspection upload failed, set the color to red and show reupload icon and button
             if (i.is_failed) {
-                holder.getCardView().setBackgroundColor(Color.RED);
-                holder.getImageViewReupload().setVisibility(View.VISIBLE);
+                holder.cardView.setBackgroundColor(Color.RED);
+                holder.buttonReupload.setVisibility(View.VISIBLE);
+                holder.buttonReupload.setEnabled(true);
+                holder.verticalDivider.setVisibility(View.VISIBLE);
             }
 
-            // If the inspection is complete, set the color to green
+            // If the inspection is uploaded, set the color to green, disable buttons
             if (i.is_uploaded) {
-                holder.getCardView().setBackgroundColor(Color.GREEN);
-                holder.getImageViewReupload().setVisibility(View.GONE);
+                holder.cardView.setBackgroundColor(Color.GREEN);
+                holder.constraintLayoutMenu.setVisibility(View.GONE);
+                holder.imageViewReupload.setVisibility(View.GONE);
             }
 
             // If there's a note, show the note icon
             if (!i.notes.equals("null")) {
-                holder.getImageViewNoteAttached().setVisibility(View.VISIBLE);
-                holder.getTextCallbackNotes().setVisibility(View.VISIBLE);
-                holder.getTextCallbackNotes().setText(i.notes);
-                holder.getTextCallbackNotes().setSelected(true);
+                holder.imageViewNoteAttached.setVisibility(View.VISIBLE);
+                holder.textCallbackNotes.setVisibility(View.VISIBLE);
+                holder.textCallbackNotes.setText(i.notes);
+                holder.textCallbackNotes.setSelected(true);
             }
 
             // Set click listener on the view, depending on whether the inspection is complete or not...
             holder.itemView.setOnClickListener(v -> {
                 if (i.is_complete) {
+                    Snackbar.make(v, "Inspection already completed", Snackbar.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
+                    intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, i.id);
+                    v.getContext().startActivity(intent);
+                }
+            });
+
+            holder.imageViewShowMenu.setOnClickListener(v -> {
+                showMenu = !showMenu;
+                if (showMenu) {
+                    holder.constraintLayoutMenu.setVisibility(View.VISIBLE);
+                    holder.imageViewShowMenu.setBackgroundResource(android.R.drawable.arrow_up_float);
+                } else {
+                    holder.constraintLayoutMenu.setVisibility(View.GONE);
+                    holder.imageViewShowMenu.setBackgroundResource(android.R.drawable.arrow_down_float);
+                }
+            });
+
+            holder.buttonReupload.setOnClickListener(v -> {
+                if (i.is_failed) {
                     BridgeLogger.log('I', TAG, "Trying reupload for ID: " + i.id);
                     BridgeAPIQueue.getInstance().getRequestQueue().cancelAll(i.id);
                     BridgeLogger.log('I', TAG, "Cancelled requests for ID: " + i.id);
@@ -106,9 +137,7 @@ public class RouteSheetListAdapter extends ListAdapter<RouteSheet_View, RouteShe
                     intent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, i.id);
                     v.getContext().startActivity(intent);
                 } else {
-                    Intent intent = new Intent(v.getContext(), InspectionDetailsActivity.class);
-                    intent.putExtra(InspectionDetailsActivity.INSPECTION_ID, i.id);
-                    v.getContext().startActivity(intent);
+                    Snackbar.make(v, "Upload still in progress", Snackbar.LENGTH_LONG).show();
                 }
             });
         } catch (Exception e) {

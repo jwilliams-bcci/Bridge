@@ -35,10 +35,12 @@ public class Ekotrope_ClothesDryer_Table {
     public JSONObject toJsonObj() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("available", available);
-            jsonObject.put("defaultsType", defaults_type);
-            jsonObject.put("combinedEnergyFactor", combined_energy_factor);
-            jsonObject.put("utilizationFactor", utilization_factor);
+            if (is_changed) {
+                jsonObject.put("available", available);
+                jsonObject.put("defaultsType", defaults_type);
+                jsonObject.put("combinedEnergyFactor", combined_energy_factor);
+                jsonObject.put("utilizationFactor", utilization_factor);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

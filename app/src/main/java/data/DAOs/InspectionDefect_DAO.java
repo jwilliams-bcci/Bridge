@@ -44,25 +44,25 @@ public interface InspectionDefect_DAO {
     @Query("SELECT * FROM inspection_defect_table WHERE id = :inspection_defect_id")
     InspectionDefect_Table getInspectionDefect(int inspection_defect_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_description collate nocase asc")
+    @Query("SELECT * FROM ReviewAndSubmit_View WHERE inspection_id = :inspection_id ORDER BY item_description collate nocase asc")
     LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortAsc(int inspection_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_description collate nocase desc")
+    @Query("SELECT * FROM ReviewAndSubmit_View WHERE inspection_id = :inspection_id ORDER BY item_description collate nocase desc")
     LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDescriptionSortDesc(int inspection_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_number asc")
+    @Query("SELECT * FROM ReviewAndSubmit_View WHERE inspection_id = :inspection_id ORDER BY item_number asc")
     LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortAsc(int inspection_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY item_number desc")
+    @Query("SELECT * FROM ReviewAndSubmit_View WHERE inspection_id = :inspection_id ORDER BY item_number desc")
     LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewItemNumberSortDesc(int inspection_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY inspection_defect_id asc")
+    @Query("SELECT * FROM ReviewAndSubmit_View WHERE inspection_id = :inspection_id ORDER BY inspection_defect_id asc")
     LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDefectIDSortAsc(int inspection_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id ORDER BY inspection_defect_id desc")
+    @Query("SELECT * FROM ReviewAndSubmit_View WHERE inspection_id = :inspection_id ORDER BY inspection_defect_id desc")
     LiveData<List<ReviewAndSubmit_View>> getInspectionDefectsForReviewDefectIDSortDesc(int inspection_id);
 
-    @Query("SELECT * FROM reviewandsubmit_view WHERE inspection_id = :inspection_id")
+    @Query("SELECT * FROM ReviewAndSubmit_View WHERE inspection_id = :inspection_id")
     List<ReviewAndSubmit_View> getInspectionDefectsForReviewSync(int inspection_id);
 
     @Query("SELECT * FROM inspection_defect_table WHERE inspection_id = :inspection_id AND reinspection_required = 1")

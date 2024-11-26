@@ -50,4 +50,7 @@ public final class Constants {
 
     public static final String MECHANICAL_VENTILATION_INDEX = "com.burgess.bridge.MECHANICAL_VENTILATION_INDEX";
     public static final int MECHANICAL_VENTILATION_INDEX_NOT_FOUND = -1;
+
+    public static final String EKOTROPE_INSPECTION_TYPE_FINAL = "Final";
+    public static final String EKOTROPE_INSPECTION_TYPE_ROUGH = "Rough";
 }

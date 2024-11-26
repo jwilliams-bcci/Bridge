@@ -38,8 +38,8 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
     private ConstraintLayout mConstraintLayout;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private Spinner mSpinnerUnit;
-    private EditText mTextValue;
+    private EditText mTextCfm50;
+    private EditText mTextAch50;
     private Spinner mSpinnerMeasurementType;
     private Button mButtonSave;
 
@@ -68,25 +68,10 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
 
         // Get intent data...
         Intent intent = getIntent();
-        mInspectionId = getIntent().getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
-        mProjectId = getIntent().getStringExtra(EKOTROPE_PROJECT_ID);
-        mPlanId = getIntent().getStringExtra(EKOTROPE_PLAN_ID);
+        mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
+        mProjectId = intent.getStringExtra(EKOTROPE_PROJECT_ID);
+        mPlanId = intent.getStringExtra(EKOTROPE_PLAN_ID);
         mInfiltration = mEkotropeInfiltrationViewModel.getInfiltration(mPlanId);
-        if (mInfiltration == null) {
-            mInfiltration = new Ekotrope_Infiltration_Table(mPlanId, "CFM_50", 0.0, "Untested", false);
-            addNew = true;
-        }
-
-        // Set spinner lists...
-        mUnits = new ArrayList<>();
-        mUnits.add("CFM_50");
-        mUnits.add("ACH_50");
-        mUnits.add("ACH_4");
-        mUnits.add("ACH_NATURAL");
-        mUnits.add("SPECIFIC_LEAKAGE_AREA");
-        mUnits.add("EFFECTIVE_LEAKAGE_AREA");
-        mUnits.add("ELA_PER_100_SF_SHELL");
-        mUnits.add("CFM50_PER_SF_SHELL");
 
         mMeasurementTypes = new ArrayList<>();
         mMeasurementTypes.add("Untested");
@@ -103,8 +88,8 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
 
     private void initializeViews() {
         mConstraintLayout = findViewById(R.id.infiltration_constraint_layout);
-        mSpinnerUnit = findViewById(R.id.infiltration_spinner_unit);
-        mTextValue = findViewById(R.id.infiltration_text_value);
+        mTextCfm50 = findViewById(R.id.infiltration_text_cfm_50);
+        mTextAch50 = findViewById(R.id.infiltration_text_ach_50);
         mSpinnerMeasurementType = findViewById(R.id.infiltration_spinner_measurement_type);
         mButtonSave = findViewById(R.id.infiltration_button_save);
     }
@@ -115,24 +100,25 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
                 Snackbar.make(mConstraintLayout, "Please fix errors.", Snackbar.LENGTH_SHORT).show();
                 return;
             }
-            String newUnit = mSpinnerUnit.getSelectedItem().toString();
-            Double newValue = Double.parseDouble(mTextValue.getText().toString());
+            Double newCfm50 = Double.parseDouble(mTextCfm50.getText().toString());
+            Double newAch50 = Double.parseDouble(mTextAch50.getText().toString());
             String newMeasurementType = mSpinnerMeasurementType.getSelectedItem().toString();
 
-            mSpinnerUnit.clearFocus();
-            mTextValue.clearFocus();
+            mTextCfm50.clearFocus();
+            mTextAch50.clearFocus();
             mSpinnerMeasurementType.clearFocus();
 
-            if ((boolean)mSpinnerUnit.getTag()) {
+            if ((boolean)mTextCfm50.getTag()) {
                 Ekotrope_ChangeLog_Table changeLog = new Ekotrope_ChangeLog_Table(mInspectionId,
-                        mProjectId, mPlanId, "Infiltration", "N/A", "Unit",
-                        mInfiltration.infiltration_unit, newUnit);
+                        mProjectId, mPlanId, "Infiltration", "N/A",
+                        "CFM 50", mInfiltration.cfm_50.toString(),
+                        newCfm50.toString());
                 mEkotropeInfiltrationViewModel.insertChangeLog(changeLog);
             }
-            if ((boolean)mTextValue.getTag()) {
+            if ((boolean) mTextAch50.getTag()) {
                 Ekotrope_ChangeLog_Table changeLog = new Ekotrope_ChangeLog_Table(mInspectionId,
-                        mProjectId, mPlanId, "Infiltration", "N/A", "Value",
-                        Double.toString(mInfiltration.infiltration_value), Double.toString(newValue));
+                        mProjectId, mPlanId, "Infiltration", "N/A",
+                        "ACH 50", mInfiltration.ach_50.toString(), newAch50.toString());
                 mEkotropeInfiltrationViewModel.insertChangeLog(changeLog);
             }
             if ((boolean)mSpinnerMeasurementType.getTag()) {
@@ -143,7 +129,7 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
             }
 
             Ekotrope_Infiltration_Table infiltration = new Ekotrope_Infiltration_Table(mPlanId,
-                    newUnit, newValue, newMeasurementType, true);
+                    newCfm50, newAch50, newMeasurementType, true);
             if (addNew) {
                 mEkotropeInfiltrationViewModel.insert(infiltration);
             } else {
@@ -154,12 +140,8 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
-        mTextValue.setText(Double.toString(mInfiltration.infiltration_value));
-
-        ArrayAdapter<String> unitAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mUnits);
-        unitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerUnit.setAdapter(unitAdapter);
-        mSpinnerUnit.setSelection(mUnits.indexOf(mInfiltration.infiltration_unit));
+        mTextCfm50.setText(String.format(mInfiltration.cfm_50.toString()));
+        mTextAch50.setText(String.format(mInfiltration.ach_50.toString()));
 
         ArrayAdapter<String> measurementTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mMeasurementTypes);
         measurementTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -168,7 +150,7 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
     }
 
     private void initializeTextValidators() {
-        mTextValue.addTextChangedListener(new TextWatcher() {
+        mTextAch50.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
@@ -180,13 +162,13 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
                 try {
                     Double value = Double.parseDouble(editable.toString());
                     if (value < 0) {
-                        mTextValue.setError("Must be greater than 0");
+                        mTextAch50.setError("Must be greater than 0");
                         valid = false;
                     } else {
                         valid = true;
                     }
                 } catch (NumberFormatException e) {
-                    mTextValue.setError("Must be a number");
+                    mTextAch50.setError("Must be a number");
                     valid = false;
                 }
             }
@@ -194,8 +176,8 @@ public class Ekotrope_InfiltrationActivity extends AppCompatActivity {
     }
 
     private void initializeChangeTracking() {
-        BridgeHelper.setChangeTracker(mSpinnerUnit, mInfiltration.infiltration_unit);
-        BridgeHelper.setChangeTracker(mTextValue, Double.toString(mInfiltration.infiltration_value));
+        BridgeHelper.setChangeTracker(mTextCfm50, Double.toString(mInfiltration.cfm_50));
+        BridgeHelper.setChangeTracker(mTextAch50, Double.toString(mInfiltration.ach_50));
         BridgeHelper.setChangeTracker(mSpinnerMeasurementType, mInfiltration.measurement_type);
     }
 }

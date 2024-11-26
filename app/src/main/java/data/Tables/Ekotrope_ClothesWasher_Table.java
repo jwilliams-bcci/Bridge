@@ -39,11 +39,13 @@ public class Ekotrope_ClothesWasher_Table {
     public JSONObject toJsonObj() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("available", available);
-            jsonObject.put("defaultsType", defaults_type);
-            jsonObject.put("loadType", load_type);
-            jsonObject.put("labeledEnergyRating", labeled_energy_rating);
-            jsonObject.put("integratedModifiedEnergyFactor", integrated_modified_energy_factor);
+            if (is_changed) {
+                jsonObject.put("available", available);
+                jsonObject.put("defaultsType", defaults_type);
+                jsonObject.put("loadType", load_type);
+                jsonObject.put("labeledEnergyRating", labeled_energy_rating);
+                jsonObject.put("integratedModifiedEnergyFactor", integrated_modified_energy_factor);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

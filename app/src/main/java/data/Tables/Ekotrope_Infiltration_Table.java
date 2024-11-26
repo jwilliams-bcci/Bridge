@@ -9,8 +9,8 @@ import org.json.JSONObject;
 public class Ekotrope_Infiltration_Table {
     @NonNull
     public String plan_id;
-    public String infiltration_unit;
-    public Double infiltration_value;
+    public Double cfm_50;
+    public Double ach_50;
     public String measurement_type;
     public boolean is_changed;
 
@@ -19,12 +19,12 @@ public class Ekotrope_Infiltration_Table {
         is_changed = false;
     }
 
-    public Ekotrope_Infiltration_Table(@NonNull String plan_id, String infiltration_unit,
-                                       Double infiltration_value, String measurement_type,
+    public Ekotrope_Infiltration_Table(@NonNull String plan_id, Double cfm_50,
+                                       Double ach_50, String measurement_type,
                                        boolean isChanged) {
         this.plan_id = plan_id;
-        this.infiltration_unit = infiltration_unit;
-        this.infiltration_value = infiltration_value;
+        this.cfm_50 = cfm_50;
+        this.ach_50 = ach_50;
         this.measurement_type = measurement_type;
         this.is_changed = isChanged;
     }
@@ -32,9 +32,11 @@ public class Ekotrope_Infiltration_Table {
     public JSONObject toJsonObj() {
         JSONObject jsonObj = new JSONObject();
         try {
-            jsonObj.put("infiltrationUnit", infiltration_unit);
-            jsonObj.put("infiltrationValue", infiltration_value);
-            jsonObj.put("infiltrationMeasurementType", measurement_type);
+            if (is_changed) {
+                jsonObj.put("infiltrationUnit", "CFM_50");
+                jsonObj.put("infiltrationValue", cfm_50);
+                jsonObj.put("infiltrationMeasurementType", measurement_type);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -19,7 +19,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.google.android.material.snackbar.Snackbar;

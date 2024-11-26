@@ -59,8 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/HeatingLoad"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView102"
-            app:layout_constraintTop_toBottomOf="@+id/textView102" />
+            app:layout_constraintTop_toBottomOf="@+id/textView102"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/textView104"
@@ -68,8 +70,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/CoolingLoad"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView103"
-            app:layout_constraintTop_toBottomOf="@+id/textView103" />
+            app:layout_constraintTop_toBottomOf="@+id/textView103"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/textView105"
@@ -77,8 +81,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/PercentHotWaterLoad"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView104"
-            app:layout_constraintTop_toBottomOf="@+id/textView104" />
+            app:layout_constraintTop_toBottomOf="@+id/textView104"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/textView106"
@@ -99,16 +105,16 @@
             app:layout_constraintTop_toBottomOf="@+id/textView106" />
 
         <TextView
-            android:id="@+id/textView108"
+            android:id="@+id/mechanical_equipment_label_test_conducted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/TestConducted"
             app:layout_constraintStart_toStartOf="@+id/textView107"
-            app:layout_constraintTop_toBottomOf="@+id/textView109" />
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_label_refrigerant_charge" />
 
         <TextView
-            android:id="@+id/textView109"
+            android:id="@+id/mechanical_equipment_label_refrigerant_charge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
@@ -121,26 +127,26 @@
             app:layout_constraintTop_toBottomOf="@+id/textView107" />
 
         <View
-            android:id="@+id/divider14"
+            android:id="@+id/mechanical_equipment_divider_left"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginEnd="8dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="@+id/textView109"
-            app:layout_constraintEnd_toStartOf="@+id/textView109"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_refrigerant_charge"
+            app:layout_constraintEnd_toStartOf="@+id/mechanical_equipment_label_refrigerant_charge"
             app:layout_constraintStart_toStartOf="@+id/textView107"
-            app:layout_constraintTop_toTopOf="@+id/textView109" />
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_refrigerant_charge" />
 
         <View
-            android:id="@+id/divider15"
+            android:id="@+id/mechanical_equipment_divider_right"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="@+id/textView109"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_refrigerant_charge"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView109"
-            app:layout_constraintTop_toTopOf="@+id/textView109" />
+            app:layout_constraintStart_toEndOf="@+id/mechanical_equipment_label_refrigerant_charge"
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_refrigerant_charge" />
 
         <TextView
             android:id="@+id/mechanical_equipment_label_test_method"
@@ -149,8 +155,8 @@
             android:layout_marginTop="36dp"
             android:text="@string/TestMethod"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="@+id/textView108"
-            app:layout_constraintTop_toBottomOf="@+id/textView108" />
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_label_test_conducted"
+            app:layout_constraintTop_toBottomOf="@+id/mechanical_equipment_label_test_conducted" />
 
         <TextView
             android:id="@+id/mechanical_equipment_label_metering_device"
@@ -237,10 +243,12 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView103"
             app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_spinner_location"
             app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_spinner_location"
-            app:layout_constraintTop_toTopOf="@+id/textView103" />
+            app:layout_constraintTop_toTopOf="@+id/textView103"
+            tools:visibility="gone" />
 
         <EditText
             android:id="@+id/mechanical_equipment_text_cooling_load"
@@ -250,10 +258,12 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView104"
             app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_heating_load"
             app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_heating_load"
-            app:layout_constraintTop_toTopOf="@+id/textView104" />
+            app:layout_constraintTop_toTopOf="@+id/textView104"
+            tools:visibility="gone" />
 
         <EditText
             android:id="@+id/mechanical_equipment_text_hot_water_load"
@@ -263,10 +273,12 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView105"
             app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_cooling_load"
             app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_cooling_load"
-            app:layout_constraintTop_toTopOf="@+id/textView105" />
+            app:layout_constraintTop_toTopOf="@+id/textView105"
+            tools:visibility="gone" />
 
         <EditText
             android:id="@+id/mechanical_equipment_text_ahri_ref_number"
@@ -277,8 +289,8 @@
             android:inputType="text"
             android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView106"
-            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_text_hot_water_load"
-            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_text_hot_water_load"
+            app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_spinner_location"
+            app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_spinner_location"
             app:layout_constraintTop_toTopOf="@+id/textView106" />
 
         <Spinner
@@ -297,10 +309,10 @@
             android:layout_height="wrap_content"
             android:minHeight="48dp"
             android:text="@string/remove_yes"
-            app:layout_constraintBottom_toBottomOf="@+id/textView108"
+            app:layout_constraintBottom_toBottomOf="@+id/mechanical_equipment_label_test_conducted"
             app:layout_constraintEnd_toEndOf="@+id/mechanical_equipment_spinner_ahri_ref_fuel_type"
             app:layout_constraintStart_toStartOf="@+id/mechanical_equipment_spinner_ahri_ref_fuel_type"
-            app:layout_constraintTop_toTopOf="@+id/textView108" />
+            app:layout_constraintTop_toTopOf="@+id/mechanical_equipment_label_test_conducted" />
 
         <Spinner
             android:id="@+id/mechanical_equipment_spinner_test_method"

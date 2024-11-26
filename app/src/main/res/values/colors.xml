@@ -9,5 +9,6 @@
     <color name="colorGray">#797272</color>
     <color name="colorLockScreen">#B0000000</color>
     <color name="colorLightRed">#FF0000</color>
+    <color name="colorDarkRed">#800000</color>
     <color name="colorGreen">#00FF00</color>
 </resources>

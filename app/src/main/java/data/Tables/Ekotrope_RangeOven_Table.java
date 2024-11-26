@@ -34,9 +34,11 @@ public class Ekotrope_RangeOven_Table {
     public JSONObject toJsonObj() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("fuelType", fuel_type);
-            jsonObject.put("isInductionRange", is_induction_range);
-            jsonObject.put("isConvectionOven", is_convection_oven);
+            if (is_changed) {
+                jsonObject.put("fuelType", fuel_type);
+                jsonObject.put("isInductionRange", is_induction_range);
+                jsonObject.put("isConvectionOven", is_convection_oven);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

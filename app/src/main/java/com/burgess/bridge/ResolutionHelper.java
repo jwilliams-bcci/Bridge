@@ -12,14 +12,16 @@ public class ResolutionHelper {
     private String mInspectionType;
     private int mBuilderId;
     private int mInspectionTypeId;
+    private boolean mIsReinspect;
 
-    public ResolutionHelper(int divisionId, int inspectionClass, String inspectionType, int builderId, int inspectionTypeId) {
+    public ResolutionHelper(int divisionId, int inspectionClass, String inspectionType, int builderId, int inspectionTypeId, boolean isReinspect) {
         resolutionList = new ArrayList<>();
         mDivisionId = divisionId;
         mInspectionClass = inspectionClass;
         mInspectionType = inspectionType;
         mBuilderId = builderId;
         mInspectionTypeId = inspectionTypeId;
+        mIsReinspect = isReinspect;
     }
 
     public List<Resolution> buildList() {
@@ -34,7 +36,18 @@ public class ResolutionHelper {
             resolutionList.add(new Resolution(11, "Passed"));
         }
         resolutionList.add(new Resolution(3, "Not Ready"));
-        resolutionList.add(new Resolution(32, "Correct & Proceed"));
+        if (mDivisionId == 5) {
+            if (mBuilderId == 2997) {
+                if (mInspectionType.contains("Pre-Drywall")) {
+                    resolutionList.add(new Resolution(32, "Correct & Proceed"));
+                }
+                else if (mInspectionType.contains("Final") && mIsReinspect) {
+                    resolutionList.add(new Resolution(32, "Correct & Proceed"));
+                }
+            }
+        } else {
+            resolutionList.add(new Resolution(32, "Correct & Proceed"));
+        }
         if (mInspectionClass == 7) {
             resolutionList.add(new Resolution(24, "Builder to Verify"));
             if (mDivisionId == 5 || mDivisionId == 17) {

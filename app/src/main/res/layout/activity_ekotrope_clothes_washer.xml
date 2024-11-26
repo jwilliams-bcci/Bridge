@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/DefaultsType"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView146"
             app:layout_constraintTop_toBottomOf="@+id/textView146" />
 
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/LabeledEnergyRating"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView147"
             app:layout_constraintTop_toBottomOf="@+id/textView150" />
 
@@ -69,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/IntegratedModifiedEnergyFactor"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView148"
             app:layout_constraintTop_toBottomOf="@+id/textView148" />
 
@@ -94,7 +97,7 @@
             android:text="@string/remove_yes"
             app:layout_constraintBottom_toBottomOf="@+id/textView146"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView148"
+            app:layout_constraintStart_toEndOf="@+id/textView146"
             app:layout_constraintTop_toTopOf="@+id/textView146" />
 
         <Spinner
@@ -102,6 +105,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView147"
             app:layout_constraintEnd_toEndOf="@+id/clothes_washer_checkbox_available"
             app:layout_constraintStart_toStartOf="@+id/clothes_washer_checkbox_available"
@@ -113,6 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/LoadType"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView147"
             app:layout_constraintTop_toBottomOf="@+id/textView147" />
 
@@ -121,6 +126,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView150"
             app:layout_constraintEnd_toEndOf="@+id/clothes_washer_spinner_defaults_type"
             app:layout_constraintStart_toStartOf="@+id/clothes_washer_spinner_defaults_type"
@@ -134,6 +140,7 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView148"
             app:layout_constraintEnd_toEndOf="@+id/clothes_washer_spinner_load_type"
             app:layout_constraintStart_toStartOf="@+id/clothes_washer_spinner_load_type"
@@ -150,6 +157,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView149"
             app:layout_constraintEnd_toEndOf="@+id/clothes_washer_text_labeled_energy_rating"
             app:layout_constraintStart_toStartOf="@+id/clothes_washer_text_labeled_energy_rating"
-            app:layout_constraintTop_toTopOf="@+id/textView149" />
+            app:layout_constraintTop_toTopOf="@+id/textView149"
+            android:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

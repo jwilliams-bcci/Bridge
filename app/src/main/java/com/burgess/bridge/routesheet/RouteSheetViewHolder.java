@@ -1,76 +1,50 @@
 package com.burgess.bridge.routesheet;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Color;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.burgess.bridge.BridgeLogger;
-import com.burgess.bridge.inspectiondetails.InspectionDetailsActivity;
 import com.burgess.bridge.R;
-import com.burgess.bridge.reviewandsubmit.ReviewAndSubmitActivity;
 
 public class RouteSheetViewHolder extends RecyclerView.ViewHolder {
     public static final String TAG = "ROUTE_SHEET";
 
-    private final CardView mCardView;
-    private final TextView mTextInspectionCommunity;
-    private final TextView mTextInspectionAddress;
-    private final TextView mTextInspectionType;
-    private final TextView mTextCallbackNotes;
-    private final TextView mTextInspectionUploaded;
-    private final ImageView mImageViewReupload;
-    private final ImageView mImageViewNoteAttached;
+    public final CardView cardView;
+    public final TextView textCommunity;
+    public final TextView textAddress;
+    public final TextView textInspectionType;
+    public final ImageView imageViewShowMenu;
+    public final TextView textCallbackNotes;
+    public final TextView textUploaded;
+    public final ImageView imageViewReupload;
+    public final ImageView imageViewNoteAttached;
+    public final ConstraintLayout constraintLayoutMenu;
+    public final View verticalDivider;
+    public final Button buttonReupload;
+    public final Button buttonResetInspection;
+    public final Button buttonViewQueue;
 
     public RouteSheetViewHolder(@NonNull View itemView) {
         super(itemView);
-        mCardView = itemView.findViewById(R.id.item_inspection_list_card_view);
-        mTextInspectionCommunity = itemView.findViewById(R.id.text_recycler_community);
-        mTextInspectionAddress = itemView.findViewById(R.id.text_recycler_address);
-        mTextInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
-        mTextCallbackNotes = itemView.findViewById(R.id.text_recycler_callback_notes);
-        mTextInspectionUploaded = itemView.findViewById(R.id.text_recycler_uploaded);
-        mImageViewReupload = itemView.findViewById(R.id.item_inspection_list_imageview_reupload);
-        mImageViewNoteAttached = itemView.findViewById(R.id.item_inspection_list_imageview_note_attached);
+        cardView = itemView.findViewById(R.id.item_inspection_list_card_view);
+        textCommunity = itemView.findViewById(R.id.text_recycler_community);
+        textAddress = itemView.findViewById(R.id.text_recycler_address);
+        textInspectionType = itemView.findViewById(R.id.text_recycler_inspection_type);
+        imageViewShowMenu = itemView.findViewById(R.id.item_inspection_list_imageview_show_menu);
+        textCallbackNotes = itemView.findViewById(R.id.text_recycler_callback_notes);
+        textUploaded = itemView.findViewById(R.id.text_recycler_uploaded);
+        imageViewReupload = itemView.findViewById(R.id.item_inspection_list_imageview_reupload);
+        imageViewNoteAttached = itemView.findViewById(R.id.item_inspection_list_imageview_note_attached);
+        constraintLayoutMenu = itemView.findViewById(R.id.item_inspection_constraint_layout_menu);
+        verticalDivider = itemView.findViewById(R.id.item_inspection_list_divider);
+        buttonReupload = itemView.findViewById(R.id.item_inspection_list_button_reupload);
+        buttonResetInspection = itemView.findViewById(R.id.item_inspection_list_button_reset_inspection);
+        buttonViewQueue = itemView.findViewById(R.id.item_inspection_list_button_view_queue);
     }
-
-    //region GETTERS
-    public CardView getCardView() {
-        return mCardView;
-    }
-
-    public TextView getTextInspectionCommunity() {
-        return mTextInspectionCommunity;
-    }
-
-    public TextView getTextInspectionAddress() {
-        return mTextInspectionAddress;
-    }
-
-    public TextView getTextInspectionType() {
-        return mTextInspectionType;
-    }
-
-    public TextView getTextCallbackNotes() { return mTextCallbackNotes; }
-
-    public TextView getTextInspectionUploaded() {
-        return mTextInspectionUploaded;
-    }
-
-    public ImageView getImageViewReupload() {
-        return mImageViewReupload;
-    }
-
-    public ImageView getImageViewNoteAttached() {
-        return mImageViewNoteAttached;
-    }
-    //endregion
 }

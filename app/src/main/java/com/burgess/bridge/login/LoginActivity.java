@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -19,18 +21,17 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.BridgeHelper;
+import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
@@ -42,28 +43,23 @@ import static com.burgess.bridge.Constants.*;
 import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
-    private LoginViewModel mLoginViewModel;
-    private ConstraintLayout mConstraintLayout;
-    private SharedPreferences mSharedPreferences;
-    private SharedPreferences.Editor mEditor;
-    private TextView mTextUserName;
-    private TextView mTextPassword;
-    private ImageView mImageViewShowPassword;
-    private TextView mTextVersionName;
-    private TextView mTextStaging;
-    private Button mButtonLogin;
-    private CheckBox mCheckBoxRememberCredentials;
-    private LinearLayout mLockScreen;
-    private ProgressBar mProgressBar;
+    private LoginViewModel loginVM;
+    private ConstraintLayout constraintLayout;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor sharedPreferencesEditor;
+    private TextView tUserName;
+    private TextView tPassword;
+    private ImageView ivShowPassword;
+    private TextView tVersionName;
+    private TextView tStaging;
+    private Button bLogin;
+    private CheckBox cbRememberCredentials;
+    private LinearLayout lockScreen;
+    private TextView tStatus;
+    private ProgressBar progressBar;
 
-    private JsonArrayRequest mUpdateCannedCommentsRequest;
-    private JsonArrayRequest mUpdateBuildersRequest;
-    private JsonArrayRequest mUpdateInspectorsRequest;
-    private JsonArrayRequest mUpdateRoomsRequest;
-    private JsonArrayRequest mUpdateDirectionsRequest;
-    private JsonArrayRequest mUpdateFaultsRequest;
-    private String mUserName;
-    private String mPassword;
+    private String userName;
+    private String password;
 
     private static final String TAG = "LOGIN";
 
@@ -71,13 +67,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mLoginViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
+        loginVM = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
 
         // Prepare Shared Preferences...
-        mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean(PREF_IS_ONLINE, true);
-        mEditor.apply();
+        sharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferencesEditor.putBoolean(PREF_IS_ONLINE, true);
+        sharedPreferencesEditor.apply();
 
         // Prepare Logger and API...
         BridgeLogger.getInstance(this);
@@ -87,57 +83,73 @@ public class LoginActivity extends AppCompatActivity {
         initializeButtonListeners();
         initializeDisplayContent();
         checkPermissions();
+
+        loginVM.getSnackbarMessage().observe(this, message -> {
+            if (message != null) {
+                BridgeHelper.hideSpinner(lockScreen, progressBar, tStatus, getWindow());
+                showWorkOfflineSnackbar(message);
+            }
+        });
+        loginVM.getStatus().observe(this, message -> {
+            if (message != null) {
+                tStatus.setText(message);
+            }
+        });
+        loginVM.getCompleteLogin().observe(this, completeLogin -> {
+            if (completeLogin) {
+                BridgeHelper.hideSpinner(lockScreen, progressBar, tStatus, getWindow());
+                Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
+                startActivity(routeSheetIntent);
+            }
+        });
     }
 
     private void initializeViews() {
-        mTextUserName = findViewById(R.id.login_text_username);
-        mTextPassword = findViewById(R.id.login_text_password);
-        mImageViewShowPassword = findViewById(R.id.login_imageview_show_password);
-        mTextVersionName = findViewById(R.id.login_text_version_name);
-        mTextStaging = findViewById(R.id.login_text_staging);
-        mButtonLogin = findViewById(R.id.login_button_login);
-        mCheckBoxRememberCredentials = findViewById(R.id.login_checkbox_remember_credentials);
-        mConstraintLayout = findViewById(R.id.login_constraint_layout);
-        mLockScreen = findViewById(R.id.login_lock_screen);
-        mProgressBar = findViewById(R.id.login_progress_bar);
+        constraintLayout = findViewById(R.id.login_constraint_layout);
+        tUserName = findViewById(R.id.login_text_username);
+        tPassword = findViewById(R.id.login_text_password);
+        ivShowPassword = findViewById(R.id.login_imageview_show_password);
+        tVersionName = findViewById(R.id.login_text_version_name);
+        tStaging = findViewById(R.id.login_text_staging);
+        bLogin = findViewById(R.id.login_button_login);
+        cbRememberCredentials = findViewById(R.id.login_checkbox_remember_credentials);
+        lockScreen = findViewById(R.id.ekotrope_data_lock_screen);
+        tStatus = findViewById(R.id.login_text_status);
+        progressBar = findViewById(R.id.login_progress_bar);
     }
     private void initializeButtonListeners() {
-        mButtonLogin.setOnClickListener(view -> {
-            mUserName = mTextUserName.getText().toString();
-            mPassword = mTextPassword.getText().toString();
+        bLogin.setOnClickListener(view -> {
+            userName = tUserName.getText().toString();
+            password = tPassword.getText().toString();
 
-            if (mCheckBoxRememberCredentials.isChecked()) {
-                mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
-            } else {
-                mEditor.putBoolean(REMEMBER_CREDENTIALS, false);
-            }
-            mEditor.apply();
+            sharedPreferencesEditor.putBoolean(REMEMBER_CREDENTIALS, cbRememberCredentials.isChecked());
+            sharedPreferencesEditor.apply();
 
             if (!isNetworkAvailable()) {
                 showWorkOfflineSnackbar("No network available!");
             } else {
-                mEditor.putBoolean(PREF_IS_ONLINE, true);
-                mEditor.apply();
+                sharedPreferencesEditor.putBoolean(PREF_IS_ONLINE, true);
+                sharedPreferencesEditor.apply();
                 workOnline();
             }
         });
-        mImageViewShowPassword.setOnClickListener(view -> {
-            if (mTextPassword.getTransformationMethod() == null) {
-                mTextPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
+        ivShowPassword.setOnClickListener(view -> {
+            if (tPassword.getTransformationMethod() == null) {
+                tPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
             } else {
-                mTextPassword.setTransformationMethod(null);
+                tPassword.setTransformationMethod(null);
             }
         });
     }
     private void initializeDisplayContent() {
-        if (mSharedPreferences.getBoolean(REMEMBER_CREDENTIALS, false)) {
-            mCheckBoxRememberCredentials.setChecked(true);
-            mTextUserName.setText(mSharedPreferences.getString(PREF_LOGIN_NAME, ""));
-            mTextPassword.setText(mSharedPreferences.getString(PREF_LOGIN_PASSWORD, ""));
+        if (sharedPreferences.getBoolean(REMEMBER_CREDENTIALS, false)) {
+            cbRememberCredentials.setChecked(true);
+            tUserName.setText(sharedPreferences.getString(PREF_LOGIN_NAME, ""));
+            tPassword.setText(sharedPreferences.getString(PREF_LOGIN_PASSWORD, ""));
         }
 
         // Set the version label to display the version number...
-        PackageInfo pInfo = null;
+        PackageInfo pInfo;
         String versionName = "NOT FOUND";
         try {
             pInfo = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
@@ -145,17 +157,17 @@ public class LoginActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             BridgeLogger.log('E', TAG, "ERROR in initializeDisplayContent: " + e.getMessage());
         }
-        mTextVersionName.setText(String.format("Version %s", versionName));
+        tVersionName.setText(String.format("Version %s", versionName));
 
         if (!BridgeAPIQueue.getInstance().isProd()) {
-            mTextStaging.setVisibility(View.VISIBLE);
+            tStaging.setVisibility(View.VISIBLE);
         } else {
-            mTextStaging.setVisibility(View.GONE);
+            tStaging.setVisibility(View.GONE);
         }
 
         // Set the text boxes to respond to "Return" on keyboard...
-        mTextUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
-        mTextPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        tUserName.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        tPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
     }
     private void checkPermissions() {
         ArrayList<String> permissionRequests = new ArrayList<>();
@@ -171,140 +183,37 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void workOnline() {
-        showSpinner();
+        BridgeHelper.showSpinner(lockScreen, progressBar, tStatus, getWindow());
 
-        RequestQueue queue = BridgeAPIQueue.getInstance(LoginActivity.this).getRequestQueue();
-        long tokenAge = mSharedPreferences.getLong(PREF_AUTH_TOKEN_AGE, 0);
-
-        JsonObjectRequest loginRequest = BridgeAPIQueue.getInstance().loginUser(mUserName, mPassword, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                if (mCheckBoxRememberCredentials.isChecked()) {
-                    mEditor.putBoolean(REMEMBER_CREDENTIALS, true);
-                    mEditor.apply();
-                }
-                queue.add(mUpdateCannedCommentsRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                if (message.equals("Authentication error! Please try again.")) {
-                    Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
-                } else {
-                    showWorkOfflineSnackbar(message);
-                }
-                hideSpinner();
-            }
-        });
-        mUpdateCannedCommentsRequest = BridgeAPIQueue.getInstance().updateCannedComments(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                queue.add(mUpdateBuildersRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-        mUpdateBuildersRequest = BridgeAPIQueue.getInstance().updateBuilders(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                queue.add(mUpdateInspectorsRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-        mUpdateInspectorsRequest = BridgeAPIQueue.getInstance().updateInspectorsV2(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                    queue.add(mUpdateRoomsRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-        mUpdateRoomsRequest = BridgeAPIQueue.getInstance().updateRooms(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                queue.add(mUpdateDirectionsRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-        mUpdateDirectionsRequest = BridgeAPIQueue.getInstance().updateDirections(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                queue.add(mUpdateFaultsRequest);
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-        mUpdateFaultsRequest = BridgeAPIQueue.getInstance().updateFaults(mLoginViewModel, new ServerCallback() {
-            @Override
-            public void onSuccess(String message) {
-                Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
-                startActivity(routeSheetIntent);
-                hideSpinner();
-            }
-
-            @Override
-            public void onFailure(String message) {
-                showWorkOfflineSnackbar(message);
-                hideSpinner();
-            }
-        });
-
+        long tokenAge = sharedPreferences.getLong(PREF_AUTH_TOKEN_AGE, 0);
         if (tokenAge > System.currentTimeMillis() - (60 * 60 * 12 * 1000)) {
-            BridgeLogger.log('I', TAG, "Token is younger than 12 hours");
             if (checkSavedLogin()) {
-                BridgeLogger.log('I', TAG, "The same user is logging in, bypassing loginRequest.");
-                queue.add(mUpdateCannedCommentsRequest);
+                loginVM.updateCannedComments(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
             } else {
-                BridgeLogger.log('I', TAG, "Different user is logging in, getting new token...");
-                queue.add(loginRequest);
+                loginVM.requestLogin(userName, password);
             }
         } else {
-            BridgeLogger.log('I', TAG, "Token is older than 12 hours, getting new one...");
-            queue.add(loginRequest);
+            loginVM.requestLogin(userName, password);
         }
     }
     private void workOffline() {
         if (checkSavedLogin()) {
-            BridgeLogger.log('I', TAG, "Working offline, credentials match");
             try {
                 Intent routeSheetIntent = new Intent(LoginActivity.this, RouteSheetActivity.class);
                 startActivity(routeSheetIntent);
             } catch (Exception e) {
                 BridgeLogger.log('E', TAG, "ERROR in workOffline: " + e.getMessage());
-                Snackbar.make(mConstraintLayout, "Error! Please contact support.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(constraintLayout, "Error! Please contact support.", Snackbar.LENGTH_LONG).show();
             }
         } else {
-            BridgeLogger.log('I', TAG, "Working offline, credentials do not match");
-            Snackbar.make(mConstraintLayout, "Credentials do not match, please try again when network is available", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(constraintLayout, "Credentials do not match, please try again when network is available", Snackbar.LENGTH_LONG).show();
         }
     }
 
     private boolean checkSavedLogin() {
-        String savedUsername = mSharedPreferences.getString(PREF_LOGIN_NAME, null);
-        String savedPassword = mSharedPreferences.getString(PREF_LOGIN_PASSWORD, null);
-        return mUserName != null && mPassword != null && mUserName.equalsIgnoreCase(savedUsername) && mPassword.equals(savedPassword);
+        String savedUsername = sharedPreferences.getString(PREF_LOGIN_NAME, null);
+        String savedPassword = sharedPreferences.getString(PREF_LOGIN_PASSWORD, null);
+        return userName != null && password != null && userName.equalsIgnoreCase(savedUsername) && password.equals(savedPassword);
     }
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -313,10 +222,10 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void showWorkOfflineSnackbar(String message) {
         Snackbar snackbar = Snackbar
-                .make(mConstraintLayout, message + " Continue offline?", Snackbar.LENGTH_INDEFINITE)
+                .make(constraintLayout, message + " Continue offline?", Snackbar.LENGTH_INDEFINITE)
                 .setAction("YES", v-> {
-                    mEditor.putBoolean(PREF_IS_ONLINE, false);
-                    mEditor.apply();
+                    sharedPreferencesEditor.putBoolean(PREF_IS_ONLINE, false);
+                    sharedPreferencesEditor.apply();
                     workOffline();
                 });
         View snackbarView = snackbar.getView();
@@ -324,16 +233,5 @@ public class LoginActivity extends AppCompatActivity {
         textView.setMaxLines(5);
 
         snackbar.show();
-    }
-
-    private void showSpinner() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mLockScreen.setVisibility(View.VISIBLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-    }
-    private void hideSpinner() {
-        mProgressBar.setVisibility(View.GONE);
-        mLockScreen.setVisibility(View.GONE);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

@@ -11,6 +11,7 @@ public class Ekotrope_MechanicalEquipment_Table {
     public String plan_id;
     public int index;
     public String name;
+    public String equipment_type;
     public String model_number;
     public String location;
     public Double percent_heating_load;
@@ -33,7 +34,7 @@ public class Ekotrope_MechanicalEquipment_Table {
     }
 
     public Ekotrope_MechanicalEquipment_Table(@NonNull String plan_id, int index, String name,
-                                              String model_number, String location,
+                                              String equpiment_type, String model_number, String location,
                                               Double percent_heating_load, Double percent_cooling_load,
                                               Double percent_hot_water_load, String ahri_reference_number,
                                               String ahri_reference_fuel_type, boolean rc_test_conducted,
@@ -43,6 +44,7 @@ public class Ekotrope_MechanicalEquipment_Table {
         this.plan_id = plan_id;
         this.index = index;
         this.name = name;
+        this.equipment_type = equpiment_type;
         this.model_number = model_number;
         this.location = location;
         this.percent_heating_load = percent_heating_load;
@@ -78,7 +80,9 @@ public class Ekotrope_MechanicalEquipment_Table {
             rcObject.put("rcDifferenceCtoa", rc_difference_ctoa);
             rcObject.put("rcWeightDeviation", rc_weight_deviation);
 
-            jsonObject.put("refrigerantCharge", rcObject);
+            if (rc_test_conducted) {
+                jsonObject.put("refrigerantCharge", rcObject);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,11 +1,20 @@
 package com.burgess.bridge;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class BridgeHelper {
     public static void setChangeTracker(EditText editText, Double compareTo) {
@@ -94,5 +103,20 @@ public class BridgeHelper {
                 checkBox.setTag(!fieldChanged);
             }
         });
+    }
+
+    public static void showSpinner(LinearLayout lockScreen, ProgressBar loadingSpinner, TextView status, Window currentWindow) {
+        currentWindow.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        loadingSpinner.setVisibility(View.VISIBLE);
+        lockScreen.setVisibility(View.VISIBLE);
+        status.setVisibility(View.VISIBLE);
+        lockScreen.getOverlay().add(new ColorDrawable(Color.parseColor("#80000000")));
+    }
+    public static void hideSpinner(LinearLayout lockScreen, ProgressBar loadingSpinner, TextView status, Window currentWindow) {
+        currentWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        loadingSpinner.setVisibility(View.GONE);
+        lockScreen.setVisibility(View.GONE);
+        status.setVisibility(View.GONE);
+        currentWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

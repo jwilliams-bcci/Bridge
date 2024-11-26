@@ -108,8 +108,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/Ducts"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView115"
-            app:layout_constraintTop_toBottomOf="@+id/textView115" />
+            app:layout_constraintTop_toBottomOf="@+id/textView115"
+            tools:visibility="gone" />
 
         <Button
             android:id="@+id/distribution_system_button_save"
@@ -193,10 +195,12 @@
             android:background="@drawable/button_rounded_orange"
             android:text="Ducts List"
             android:textColor="@color/colorWhite"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView116"
             app:layout_constraintEnd_toEndOf="@+id/distribution_system_text_sq_feet_served"
             app:layout_constraintStart_toStartOf="@+id/distribution_system_text_sq_feet_served"
-            app:layout_constraintTop_toTopOf="@+id/textView116" />
+            app:layout_constraintTop_toTopOf="@+id/textView116"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

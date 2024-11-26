@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/DefaultsType"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView142"
             app:layout_constraintTop_toBottomOf="@+id/textView142" />
 
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/CombinedEnergyFactor"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView143"
             app:layout_constraintTop_toBottomOf="@+id/textView143" />
 
@@ -69,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/UtilizationFactor"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView144"
             app:layout_constraintTop_toBottomOf="@+id/textView144" />
 
@@ -94,7 +97,7 @@
             android:text="@string/remove_yes"
             app:layout_constraintBottom_toBottomOf="@+id/textView142"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView144"
+            app:layout_constraintStart_toEndOf="@+id/textView142"
             app:layout_constraintTop_toTopOf="@+id/textView142" />
 
         <Spinner
@@ -102,6 +105,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView143"
             app:layout_constraintEnd_toEndOf="@+id/clothes_dryer_checkbox_available"
             app:layout_constraintStart_toStartOf="@+id/clothes_dryer_checkbox_available"
@@ -115,6 +119,7 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView144"
             app:layout_constraintEnd_toEndOf="@+id/clothes_dryer_spinner_defaults_type"
             app:layout_constraintStart_toStartOf="@+id/clothes_dryer_spinner_defaults_type"
@@ -125,6 +130,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView145"
             app:layout_constraintEnd_toEndOf="@+id/clothes_dryer_text_combined_energy_factor"
             app:layout_constraintStart_toStartOf="@+id/clothes_dryer_text_combined_energy_factor"

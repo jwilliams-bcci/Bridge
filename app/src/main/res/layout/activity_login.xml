@@ -9,7 +9,7 @@
     tools:context=".login.LoginActivity">
 
     <LinearLayout
-        android:id="@+id/login_lock_screen"
+        android:id="@+id/ekotrope_data_lock_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorLockScreen"
@@ -146,5 +146,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/login_text_password"
         app:srcCompat="@android:drawable/ic_menu_view" />
+
+    <TextView
+        android:id="@+id/login_text_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/login_progress_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

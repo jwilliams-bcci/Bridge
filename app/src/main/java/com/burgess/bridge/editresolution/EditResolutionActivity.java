@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,7 +36,7 @@ import android.widget.ImageView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.toolbox.StringRequest;
-import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
 import com.burgess.bridge.ServerCallback;
@@ -97,7 +96,7 @@ public class EditResolutionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_resolution);
         setSupportActionBar(findViewById(R.id.edit_resolution_toolbar));
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        mEditResolutionViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(EditResolutionViewModel.class);
+        mEditResolutionViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(EditResolutionViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
@@ -240,7 +239,7 @@ public class EditResolutionActivity extends AppCompatActivity {
             BridgeLogger.log('E', TAG, "ERROR in parsing JSON: " + e.getMessage());
         }
 
-        StringRequest request = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, noteDetails.defect_item_id, noteDetails.inspection_id, new ServerCallback() {
+        StringRequest request = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, noteDetails.defect_item_id, noteDetails.inspection_id, null, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 BridgeLogger.log('I', TAG, "Note uploaded for " + mInspectionId);

@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.burgess.bridge.BridgeAPIQueue;
+import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,6 +47,7 @@ import data.DAOs.Inspector_DAO;
 import data.DAOs.MultifamilyDetails_DAO;
 import data.DAOs.PastInspection_DAO;
 import data.DAOs.Room_DAO;
+import data.DAOs.SubmitRequest_DAO;
 import data.Tables.Builder_Table;
 import data.Tables.CannedComment_Table;
 import data.Tables.DefectItem_InspectionType_XRef;
@@ -82,6 +83,7 @@ import data.Tables.Location_Table;
 import data.Tables.MultifamilyDetails_Table;
 import data.Tables.PastInspection_Table;
 import data.Tables.Room_Table;
+import data.Tables.SubmitRequest_Table;
 import data.Views.ReviewAndSubmit_View;
 import data.Views.RouteSheet_View;
 
@@ -120,11 +122,12 @@ import data.Views.RouteSheet_View;
         Ekotrope_ClothesDryer_Table.class,
         Ekotrope_ClothesWasher_Table.class,
         Ekotrope_RangeOven_Table.class,
-        Ekotrope_Infiltration_Table.class
+        Ekotrope_Infiltration_Table.class,
+        SubmitRequest_Table.class
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 82, exportSchema = false)
+        }, version = 83, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -160,6 +163,7 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Ekotrope_ClothesWasher_DAO mEkotropeClothesWasherDao();
     public abstract Ekotrope_RangeOven_DAO mEkotropeRangeOvenDao();
     public abstract Ekotrope_Infiltration_DAO mEkotropeInfiltrationDao();
+    public abstract SubmitRequest_DAO mSubmitRequestDao();
     private static volatile BridgeRoomDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);

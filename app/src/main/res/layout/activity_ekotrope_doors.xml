@@ -68,8 +68,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/UFactor"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView55"
-            app:layout_constraintTop_toBottomOf="@+id/textView55" />
+            app:layout_constraintTop_toBottomOf="@+id/textView55"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/ekotrope_doors_text_name"
@@ -122,10 +124,12 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView56"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ekotrope_doors_text_door_area"
-            app:layout_constraintTop_toTopOf="@+id/textView56" />
+            app:layout_constraintTop_toTopOf="@+id/textView56"
+            tools:visibility="gone" />
 
         <Button
             android:id="@+id/ekotrope_doors_button_save"

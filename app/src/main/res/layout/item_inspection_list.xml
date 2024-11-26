@@ -9,14 +9,15 @@
         android:id="@+id/item_inspection_list_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="4dp"
         app:cardCornerRadius="2dp"
-        app:cardElevation="2dp"
+        app:cardElevation="4dp"
         app:cardUseCompatPadding="true"
         app:contentPadding="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/item_inspection_list_constraint_layout"
-            android:layout_width="398dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
@@ -24,7 +25,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Address"
+                android:hint="@string/NotFound"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#000000"
                 app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
@@ -36,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Community"
+                android:hint="@string/NotFound"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
@@ -47,9 +48,9 @@
                 android:id="@+id/text_recycler_inspection_type"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Inspection Type"
+                android:hint="@string/NotFound"
                 android:textColor="?android:attr/textColorPrimary"
-                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
+                app:layout_constraintEnd_toEndOf="@+id/text_recycler_community"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_recycler_community" />
 
@@ -60,12 +61,12 @@
                 android:layout_marginEnd="8dp"
                 android:ellipsize="marquee"
                 android:focusableInTouchMode="true"
+                android:hint="@string/NotFound"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:text="Callback Notes"
                 android:textColor="?android:attr/textColorPrimary"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_recycler_inspection_type" />
@@ -75,9 +76,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:text="Uploaded"
+                android:hint="@string/NotFound"
                 android:textSize="12sp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_note_attached"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,9 +90,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/text_recycler_uploaded"
+                app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_show_menu"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@android:drawable/ic_menu_upload" />
 
@@ -101,12 +102,88 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="@color/colorLightRed"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/text_recycler_uploaded"
                 app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_imageview_reupload"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_dialog_alert"
-                tools:visibility="gone" />
+                app:srcCompat="@android:drawable/ic_dialog_alert" />
+
+            <ImageView
+                android:id="@+id/item_inspection_list_imageview_show_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@android:drawable/arrow_down_float"
+                android:scaleX="2"
+                android:scaleY="2"
+                app:layout_constraintBottom_toBottomOf="@+id/text_recycler_uploaded"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_inspection_constraint_layout_menu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_recycler_uploaded">
+
+                <Button
+                    android:id="@+id/item_inspection_list_button_reupload"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/button_rounded_orange"
+                    android:text="@string/ReUpload"
+                    android:textColor="@color/colorWhite"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/item_inspection_list_divider"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/item_inspection_list_divider"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:background="?android:attr/listDivider"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="@+id/item_inspection_list_button_reupload"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/item_inspection_list_button_reset_inspection"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/button_rounded_red"
+                    android:text="@string/ResetInspection"
+                    android:textColor="@color/colorWhite"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toStartOf="@+id/item_inspection_list_divider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/item_inspection_list_button_view_queue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/button_rounded_blue"
+                    android:text="@string/ViewQueue"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/item_inspection_list_button_reupload" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

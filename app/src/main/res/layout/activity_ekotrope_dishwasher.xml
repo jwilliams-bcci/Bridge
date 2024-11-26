@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/DefaultsType"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView134"
             app:layout_constraintTop_toBottomOf="@+id/textView134" />
 
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/Size"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView135"
             app:layout_constraintTop_toBottomOf="@+id/textView135" />
 
@@ -69,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/EfficiencyType"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView136"
             app:layout_constraintTop_toBottomOf="@+id/textView136" />
 
@@ -78,6 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/Efficiency"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView137"
             app:layout_constraintTop_toBottomOf="@+id/textView137" />
 
@@ -87,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/AnnualGasCost"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView138"
             app:layout_constraintTop_toBottomOf="@+id/textView138" />
 
@@ -96,6 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/GasRate"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView139"
             app:layout_constraintTop_toBottomOf="@+id/textView139" />
 
@@ -105,6 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="36dp"
             android:text="@string/ElectricRate"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView140"
             app:layout_constraintTop_toBottomOf="@+id/textView140" />
 
@@ -130,7 +137,7 @@
             android:text="@string/remove_yes"
             app:layout_constraintBottom_toBottomOf="@+id/textView134"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView139"
+            app:layout_constraintStart_toEndOf="@+id/textView134"
             app:layout_constraintTop_toTopOf="@+id/textView134" />
 
         <Spinner
@@ -141,13 +148,15 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView135"
             app:layout_constraintEnd_toEndOf="@+id/dishwasher_checkbox_available"
             app:layout_constraintStart_toStartOf="@+id/dishwasher_checkbox_available"
-            app:layout_constraintTop_toTopOf="@+id/textView135" />
+            app:layout_constraintTop_toTopOf="@+id/textView135"
+            android:visibility="gone" />
 
         <Spinner
             android:id="@+id/dishwasher_spinner_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView136"
             app:layout_constraintEnd_toEndOf="@+id/dishwasher_spinner_defaults_type"
             app:layout_constraintStart_toStartOf="@+id/dishwasher_spinner_defaults_type"
@@ -158,6 +167,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView137"
             app:layout_constraintEnd_toEndOf="@+id/dishwasher_spinner_size"
             app:layout_constraintStart_toStartOf="@+id/dishwasher_spinner_size"
@@ -171,6 +181,7 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView138"
             app:layout_constraintEnd_toEndOf="@+id/dishwasher_spinner_efficiency_type"
             app:layout_constraintStart_toStartOf="@+id/dishwasher_spinner_efficiency_type"
@@ -184,6 +195,7 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView139"
             app:layout_constraintEnd_toEndOf="@+id/dishwasher_text_efficiency"
             app:layout_constraintStart_toStartOf="@+id/dishwasher_text_efficiency"
@@ -197,6 +209,7 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView140"
             app:layout_constraintEnd_toEndOf="@+id/dishwasher_text_annual_gas_cost"
             app:layout_constraintStart_toStartOf="@+id/dishwasher_text_annual_gas_cost"
@@ -210,6 +223,7 @@
             android:hint="@string/NotFound"
             android:inputType="number|numberDecimal"
             android:minHeight="48dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textView141"
             app:layout_constraintEnd_toEndOf="@+id/dishwasher_text_gas_rate"
             app:layout_constraintStart_toStartOf="@+id/dishwasher_text_gas_rate"

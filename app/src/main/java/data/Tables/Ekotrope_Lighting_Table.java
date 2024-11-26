@@ -39,12 +39,14 @@ public class Ekotrope_Lighting_Table {
     public JSONObject toJsonObj() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("percentInteriorFluorescent", percent_interior_fluorescent);
-            jsonObject.put("percentInteriorLed", percent_interior_led);
-            jsonObject.put("percentExteriorFluorescent", percent_exterior_fluorescent);
-            jsonObject.put("percentExteriorLed", percent_exterior_led);
-            jsonObject.put("percentGarageFluorescent", percent_garage_fluorescent);
-            jsonObject.put("percentGarageLed", percent_garage_led);
+            if (is_changed) {
+                jsonObject.put("percentInteriorFluorescent", percent_interior_fluorescent);
+                jsonObject.put("percentInteriorLED", percent_interior_led);
+                jsonObject.put("percentExteriorFluorescent", percent_exterior_fluorescent);
+                jsonObject.put("percentExteriorLED", percent_exterior_led);
+                jsonObject.put("percentGarageFluorescent", percent_garage_fluorescent);
+                jsonObject.put("percentGarageLED", percent_garage_led);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

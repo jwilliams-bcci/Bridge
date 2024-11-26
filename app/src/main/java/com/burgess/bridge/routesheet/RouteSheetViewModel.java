@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import data.Repositories.DefectItemRepository;
@@ -19,6 +20,7 @@ import data.Repositories.Ekotrope_DistributionSystemRepository;
 import data.Repositories.Ekotrope_DoorRepository;
 import data.Repositories.Ekotrope_DuctRepository;
 import data.Repositories.Ekotrope_FramedFloorRepository;
+import data.Repositories.Ekotrope_InfiltrationRepository;
 import data.Repositories.Ekotrope_LightingRepository;
 import data.Repositories.Ekotrope_MechanicalEquipmentRepository;
 import data.Repositories.Ekotrope_MechanicalVentilationRepository;
@@ -31,6 +33,7 @@ import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionHistoryRepository;
 import data.Repositories.InspectionRepository;
 import data.Repositories.PastInspectionRepository;
+import data.Repositories.SubmitRequestRepository;
 import data.Tables.DefectItem_InspectionType_XRef;
 import data.Tables.DefectItem_Table;
 import data.Tables.Ekotrope_AboveGradeWall_Table;
@@ -42,6 +45,7 @@ import data.Tables.Ekotrope_DistributionSystem_Table;
 import data.Tables.Ekotrope_Door_Table;
 import data.Tables.Ekotrope_Duct_Table;
 import data.Tables.Ekotrope_FramedFloor_Table;
+import data.Tables.Ekotrope_Infiltration_Table;
 import data.Tables.Ekotrope_Lighting_Table;
 import data.Tables.Ekotrope_MechanicalEquipment_Table;
 import data.Tables.Ekotrope_MechanicalVentilation_Table;
@@ -54,6 +58,7 @@ import data.Tables.InspectionDefect_Table;
 import data.Tables.InspectionHistory_Table;
 import data.Tables.Inspection_Table;
 import data.Tables.PastInspection_Table;
+import data.Tables.SubmitRequest_Table;
 import data.Views.RouteSheet_View;
 
 public class RouteSheetViewModel extends AndroidViewModel {
@@ -80,6 +85,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
     private Ekotrope_ClothesDryerRepository mEkotropeClothesDryerRepository;
     private Ekotrope_ClothesWasherRepository mEkotropeClothesWasherRepository;
     private Ekotrope_RangeOvenRepository mEkotropeRangeOvenRepository;
+    private Ekotrope_InfiltrationRepository mEkotropeInfiltrationRepository;
+    private SubmitRequestRepository submitRequestRepository;
     private String reportUrl;
 
     public RouteSheetViewModel(@NonNull Application application) {
@@ -107,6 +114,8 @@ public class RouteSheetViewModel extends AndroidViewModel {
         mEkotropeClothesDryerRepository = new Ekotrope_ClothesDryerRepository(application);
         mEkotropeClothesWasherRepository = new Ekotrope_ClothesWasherRepository(application);
         mEkotropeRangeOvenRepository = new Ekotrope_RangeOvenRepository(application);
+        mEkotropeInfiltrationRepository = new Ekotrope_InfiltrationRepository(application);
+        submitRequestRepository = new SubmitRequestRepository(application);
         reportUrl = "";
     }
 
@@ -248,5 +257,13 @@ public class RouteSheetViewModel extends AndroidViewModel {
 
     public void insertRangeOven(Ekotrope_RangeOven_Table rangeOven) {
         mEkotropeRangeOvenRepository.insert(rangeOven);
+    }
+
+    public void insertInfiltration(Ekotrope_Infiltration_Table infiltration) {
+        mEkotropeInfiltrationRepository.insert(infiltration);
+    }
+
+    public void startInspection(OffsetDateTime startTime, int inspectionId) {
+        mInspectionRepository.startInspection(startTime, inspectionId);
     }
 }

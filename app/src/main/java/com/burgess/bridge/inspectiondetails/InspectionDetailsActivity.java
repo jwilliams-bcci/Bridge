@@ -98,8 +98,6 @@ public class InspectionDetailsActivity extends AppCompatActivity {
             Intent multifamilyInformationIntent = new Intent(InspectionDetailsActivity.this, MultifamilyDetailsActivity.class);
             multifamilyInformationIntent.putExtra(MultifamilyDetailsActivity.INSPECTION_ID, mInspectionId);
 
-            BridgeLogger.getInstance().log('I', TAG, "Starting inspection " + mInspectionId + " at " + startTime.toString());
-
             if (mInspection.division_id == 20) {
                 startActivity(multifamilyInformationIntent);
             } else {

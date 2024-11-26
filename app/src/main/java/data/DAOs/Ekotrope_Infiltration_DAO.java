@@ -22,9 +22,8 @@ public interface Ekotrope_Infiltration_DAO {
     Ekotrope_Infiltration_Table getInfiltration(String plan_id);
 
     @Query("UPDATE ekotrope_infiltration_table SET " +
-            "infiltration_unit = :infiltration_unit, infiltration_value = :infiltration_value, " +
+            "cfm_50 = :cfm_50, ach_50 = :ach_50, " +
             "measurement_type = :measurement_type, is_changed = 1 " +
             "WHERE plan_id = :plan_id")
-    void update(String plan_id, String infiltration_unit, Double infiltration_value,
-                String measurement_type);
+    void update(String plan_id, Double cfm_50, Double ach_50, String measurement_type);
 }

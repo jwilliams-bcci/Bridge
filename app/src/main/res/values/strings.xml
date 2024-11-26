@@ -206,4 +206,7 @@
     <string name="InfiltrationUnit">Infiltration Unit</string>
     <string name="InfiltrationValue">Infiltration Value</string>
     <string name="Infiltration">Infiltration</string>
+    <string name="ReUpload">Re-Upload</string>
+    <string name="ResetInspection">Reset Inspection</string>
+    <string name="ViewQueue">View Queue</string>
 </resources>

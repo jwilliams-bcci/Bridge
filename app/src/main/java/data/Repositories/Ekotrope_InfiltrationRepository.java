@@ -19,8 +19,8 @@ public class Ekotrope_InfiltrationRepository {
     }
 
     public void update(Ekotrope_Infiltration_Table infiltration) {
-        mEkotropeInfiltrationDao.update(infiltration.plan_id, infiltration.infiltration_unit,
-                infiltration.infiltration_value, infiltration.measurement_type);
+        mEkotropeInfiltrationDao.update(infiltration.plan_id, infiltration.cfm_50,
+                infiltration.ach_50, infiltration.measurement_type);
     }
 
     public Ekotrope_Infiltration_Table getInfiltration(String mPlanId) {

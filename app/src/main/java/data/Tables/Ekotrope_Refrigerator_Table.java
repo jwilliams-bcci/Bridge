@@ -27,7 +27,9 @@ public class Ekotrope_Refrigerator_Table {
     public JSONObject toJsonObj() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("refrigeratorConsumption", refrigerator_consumption);
+            if (is_changed) {
+                jsonObject.put("refrigeratorConsumption", refrigerator_consumption);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
