@@ -14,6 +14,7 @@ public final class Constants {
     public static final String PREF_IS_ONLINE = "IsOnline";
     public static final String PREF_IND_INSPECTIONS_REMAINING = "IndividualInspectionsRemaining";
     public static final String PREF_TEAM_INSPECTIONS_REMAINING = "InspectionsRemaining";
+    public static final String PREF_ROUTE_SHEET_LAST_UPDATED = "RouteSheetLastUpdated";
 
     public static final String REMEMBER_CREDENTIALS = "RememberCredentials";
     public static final String CANCEL_TAG = "CANCEL_ALL";

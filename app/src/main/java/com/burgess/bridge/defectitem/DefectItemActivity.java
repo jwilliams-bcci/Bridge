@@ -4,8 +4,6 @@ import static com.burgess.bridge.Constants.PREF;
 import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
@@ -15,31 +13,25 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 //import android.app.FragmentManager;
 //import android.app.FragmentTransaction;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -63,12 +55,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -118,6 +106,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private DefectItemViewModel mDefectItemViewModel;
     private DefectItem_Table mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
+    private RadioButton mRadioButtonNC;
     private RadioButton mRadioButtonR;
     private RadioButton mRadioButtonNA;
     private TextView mDefectItemDetails;
@@ -204,6 +193,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
         mRadioGroupDefectStatus = findViewById(R.id.defect_item_radio_group);
+        mRadioButtonNC = findViewById(R.id.defect_item_radio_nc);
         mRadioButtonR = findViewById(R.id.defect_item_radio_r);
         mRadioButtonNA = findViewById(R.id.defect_item_radio_na);
         mDefectItemTextLocation = findViewById(R.id.defect_item_text_location);
@@ -261,7 +251,7 @@ public class DefectItemActivity extends AppCompatActivity {
             String lotNumber = "";
             String constructionStage = "";
 
-            // If DefectId == 1, it's a note, set appropriate status id. Otherwise, get radio button
+            // If DefectId == 1, it's a note, set appropriate status InspectionID. Otherwise, get radio button
             if (mDefectId == 1) {
                 defectStatusId = 7;
             } else {
@@ -284,12 +274,12 @@ public class DefectItemActivity extends AppCompatActivity {
             }
 
             // If it's Multifamily and not in Observation categories, require a picture
-            if (mInspection.division_id == 20 && !mDefectItem.defect_category_name.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
+            if (mInspection.DivisionID == 20 && !mDefectItem.CategoryName.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
                 Snackbar.make(mConstraintLayout, "MFC Inspections require a photo for items marked C in this category.", Snackbar.LENGTH_LONG).show();
                 return;
             }
 
-            if (mInspection.division_id != 20 && mDefectItem.defect_category_name.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
+            if (mInspection.DivisionID != 20 && mDefectItem.CategoryName.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
                 Snackbar.make(mConstraintLayout, "Defect items marked C in this category require a picture.", Snackbar.LENGTH_LONG).show();
                 return;
             }
@@ -297,12 +287,12 @@ public class DefectItemActivity extends AppCompatActivity {
             // Custom rules for AHTVX
             int[] builderIds_AHTVX = { 3083, 3084, 3082, 3085 };
             for (int builderId : builderIds_AHTVX) {
-                if (builderId == mInspection.builder_id) {
-                    if (!mInspection.reinspect && defectStatusId == 2 && !mPictureTaken) {
+                if (builderId == mInspection.BuilderID) {
+                    if (!mInspection.ReInspect && defectStatusId == 2 && !mPictureTaken) {
                         Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items during 1st time inspections.", Snackbar.LENGTH_LONG).show();
                         return;
                     }
-                    if (mInspection.reinspect && defectStatusId == 3 && !mPictureTaken) {
+                    if (mInspection.ReInspect && defectStatusId == 3 && !mPictureTaken) {
                         Snackbar.make(mConstraintLayout, "A picture is required for this builder on C items during reinspections.", Snackbar.LENGTH_LONG).show();
                         return;
                     }
@@ -312,18 +302,18 @@ public class DefectItemActivity extends AppCompatActivity {
             // Custom rules for Coventry / Dreamfinders
             int[] builderIds_Coventry_Dreamfinders = { 396, 397, 2254, 2255 };
             for (int builderId : builderIds_Coventry_Dreamfinders) {
-                if (builderId == mInspection.builder_id && (mInspection.inspection_class == 1 || mInspection.inspection_class == 2) ) {
-                    if (!mInspection.reinspect && defectStatusId == 2 && !mPictureTaken) {
+                if (builderId == mInspection.BuilderID && (mInspection.InspectionClass == 1 || mInspection.InspectionClass == 2) ) {
+                    if (!mInspection.ReInspect && defectStatusId == 2 && !mPictureTaken) {
                         Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items during 1st time inspections.", Snackbar.LENGTH_LONG).show();
                         return;
                     }
                 }
             }
 
-            if (mInspection.require_risk_assessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--") || !mPictureTaken)) {
+            if (mInspection.RequireRiskAssessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--") || !mPictureTaken)) {
                 Snackbar.make(mConstraintLayout, "Must have a lot number, construction stage, and picture for this inspection type.", Snackbar.LENGTH_LONG).show();
                 return;
-            } else if (mInspection.require_risk_assessment) {
+            } else if (mInspection.RequireRiskAssessment) {
                 lotNumber = mTextLotNumber.getText().toString();
                 constructionStage = mSpinnerConstructionStage.getSelectedItem().toString();
             }
@@ -346,22 +336,22 @@ public class DefectItemActivity extends AppCompatActivity {
 
             // If a picture was taken, create a new InspectionDefect_Table with the picture path
             if (mPictureTaken && !mAttachmentIncluded) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, null);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.ReInspectionRequired, mCurrentPhotoPath, null);
             } else if (mAttachmentIncluded && !mPictureTaken) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, attachmentData);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.ReInspectionRequired, null, attachmentData);
             } else if (mAttachmentIncluded && mPictureTaken) {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, mCurrentPhotoPath, attachmentData);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.ReInspectionRequired, mCurrentPhotoPath, attachmentData);
             } else {
-                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.reinspection_required, null, null);
+                inspectionDefect = new InspectionDefect_Table(mInspectionId, mDefectId, defectStatusId, comment, priorInspectionDetailId, firstInspectionDetailId, lotNumber, constructionStage, mDefectItem.ReInspectionRequired, null, null);
             }
 
             // If mInspectionDefectId > 0, that means this is a previously created item, update the item. Otherwise, create a new one.
             if (mInspectionDefectId > 0) {
                 InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
-                currentItem.comment = comment;
-                currentItem.defect_status_id = defectStatusId;
+                currentItem.Comment = comment;
+                currentItem.DefectStatusID = defectStatusId;
                 if (mPictureTaken) {
-                    currentItem.picture_path = mCurrentPhotoPath;
+                    currentItem.PicturePath = mCurrentPhotoPath;
                 }
                 mDefectItemViewModel.updateInspectionDefect(currentItem);
                 mDefectItemViewModel.updateReviewedStatus(defectStatusId, mInspectionHistoryId);
@@ -370,7 +360,7 @@ public class DefectItemActivity extends AppCompatActivity {
                 finish();
             } else {
                 newId = mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
-                // If this is a reinspect, mInspectionHistoryId will be > 0, update the reviewed flag and the status id.
+                // If this is a reinspect, mInspectionHistoryId will be > 0, update the reviewed flag and the status InspectionID.
                 if (mInspectionHistoryId > 0) {
                     mDefectItemViewModel.updateIsReviewed(mInspectionHistoryId);
                     mDefectItemViewModel.updateReviewedStatus(defectStatusId, mInspectionHistoryId);
@@ -414,7 +404,7 @@ public class DefectItemActivity extends AppCompatActivity {
             mFaultFragment.show(getSupportFragmentManager(), "FAULT");
         });
         mDefectItemTextCannedComment.setOnClickListener(view -> {
-            if (mInspection.inspection_class == 7) {
+            if (mInspection.InspectionClass == 7) {
                 mCannedCommentFragment = CannedCommentFragment.newInstance(mDefectItemViewModel.getEnergyCannedCommentsSync());
             } else {
                 mCannedCommentFragment = CannedCommentFragment.newInstance(mDefectItemViewModel.getCannedCommentsSync());
@@ -426,16 +416,16 @@ public class DefectItemActivity extends AppCompatActivity {
         mTextToolbarIndividualRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_IND_INSPECTIONS_REMAINING, -1)));
         mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
 
-        mDefectItemDetails.append(Integer.toString(mDefectItem.item_number));
+        mDefectItemDetails.append(Integer.toString(mDefectItem.ItemNumber));
         mDefectItemDetails.append(" - ");
-        mDefectItemDetails.append(mDefectItem.item_description);
+        mDefectItemDetails.append(mDefectItem.ItemDescription);
 
         // Set up spinner
         String[] spinnerItems = new String[]{"--Choose an option--", "Preliminary", "Prime", "Critical"};
         mSpinnerConstructionStageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerItems);
         mSpinnerConstructionStage.setAdapter(mSpinnerConstructionStageAdapter);
 
-        if (!mInspection.require_risk_assessment) {
+        if (!mInspection.RequireRiskAssessment) {
             mLabelLotNumber.setVisibility(View.GONE);
             mLabelConstructionStage.setVisibility(View.GONE);
             mTextLotNumber.setVisibility(View.GONE);
@@ -451,21 +441,26 @@ public class DefectItemActivity extends AppCompatActivity {
         }
 
         // If the category is 128, 131, or 132, default to C
-        if (mDefectItem.defect_category_id == 128 || mDefectItem.defect_category_id == 131 || mDefectItem.defect_category_id == 132) {
+        if (mDefectItem.DefectCategoryID == 128 || mDefectItem.DefectCategoryID == 131 || mDefectItem.DefectCategoryID == 132) {
             mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
         }
 
-        // If MFC inspection, remove R and NC status
-        if (mInspection.division_id == 20) {
+        // If MFC inspection, remove R and NA status
+        if (mInspection.DivisionID == 20) {
             mRadioButtonR.setVisibility(View.GONE);
             mRadioButtonNA.setVisibility(View.GONE);
+            // If the category is an observation, remove NC status
+            if (mDefectItem.CategoryName.contains("Observation")) {
+                mRadioButtonNC.setVisibility(View.GONE);
+                mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
+            }
         }
 
         // Engineering Inspections where Defect Items default to Complete
-        if (mInspection.inspection_type_id == 1706 || mInspection.inspection_type_id == 1708 || mInspection.inspection_type_id == 1709 ||
-                mInspection.inspection_type_id == 1710 || mInspection.inspection_type_id == 1711 || mInspection.inspection_type_id == 1851 ||
-                mInspection.inspection_type_id == 1852 || mInspection.inspection_type_id == 1853 || mInspection.inspection_type_id == 1854 ||
-                mInspection.inspection_type_id == 1855) {
+        if (mInspection.InspectionTypeID == 1706 || mInspection.InspectionTypeID == 1708 || mInspection.InspectionTypeID == 1709 ||
+                mInspection.InspectionTypeID == 1710 || mInspection.InspectionTypeID == 1711 || mInspection.InspectionTypeID == 1851 ||
+                mInspection.InspectionTypeID == 1852 || mInspection.InspectionTypeID == 1853 || mInspection.InspectionTypeID == 1854 ||
+                mInspection.InspectionTypeID == 1855) {
             mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
         }
 
@@ -473,7 +468,7 @@ public class DefectItemActivity extends AppCompatActivity {
         // So populate the comment box and current status
         if (mInspectionDefectId > 0) {
             InspectionDefect_Table currentItem = mDefectItemViewModel.getInspectionDefect(mInspectionDefectId);
-            switch (currentItem.defect_status_id) {
+            switch (currentItem.DefectStatusID) {
                 case 2:
                     mRadioGroupDefectStatus.check(R.id.defect_item_radio_nc);
                     break;
@@ -487,11 +482,11 @@ public class DefectItemActivity extends AppCompatActivity {
                     mRadioGroupDefectStatus.check(R.id.defect_item_radio_na);
                     break;
             }
-            mDefectItemTextComment.setText(currentItem.comment);
+            mDefectItemTextComment.setText(currentItem.Comment);
 
-            if (currentItem.picture_path != null) {
+            if (currentItem.PicturePath != null) {
                 mPictureTaken = true;
-                mCurrentPhotoPath = currentItem.picture_path;
+                mCurrentPhotoPath = currentItem.PicturePath;
                 displayThumbnail();
             }
         }

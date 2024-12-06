@@ -125,7 +125,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_FOUND);
         mInspection = mReviewAndSubmitViewModel.getInspectionSync(mInspectionId);
         mSecurityUserId = mSharedPreferences.getString(Constants.PREF_SECURITY_USER_ID, "NULL");
-        mDivisionId = mInspection.division_id;
+        mDivisionId = mInspection.DivisionID;
         mIsOnline = mSharedPreferences.getBoolean(PREF_IS_ONLINE, false);
         mChangedStatus = false;
 
@@ -217,12 +217,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
                     Attachment_Table attachment = new Attachment_Table();
-                    attachment.inspection_id = mInspectionId;
-                    attachment.location_id = mInspection.location_id;
-                    attachment.file_name = null;
-                    attachment.file_data = null;
-                    attachment.file_path = data.getData().toString();
-                    attachment.is_uploaded = false;
+                    attachment.InspectionID = mInspectionId;
+                    attachment.LocationID = mInspection.LocationID;
+                    attachment.FileName = null;
+                    attachment.FileData = null;
+                    attachment.FilePath = data.getData().toString();
+                    attachment.IsUploaded = false;
 
                     mReviewAndSubmitViewModel.insertAttachment(attachment);
                 }
@@ -236,9 +236,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
             // Display address
             mTextAddress.setText("");
-            mTextAddress.append(mInspection.community + "\n");
-            mTextAddress.append(mInspection.address + "\n");
-            mTextAddress.append(mInspection.inspection_type);
+            mTextAddress.append(mInspection.Community + "\n");
+            mTextAddress.append(mInspection.Address + "\n");
+            mTextAddress.append(mInspection.InspectionType);
 
             // Populate the recycler view of inspection defects
             mReviewAndSubmitListAdapter = new ReviewAndSubmitListAdapter(new ReviewAndSubmitListAdapter.ReviewAndSubmitDiff());
@@ -249,7 +249,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             });
 
             // If this is not a reinspection, set up the swipe functionality to remove an item
-            if (!mInspection.reinspect || (mInspection.division_id == 20 && mInspection.inspection_type_id != 1154)) {
+            if (!mInspection.ReInspect || (mInspection.DivisionID == 20 && mInspection.InspectionTypeID != 1154)) {
                 ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
                     @Override
@@ -279,7 +279,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
     private int getInspectionStatusId() {
         try {
             int status;
-            int builderId = mInspection.builder_id;
+            int builderId = mInspection.BuilderID;
             Builder_Table builder = mReviewAndSubmitViewModel.getBuilder(builderId);
             boolean builderConditionalReinspect = builder.reinspection_required;
             mInspectionDefectList = mReviewAndSubmitViewModel.getInspectionDefectsForReviewSync(mInspectionId);
@@ -308,17 +308,17 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 }
             }
 
-            if (mInspection.inspection_type_id == 1828 && mInspection.builder_id == 2597) {
+            if (mInspection.InspectionTypeID == 1828 && mInspection.BuilderID == 2597) {
                 status = 32;
             }
 
-            if (mInspection.inspection_type_id == 1329 && (status == 11 || status == 26)) {
+            if (mInspection.InspectionTypeID == 1329 && (status == 11 || status == 26)) {
                 status = 27;
             }
 
             int[] defaultToPerformed = { 785, 1160, 1148, 918, 1706, 1708, 1709, 1710, 1711, 1851, 1852, 1853, 1854, 1855 };
             for (int typeId : defaultToPerformed) {
-                if (typeId == mInspection.inspection_type_id) {
+                if (typeId == mInspection.InspectionTypeID) {
                     status = 27;
                     break;
                 }
@@ -347,10 +347,10 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         List<InspectionDefect_Table> inspectionDefects = mReviewAndSubmitViewModel.getAllInspectionDefectsSync(mInspectionId);
         List<Attachment_Table> inspectionAttachments = mReviewAndSubmitViewModel.getAttachmentsToUpload(mInspectionId);
         OffsetDateTime endTime = OffsetDateTime.now();
-        if (mInspection.end_time == null) {
+        if (mInspection.EndTime == null) {
             mReviewAndSubmitViewModel.completeInspection(endTime, mInspectionId);
         } else {
-            endTime = mInspection.end_time;
+            endTime = mInspection.EndTime;
         }
 
         if (mDivisionId == 20) {
@@ -380,16 +380,16 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         JSONObject statusJSON = new JSONObject();
         InspectionDefect_Table inspectionDefect;
         DefectItem_Table defectItem;
-        BridgeLogger.log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.start_time + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
+        BridgeLogger.log('I', TAG, "Setting up update inspection status request... InspID:" + mInspectionId + " StartTime:" + mInspection.StartTime + " EndTime:" + endTime + " Status:" + mInspectionStatusId + " Sup Present:" + mSupervisorPresent);
         statusJSON.put("InspectionId", mInspectionId);
         statusJSON.put("StatusId", mInspectionStatusId);
         statusJSON.put("UserId", mSecurityUserId);
         statusJSON.put("InspectionTotal", inspectionDefects.size());
         statusJSON.put("SuperPresent", (mSupervisorPresent ? 1 : 0));
-        statusJSON.put("StartTime", mInspection.start_time.toString());
+        statusJSON.put("StartTime", mInspection.StartTime.toString());
         statusJSON.put("EndTime", endTime.toString());
-        statusJSON.put("Training", (mInspection.trainee_id > 0 ? 1 : 0));
-        statusJSON.put("TraineeId", mInspection.trainee_id);
+        statusJSON.put("Training", (mInspection.TraineeID > 0 ? 1 : 0));
+        statusJSON.put("TraineeId", mInspection.TraineeID);
         if (mChangedStatus) {
             statusJSON.put("ChangeReason","Changed the resolution.");
         } else {
@@ -421,15 +421,15 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 attachment = inspectionAttachments.get(lcv);
                 Attachment_Table finalAttachment = attachment;
                 JSONObject jsonAttachment = new JSONObject();
-                jsonAttachment.put("InspectionId", attachment.inspection_id);
+                jsonAttachment.put("InspectionId", attachment.InspectionID);
                 jsonAttachment.put("UserId", 2806);
-                jsonAttachment.put("ImageData", attachment.file_data);
-                jsonAttachment.put("ImageFileName", attachment.file_name);
+                jsonAttachment.put("ImageData", attachment.FileData);
+                jsonAttachment.put("ImageFileName", attachment.FileName);
                 mUploadInspectionAttachmentRequest = BridgeAPIQueue.getInstance().uploadInspectionAttachment(jsonAttachment, mInspectionId, new ServerCallback() {
                     @Override
                     public void onSuccess(String message) {
                         BridgeLogger.log('I', TAG, "mUploadInspectionAttachmentRequest returned success.");
-                        mReviewAndSubmitViewModel.updateIsUploaded(finalAttachment.id);
+                        mReviewAndSubmitViewModel.updateIsUploaded(finalAttachment.AttachmentID);
                     }
 
                     @Override
@@ -457,24 +457,24 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
             BridgeLogger.log('I', TAG, "Found defects, uploading...");
             for(int lcv = 0; lcv < inspectionDefects.size(); lcv++) {
                 inspectionDefect = inspectionDefects.get(lcv);
-                defectItem = mReviewAndSubmitViewModel.getDefectItem(inspectionDefect.defect_item_id);
+                defectItem = mReviewAndSubmitViewModel.getDefectItem(inspectionDefect.DefectItemID);
 
                 defectJSON = new JSONObject();
-                defectJSON.put("InspectionId", inspectionDefect.inspection_id);
-                defectJSON.put("DefectItemId", inspectionDefect.defect_item_id);
-                defectJSON.put("DefectStatusId", inspectionDefect.defect_status_id);
+                defectJSON.put("InspectionId", inspectionDefect.InspectionID);
+                defectJSON.put("DefectItemId", inspectionDefect.DefectItemID);
+                defectJSON.put("DefectStatusId", inspectionDefect.DefectStatusID);
 
-                if (inspectionDefect.comment != null) {
-                    defectJSON.put("Comment", inspectionDefect.comment);
+                if (inspectionDefect.Comment != null) {
+                    defectJSON.put("Comment", inspectionDefect.Comment);
                 } else {
                     defectJSON.put("Comment", "");
                 }
-                if (inspectionDefect.picture_path != null) {
+                if (inspectionDefect.PicturePath != null) {
                     try {
-                        defectJSON.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.id, false)));
-                        defectJSON.put("ImageFileName", inspectionDefect.picture_path.substring(inspectionDefect.picture_path.lastIndexOf("/")+1));
+                        defectJSON.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(inspectionDefect.ID, false)));
+                        defectJSON.put("ImageFileName", inspectionDefect.PicturePath.substring(inspectionDefect.PicturePath.lastIndexOf("/")+1));
                     } catch (NullPointerException e) {
-                        Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + defectItem.item_number, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mConstraintLayout, "Photo is missing! Please check photo for #" + defectItem.ItemNumber, Snackbar.LENGTH_SHORT).show();
                         hideProgressSpinner();
                         return;
                     }
@@ -482,12 +482,12 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     defectJSON.put("ImageData", null);
                     defectJSON.put("ImageFileName", null);
                 }
-                if (inspectionDefect.attachment_data != null) {
+                if (inspectionDefect.AttachmentData != null) {
                     try {
-                        defectJSON.put("AttachmentData", Base64.getEncoder().encodeToString(inspectionDefect.attachment_data));
-                        defectJSON.put("AttachmentFileName", mInspectionId + "_" + defectItem.id + "_Attachment.pdf");
+                        defectJSON.put("AttachmentData", Base64.getEncoder().encodeToString(inspectionDefect.AttachmentData));
+                        defectJSON.put("AttachmentFileName", mInspectionId + "_" + defectItem.DefectItemID + "_Attachment.pdf");
                     } catch (NullPointerException e) {
-                        Snackbar.make(mConstraintLayout, "Attachment is missing! Please check attachment for #" + defectItem.item_number, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mConstraintLayout, "Attachment is missing! Please check attachment for #" + defectItem.ItemNumber, Snackbar.LENGTH_SHORT).show();
 
                         hideProgressSpinner();
                         return;
@@ -496,25 +496,25 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     defectJSON.put("AttachmentData", null);
                     defectJSON.put("AttachmentFileName", null);
                 }
-                defectJSON.put("PriorInspectionDetailId", inspectionDefect.prior_inspection_detail_id);
-                defectJSON.put("FirstInspectionDetailId", inspectionDefect.first_inspection_detail_id);
-                if (mInspection.require_risk_assessment) {
-                    defectJSON.put("LotNumber", inspectionDefect.lot_number);
-                    defectJSON.put("StageOfConstruction", inspectionDefect.stage_of_construction);
+                defectJSON.put("PriorInspectionDetailId", inspectionDefect.PriorInspectionDetailID);
+                defectJSON.put("FirstInspectionDetailId", inspectionDefect.FirstDefectInspectionDetailID);
+                if (mInspection.RequireRiskAssessment) {
+                    defectJSON.put("LotNumber", inspectionDefect.LotNumber);
+                    defectJSON.put("StageOfConstruction", inspectionDefect.StageOfConstruction);
                 } else {
                     defectJSON.put("LotNumber", null);
                     defectJSON.put("StageOfConstruction", null);
                 }
                 InspectionDefect_Table finalDefect = inspectionDefect;
-                if (!inspectionDefect.is_uploaded) {
-                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(defectJSON, inspectionDefect.defect_item_id, inspectionDefect.inspection_id, mReviewAndSubmitViewModel, new ServerCallback() {
+                if (!inspectionDefect.IsUploaded) {
+                    mUploadInspectionDataRequest = BridgeAPIQueue.getInstance().uploadInspectionDefect(defectJSON, inspectionDefect.DefectItemID, inspectionDefect.InspectionID, mReviewAndSubmitViewModel, new ServerCallback() {
                         @Override
                         public void onSuccess(String message) {
-                            mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.id);
+                            mReviewAndSubmitViewModel.markDefectUploaded(finalDefect.ID);
                             BridgeLogger.log('I', TAG, "Defect item uploaded... " + finalDefect);
-                            if (mReviewAndSubmitViewModel.multifamilyDefectExists(finalDefect.first_inspection_detail_id) > 0) {
-                                int existingId = mReviewAndSubmitViewModel.multifamilyDefectExists(finalDefect.first_inspection_detail_id);
-                                mReviewAndSubmitViewModel.updateExistingMFCDefect(finalDefect.defect_status_id, finalDefect.comment, existingId);
+                            if (mReviewAndSubmitViewModel.multifamilyDefectExists(finalDefect.FirstDefectInspectionDetailID, mInspectionId) > 0) {
+                                int existingId = mReviewAndSubmitViewModel.multifamilyDefectExists(finalDefect.FirstDefectInspectionDetailID, mInspectionId);
+                                mReviewAndSubmitViewModel.updateExistingMFCDefect(finalDefect.DefectStatusID, finalDefect.Comment, existingId);
                                 BridgeLogger.log('I', TAG, "Updated existing defect");
                             }
                             if (mReviewAndSubmitViewModel.remainingToUpload(mInspectionId) == 0) {
@@ -542,9 +542,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         InspectionDefect_Table defect = mReviewAndSubmitViewModel.getInspectionDefect(inspectionDefectId);
         Bitmap image;
         if (isAttachment) {
-            return defect.attachment_data;
+            return defect.AttachmentData;
         } else {
-            image = BitmapFactory.decodeFile(defect.picture_path);
+            image = BitmapFactory.decodeFile(defect.PicturePath);
         }
         Bitmap outBmp;
         float degrees = 90;
@@ -588,9 +588,9 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                 .setMessage(statusMessage)
                 .setPositiveButton("Yes", (dialog, which) -> {
                     try {
-                        if (mDivisionId == 2 & mInspection.builder_name.contains("David Weekley")) {
+                        if (mDivisionId == 2 & mInspection.BuilderName.contains("David Weekley")) {
                             for (int typeId : thermalRoughInspectionTypes) {
-                                if (mInspection.inspection_type_id == typeId) {
+                                if (mInspection.InspectionTypeID == typeId) {
                                     // Houston, David Weekley Inspection, Thermal Rough, need to check for sticker.
                                     needsStickerDialog.set(true);
                                 }
@@ -624,7 +624,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
 
     private void showEditResolutionDialog() {
         mChangeResolutionFragment = ChangeResolutionFragment.newInstance();
-        ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.division_id, mInspection.inspection_class, mInspection.inspection_type, mInspection.builder_id, mInspection.inspection_type_id, mInspection.reinspect);
+        ResolutionHelper resolutionHelper = new ResolutionHelper(mInspection.DivisionID, mInspection.InspectionClass, mInspection.InspectionType, mInspection.BuilderID, mInspection.InspectionTypeID, mInspection.ReInspect);
         mChangeResolutionFragment.setResolutionList(resolutionHelper.buildList());
         mChangeResolutionFragment.show(getSupportFragmentManager(), "CHANGE_RESOLUTION");
     }

@@ -91,81 +91,81 @@ public class Ekotrope_Final extends Fragment {
         mButtonCeilings.setOnClickListener(view -> {
             Intent ceilingsIntent = new Intent(getActivity(), Ekotrope_CeilingsListActivity.class);
             ceilingsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            ceilingsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            ceilingsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            ceilingsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            ceilingsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(ceilingsIntent);
         });
         mButtonMechanicalEquipment.setOnClickListener(view -> {
             Intent mechanicalEquipmentIntent = new Intent(getActivity(), Ekotrope_ComponentListActivity.class);
             mechanicalEquipmentIntent.putExtra(INSPECTION_ID, mInspectionId);
-            mechanicalEquipmentIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            mechanicalEquipmentIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            mechanicalEquipmentIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            mechanicalEquipmentIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             mechanicalEquipmentIntent.putExtra(COMPONENT_TYPE, COMPONENT_MECHANICAL_EQUIPMENT);
             startActivity(mechanicalEquipmentIntent);
         });
         mButtonDistributionSystems.setOnClickListener(view -> {
             Intent distributionSystemsIntent = new Intent(getActivity(), Ekotrope_ComponentListActivity.class);
             distributionSystemsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            distributionSystemsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            distributionSystemsIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            distributionSystemsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            distributionSystemsIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             distributionSystemsIntent.putExtra(COMPONENT_TYPE, COMPONENT_DISTRIBUTION_SYSTEM);
             startActivity(distributionSystemsIntent);
         });
         mButtonMechanicalVentilation.setOnClickListener(view -> {
             Intent mechanicalVentilationIntent = new Intent(getActivity(), Ekotrope_ComponentListActivity.class);
             mechanicalVentilationIntent.putExtra(INSPECTION_ID, mInspectionId);
-            mechanicalVentilationIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            mechanicalVentilationIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            mechanicalVentilationIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            mechanicalVentilationIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             mechanicalVentilationIntent.putExtra(COMPONENT_TYPE, COMPONENT_MECHANICAL_VENTILATION);
             startActivity(mechanicalVentilationIntent);
         });
         mButtonLighting.setOnClickListener(view -> {
             Intent lightingIntent = new Intent(getActivity(), Ekotrope_LightingActivity.class);
             lightingIntent.putExtra(INSPECTION_ID, mInspectionId);
-            lightingIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            lightingIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            lightingIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            lightingIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             startActivity(lightingIntent);
         });
         mButtonRefrigerator.setOnClickListener(view -> {
             Intent refrigeratorIntent = new Intent(getActivity(), Ekotrope_RefrigeratorActivity.class);
             refrigeratorIntent.putExtra(INSPECTION_ID, mInspectionId);
-            refrigeratorIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            refrigeratorIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            refrigeratorIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            refrigeratorIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             startActivity(refrigeratorIntent);
         });
         mButtonDishwasher.setOnClickListener(view -> {
             Intent dishwasherIntent = new Intent(getActivity(), Ekotrope_DishwasherActivity.class);
             dishwasherIntent.putExtra(INSPECTION_ID, mInspectionId);
-            dishwasherIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            dishwasherIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            dishwasherIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            dishwasherIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             startActivity(dishwasherIntent);
         });
         mButtonClothesDryer.setOnClickListener(view -> {
             Intent clothesDryerIntent = new Intent(getActivity(), Ekotrope_ClothesDryerActivity.class);
             clothesDryerIntent.putExtra(INSPECTION_ID, mInspectionId);
-            clothesDryerIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            clothesDryerIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            clothesDryerIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            clothesDryerIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             startActivity(clothesDryerIntent);
         });
         mButtonClothesWasher.setOnClickListener(view -> {
             Intent clothesWasherIntent = new Intent(getActivity(), Ekotrope_ClothesWasherActivity.class);
             clothesWasherIntent.putExtra(INSPECTION_ID, mInspectionId);
-            clothesWasherIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            clothesWasherIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            clothesWasherIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            clothesWasherIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             startActivity(clothesWasherIntent);
         });
         mButtonRangeOven.setOnClickListener(view -> {
             Intent rangeOvenIntent = new Intent(getActivity(), Ekotrope_RangeOvenActivity.class);
             rangeOvenIntent.putExtra(INSPECTION_ID, mInspectionId);
-            rangeOvenIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            rangeOvenIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            rangeOvenIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            rangeOvenIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             startActivity(rangeOvenIntent);
         });
         mButtonInfiltration.setOnClickListener(view -> {
             Intent infiltrationIntent = new Intent(getActivity(), Ekotrope_InfiltrationActivity.class);
             infiltrationIntent.putExtra(INSPECTION_ID, mInspectionId);
-            infiltrationIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            infiltrationIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.ekotrope_plan_id);
+            infiltrationIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            infiltrationIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
             startActivity(infiltrationIntent);
         });
     }

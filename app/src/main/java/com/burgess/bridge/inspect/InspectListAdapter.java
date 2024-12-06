@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
@@ -50,14 +49,14 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
         TextView textItemDescription = holder.getTextDefectItemDescription();
 
         // Set text fields
-        textSection.setText(defectItem.defect_category_name);
-        textItemDescription.setText(defectItem.item_description);
-        textItemNumber.setText(Integer.toString(defectItem.item_number));
+        textSection.setText(defectItem.CategoryName);
+        textItemDescription.setText(defectItem.ItemDescription);
+        textItemNumber.setText(Integer.toString(defectItem.ItemNumber));
 
         // Hide the section if needed
         if (position > 0) {
             DefectItem_Table previous = getItem(position-1);
-            if (previous.defect_category_name.equals(defectItem.defect_category_name)) {
+            if (previous.CategoryName.equals(defectItem.CategoryName)) {
                 textSection.setVisibility(View.GONE);
             } else {
                 textSection.setVisibility(View.VISIBLE);
@@ -67,8 +66,8 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
         // Set the click listener
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), DefectItemActivity.class);
-            intent.putExtra(DefectItemActivity.INSPECTION_ID, inspection.id);
-            intent.putExtra(DefectItemActivity.DEFECT_ID, defectItem.id);
+            intent.putExtra(DefectItemActivity.INSPECTION_ID, inspection.InspectionID);
+            intent.putExtra(DefectItemActivity.DEFECT_ID, defectItem.DefectItemID);
             intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, -1);
             intent.putExtra(DefectItemActivity.FIRST_DETAIL_ID, -1);
             intent.putExtra(DefectItemActivity.FILTER_OPTION, mFilter);
@@ -104,7 +103,7 @@ public class InspectListAdapter extends ListAdapter<DefectItem_Table, InspectVie
 
         @Override
         public boolean areContentsTheSame(@NonNull DefectItem_Table oldItem, @NonNull DefectItem_Table newItem) {
-            return oldItem.id == newItem.id;
+            return oldItem.DefectItemID == newItem.DefectItemID;
         }
     }
 }

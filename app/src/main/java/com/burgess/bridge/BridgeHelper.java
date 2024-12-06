@@ -119,4 +119,16 @@ public class BridgeHelper {
         status.setVisibility(View.GONE);
         currentWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
+    public static void showSpinner(LinearLayout lockScreen, ProgressBar loadingSpinner, Window currentWindow) {
+        currentWindow.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        loadingSpinner.setVisibility(View.VISIBLE);
+        lockScreen.setVisibility(View.VISIBLE);
+        lockScreen.getOverlay().add(new ColorDrawable(Color.parseColor("#80000000")));
+    }
+    public static void hideSpinner(LinearLayout lockScreen, ProgressBar loadingSpinner, Window currentWindow) {
+        currentWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        loadingSpinner.setVisibility(View.GONE);
+        lockScreen.setVisibility(View.GONE);
+        currentWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 }

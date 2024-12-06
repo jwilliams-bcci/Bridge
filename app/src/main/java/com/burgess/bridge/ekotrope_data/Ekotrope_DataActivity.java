@@ -91,17 +91,17 @@ public class Ekotrope_DataActivity extends AppCompatActivity {
     }
 
     private void initializeDisplayContent() {
-        mTextEkotropeProjectId.setText(mInspection.ekotrope_project_id);
-        mTextEkotropePlanId.setText(mInspection.ekotrope_plan_id);
+        mTextEkotropeProjectId.setText(mInspection.EkotropeProjectID);
+        mTextEkotropePlanId.setText(mInspection.EkotropePlanID);
 
         Bundle bundle = new Bundle();
         bundle.putInt(INSPECTION_ID, mInspectionId);
-        if (mInspection.inspection_type.contains("Rough")) {
+        if (mInspection.InspectionType.contains("Rough")) {
             mInspectionType = EKOTROPE_INSPECTION_TYPE_ROUGH;
             Ekotrope_Rough ekotrope_rough = new Ekotrope_Rough();
             ekotrope_rough.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.ekotrope_data_fragment_inspection_type, ekotrope_rough).commit();
-        } else if (mInspection.inspection_type.contains("Final")) {
+        } else if (mInspection.InspectionType.contains("Final")) {
             mInspectionType = EKOTROPE_INSPECTION_TYPE_FINAL;
             Ekotrope_Final ekotrope_final = new Ekotrope_Final();
             ekotrope_final.setArguments(bundle);
@@ -112,11 +112,11 @@ public class Ekotrope_DataActivity extends AppCompatActivity {
     private void initializeButtonListeners() {
         mButtonEmail.setOnClickListener(view -> {
             if (mInspectionType.equals(EKOTROPE_INSPECTION_TYPE_FINAL)) {
-                Intent emailIntent = BridgeLogger.sendEkotropeJson(mEkotropeDataViewModel.getInspectionSyncJson_Final(mInspection.ekotrope_plan_id, mInspection.ekotrope_project_id), mInspectionId);
+                Intent emailIntent = BridgeLogger.sendEkotropeJson(mEkotropeDataViewModel.getInspectionSyncJson_Final(mInspection.EkotropePlanID, mInspection.EkotropeProjectID), mInspectionId);
                 startActivity(emailIntent);
                 Snackbar.make(mConstraintLayout, "JSON-Final sent via email", Snackbar.LENGTH_SHORT).show();
             } else if (mInspectionType.equals(EKOTROPE_INSPECTION_TYPE_ROUGH)) {
-                Intent emailIntent = BridgeLogger.sendEkotropeJson(mEkotropeDataViewModel.getInspectionSyncJson_Rough(mInspection.ekotrope_plan_id, mInspection.ekotrope_project_id), mInspectionId);
+                Intent emailIntent = BridgeLogger.sendEkotropeJson(mEkotropeDataViewModel.getInspectionSyncJson_Rough(mInspection.EkotropePlanID, mInspection.EkotropeProjectID), mInspectionId);
                 startActivity(emailIntent);
                 Snackbar.make(mConstraintLayout, "JSON-Final sent via email", Snackbar.LENGTH_SHORT).show();
             } else {
@@ -125,12 +125,12 @@ public class Ekotrope_DataActivity extends AppCompatActivity {
         });
 
         mButtonSubmit.setOnClickListener(view -> {
-            BridgeLogger.log('I', TAG, String.format(Locale.ENGLISH,"Submitting Ekotrope data for Inspection ID: %d, Plan ID: %s, Project ID: %s", mInspectionId, mInspection.ekotrope_plan_id, mInspection.ekotrope_project_id));
-            BridgeHelper.showSpinner(mLockScreen, mProgressBar, null, getWindow());
-            JsonObjectRequest request = BridgeAPIQueue.getInstance(this).updateEkotropePlanData(mEkotropeDataViewModel, mInspection.ekotrope_plan_id, mInspection.ekotrope_project_id, mInspectionType, new ServerCallback() {
+            BridgeLogger.log('I', TAG, String.format(Locale.ENGLISH,"Submitting Ekotrope data for Inspection ID: %d, Plan ID: %s, Project ID: %s", mInspectionId, mInspection.EkotropePlanID, mInspection.EkotropeProjectID));
+            BridgeHelper.showSpinner(mLockScreen, mProgressBar, getWindow());
+            JsonObjectRequest request = BridgeAPIQueue.getInstance(this).updateEkotropePlanData(mEkotropeDataViewModel, mInspection.EkotropePlanID, mInspection.EkotropeProjectID, mInspectionType, new ServerCallback() {
                 @Override
                 public void onSuccess(String message) {
-                    BridgeHelper.hideSpinner(mLockScreen, mProgressBar, null, getWindow());
+                    BridgeHelper.hideSpinner(mLockScreen, mProgressBar, getWindow());
                     Intent inspectIntent = new Intent(getApplicationContext(), InspectActivity.class);
                     inspectIntent.putExtra(INSPECTION_ID, mInspectionId);
                     inspectIntent.putExtra(EKOTROPE_SUBMITTED, EKOTROPE_SUBMITTED_TRUE);
@@ -139,11 +139,11 @@ public class Ekotrope_DataActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(String message) {
-                    BridgeHelper.hideSpinner(mLockScreen, mProgressBar, null, getWindow());
+                    BridgeHelper.hideSpinner(mLockScreen, mProgressBar, getWindow());
                     BridgeLogger.log('E', TAG, String.format(Locale.ENGLISH,"Failed to " +
                             "update Ekotrope data for Inspection ID: %d, Plan ID: %s, " +
-                            "Project ID: %s, Message: %s", mInspectionId, mInspection.ekotrope_plan_id,
-                            mInspection.ekotrope_project_id, message));
+                            "Project ID: %s, Message: %s", mInspectionId, mInspection.EkotropePlanID,
+                            mInspection.EkotropeProjectID, message));
                     Snackbar.make(mConstraintLayout, message, Snackbar.LENGTH_SHORT).show();
                 }
             });

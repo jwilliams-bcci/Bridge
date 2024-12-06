@@ -18,9 +18,9 @@ public interface PastInspection_DAO {
     @Query("DELETE FROM past_inspection_table")
     void deleteAll();
 
-    @Query("DELETE FROM past_inspection_table WHERE id = :id")
+    @Query("DELETE FROM past_inspection_table WHERE InspectionID = :id")
     void delete(int id);
 
-    @Query("SELECT * FROM past_inspection_table WHERE location_id = :locationId")
+    @Query("SELECT * FROM past_inspection_table WHERE LocationID = :locationId")
     LiveData<List<PastInspection_Table>> getPastInspections(int locationId);
 }

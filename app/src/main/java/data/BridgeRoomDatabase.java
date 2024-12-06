@@ -127,7 +127,7 @@ import data.Views.RouteSheet_View;
         }, views = {
         RouteSheet_View.class,
         ReviewAndSubmit_View.class
-        }, version = 83, exportSchema = false)
+        }, version = 86, exportSchema = false)
 @TypeConverters({DateConverter.class})
 public abstract class BridgeRoomDatabase extends RoomDatabase {
     public abstract Builder_DAO mBuilderDao();
@@ -169,15 +169,13 @@ public abstract class BridgeRoomDatabase extends RoomDatabase {
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static BridgeRoomDatabase getDatabase(final Context context) {
-        String isProd = BridgeAPIQueue.getInstance(context).isProd() ? "bridge_database_prod.db" : "bridge_database_stage.db";
-
         if (INSTANCE == null) {
             synchronized (BridgeRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), BridgeRoomDatabase.class, "bridge_database")
                             .addCallback(sRoomDatabaseCallback)
-                            .fallbackToDestructiveMigration()
                             .allowMainThreadQueries()
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

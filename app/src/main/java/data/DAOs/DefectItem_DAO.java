@@ -21,38 +21,38 @@ public interface DefectItem_DAO {
 
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
-            "INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id " +
-            "WHERE x.inspection_type_id = :inspection_type_id AND d.defect_category_name <> 'Re-Observation' " +
-            "ORDER BY d.defect_category_id, d.item_number ASC")
+            "INNER JOIN defect_item_x_inspection_type x ON x.DefectItemID = d.DefectItemID " +
+            "WHERE x.InspectionTypeID = :inspection_type_id AND d.CategoryName <> 'Re-Observation' " +
+            "ORDER BY d.DefectCategoryID, d.ItemNumber ASC")
     LiveData<List<DefectItem_Table>> getDefectItemsNumberSort(int inspection_type_id);
 
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
-            "INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id " +
-            "WHERE x.inspection_type_id = :inspection_type_id AND d.defect_category_name <> 'Re-Observation' " +
-            "ORDER BY d.defect_category_id, d.item_description ASC")
+            "INNER JOIN defect_item_x_inspection_type x ON x.DefectItemID = d.DefectItemID " +
+            "WHERE x.InspectionTypeID = :inspection_type_id AND d.CategoryName <> 'Re-Observation' " +
+            "ORDER BY d.DefectCategoryID, d.ItemDescription ASC")
     LiveData<List<DefectItem_Table>> getDefectItemsDescriptionSort(int inspection_type_id);
 
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
-            "INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id " +
-            "WHERE defect_category_name = :categoryName AND x.inspection_type_id = :inspection_type_id AND d.defect_category_name <> 'Re-Observation' " +
-            "ORDER BY d.item_number ASC")
+            "INNER JOIN defect_item_x_inspection_type x ON x.DefectItemID = d.DefectItemID " +
+            "WHERE CategoryName = :categoryName AND x.InspectionTypeID = :inspection_type_id AND d.CategoryName <> 'Re-Observation' " +
+            "ORDER BY d.ItemNumber ASC")
     LiveData<List<DefectItem_Table>> getDefectItemsFilteredNumberSort(String categoryName, int inspection_type_id);
 
     @Query("SELECT d.* " +
             "FROM defect_item_table d " +
-            "INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id " +
-            "WHERE d.defect_category_name = :categoryName AND x.inspection_type_id = :inspection_type_id AND d.defect_category_name <> 'Re-Observation' " +
-            "ORDER BY d.item_description ASC")
+            "INNER JOIN defect_item_x_inspection_type x ON x.DefectItemID = d.DefectItemID " +
+            "WHERE d.CategoryName = :categoryName AND x.InspectionTypeID = :inspection_type_id AND d.CategoryName <> 'Re-Observation' " +
+            "ORDER BY d.ItemDescription ASC")
     LiveData<List<DefectItem_Table>> getDefectItemsFilteredDescriptionSort(String categoryName, int inspection_type_id);
 
-    @Query("SELECT 'ALL' AS [category_name] UNION SELECT DISTINCT d.defect_category_name FROM defect_item_table d INNER JOIN defect_item_x_inspection_type x ON x.defect_item_id = d.id WHERE x.inspection_type_id = :inspection_type_id AND d.defect_category_name <> 'Re-Observation' ORDER BY category_name ASC")
+    @Query("SELECT 'ALL' AS [category_name] UNION SELECT DISTINCT d.CategoryName FROM defect_item_table d INNER JOIN defect_item_x_inspection_type x ON x.DefectItemID = d.DefectItemID WHERE x.InspectionTypeID = :inspection_type_id AND d.CategoryName <> 'Re-Observation' ORDER BY category_name ASC")
     LiveData<List<String>> getDefectCategories(int inspection_type_id);
 
-    @Query("SELECT * FROM defect_item_table WHERE id = :defect_item_id")
+    @Query("SELECT * FROM defect_item_table WHERE DefectItemID = :defect_item_id")
     LiveData<DefectItem_Table> getDefectItem(int defect_item_id);
 
-    @Query("SELECT * FROM defect_item_table WHERE id = :defect_item_id")
+    @Query("SELECT * FROM defect_item_table WHERE DefectItemID = :defect_item_id")
     DefectItem_Table getDefectItemSync(int defect_item_id);
 }

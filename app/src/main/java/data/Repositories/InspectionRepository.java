@@ -1,8 +1,11 @@
 package data.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.AsyncListUtil;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -41,13 +44,13 @@ public class InspectionRepository {
     }
 
     public void insert(Inspection_Table i) {
-        Inspection_Table existingInspection = getInspectionSync(i.id);
+        Inspection_Table existingInspection = getInspectionSync(i.InspectionID);
         if (existingInspection != null) {
             BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-                mInspectionDao.update(i.id, i.inspection_type_id, i.inspection_date, i.division_id, i.location_id, i.builder_name, i.builder_id,
-                        i.super_name, i.inspector_id, i.inspector, i.community, i.community_id, i.city, i.inspection_class, i.inspection_type,
-                        i.reinspect, i.inspection_order, i.address, i.inspection_status_id, i.inspection_status, i.super_phone, i.super_email,
-                        i.super_present, i.incomplete_reason, i.incomplete_reason_id, i.notes, i.job_number, i.require_risk_assessment, i.ekotrope_project_id);
+                mInspectionDao.update(i.InspectionID, i.InspectionTypeID, i.InspectionDate, i.DivisionID, i.LocationID, i.BuilderName, i.BuilderID,
+                        i.SuperName, i.InspectorID, i.Inspector, i.Community, i.CommunityID, i.City, i.InspectionClass, i.InspectionType,
+                        i.ReInspect, i.InspectionOrder, i.Address, i.InspectionStatusID, i.InspectionStatus, i.SuperPhone, i.SuperEmailAddress,
+                        i.SuperintendentPresent, i.IncompleteReason, i.IncompleteReasonID, i.Notes, i.JobNumber, i.RequireRiskAssessment, i.EkotropeProjectID);
             });
         } else {
             BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
@@ -90,5 +93,9 @@ public class InspectionRepository {
 
     public void updateEkotropePlanId(String ekotropePlanId, int inspectionId) {
         mInspectionDao.updateEkotropePlanId(ekotropePlanId, inspectionId);
+    }
+
+    public int getPendingMFCInspectionsAtLocation(int locationId) {
+        return mInspectionDao.getPendingMFCInspectionsAtLocation(locationId);
     }
 }

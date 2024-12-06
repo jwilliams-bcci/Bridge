@@ -24,8 +24,8 @@ public class InspectionDefectRepository {
         return mInspectionDefectDao.getInspectionDefect(inspection_defect_id);
     }
 
-    public int multifamilyDefectExists(int first_inspection_detail_id) {
-        return mInspectionDefectDao.multifamilyDefectExists(first_inspection_detail_id);
+    public int getExistingMFCDefect(int first_inspection_detail_id, int inspection_id) {
+        return mInspectionDefectDao.getExistingMFCDefect(first_inspection_detail_id, inspection_id);
     }
 
     public void updateExistingMFCDefect(int defect_status_id, String comment, int id) {

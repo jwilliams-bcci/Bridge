@@ -97,7 +97,7 @@ public class InspectActivity extends AppCompatActivity {
         mFilter = intent.getStringExtra(FILTER_OPTION) != null ? intent.getStringExtra(FILTER_OPTION) : "ALL";
         mInspection = mInspectViewModel.getInspectionSync(mInspectionId);
         mReinspection = mInspectViewModel.getReinspect(mInspectionId);
-        mInspectionTypeId = mInspection.inspection_type_id;
+        mInspectionTypeId = mInspection.InspectionTypeID;
 
         initializeViews();
         initializeButtonListeners();
@@ -151,10 +151,10 @@ public class InspectActivity extends AppCompatActivity {
             }
 
             // David Weekley Final - Has the sewer cam inspection passed? Yes or No buttons.
-            if ((mInspection.builder_name.toLowerCase().contains("dwh") || mInspection.builder_name.toLowerCase().contains("weekley"))
-                    && mInspection.inspection_type.toLowerCase().contains("final")
-                    && !(mInspection.inspection_type.toLowerCase().contains("roof") || mInspection.inspection_type.toLowerCase().contains("airplus"))
-                    && mInspection.division_id == 1 && mInspection.inspection_class != 7 && allGood) {
+            if ((mInspection.BuilderName.toLowerCase().contains("dwh") || mInspection.BuilderName.toLowerCase().contains("weekley"))
+                    && mInspection.InspectionType.toLowerCase().contains("final")
+                    && !(mInspection.InspectionType.toLowerCase().contains("roof") || mInspection.InspectionType.toLowerCase().contains("airplus"))
+                    && mInspection.DivisionID == 1 && mInspection.InspectionClass != 7 && allGood) {
                 needsSewerCam = true;
             } else {
                 needsSewerCam = false;
@@ -181,7 +181,7 @@ public class InspectActivity extends AppCompatActivity {
                     mInspectListAdapter.setCurrentList(defectItems));
         });
         mButtonViewEkotropeData.setOnClickListener(v -> {
-            if (mInspection.ekotrope_project_id.isEmpty() || mInspection.ekotrope_plan_id.isEmpty()) {
+            if (mInspection.EkotropeProjectID.isEmpty() || mInspection.EkotropePlanID.isEmpty()) {
                 Snackbar.make(mConstraintLayout, "Ekotrope data not available, refresh route sheet or contact support", Snackbar.LENGTH_LONG).show();
             } else {
                 Intent viewEkotropeDataIntent = new Intent(InspectActivity.this, Ekotrope_DataActivity.class);
@@ -196,17 +196,17 @@ public class InspectActivity extends AppCompatActivity {
 
         // Set address label
         mTextAddress.setText("");
-        mTextAddress.append(mInspection.community + "\n");
-        mTextAddress.append(mInspection.address + "\n");
-        mTextAddress.append(mInspection.inspection_type);
+        mTextAddress.append(mInspection.Community + "\n");
+        mTextAddress.append(mInspection.Address + "\n");
+        mTextAddress.append(mInspection.InspectionType);
 
         mTextTotalDefectCount.setText(Integer.toString(mInspectViewModel.getInspectionDefectCount(mInspectionId)));
 
-        if ((mReinspection && mInspection.division_id != 20) || (mInspectionTypeId == 1154)) {
+        if ((mReinspection && mInspection.DivisionID != 20) || (mInspectionTypeId == 1154)) {
             initializeReinspectDisplayContent();
         } else {
-            if((mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) ||
-                    (mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Final"))) {
+            if((mInspection.InspectionClass != 7 && mInspection.InspectionType.contains("Rough")) ||
+                    (mInspection.InspectionClass != 7 && mInspection.InspectionType.contains("Final"))) {
                 mButtonViewEkotropeData.setVisibility(View.GONE);
                 ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
                 ConstraintSet newLayout = new ConstraintSet();
@@ -246,7 +246,7 @@ public class InspectActivity extends AppCompatActivity {
         mSpinnerDefectCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if ((mReinspection && mInspection.division_id != 20) || (mInspection.inspection_type_id == 1154)) {
+                if ((mReinspection && mInspection.DivisionID != 20) || (mInspection.InspectionTypeID == 1154)) {
                     displayReinspectItems(0);
                 } else {
                     mFilter = parent.getSelectedItem().toString();
@@ -280,13 +280,13 @@ public class InspectActivity extends AppCompatActivity {
         mButtonSortItemNumber.setVisibility(View.GONE);
         mTextTotalDefectCountLabel.setVisibility(View.GONE);
         mTextTotalDefectCount.setVisibility(View.GONE);
-        if (mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) {
+        if (mInspection.InspectionClass != 7 && mInspection.InspectionType.contains("Rough")) {
             mButtonViewEkotropeData.setVisibility(View.GONE);
         }
 
         // Change constraints
-        if ((mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Rough")) ||
-                (mInspection.inspection_class != 7 && mInspection.inspection_type.contains("Final"))) {
+        if ((mInspection.InspectionClass != 7 && mInspection.InspectionType.contains("Rough")) ||
+                (mInspection.InspectionClass != 7 && mInspection.InspectionType.contains("Final"))) {
             mButtonViewEkotropeData.setVisibility(View.GONE);
             ConstraintLayout layout = findViewById(R.id.inspect_constraint_layout);
             ConstraintSet newLayout = new ConstraintSet();
@@ -337,11 +337,11 @@ public class InspectActivity extends AppCompatActivity {
                     case ItemTouchHelper.LEFT:
                         if (selectedInspectionDefectId > 0) {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
-                            if (inspectionDefectToUpdate.defect_status_id == 2) {
+                            if (inspectionDefectToUpdate.DefectStatusID == 2) {
                                 Snackbar.make(mConstraintLayout, "Defect is already marked NC!", Snackbar.LENGTH_SHORT).show();
                                 mReinspectListAdapter.notifyItemChanged(viewHolder.getAbsoluteAdapterPosition());
                             } else {
-                                inspectionDefectToUpdate.defect_status_id = 2;
+                                inspectionDefectToUpdate.DefectStatusID = 2;
                                 mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
                                 mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
                                 mInspectViewModel.updateIsReviewed(selectedHistoryId);
@@ -359,8 +359,8 @@ public class InspectActivity extends AppCompatActivity {
                     case ItemTouchHelper.RIGHT:
                         int[] builderIds = { 3083, 3084, 3082, 3085 };
                         for (int builderId : builderIds) {
-                            if (builderId == mInspection.builder_id) {
-                                if (mInspection.reinspect) {
+                            if (builderId == mInspection.BuilderID) {
+                                if (mInspection.ReInspect) {
                                     Snackbar.make(mConstraintLayout, "Cannot swipe to clear for this builder, a picture is required.", Snackbar.LENGTH_LONG).show();
                                     return;
                                 }
@@ -368,11 +368,11 @@ public class InspectActivity extends AppCompatActivity {
                         }
                         if (selectedInspectionDefectId > 0) {
                             InspectionDefect_Table inspectionDefectToUpdate = mInspectViewModel.getInspectionDefect(selectedInspectionDefectId);
-                            if (inspectionDefectToUpdate.defect_status_id == 3) {
+                            if (inspectionDefectToUpdate.DefectStatusID == 3) {
                                 Snackbar.make(mConstraintLayout, "Defect is already marked C!", Snackbar.LENGTH_SHORT).show();
                                 mReinspectListAdapter.notifyItemChanged(viewHolder.getAbsoluteAdapterPosition());
                             } else {
-                                inspectionDefectToUpdate.defect_status_id = 3;
+                                inspectionDefectToUpdate.DefectStatusID = 3;
                                 mInspectViewModel.updateInspectionDefect(inspectionDefectToUpdate);
                                 mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
                                 mInspectViewModel.updateIsReviewed(selectedHistoryId);

@@ -1,19 +1,10 @@
 package com.burgess.bridge.attachments;
 
-import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Base64;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -21,9 +12,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 import com.burgess.bridge.R;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 
@@ -48,12 +37,12 @@ public class AttachmentsListAdapter extends ListAdapter<Attachment_Table, Attach
     public void onBindViewHolder(@NonNull AttachmentsViewHolder holder, int position) {
         Attachment_Table attachment = currentList.get(position);
 
-        holder.getTextFileName().setText(attachment.file_name);
-        holder.getTextAttachmentType().setText(attachment.attachment_type);
+        holder.getTextFileName().setText(attachment.FileName);
+        holder.getTextAttachmentType().setText(attachment.AttachmentType);
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            File file = new File(attachment.file_path);
+            File file = new File(attachment.FilePath);
             Uri apkUri = FileProvider.getUriForFile(v.getContext(), v.getContext().getApplicationContext().getPackageName(), file);
             intent.setDataAndType(apkUri, "*/*");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -74,7 +63,7 @@ public class AttachmentsListAdapter extends ListAdapter<Attachment_Table, Attach
 
         @Override
         public boolean areContentsTheSame(@NonNull Attachment_Table oldItem, @NonNull Attachment_Table newItem) {
-            return oldItem.id == newItem.id;
+            return oldItem.AttachmentID == newItem.AttachmentID;
         }
     }
 }

@@ -26,6 +26,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/route_sheet_text_refresh_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/NotFound"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/route_sheet_toolbar"
         android:layout_width="0dp"
@@ -44,6 +55,9 @@
         android:id="@+id/route_sheet_text_search_community"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
         android:autofillHints="@string/route_sheet_text_search_community_hint"
         android:ems="10"
         android:hint="@string/route_sheet_text_search_community_hint"
@@ -53,7 +67,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/route_sheet_swipe_refresh"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/route_sheet_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/route_sheet_text_refresh_status" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/route_sheet_swipe_refresh"

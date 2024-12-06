@@ -2,33 +2,28 @@ package data.Tables;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.OnConflictStrategy;
-import androidx.room.PrimaryKey;
-import androidx.room.Update;
 
-@Entity(tableName = "defect_item_table", primaryKeys = {"id", "defect_category_id", "defect_category_name"})
+@Entity(tableName = "defect_item_table", primaryKeys = {"DefectItemID", "DefectCategoryID", "CategoryName"})
 public class DefectItem_Table {
-    public int id;
-    public int defect_category_id;
+    public int DefectItemID;
+    public int ItemNumber;
+    public String ItemDescription;
+    public int DefectCategoryID;
     @NonNull
-    public String defect_category_name;
-    public int item_number;
-    public int inspection_type_id;
-    public String item_description;
-    public String spanish_item_description;
-    public boolean reinspection_required;
+    public String CategoryName;
+    public String SpanishItemDescription;
+    public boolean ReInspectionRequired;
 
     public DefectItem_Table() {}
 
-    public DefectItem_Table(int id, int defect_category_id, String defect_category_name, int item_number, int inspection_type_id,
-                            String item_description, String spanish_item_description, boolean reinspection_required) {
-        this.id = id;
-        this.defect_category_id = defect_category_id;
-        this.defect_category_name = defect_category_name;
-        this.item_number = item_number;
-        this.inspection_type_id = inspection_type_id;
-        this.item_description = item_description;
-        this.spanish_item_description = spanish_item_description;
-        this.reinspection_required = reinspection_required;
+    public DefectItem_Table(int DefectItemID, int DefectCategoryID, String CategoryName, int ItemNumber,
+                            String ItemDescription, String SpanishItemDescription, boolean ReInspectionRequired) {
+        this.DefectItemID = DefectItemID;
+        this.DefectCategoryID = DefectCategoryID;
+        this.CategoryName = CategoryName;
+        this.ItemNumber = ItemNumber;
+        this.ItemDescription = ItemDescription;
+        this.SpanishItemDescription = SpanishItemDescription;
+        this.ReInspectionRequired = ReInspectionRequired;
     }
 }

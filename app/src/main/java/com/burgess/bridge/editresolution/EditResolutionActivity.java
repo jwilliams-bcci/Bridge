@@ -168,9 +168,9 @@ public class EditResolutionActivity extends AppCompatActivity {
         mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
 
         mTextAddress.setText("");
-        mTextAddress.append(mInspection.community + "\n");
-        mTextAddress.append(mInspection.address + "\n");
-        mTextAddress.append(mInspection.inspection_type + "\n");
+        mTextAddress.append(mInspection.Community + "\n");
+        mTextAddress.append(mInspection.Address + "\n");
+        mTextAddress.append(mInspection.InspectionType + "\n");
         mProgressSpinner.setVisibility(GONE);
 
         mSpinnerResolutions.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, (List<Resolution>) Arrays.stream(Resolution.values()).filter(e -> e.editResolutionOnly).collect(Collectors.toList())));
@@ -214,18 +214,18 @@ public class EditResolutionActivity extends AppCompatActivity {
         BridgeLogger.log('I', TAG, "Uploading note...");
         JSONObject jObj = new JSONObject();
         try{
-            jObj.put("InspectionId", noteDetails.inspection_id);
-            jObj.put("DefectItemId", noteDetails.defect_item_id);
-            jObj.put("DefectStatusId", noteDetails.defect_status_id);
-            if (noteDetails.comment != null) {
-                jObj.put("Comment", noteDetails.comment);
+            jObj.put("InspectionId", noteDetails.InspectionID);
+            jObj.put("DefectItemId", noteDetails.DefectItemID);
+            jObj.put("DefectStatusId", noteDetails.DefectStatusID);
+            if (noteDetails.Comment != null) {
+                jObj.put("Comment", noteDetails.Comment);
             } else {
                 jObj.put("Comment", "");
             }
-            if (noteDetails.picture_path != null) {
+            if (noteDetails.PicturePath != null) {
                 try {
-                    jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(noteDetails.id)));
-                    jObj.put("ImageFileName", noteDetails.picture_path.substring(noteDetails.picture_path.lastIndexOf("/")+1));
+                    jObj.put("ImageData", Base64.getEncoder().encodeToString(getPictureData(noteDetails.ID)));
+                    jObj.put("ImageFileName", noteDetails.PicturePath.substring(noteDetails.PicturePath.lastIndexOf("/")+1));
                 } catch (NullPointerException e) {
                     Snackbar.make(mConstraintLayout, "Photo is missing!", Snackbar.LENGTH_SHORT).show();
                     return null;
@@ -234,12 +234,12 @@ public class EditResolutionActivity extends AppCompatActivity {
                 jObj.put("ImageData", null);
                 jObj.put("ImageFileName", null);
             }
-            jObj.put("PriorInspectionDetailId", noteDetails.prior_inspection_detail_id);
+            jObj.put("PriorInspectionDetailId", noteDetails.PriorInspectionDetailID);
         } catch (JSONException e) {
             BridgeLogger.log('E', TAG, "ERROR in parsing JSON: " + e.getMessage());
         }
 
-        StringRequest request = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, noteDetails.defect_item_id, noteDetails.inspection_id, null, new ServerCallback() {
+        StringRequest request = BridgeAPIQueue.getInstance().uploadInspectionDefect(jObj, noteDetails.DefectItemID, noteDetails.InspectionID, null, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
                 BridgeLogger.log('I', TAG, "Note uploaded for " + mInspectionId);
@@ -328,7 +328,7 @@ public class EditResolutionActivity extends AppCompatActivity {
     }
     private byte[] getPictureData(int inspectionDefectId) {
         InspectionDefect_Table defect = mEditResolutionViewModel.getInspectionDefect(inspectionDefectId);
-        Bitmap image = BitmapFactory.decodeFile(defect.picture_path);
+        Bitmap image = BitmapFactory.decodeFile(defect.PicturePath);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         if (image != null) {
             image.compress(Bitmap.CompressFormat.JPEG, 50, stream);

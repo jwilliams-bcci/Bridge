@@ -1,16 +1,12 @@
 package com.burgess.bridge.reviewandsubmit;
 
 import android.content.Intent;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
-import com.burgess.bridge.R;
 import com.burgess.bridge.defectitem.DefectItemActivity;
 
 import java.util.List;
@@ -34,7 +30,7 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
     public void onBindViewHolder(@NonNull ReviewAndSubmitViewHolder holder, int position) {
         ReviewAndSubmit_View current = getItem(position);
         boolean showThumbnail = false;
-        if (current.picture_path != null) {
+        if (current.PicturePath != null) {
             showThumbnail = true;
         }
         holder.itemView.setOnClickListener(v -> {
@@ -48,7 +44,7 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
         });
 
         String status = "";
-        switch(current.defect_status_id) {
+        switch(current.DefectStatusID) {
             case 7:
                 status = "NOTE";
                 break;
@@ -66,7 +62,7 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
                 break;
         }
 
-        holder.bind(current.inspection_id, current.inspection_defect_id, current.defect_item_id, current.item_number, current.item_description, current.comment, status, showThumbnail, current.is_editable);
+        holder.bind(current.InspectionID, current.InspectionDefectID, current.DefectItemID, current.ItemNumber, current.ItemDescription, current.Comment, status, showThumbnail, current.IsEditable);
     }
 
     public List<ReviewAndSubmit_View> getCurrentList() { return currentList; }
@@ -83,7 +79,7 @@ public class ReviewAndSubmitListAdapter extends ListAdapter<ReviewAndSubmit_View
 
         @Override
         public boolean areContentsTheSame(@NonNull ReviewAndSubmit_View oldItem, @NonNull ReviewAndSubmit_View newItem) {
-            return oldItem.inspection_defect_id == newItem.inspection_defect_id;
+            return oldItem.InspectionDefectID == newItem.InspectionDefectID;
         }
     }
 }

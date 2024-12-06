@@ -1,113 +1,107 @@
 package data.Tables;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 
 import data.DateConverter;
 
 @Entity(tableName = "inspection_table")
 public class Inspection_Table {
     @PrimaryKey
-    public int id;
-    public int inspection_type_id;
+    public int InspectionID;
+    public int InspectionTypeID;
     @TypeConverters({DateConverter.class})
-    public OffsetDateTime inspection_date;
-    public int division_id;
-    public int location_id;
-    public String builder_name;
-    public int builder_id;
-    public String super_name;
-    public int inspector_id;
-    public String inspector;
-    public String community;
-    public int community_id;
-    public String city;
-    public int inspection_class;
-    public String inspection_type;
-    public boolean reinspect;
-    public int inspection_order;
-    public String address;
-    public int inspection_status_id;
-    public String inspection_status;
-    public String super_phone;
-    public String super_email;
-    public int super_present;
-    public String incomplete_reason;
-    public int incomplete_reason_id;
-    public String notes;
-    public String job_number;
-    public boolean require_risk_assessment;
-    public String ekotrope_project_id;
-    public String ekotrope_plan_id;
+    public String InspectionDate = "";
+    public int DivisionID;
+    public int LocationID;
+    public String BuilderName = "";
+    public int BuilderID;
+    public String SuperName = "";
+    public int InspectorID;
+    public String Inspector = "";
+    public String Community = "";
+    public int CommunityID;
+    public String City = "";
+    public int InspectionClass;
+    public String InspectionType = "";
+    public boolean ReInspect;
+    public int InspectionOrder;
+    public String Address = "";
+    public int InspectionStatusID;
+    public String InspectionStatus = "";
+    public String SuperPhone = "";
+    public String SuperEmailAddress = "";
+    public int SuperintendentPresent;
+    public String IncompleteReason = "";
+    public int IncompleteReasonID;
+    public String Notes = "";
+    public String JobNumber = "";
+    public boolean RequireRiskAssessment;
+    public String EkotropeProjectID = "";
+    public String EkotropePlanID = "";
     @TypeConverters({DateConverter.class})
-    public OffsetDateTime start_time;
+    public OffsetDateTime StartTime;
     @TypeConverters({DateConverter.class})
-    public OffsetDateTime end_time;
-    public boolean is_complete;
-    public boolean is_uploaded;
-    public boolean is_failed;
-    public int route_sheet_order;
-    public int trainee_id;
+    public OffsetDateTime EndTime;
+    public boolean IsComplete;
+    public boolean IsUploaded;
+    public boolean IsFailed;
+    public int RouteSheetOrder;
+    public int TraineeID;
+    public String JotformLink = "";
 
-    public Inspection_Table () {
+    public Inspection_Table () {}
 
-    }
-
-    public Inspection_Table(@NonNull int id, OffsetDateTime inspection_date, int division_id,
-                            int location_id, String builder_name, int builder_id, String super_name,
-                            int inspector_id, String inspector, String community, int community_id,
-                            int inspection_class, String city, int inspection_type_id,
-                            String inspection_type, boolean reinspect, int inspection_order,
-                            String address, int inspection_status_id, String inspection_status,
-                            String super_phone, String super_email, int super_present,
-                            String incomplete_reason, int incomplete_reason_id, String notes,
-                            String job_number, boolean require_risk_assessment,
-                            String ekotrope_project_id, String ekotrope_plan_id,
-                            OffsetDateTime start_time, OffsetDateTime end_time, boolean is_complete,
-                            boolean is_uploaded, boolean is_failed, int route_sheet_order,
-                            int trainee_id) {
-        this.id = id;
-        this.inspection_date = inspection_date;
-        this.division_id = division_id;
-        this.builder_name = builder_name;
-        this.builder_id = builder_id;
-        this.super_name = super_name;
-        this.community = community;
-        this.community_id = community_id;
-        this.inspection_class = inspection_class;
-        this.city = city;
-        this.inspector_id = inspector_id;
-        this.inspector = inspector;
-        this.location_id = location_id;
-        this.inspection_type_id = inspection_type_id;
-        this.inspection_type = inspection_type;
-        this.reinspect = reinspect;
-        this.inspection_order = inspection_order;
-        this.address = address;
-        this.inspection_status_id = inspection_status_id;
-        this.inspection_status = inspection_status;
-        this.super_phone = super_phone;
-        this.super_email = super_email;
-        this.super_present = super_present;
-        this.incomplete_reason = incomplete_reason;
-        this.incomplete_reason_id = incomplete_reason_id;
-        this.notes = notes;
-        this.job_number = job_number;
-        this.require_risk_assessment = require_risk_assessment;
-        this.ekotrope_project_id = ekotrope_project_id;
-        this.ekotrope_plan_id = ekotrope_plan_id;
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.is_complete = is_complete;
-        this.is_uploaded = is_uploaded;
-        this.is_failed = is_failed;
-        this.route_sheet_order = route_sheet_order;
-        this.trainee_id = trainee_id;
+    public Inspection_Table(int InspectionID, String InspectionDate, int DivisionID,
+                            int LocationID, String BuilderName, int BuilderID, String SuperName,
+                            int InspectorID, String Inspector, String Community, int CommunityID,
+                            int InspectionClass, String City, int InspectionTypeID,
+                            String InspectionType, boolean ReInspect, int InspectionOrder,
+                            String Address, int InspectionStatusID, String InspectionStatus,
+                            String SuperPhone, String SuperEmailAddress, int SuperintendentPresent,
+                            String IncompleteReason, int IncompleteReasonID, String Notes,
+                            String JobNumber, boolean RequireRiskAssessment,
+                            String EkotropeProjectID, int RouteSheetOrder, String JotformLink) {
+        this.InspectionID = InspectionID;
+        this.InspectionDate = InspectionDate;
+        this.DivisionID = DivisionID;
+        this.BuilderName = BuilderName.isEmpty() ? "" : BuilderName;
+        this.BuilderID = BuilderID;
+        this.SuperName = SuperName.isEmpty() ? "" : SuperName;
+        this.Community = Community.isEmpty() ? "" : Community;
+        this.CommunityID = CommunityID;
+        this.InspectionClass = InspectionClass;
+        this.City = City.isEmpty() ? "" : City;
+        this.InspectorID = InspectorID;
+        this.Inspector = Inspector.isEmpty() ? "" : Inspector;
+        this.LocationID = LocationID;
+        this.InspectionTypeID = InspectionTypeID;
+        this.InspectionType = InspectionType.isEmpty() ? "" : InspectionType;
+        this.ReInspect = ReInspect;
+        this.InspectionOrder = InspectionOrder;
+        this.Address = Address.isEmpty() ? "" : Address;
+        this.InspectionStatusID = InspectionStatusID;
+        this.InspectionStatus = InspectionStatus.isEmpty() ? "" : InspectionStatus;
+        this.SuperPhone = SuperPhone.isEmpty() ? "" : SuperPhone;
+        this.SuperEmailAddress = SuperEmailAddress.isEmpty() ? "" : SuperEmailAddress;
+        this.SuperintendentPresent = SuperintendentPresent;
+        this.IncompleteReason = IncompleteReason.isEmpty() ? "" : IncompleteReason;
+        this.IncompleteReasonID = IncompleteReasonID;
+        this.Notes = Notes.isEmpty() ? "" : Notes;
+        this.JobNumber = JobNumber.isEmpty() ? "" : JobNumber;
+        this.RequireRiskAssessment = RequireRiskAssessment;
+        this.EkotropeProjectID = EkotropeProjectID.isEmpty() ? "" : EkotropeProjectID;
+        this.EkotropePlanID = null;
+        this.StartTime = null;
+        this.EndTime = null;
+        this.IsComplete = false;
+        this.IsUploaded = false;
+        this.IsFailed = false;
+        this.RouteSheetOrder = RouteSheetOrder;
+        this.TraineeID = -1;
+        this.JotformLink = JotformLink.isEmpty() ? "" : JotformLink;
     }
 }

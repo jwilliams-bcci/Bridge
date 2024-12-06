@@ -30,17 +30,6 @@ public class InspectionHistoryRepository {
         BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
             mInspectionHistoryDao.insert(inspectionHistory);
         });
-        // TODO: fix updating inspection histories for voided inspections
-//        InspectionHistory_Table existingInspectionHistory = getInspectionHistorySync(inspectionHistory.id);
-//        if (existingInspectionHistory != null) {
-//            BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-//                mInspectionHistoryDao.update(existingInspectionHistory.id, inspectionHistory.inspection_id);
-//            });
-//        } else {
-//            BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
-//                mInspectionHistoryDao.insert(inspectionHistory);
-//            });
-//        }
     }
 
     public void deleteForInspection(int inspectionId) {

@@ -7,8 +7,10 @@ import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.attachments.AttachmentsActivity;
 import com.burgess.bridge.pastinspections.PastInspectionsActivity;
 import com.burgess.bridge.R;
@@ -25,9 +26,9 @@ import com.burgess.bridge.editresolution.EditResolutionActivity;
 import com.burgess.bridge.inspect.InspectActivity;
 import com.burgess.bridge.multifamily.MultifamilyDetailsActivity;
 import com.burgess.bridge.transferinspection.TransferInspectionActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 import data.Tables.Inspection_Table;
 
@@ -51,6 +52,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     private Button mAssignTraineeButton;
     private Button mEditResolutionButton;
     private Button mAttachmentsButton;
+    private Button bJotformLink;
 
     private static final String TAG = "INSPECTION_DETAILS";
 
@@ -60,7 +62,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inspection_details);
         setSupportActionBar(findViewById(R.id.inspection_details_toolbar));
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        mInspectionDetailsViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectionDetailsViewModel.class);
+        mInspectionDetailsViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(InspectionDetailsViewModel.class);
 
         Intent intent = getIntent();
         mInspectionId = intent.getIntExtra(INSPECTION_ID, INSPECTION_ID_NOT_SET);
@@ -84,11 +86,12 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mAssignTraineeButton = findViewById(R.id.inspection_details_button_assign_trainee);
         mEditResolutionButton = findViewById(R.id.inspection_details_button_edit_resolution);
         mAttachmentsButton = findViewById(R.id.inspection_details_button_attachments);
+        bJotformLink = findViewById(R.id.inspection_details_button_jotform_link);
     }
     private void initializeButtonListeners() {
         mInspectButton.setOnClickListener(view -> {
             OffsetDateTime startTime = OffsetDateTime.now();
-            if (mInspection.start_time == null) {
+            if (mInspection.StartTime == null) {
                 mInspectionDetailsViewModel.startInspection(startTime, mInspectionId);
             }
 
@@ -98,7 +101,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
             Intent multifamilyInformationIntent = new Intent(InspectionDetailsActivity.this, MultifamilyDetailsActivity.class);
             multifamilyInformationIntent.putExtra(MultifamilyDetailsActivity.INSPECTION_ID, mInspectionId);
 
-            if (mInspection.division_id == 20) {
+            if (mInspection.DivisionID == 20) {
                 startActivity(multifamilyInformationIntent);
             } else {
                 startActivity(inspectIntent);
@@ -133,8 +136,15 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mAttachmentsButton.setOnClickListener(view -> {
             Intent attachmentsIntent = new Intent(InspectionDetailsActivity.this, AttachmentsActivity.class);
             attachmentsIntent.putExtra(AttachmentsActivity.INSPECTION_ID, mInspectionId);
-            attachmentsIntent.putExtra(AttachmentsActivity.LOCATION_ID, mInspection.location_id);
+            attachmentsIntent.putExtra(AttachmentsActivity.LOCATION_ID, mInspection.LocationID);
             startActivity(attachmentsIntent);
+        });
+
+        bJotformLink.setOnClickListener(view -> {
+            if (mInspection.JotformLink != null) {
+                Intent showJotFormIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mInspection.JotformLink));
+                startActivity(showJotFormIntent);
+            }
         });
     }
     private void initializeDisplayContent() {
@@ -142,17 +152,19 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
 
         mTextAddress.setText("");
-        mTextAddress.append(mInspection.community + "\n");
-        mTextAddress.append(mInspection.address + "\n");
-        mTextAddress.append(mInspection.inspection_type + "\n");
+        mTextAddress.append(mInspection.Community + "\n");
+        mTextAddress.append(mInspection.Address + "\n");
+        mTextAddress.append(mInspection.InspectionType + "\n");
 
-        mTextBuilder.setText(mInspection.builder_name);
-        mTextSuperintendent.setText(mInspection.super_name + "\n" + mInspection.super_phone);
+        mTextBuilder.setText(mInspection.BuilderName);
+        mTextSuperintendent.setText(String.format("%s\n%s", mInspection.SuperName, mInspection.SuperPhone));
         mTextSuperintendent.setMovementMethod(LinkMovementMethod.getInstance());
-        if (mInspection.notes.equals("null") || mInspection.notes.isEmpty()) {
-            mTextNotes.setText("No notes");
+        mTextNotes.setText(mInspection.Notes);
+
+        if (!Objects.equals(mInspection.JotformLink, "")) {
+            bJotformLink.setVisibility(View.VISIBLE);
         } else {
-            mTextNotes.setText(mInspection.notes);
+            bJotformLink.setVisibility(View.GONE);
         }
     }
 }

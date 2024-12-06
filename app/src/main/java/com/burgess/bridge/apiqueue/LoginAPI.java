@@ -1,12 +1,8 @@
 package com.burgess.bridge.apiqueue;
 
-import static com.burgess.bridge.Constants.*;
 import static com.burgess.bridge.apiqueue.APIConstants.*;
 import static com.burgess.bridge.apiqueue.APIConstants.API_PROD_URL;
 import static com.burgess.bridge.apiqueue.APIConstants.API_STAGE_URL;
-
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -18,7 +14,6 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.login.LoginViewModel;

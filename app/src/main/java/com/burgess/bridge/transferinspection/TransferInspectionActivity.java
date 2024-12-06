@@ -117,9 +117,9 @@ public class TransferInspectionActivity extends AppCompatActivity {
         mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
 
         mTextAddress.setText("");
-        mTextAddress.append(mInspection.community + "\n");
-        mTextAddress.append(mInspection.address + "\n");
-        mTextAddress.append(mInspection.inspection_type + "\n");
+        mTextAddress.append(mInspection.Community + "\n");
+        mTextAddress.append(mInspection.Address + "\n");
+        mTextAddress.append(mInspection.InspectionType + "\n");
 
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, mInspectors);
         mTextNewInspector.setAdapter(mAdapter);

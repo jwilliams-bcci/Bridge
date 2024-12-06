@@ -36,10 +36,10 @@ public class PastInspectionListAdapter extends ListAdapter<PastInspection_Table,
         PastInspection_Table pastInspection = currentList.get(position);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 
-        holder.getTextInspectionDate().setText(formatter.format(pastInspection.inspection_submit_time));
-        holder.getTextInspectorName().setText(pastInspection.inspector);
-        holder.getTextInspectionType().setText(pastInspection.inspection_type);
-        holder.getTextInspectionStatus().setText(pastInspection.incomplete_reason);
+        //holder.getTextInspectionDate().setText(formatter.format(pastInspection.InspectionSubmitTime));
+        holder.getTextInspectorName().setText(pastInspection.Inspector);
+        holder.getTextInspectionType().setText(pastInspection.InspectionType);
+        holder.getTextInspectionStatus().setText(pastInspection.IncompleteReason);
     }
 
     public void setCurrentList(List<PastInspection_Table> list) {
@@ -56,7 +56,7 @@ public class PastInspectionListAdapter extends ListAdapter<PastInspection_Table,
 
         @Override
         public boolean areContentsTheSame(@NonNull PastInspection_Table oldItem, @NonNull PastInspection_Table newItem) {
-            return oldItem.id == newItem.id;
+            return oldItem.InspectionID == newItem.InspectionID;
         }
     }
 }

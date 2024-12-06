@@ -89,16 +89,16 @@ public class PastInspectionsActivity extends AppCompatActivity {
         mTextToolbarTeamRemaining.setText(String.valueOf(mSharedPreferences.getInt(PREF_TEAM_INSPECTIONS_REMAINING, -1)));
 
         mTextAddress.setText("");
-        mTextAddress.append(mInspection.community + "\n");
-        mTextAddress.append(mInspection.address + "\n");
-        mTextAddress.append(mInspection.inspection_type + "\n");
+        mTextAddress.append(mInspection.Community + "\n");
+        mTextAddress.append(mInspection.Address + "\n");
+        mTextAddress.append(mInspection.InspectionType + "\n");
 
         try {
-            mPastInspections = mPastInspectionsViewModel.getPastInspections(mInspection.location_id);
+            mPastInspections = mPastInspectionsViewModel.getPastInspections(mInspection.LocationID);
             mPastInspectionsListAdapter = new PastInspectionListAdapter(new PastInspectionListAdapter.PastInspectionsDiff());
             mRecyclerPastInspections.setAdapter(mPastInspectionsListAdapter);
             mRecyclerPastInspections.setLayoutManager(new LinearLayoutManager(this));
-            mPastInspectionsViewModel.getPastInspections(mInspection.location_id).observe(this, pastInspections -> {
+            mPastInspectionsViewModel.getPastInspections(mInspection.LocationID).observe(this, pastInspections -> {
                 mPastInspectionsListAdapter.setCurrentList(pastInspections);
                 if (pastInspections.isEmpty()) {
                     mTextEmptyLabel.setVisibility(View.VISIBLE);

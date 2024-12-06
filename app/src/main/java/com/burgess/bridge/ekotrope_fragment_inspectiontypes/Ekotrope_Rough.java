@@ -79,64 +79,64 @@ public class Ekotrope_Rough extends Fragment {
         mButtonFramedFloors.setOnClickListener(view -> {
             Intent framedFloorsListIntent = new Intent(getActivity(), Ekotrope_FramedFloorsListActivity.class);
             framedFloorsListIntent.putExtra(INSPECTION_ID, mInspectionId);
-            framedFloorsListIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            framedFloorsListIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            framedFloorsListIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            framedFloorsListIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(framedFloorsListIntent);
         });
 
         mButtonAboveGradeWalls.setOnClickListener(view -> {
             Intent aboveGradeWallsIntent = new Intent(getActivity(), Ekotrope_AboveGradeWallsListActivity.class);
             aboveGradeWallsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            aboveGradeWallsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            aboveGradeWallsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            aboveGradeWallsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            aboveGradeWallsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(aboveGradeWallsIntent);
         });
 
         mButtonWindows.setOnClickListener(view -> {
             Intent windowsIntent = new Intent(getActivity(), Ekotrope_WindowsListActivity.class);
             windowsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            windowsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            windowsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            windowsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            windowsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(windowsIntent);
         });
 
         mButtonDoors.setOnClickListener(view -> {
             Intent doorsIntent = new Intent(getActivity(), Ekotrope_DoorsListActivity.class);
             doorsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            doorsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            doorsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            doorsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            doorsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(doorsIntent);
         });
 
         mButtonCeilings.setOnClickListener(view -> {
             Intent ceilingsIntent = new Intent(getActivity(), Ekotrope_CeilingsListActivity.class);
             ceilingsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            ceilingsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            ceilingsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            ceilingsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            ceilingsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(ceilingsIntent);
         });
 
         mButtonSlabs.setOnClickListener(view -> {
             Intent slabsIntent = new Intent(getActivity(), Ekotrope_SlabsListActivity.class);
             slabsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            slabsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            slabsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            slabsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            slabsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(slabsIntent);
         });
 
         mButtonRimJoists.setOnClickListener(view -> {
             Intent rimJoistsIntent = new Intent(getActivity(), Ekotrope_RimJoistsListActivity.class);
             rimJoistsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            rimJoistsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            rimJoistsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            rimJoistsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            rimJoistsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(rimJoistsIntent);
         });
 
         mButtonDistributionSystems.setOnClickListener(view -> {
             Intent distributionSystemsIntent = new Intent(getActivity(), Ekotrope_ComponentListActivity.class);
             distributionSystemsIntent.putExtra(INSPECTION_ID, mInspectionId);
-            distributionSystemsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.ekotrope_project_id);
-            distributionSystemsIntent.putExtra(PLAN_ID, mInspection.ekotrope_plan_id);
+            distributionSystemsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
+            distributionSystemsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
             startActivity(distributionSystemsIntent);
         });
     }

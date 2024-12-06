@@ -18,21 +18,21 @@ public interface Attachment_DAO {
     @Query("DELETE FROM Attachment_Table")
     void deleteAll();
 
-    @Query("DELETE FROM Attachment_Table WHERE id = :id")
+    @Query("DELETE FROM Attachment_Table WHERE AttachmentID = :id")
     void delete(int id);
 
-    @Query("DELETE FROM attachment_Table WHERE inspection_id = :inspection_id")
+    @Query("DELETE FROM attachment_Table WHERE InspectionID = :inspection_id")
     void deleteForInspection(int inspection_id);
 
-    @Query("SELECT * FROM attachment_Table WHERE inspection_id = :inspection_id")
+    @Query("SELECT * FROM attachment_Table WHERE InspectionID = :inspection_id")
     List<Attachment_Table> getAttachmentsForInspection(int inspection_id);
 
-    @Query("SELECT * FROM attachment_table WHERE inspection_id = :inspectionId OR location_id = :locationId")
+    @Query("SELECT * FROM attachment_table WHERE InspectionID = :inspectionId OR LocationID = :locationId")
     LiveData<List<Attachment_Table>> getAttachments(int inspectionId, int locationId);
 
-    @Query("SELECT * FROM attachment_table WHERE inspection_id = :inspectionId AND is_uploaded = 0")
+    @Query("SELECT * FROM attachment_table WHERE InspectionID = :inspectionId AND IsUploaded = 0")
     List<Attachment_Table> getAttachmentsToUpload(int inspectionId);
 
-    @Query("UPDATE attachment_table SET is_uploaded = 1 WHERE id = :attachmentId")
+    @Query("UPDATE attachment_table SET IsUploaded = 1 WHERE AttachmentID = :attachmentId")
     void updateIsUploaded(int attachmentId);
 }

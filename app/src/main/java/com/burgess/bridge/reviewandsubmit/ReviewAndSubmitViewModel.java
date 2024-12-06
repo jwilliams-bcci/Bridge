@@ -156,8 +156,8 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         mInspectionDefectRepository.updateExistingMFCDefect(defectStatusId, comment, id);
     }
 
-    public int multifamilyDefectExists(int firstInspectionDetailId) {
-        return mInspectionDefectRepository.multifamilyDefectExists(firstInspectionDetailId);
+    public int multifamilyDefectExists(int firstInspectionDetailId, int inspectionId) {
+        return mInspectionDefectRepository.getExistingMFCDefect(firstInspectionDetailId, inspectionId);
     }
 
     public void insertSubmitRequest(SubmitRequest_Table submitRequest) {

@@ -16,8 +16,8 @@ android {
         applicationId "com.burgess.bridge"
         minSdkVersion 26
         targetSdkVersion 34
-        versionCode 39
-        versionName "1.11.3-eko.4"
+        versionCode 40
+        versionName "1.12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -97,4 +97,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     compileOnly 'com.google.android.wearable:wearable:2.9.0'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
 }

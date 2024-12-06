@@ -31,7 +31,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -78,12 +77,14 @@ import static com.burgess.bridge.Constants.EKOTROPE_INSPECTION_TYPE_ROUGH;
 import static com.burgess.bridge.Constants.PREF_AUTH_TOKEN;
 import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
+import static com.burgess.bridge.apiqueue.APIConstants.API_EKOTROPE_AUTH_TEST;
 
 public class BridgeAPIQueue {
     private static BridgeAPIQueue instance;
     private RequestQueue queue;
     private static Context ctx;
     private static boolean isProd;
+    private static boolean isEkotropeProd;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
 
@@ -123,6 +124,7 @@ public class BridgeAPIQueue {
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
         isProd = true;
+        isEkotropeProd = false;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -153,6 +155,8 @@ public class BridgeAPIQueue {
         return isProd;
     }
 
+    public static boolean isEkotropeProd() { return isEkotropeProd; }
+
     // Route Sheet
     public JsonArrayRequest updateRouteSheet(RouteSheetViewModel vm, String inspectorId, String inspectionDate, final ServerCallback callback) {
         String url = isProd ? API_PROD_URL : API_STAGE_URL;
@@ -170,56 +174,57 @@ public class BridgeAPIQueue {
                 try {
                     JSONObject obj = response.getJSONObject(i);
                     Inspection_Table inspection = new Inspection_Table();
-                    inspection.id = obj.optInt("InspectionID");
-                    inspection.inspection_date = OffsetDateTime.parse(obj.optString("InspectionDate"));
-                    inspection.division_id = obj.optInt("DivisionID");
-                    inspection.location_id = obj.optInt("LocationID");
-                    inspection.builder_name = obj.getString("BuilderName");
-                    inspection.builder_id = obj.optInt("BuilderID");
-                    inspection.super_name = obj.getString("SuperName");
-                    inspection.inspector_id = obj.optInt("InspectorID");
-                    inspection.inspector = obj.getString("Inspector");
-                    inspection.community = obj.getString("Community");
-                    inspection.community_id = obj.optInt("CommunityID");
-                    inspection.inspection_class = obj.optInt("InspectionClass");
-                    inspection.city = obj.getString("City");
-                    inspection.inspection_type_id = obj.optInt("InspectionTypeID");
-                    inspection.inspection_type = obj.getString("InspectionType");
-                    inspection.reinspect = obj.getBoolean("ReInspect");
-                    inspection.inspection_order = obj.optInt("InspectionOrder");
-                    inspection.address = obj.getString("Address1");
-                    inspection.inspection_status_id = obj.optInt("InspectionStatusID");
-                    inspection.inspection_status = obj.getString("InspectionStatus");
-                    inspection.super_phone = obj.getString("SuperPhone");
-                    inspection.super_email = obj.getString("SuperEmailAddress");
-                    inspection.super_present = obj.optInt("SuperintendentPresent");
-                    inspection.incomplete_reason = obj.getString("IncompleteReason");
-                    inspection.incomplete_reason_id = obj.optInt("IncompleteReasonID");
-                    inspection.notes = obj.getString("Comment");
-                    inspection.job_number = obj.getString("JobNumber");
-                    inspection.require_risk_assessment = obj.getBoolean("RequireRiskAssessment");
-                    inspection.ekotrope_project_id = obj.getString("EkotropeProjectID");
-                    inspection.ekotrope_plan_id = null;
-                    inspection.start_time = null;
-                    inspection.end_time = null;
-                    inspection.is_complete = false;
-                    inspection.is_uploaded = false;
-                    inspection.is_failed = false;
-                    inspection.route_sheet_order = obj.optInt("Order");
-                    inspection.trainee_id = -1;
+                    inspection.InspectionID = obj.optInt("InspectionID");
+                    //inspection.InspectionDate = OffsetDateTime.parse(obj.optString("InspectionDate"));
+                    inspection.DivisionID = obj.optInt("DivisionID");
+                    inspection.LocationID = obj.optInt("LocationID");
+                    inspection.BuilderName = obj.getString("BuilderName");
+                    inspection.BuilderID = obj.optInt("BuilderID");
+                    inspection.SuperName = obj.getString("SuperName");
+                    inspection.InspectorID = obj.optInt("InspectorID");
+                    inspection.Inspector = obj.getString("Inspector");
+                    inspection.Community = obj.getString("Community");
+                    inspection.CommunityID = obj.optInt("CommunityID");
+                    inspection.InspectionClass = obj.optInt("InspectionClass");
+                    inspection.City = obj.getString("City");
+                    inspection.InspectionTypeID = obj.optInt("InspectionTypeID");
+                    inspection.InspectionType = obj.getString("InspectionType");
+                    inspection.ReInspect = obj.getBoolean("ReInspect");
+                    inspection.InspectionOrder = obj.optInt("InspectionOrder");
+                    inspection.Address = obj.getString("Address1");
+                    inspection.InspectionStatusID = obj.optInt("InspectionStatusID");
+                    inspection.InspectionStatus = obj.getString("InspectionStatus");
+                    inspection.SuperPhone = obj.getString("SuperPhone");
+                    inspection.SuperEmailAddress = obj.getString("SuperEmailAddress");
+                    inspection.SuperintendentPresent = obj.optInt("SuperintendentPresent");
+                    inspection.IncompleteReason = obj.getString("IncompleteReason");
+                    inspection.IncompleteReasonID = obj.optInt("IncompleteReasonID");
+                    inspection.Notes = obj.getString("Comment");
+                    inspection.JobNumber = obj.getString("JobNumber");
+                    inspection.RequireRiskAssessment = obj.getBoolean("RequireRiskAssessment");
+                    inspection.EkotropeProjectID = obj.getString("EkotropeProjectID");
+                    inspection.EkotropePlanID = null;
+                    inspection.StartTime = null;
+                    inspection.EndTime = null;
+                    inspection.IsComplete = false;
+                    inspection.IsUploaded = false;
+                    inspection.IsFailed = false;
+                    inspection.RouteSheetOrder = obj.optInt("Order");
+                    inspection.TraineeID = -1;
+                    inspection.JotformLink = obj.getString("EnergyJotformLink");
 
-                    if (inspection.division_id == 20) {
-                        multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.id, inspection.location_id, inspection.inspection_order, inspection.inspection_type_id));
+                    if (inspection.DivisionID == 20) {
+                        multifamilyHistoryRequests.add(updateMultifamilyHistory(vm, inspection.InspectionID, inspection.LocationID, inspection.InspectionOrder, inspection.InspectionTypeID));
                     } else {
-                        if (inspection.reinspect) {
-                            inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.id, inspection.inspection_order, inspection.inspection_type_id, inspection.location_id));
+                        if (inspection.ReInspect) {
+                            inspectionHistoryRequests.add(updateInspectionHistory(vm, inspection.InspectionID, inspection.InspectionOrder, inspection.InspectionTypeID, inspection.LocationID));
                         }
                     }
-                    if (inspection.ekotrope_project_id != "null") {
-                        ekotropePlansIdRequests.add(getEkotropePlanId(vm, inspection.ekotrope_project_id, inspection.id, new ServerCallback() {
+                    if (inspection.EkotropeProjectID != "null") {
+                        ekotropePlansIdRequests.add(getEkotropePlanId(vm, inspection.EkotropeProjectID, inspection.InspectionID, new ServerCallback() {
                             @Override
                             public void onSuccess(String message) {
-                                BridgeLogger.log('I', TAG, "Added plan id for " + inspection.id);
+                                BridgeLogger.log('I', TAG, "Added plan InspectionID for " + inspection.InspectionID);
                                 callback.onSuccess("Added plan");
                             }
                             @Override
@@ -229,7 +234,7 @@ public class BridgeAPIQueue {
                             }
                         }));
                     }
-                    pastInspectionRequests.add(updatePastInspections(vm, inspection.location_id));
+                    pastInspectionRequests.add(updatePastInspections(vm, inspection.LocationID));
                     vm.insertInspection(inspection);
                 } catch (JSONException e) {
                     BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + e.getMessage());
@@ -283,14 +288,14 @@ public class BridgeAPIQueue {
                 try {
                     JSONObject obj = response.getJSONObject(i);
                     DefectItem_Table defectItem = new DefectItem_Table();
-                    defectItem.id = obj.optInt("DefectItemID");
-                    defectItem.defect_category_id = obj.optInt("DefectCategoryID");
-                    defectItem.defect_category_name = obj.optString("CategoryName");
-                    defectItem.item_number = obj.optInt("ItemNumber");
-                    defectItem.inspection_type_id = obj.optInt("InspectionTypeID");
-                    defectItem.item_description = obj.optString("ItemDescription");
-                    defectItem.spanish_item_description = obj.optString("SpanishItemDescription");
-                    defectItem.reinspection_required = obj.optBoolean("ReInspectionRequired");
+                    defectItem.DefectItemID = obj.optInt("DefectItemID");
+                    defectItem.DefectCategoryID = obj.optInt("DefectCategoryID");
+                    defectItem.CategoryName = obj.optString("CategoryName");
+                    defectItem.ItemNumber = obj.optInt("ItemNumber");
+                    //defectItem.InspectionTypeID = obj.optInt("InspectionTypeID");
+                    defectItem.ItemDescription = obj.optString("ItemDescription");
+                    defectItem.SpanishItemDescription = obj.optString("SpanishItemDescription");
+                    defectItem.ReInspectionRequired = obj.optBoolean("ReInspectionRequired");
 
                     vm.insertDefectItem(defectItem);
                 } catch (JSONException e) {
@@ -326,10 +331,10 @@ public class BridgeAPIQueue {
                 try {
                     JSONObject obj = response.getJSONObject(i);
                     DefectItem_InspectionType_XRef relation = new DefectItem_InspectionType_XRef();
-                    relation.defect_item_id = obj.optInt("DefectItemID");
-                    relation.inspection_type_id = obj.optInt("InspectionTypeID");
+                    relation.DefectItemID = obj.optInt("DefectItemID");
+                    relation.InspectionTypeID = obj.optInt("InspectionTypeID");
 
-                    vm.insertReference(relation);
+                    vm.insertDIIT(relation);
                 } catch (JSONException e) {
                     BridgeLogger.log('E', TAG, "ERROR in updateDIIT: " + e.getMessage());
                 }
@@ -367,19 +372,19 @@ public class BridgeAPIQueue {
                 try {
                     JSONObject obj = response.getJSONObject(lcv);
                     InspectionHistory_Table hist = new InspectionHistory_Table();
-                    hist.id = obj.optInt("InspectionDetailID");
-                    hist.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
-                    hist.inspection_id = inspectionId;
-                    hist.previous_inspection_id = obj.optInt("InspectionID");
-                    hist.defect_item_id = obj.optInt("DefectItemID");
-                    hist.defect_item_number = obj.optInt("ItemNumber");
-                    hist.defect_category_id = obj.optInt("DefectCategoryID");
-                    hist.defect_category_name = obj.optString("CategoryName");
-                    hist.defect_item_description = obj.optString("ItemDescription");
-                    hist.comment = obj.optString("Comment");
-                    hist.is_reviewed = false;
-                    hist.reviewed_status = null;
-                    hist.inspection_defect_id = -1;
+                    hist.InspectionDetailID = obj.optInt("InspectionDetailID");
+                    hist.FirstDefectInspectionDetailID = obj.optInt("FirstDefectInspectionDetailID");
+                    hist.InspectionID = inspectionId;
+                    hist.PreviousInspectionID = obj.optInt("InspectionID");
+                    hist.DefectItemID = obj.optInt("DefectItemID");
+                    hist.ItemNumber = obj.optInt("ItemNumber");
+                    hist.DefectCategoryID = obj.optInt("DefectCategoryID");
+                    hist.CategoryName = obj.optString("CategoryName");
+                    hist.ItemDescription = obj.optString("ItemDescription");
+                    hist.Comment = obj.optString("Comment");
+                    hist.IsReviewed = false;
+                    hist.ReviewedStatus = null;
+                    hist.InspectionDefectID = -1;
                     vm.insertInspectionHistory(hist);
                 } catch (JSONException e) {
                     BridgeLogger.log('E', TAG, "ERROR in updateInspectionHistory: " + e.getMessage());
@@ -411,19 +416,19 @@ public class BridgeAPIQueue {
                     JSONObject obj = response.getJSONObject(lcv);
                     if (!isReobservation) {
                         InspectionDefect_Table newDefect = new InspectionDefect_Table();
-                        newDefect.inspection_id = inspectionId;
-                        newDefect.defect_item_id = obj.optInt("DefectItemID");
-                        newDefect.defect_status_id = obj.optInt("DefectStatusID");
-                        newDefect.comment = obj.optString("Comment");
-                        newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
-                        newDefect.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
-                        newDefect.reinspection_required = false;
-                        newDefect.picture_path = null;
-                        newDefect.is_uploaded = false;
-                        newDefect.is_editable = false;
-                        if (vm.multifamilyDefectExists(newDefect.first_inspection_detail_id) > 0) {
-                            int existingId = vm.multifamilyDefectExists(newDefect.first_inspection_detail_id);
-                            vm.updateExistingMFCDefect(newDefect.defect_status_id, newDefect.comment, existingId);
+                        newDefect.InspectionID = inspectionId;
+                        newDefect.DefectItemID = obj.optInt("DefectItemID");
+                        newDefect.DefectStatusID = obj.optInt("DefectStatusID");
+                        newDefect.Comment = obj.optString("Comment");
+                        newDefect.PriorInspectionDetailID = obj.optInt("InspectionDetailID");
+                        newDefect.FirstDefectInspectionDetailID = obj.optInt("FirstDefectInspectionDetailID");
+                        newDefect.ReinspectionRequired = false;
+                        newDefect.PicturePath = null;
+                        newDefect.IsUploaded = false;
+                        newDefect.IsEditable = false;
+                        if (vm.getExistingMFCDefect(newDefect.FirstDefectInspectionDetailID, inspectionId) > 0) {
+                            int existingId = vm.getExistingMFCDefect(newDefect.FirstDefectInspectionDetailID, inspectionId);
+                            vm.updateExistingMFCDefect(newDefect.DefectStatusID, newDefect.Comment, existingId);
                         } else {
                             vm.insertInspectionDefect(newDefect);
                         }
@@ -431,34 +436,34 @@ public class BridgeAPIQueue {
                         InspectionHistory_Table hist = new InspectionHistory_Table();
                         boolean needsReview = (obj.optInt("DefectStatusID") == 2);
                         if (needsReview) {
-                            hist.id = obj.optInt("InspectionDetailID");
-                            hist.inspection_id = inspectionId;
-                            hist.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
-                            hist.previous_inspection_id = obj.optInt("InspectionID");
-                            hist.defect_item_id = obj.optInt("DefectItemID");
-                            hist.defect_item_number = obj.optInt("ItemNumber");
-                            hist.defect_category_id = obj.optInt("DefectCategoryID");
-                            hist.defect_category_name = obj.optString("CategoryName");
-                            hist.defect_item_description = obj.optString("ItemDescription");
-                            hist.comment = obj.optString("Comment");
-                            hist.is_reviewed = false;
-                            hist.reviewed_status = null;
-                            hist.inspection_defect_id = -1;
+                            hist.InspectionDetailID = obj.optInt("InspectionDetailID");
+                            hist.InspectionID = inspectionId;
+                            hist.FirstDefectInspectionDetailID = obj.optInt("FirstDefectInspectionDetailID");
+                            hist.PreviousInspectionID = obj.optInt("InspectionID");
+                            hist.DefectItemID = obj.optInt("DefectItemID");
+                            hist.ItemNumber = obj.optInt("ItemNumber");
+                            hist.DefectCategoryID = obj.optInt("DefectCategoryID");
+                            hist.CategoryName = obj.optString("CategoryName");
+                            hist.ItemDescription = obj.optString("ItemDescription");
+                            hist.Comment = obj.optString("Comment");
+                            hist.IsReviewed = false;
+                            hist.ReviewedStatus = null;
+                            hist.InspectionDefectID = -1;
                             vm.insertInspectionHistory(hist);
                         } else {
                             InspectionDefect_Table newDefect = new InspectionDefect_Table();
-                            newDefect.inspection_id = inspectionId;
-                            newDefect.defect_item_id = obj.optInt("DefectItemID");
-                            newDefect.defect_status_id = obj.optInt("DefectStatusID");
-                            newDefect.comment = obj.optString("Comment");
-                            newDefect.prior_inspection_detail_id = obj.optInt("InspectionDetailID");
-                            newDefect.first_inspection_detail_id = obj.optInt("FirstDefectInspectionDetailID");
-                            newDefect.reinspection_required = false;
-                            newDefect.picture_path = null;
-                            newDefect.is_uploaded = false;
-                            if (vm.multifamilyDefectExists(newDefect.first_inspection_detail_id) > 0) {
-                                int existingId = vm.multifamilyDefectExists(newDefect.first_inspection_detail_id);
-                                vm.updateExistingMFCDefect(newDefect.defect_status_id, newDefect.comment, existingId);
+                            newDefect.InspectionID = inspectionId;
+                            newDefect.DefectItemID = obj.optInt("DefectItemID");
+                            newDefect.DefectStatusID = obj.optInt("DefectStatusID");
+                            newDefect.Comment = obj.optString("Comment");
+                            newDefect.PriorInspectionDetailID = obj.optInt("InspectionDetailID");
+                            newDefect.FirstDefectInspectionDetailID = obj.optInt("FirstDefectInspectionDetailID");
+                            newDefect.ReinspectionRequired = false;
+                            newDefect.PicturePath = null;
+                            newDefect.IsUploaded = false;
+                            if (vm.getExistingMFCDefect(newDefect.FirstDefectInspectionDetailID, inspectionId) > 0) {
+                                int existingId = vm.getExistingMFCDefect(newDefect.FirstDefectInspectionDetailID, inspectionId);
+                                vm.updateExistingMFCDefect(newDefect.DefectStatusID, newDefect.Comment, existingId);
                             } else {
                                 vm.insertInspectionDefect(newDefect);
                             }
@@ -559,7 +564,7 @@ public class BridgeAPIQueue {
         url += String.format(GET_REPORT_DATA_URL, inspectorId, inspectionDate);
 
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-            vm.updateUrl(response.substring(1, response.length()-1));
+            vm.setReportUrl(response.substring(1, response.length()-1));
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -688,6 +693,7 @@ public class BridgeAPIQueue {
         return request;
     }
     public JsonObjectRequest updateEkotropePlanData(Ekotrope_DataViewModel vm, String planId, String projectId, String inspectionType, final ServerCallback callback) {
+        String auth = isEkotropeProd ? API_EKOTROPE_AUTH_PROD : API_EKOTROPE_AUTH_TEST;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, API_EKOTROPE_INSPECTION_SYNC, null, response -> {
             BridgeLogger.log('I', TAG, String.format(Locale.ENGLISH, "API Response Code: %s", response.optString("Status")));
             callback.onSuccess("Success!");
@@ -708,7 +714,7 @@ public class BridgeAPIQueue {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> params = new HashMap<>();
-                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(API_EKOTROPE_AUTH_PROD.getBytes(), Base64.DEFAULT));
+                params.put(AUTH_HEADER, "Basic " +  Base64.encodeToString(auth.getBytes(), Base64.DEFAULT));
                 return params;
             }
 
@@ -1098,16 +1104,16 @@ public class BridgeAPIQueue {
                 try {
                     JSONObject obj = response.getJSONObject(i);
                     Attachment_Table attachment = new Attachment_Table();
-                    attachment.id = obj.optInt("AttachmentID");
-                    attachment.inspection_id = obj.optInt("InspectionID");
-                    attachment.location_id = obj.optInt("LocationID");
-                    attachment.file_name = obj.optString("AttachmentFileName");
-                    attachment.file_data = Base64.decode(obj.optString("ImageFileData"), Base64.DEFAULT);
-                    attachment.attachment_type = obj.optString("AttachmentType");
-                    attachment.file_path = null;
-                    attachment.is_uploaded = true;
+                    attachment.AttachmentID = obj.optInt("AttachmentID");
+                    attachment.InspectionID = obj.optInt("InspectionID");
+                    attachment.LocationID = obj.optInt("LocationID");
+                    attachment.FileName = obj.optString("AttachmentFileName");
+                    attachment.FileData = Base64.decode(obj.optString("ImageFileData"), Base64.DEFAULT);
+                    attachment.AttachmentType = obj.optString("AttachmentType");
+                    attachment.FilePath = null;
+                    attachment.IsUploaded = true;
 
-                    String fileName = attachment.inspection_id + "_" + attachment.file_name;
+                    String fileName = attachment.InspectionID + "_" + attachment.FileName;
                     String path = ctx.getExternalFilesDir("Attachments").getAbsolutePath() + "/" + fileName;
                     File file = new File(path);
                     try {
@@ -1115,13 +1121,13 @@ public class BridgeAPIQueue {
                             file.createNewFile();
                         }
                         FileOutputStream fos = new FileOutputStream(file);
-                        fos.write(attachment.file_data);
+                        fos.write(attachment.FileData);
                         fos.close();
                     } catch (Exception e) {
                         BridgeLogger.log('E', TAG, "ERROR in updateAttachments: " + e.getMessage());
                     }
 
-                    attachment.file_path = path;
+                    attachment.FilePath = path;
 
                     vm.insertAttachment(attachment);
                 } catch (JSONException e) {
@@ -1160,13 +1166,13 @@ public class BridgeAPIQueue {
                 try {
                     JSONObject obj = response.getJSONObject(i);
                     PastInspection_Table pastInspection = new PastInspection_Table();
-                    pastInspection.id = obj.optInt("InspectionID");
-                    pastInspection.inspection_submit_time = OffsetDateTime.parse(obj.optString("InspectionSubmitTime"));
-                    pastInspection.location_id = obj.optInt("LocationID");
-                    pastInspection.inspector = obj.getString("Inspector");
-                    pastInspection.inspection_type = obj.getString("InspectionType");
-                    pastInspection.inspection_status_id = obj.optInt("InspectionStatusID");
-                    pastInspection.incomplete_reason = obj.getString("IncompleteReason");
+                    pastInspection.InspectionID = obj.optInt("InspectionID");
+                    //pastInspection.InspectionSubmitTime = OffsetDateTime.parse(obj.optString("InspectionSubmitTime"));
+                    pastInspection.LocationID = obj.optInt("LocationID");
+                    pastInspection.Inspector = obj.getString("Inspector");
+                    pastInspection.InspectionType = obj.getString("InspectionType");
+                    pastInspection.InspectionStatusID = obj.optInt("InspectionStatusID");
+                    pastInspection.IncompleteReason = obj.getString("IncompleteReason");
 
                     vm.insertPastInspection(pastInspection);
                 } catch (JSONException e) {

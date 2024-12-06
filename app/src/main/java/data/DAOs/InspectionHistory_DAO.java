@@ -15,36 +15,36 @@ public interface InspectionHistory_DAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(InspectionHistory_Table inspectionHistory);
 
-    @Query("DELETE FROM inspection_history_table WHERE inspection_id = :inspection_id")
+    @Query("DELETE FROM inspection_history_table WHERE InspectionID = :inspection_id")
     void deleteForInspection(int inspection_id);
 
     @Query("DELETE FROM inspection_history_table")
     void deleteAll();
 
-    @Query("UPDATE inspection_history_table SET inspection_id = :inspection_id, is_reviewed = 0, reviewed_status = null, inspection_defect_id = -1  WHERE id = :id")
+    @Query("UPDATE inspection_history_table SET InspectionID = :inspection_id, IsReviewed = 0, ReviewedStatus = null, InspectionDefectID = -1  WHERE InspectionDetailID = :id")
     void update(int id, int inspection_id);
 
     @Query("SELECT * " +
             "FROM inspection_history_table " +
-            "WHERE inspection_id = :inspection_id " +
-            "ORDER BY is_reviewed, comment COLLATE NOCASE ASC")
+            "WHERE InspectionID = :inspection_id " +
+            "ORDER BY IsReviewed, Comment COLLATE NOCASE ASC")
     LiveData<List<InspectionHistory_Table>> getInspectionHistory(int inspection_id);
 
-    @Query("SELECT * FROM inspection_history_table WHERE id = :inspection_history_id")
+    @Query("SELECT * FROM inspection_history_table WHERE InspectionDetailID = :inspection_history_id")
     InspectionHistory_Table getInspectionHistorySync(int inspection_history_id);
 
-    @Query("SELECT comment FROM inspection_history_table WHERE id = :inspection_history_id")
+    @Query("SELECT Comment FROM inspection_history_table WHERE InspectionDetailID = :inspection_history_id")
     String getComment(int inspection_history_id);
 
-    @Query("UPDATE inspection_history_table SET is_reviewed = 1 WHERE id = :inspection_history_id")
+    @Query("UPDATE inspection_history_table SET IsReviewed = 1 WHERE InspectionDetailID = :inspection_history_id")
     void updateIsReviewed(int inspection_history_id);
 
-    @Query("UPDATE inspection_history_table SET reviewed_status = :defect_status_id WHERE id = :inspection_history_id")
+    @Query("UPDATE inspection_history_table SET ReviewedStatus = :defect_status_id WHERE InspectionDetailID = :inspection_history_id")
     void updateReviewedStatus(int defect_status_id, int inspection_history_id);
 
-    @Query("UPDATE inspection_history_table SET inspection_defect_id = :inspection_defect_id WHERE id = :inspection_history_id")
+    @Query("UPDATE inspection_history_table SET InspectionDefectID = :inspection_defect_id WHERE InspectionDetailID = :inspection_history_id")
     void updateInspectionDefectId(int inspection_defect_id, int inspection_history_id);
 
-    @Query("SELECT COUNT(*) FROM inspection_history_table WHERE inspection_id = :inspection_id AND is_reviewed = 0")
+    @Query("SELECT COUNT(*) FROM inspection_history_table WHERE InspectionID = :inspection_id AND IsReviewed = 0")
     int getItemsToReview(int inspection_id);
 }
