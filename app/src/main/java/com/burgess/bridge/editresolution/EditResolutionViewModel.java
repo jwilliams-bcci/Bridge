@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import data.Repositories.InspectionDefectRepository;
 import data.Repositories.InspectionRepository;
@@ -26,7 +27,7 @@ public class EditResolutionViewModel extends AndroidViewModel {
         return mInspectionRepository.getInspectionSync(inspectionId);
     }
 
-    public long addInspectionDefect(InspectionDefect_Table inspectionDefect) {
+    public long addInspectionDefect(InspectionDefect_Table inspectionDefect) throws ExecutionException, InterruptedException {
         return mInspectionDefectRepository.insert(inspectionDefect);
     }
 

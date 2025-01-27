@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.burgess.bridge.R;
 
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import data.Tables.PastInspection_Table;
@@ -34,9 +34,9 @@ public class PastInspectionListAdapter extends ListAdapter<PastInspection_Table,
     @Override
     public void onBindViewHolder(@NonNull PastInspectionsViewHolder holder, int position) {
         PastInspection_Table pastInspection = currentList.get(position);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
-        //holder.getTextInspectionDate().setText(formatter.format(pastInspection.InspectionSubmitTime));
+        holder.getTextInspectionDate().setText(pastInspection.InspectionSubmitDate);
         holder.getTextInspectorName().setText(pastInspection.Inspector);
         holder.getTextInspectionType().setText(pastInspection.InspectionType);
         holder.getTextInspectionStatus().setText(pastInspection.IncompleteReason);

@@ -33,7 +33,9 @@ public class InspectionHistoryRepository {
     }
 
     public void deleteForInspection(int inspectionId) {
-        mInspectionHistoryDao.deleteForInspection(inspectionId);
+        BridgeRoomDatabase.databaseWriteExecutor.execute(() -> {
+            mInspectionHistoryDao.deleteForInspection(inspectionId);
+        });
     }
 
     public String getComment(int inspectionHistoryId) {
@@ -54,5 +56,9 @@ public class InspectionHistoryRepository {
 
     public int getItemsToReview(int inspectionId) {
         return mInspectionHistoryDao.getItemsToReview(inspectionId);
+    }
+
+    public List<InspectionHistory_Table> getNotes(int inspectionId) {
+        return mInspectionHistoryDao.getNotes(inspectionId);
     }
 }

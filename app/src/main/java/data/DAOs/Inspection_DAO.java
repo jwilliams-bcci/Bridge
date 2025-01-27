@@ -5,11 +5,11 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
+import androidx.room.Transaction;
 
 import java.time.OffsetDateTime;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import data.Tables.Inspection_Table;
 import data.Views.RouteSheet_View;
@@ -18,6 +18,15 @@ import data.Views.RouteSheet_View;
 public interface Inspection_DAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Inspection_Table inspection);
+
+    @Transaction
+    default void updateItemPositions(List<RouteSheet_View> items) {
+        for (int lcv = 0; lcv < items.size(); lcv++) { {
+            RouteSheet_View item = items.get(lcv);
+            item.RouteSheetOrder = lcv;
+            updateRouteSheetIndex(item.InspectionID, item.RouteSheetOrder);
+        }}
+    }
 
     @Query("DELETE FROM inspection_table")
     void deleteAll();
@@ -46,18 +55,24 @@ public interface Inspection_DAO {
     LiveData<List<RouteSheet_View>> getInspectionsForRouteSheet(int inspector_id);
 
     @Query("SELECT * FROM inspection_table WHERE InspectionID = :inspection_id")
-    LiveData<Inspection_Table> getInspection(int inspection_id);
-
-    @Query("SELECT * FROM inspection_table WHERE InspectionID = :inspection_id")
     Inspection_Table getInspectionSync(int inspection_id);
 
     @Query("SELECT InspectionID FROM inspection_table WHERE InspectorID = :inspector_id")
     List<Integer> getAllInspectionIds(int inspector_id);
 
+    @Query("SELECT InspectionID FROM inspection_table WHERE InspectorID = :inspector_id")
+    List<Integer> getAllInspectionIdsThread(int inspector_id);
+
     @Query("SELECT ReInspect FROM inspection_table WHERE InspectionID = :inspection_id")
     boolean getReinspect(int inspection_id);
 
-    @Query("UPDATE inspection_table SET IsComplete = 1, IsFailed = 0, EndTime = :end_time WHERE InspectionID = :inspection_id")
+    @Query("SELECT COUNT() FROM inspection_table WHERE IsUploaded = 0 AND LocationID = :location_id")
+    int getPendingMFCInspectionsAtLocation(int location_id);
+
+    @Query("SELECT COUNT() FROM inspection_table WHERE IsComplete = 0")
+    int getIndividualRemainingInspections();
+
+    @Query("UPDATE inspection_table SET IsComplete = 1, IsFailed = 0, EndTime = :end_time, SubmitTime = :end_time WHERE InspectionID = :inspection_id")
     void completeInspection(OffsetDateTime end_time, int inspection_id);
 
     @Query("UPDATE inspection_table SET IsFailed = 1 WHERE InspectionID = :inspection_id")
@@ -69,11 +84,11 @@ public interface Inspection_DAO {
     @Query("UPDATE inspection_table SET RouteSheetOrder = :new_order WHERE InspectionID = :inspection_id")
     void updateRouteSheetIndex(int inspection_id, int new_order);
 
+    @Query("UPDATE inspection_table SET SubmitTime = datetime('now') WHERE InspectionID = :inspection_id")
+    void updateSubmitTime(int inspection_id);
+
     @Query("UPDATE inspection_table SET StartTime = :start_time WHERE InspectionID = :inspection_id")
     void startInspection(OffsetDateTime start_time, int inspection_id);
-
-    @Query("SELECT COUNT() FROM inspection_table WHERE IsComplete = 0")
-    int getIndividualRemainingInspections();
 
     @Query("UPDATE inspection_table SET TraineeID = :trainee_id WHERE InspectionID = :inspection_id")
     void assignTrainee(int trainee_id, int inspection_id);
@@ -81,6 +96,9 @@ public interface Inspection_DAO {
     @Query("UPDATE inspection_table SET EkotropePlanID = :ekotrope_plan_id WHERE InspectionID = :inspection_id")
     void updateEkotropePlanId(String ekotrope_plan_id, int inspection_id);
 
-    @Query("SELECT COUNT() FROM inspection_table WHERE IsUploaded = 0 AND LocationID = :location_id")
-    int getPendingMFCInspectionsAtLocation(int location_id);
+    @Query("UPDATE inspection_table SET IsComplete = 0, IsFailed = 0, IsUploaded = 0 WHERE InspectionID = :inspection_id")
+    void clearStatusFlags(int inspection_id);
+
+    @Query("UPDATE inspection_table SET JotformAccessed = 1 WHERE InspectionID = :inspection_id")
+    void updateJotformAccessed(int inspection_id);
 }

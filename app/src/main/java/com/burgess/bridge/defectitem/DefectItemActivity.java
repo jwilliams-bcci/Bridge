@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import data.Tables.DefectItem_Table;
 import data.Tables.Direction_Table;
@@ -159,7 +160,7 @@ public class DefectItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_defect_item);
         setSupportActionBar(findViewById(R.id.defect_item_toolbar));
-        mDefectItemViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
+        mDefectItemViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(DefectItemViewModel.class);
         checkPermission();
 
         // Prepare shared preferences...
@@ -225,14 +226,19 @@ public class DefectItemActivity extends AppCompatActivity {
             chooseFileLauncher.launch(fileIntent);
         });
         mButtonCamera.setOnClickListener(v -> {
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-                File photoFile = createImageFile();
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(this, "com.burgess.bridge", photoFile);
-                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+            try {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+                    File photoFile = createImageFile();
+                    if (photoFile != null) {
+                        Uri photoURI = FileProvider.getUriForFile(this, "com.burgess.bridge", photoFile);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                    }
                 }
+            }
+            catch (Exception e) {
+                BridgeLogger.log('E', TAG, String.format("Camera exception - %s", e.getMessage()));
             }
         });
         mSaveInspectionDefect.setOnClickListener(v -> {
@@ -299,6 +305,9 @@ public class DefectItemActivity extends AppCompatActivity {
                 }
             }
 
+            // Custom rules for MHI
+
+
             // Custom rules for Coventry / Dreamfinders
             int[] builderIds_Coventry_Dreamfinders = { 396, 397, 2254, 2255 };
             for (int builderId : builderIds_Coventry_Dreamfinders) {
@@ -310,12 +319,12 @@ public class DefectItemActivity extends AppCompatActivity {
                 }
             }
 
-            if (mInspection.RequireRiskAssessment && (mTextLotNumber.getText().toString() == null || mSpinnerConstructionStage.getSelectedItem().toString().equals("--Choose an option--") || !mPictureTaken)) {
-                Snackbar.make(mConstraintLayout, "Must have a lot number, construction stage, and picture for this inspection type.", Snackbar.LENGTH_LONG).show();
+            if (mInspection.RequireRiskAssessment && (mTextLotNumber.getText().toString() == null || !mPictureTaken)) {
+                Snackbar.make(mConstraintLayout, "Must have a lot number and picture for this inspection type.", Snackbar.LENGTH_LONG).show();
                 return;
             } else if (mInspection.RequireRiskAssessment) {
                 lotNumber = mTextLotNumber.getText().toString();
-                constructionStage = mSpinnerConstructionStage.getSelectedItem().toString();
+                //constructionStage = mSpinnerConstructionStage.getSelectedItem().toString();
             }
 
             // Append all text fields together
@@ -359,7 +368,11 @@ public class DefectItemActivity extends AppCompatActivity {
                 mDefectItemViewModel.updateInspectionDefectId(mInspectionDefectId, mInspectionHistoryId);
                 finish();
             } else {
-                newId = mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
+                try {
+                    newId = mDefectItemViewModel.insertInspectionDefect(inspectionDefect);
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 // If this is a reinspect, mInspectionHistoryId will be > 0, update the reviewed flag and the status InspectionID.
                 if (mInspectionHistoryId > 0) {
                     mDefectItemViewModel.updateIsReviewed(mInspectionHistoryId);
@@ -421,15 +434,15 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemDetails.append(mDefectItem.ItemDescription);
 
         // Set up spinner
-        String[] spinnerItems = new String[]{"--Choose an option--", "Preliminary", "Prime", "Critical"};
-        mSpinnerConstructionStageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerItems);
-        mSpinnerConstructionStage.setAdapter(mSpinnerConstructionStageAdapter);
+        //String[] spinnerItems = new String[]{"--Choose an option--", "Preliminary", "Prime", "Critical"};
+        //mSpinnerConstructionStageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerItems);
+        //mSpinnerConstructionStage.setAdapter(mSpinnerConstructionStageAdapter);
 
         if (!mInspection.RequireRiskAssessment) {
             mLabelLotNumber.setVisibility(View.GONE);
-            mLabelConstructionStage.setVisibility(View.GONE);
+            //mLabelConstructionStage.setVisibility(View.GONE);
             mTextLotNumber.setVisibility(View.GONE);
-            mSpinnerConstructionStage.setVisibility(View.GONE);
+            //mSpinnerConstructionStage.setVisibility(View.GONE);
         }
 
         // If mDefectId == 1, then it's a note, hide the radio buttons and show the Add Attachment button.
@@ -483,6 +496,8 @@ public class DefectItemActivity extends AppCompatActivity {
                     break;
             }
             mDefectItemTextComment.setText(currentItem.Comment);
+            mTextLotNumber.setText(currentItem.LotNumber);
+            //mSpinnerConstructionStage.setSelection(mSpinnerConstructionStageAdapter.getPosition(currentItem.StageOfConstruction));
 
             if (currentItem.PicturePath != null) {
                 mPictureTaken = true;

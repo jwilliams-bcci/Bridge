@@ -350,7 +350,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         if (mInspection.EndTime == null) {
             mReviewAndSubmitViewModel.completeInspection(endTime, mInspectionId);
         } else {
-            endTime = mInspection.EndTime;
+            mReviewAndSubmitViewModel.completeInspection(mInspection.EndTime, mInspectionId);
         }
 
         if (mDivisionId == 20) {

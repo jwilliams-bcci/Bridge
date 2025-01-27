@@ -92,10 +92,6 @@ public class ReviewAndSubmitViewModel extends AndroidViewModel {
         return mInspectionDefectRepository.getInspectionDefectsForReviewSync(inspectionId);
     }
 
-    public LiveData<Inspection_Table> getInspection(int inspectionId) {
-        return mInspectionRepository.getInspection(inspectionId);
-    }
-
     public Inspection_Table getInspectionSync(int inspectionId) {
         return mInspectionRepository.getInspectionSync(inspectionId);
     }

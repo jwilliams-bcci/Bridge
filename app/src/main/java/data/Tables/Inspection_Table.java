@@ -46,12 +46,15 @@ public class Inspection_Table {
     public OffsetDateTime StartTime;
     @TypeConverters({DateConverter.class})
     public OffsetDateTime EndTime;
+    @TypeConverters({DateConverter.class})
+    public OffsetDateTime SubmitTime;
     public boolean IsComplete;
     public boolean IsUploaded;
     public boolean IsFailed;
     public int RouteSheetOrder;
     public int TraineeID;
     public String JotformLink = "";
+    public boolean JotformAccessed;
 
     public Inspection_Table () {}
 
@@ -64,7 +67,8 @@ public class Inspection_Table {
                             String SuperPhone, String SuperEmailAddress, int SuperintendentPresent,
                             String IncompleteReason, int IncompleteReasonID, String Notes,
                             String JobNumber, boolean RequireRiskAssessment,
-                            String EkotropeProjectID, int RouteSheetOrder, String JotformLink) {
+                            String EkotropeProjectID, int RouteSheetOrder, String JotformLink,
+                            boolean JotformAccessed) {
         this.InspectionID = InspectionID;
         this.InspectionDate = InspectionDate;
         this.DivisionID = DivisionID;
@@ -97,11 +101,13 @@ public class Inspection_Table {
         this.EkotropePlanID = null;
         this.StartTime = null;
         this.EndTime = null;
+        this.SubmitTime = null;
         this.IsComplete = false;
         this.IsUploaded = false;
         this.IsFailed = false;
         this.RouteSheetOrder = RouteSheetOrder;
         this.TraineeID = -1;
         this.JotformLink = JotformLink.isEmpty() ? "" : JotformLink;
+        this.JotformAccessed = false;
     }
 }

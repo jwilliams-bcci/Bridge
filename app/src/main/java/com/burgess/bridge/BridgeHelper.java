@@ -1,5 +1,6 @@
 package com.burgess.bridge;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -33,7 +34,6 @@ public class BridgeHelper {
             }
         });
     }
-
     public static void setChangeTracker(EditText editText, Integer compareTo) {
         Drawable originalBackground = editText.getBackground();
         boolean fieldChanged = true;
@@ -50,7 +50,6 @@ public class BridgeHelper {
             }
         });
     }
-
     public static void setChangeTracker(EditText editText, String compareTo) {
         Drawable originalBackground = editText.getBackground();
         boolean fieldChanged = true;
@@ -67,7 +66,6 @@ public class BridgeHelper {
             }
         });
     }
-
     public static void setChangeTracker(Spinner spinner, String compareTo) {
         Drawable originalBackground = spinner.getBackground();
         boolean fieldChanged = true;
@@ -89,7 +87,6 @@ public class BridgeHelper {
             }
         });
     }
-
     public static void setChangeTracker(CheckBox checkBox, boolean compareTo) {
         Drawable originalBackground = checkBox.getBackground();
         boolean fieldChanged = true;

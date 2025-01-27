@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
 @DatabaseView("SELECT i.InspectionID, i.LocationID, i.DivisionID, i.InspectorID, i.InspectionTypeID," +
                 "i.InspectionStatusID, i.ReInspect, i.Community, i.Address, i.InspectionType," +
                 "i.Notes, i.JobNumber, i.RequireRiskAssessment, i.EkotropeProjectID," +
-                "i.InspectionDate, i.IsComplete, i.IsFailed, i.IsUploaded," +
+                "i.InspectionDate, i.SubmitTime, i.IsComplete, i.IsFailed, i.IsUploaded," +
                 "SUM(CASE WHEN id.IsUploaded = 1 THEN 1 ELSE 0 END) AS NumUploaded, " +
                 "COUNT(id.ID) AS NumTotal, i.StartTime, RouteSheetOrder " +
                 "FROM inspection_table i " +
@@ -28,6 +28,7 @@ public class RouteSheet_View {
     public boolean RequireRiskAssessment;
     public String EkotropeProjectID;
     public OffsetDateTime InspectionDate;
+    public OffsetDateTime SubmitTime;
     public boolean IsComplete;
     public boolean IsFailed;
     public boolean IsUploaded;

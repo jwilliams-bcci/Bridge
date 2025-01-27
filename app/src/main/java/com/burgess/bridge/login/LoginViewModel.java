@@ -16,6 +16,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.ServerCallback;
+import com.burgess.bridge.SharedPreferencesRepository;
 import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 import com.burgess.bridge.apiqueue.LoginAPI;
 
@@ -42,11 +43,10 @@ public class LoginViewModel extends AndroidViewModel {
     private final RoomRepository mRoomRepository;
     private final DirectionRepository mDirectionRepository;
     private final FaultRepository mFaultRepository;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private MutableLiveData<String> snackbarMessage = new MutableLiveData<>();
-    private MutableLiveData<String> statusMessage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> completeLogin = new MutableLiveData<>();
+    private final SharedPreferencesRepository sharedPreferences;
+    private final MutableLiveData<String> snackbarMessage = new MutableLiveData<>();
+    private final MutableLiveData<String> statusMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> completeLogin = new MutableLiveData<>();
 
     private static final String TAG = "LOGIN";
 
@@ -58,22 +58,20 @@ public class LoginViewModel extends AndroidViewModel {
         mRoomRepository = new RoomRepository(application);
         mDirectionRepository = new DirectionRepository(application);
         mFaultRepository = new FaultRepository(application);
-        sharedPreferences = application.getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        sharedPreferences = new SharedPreferencesRepository(application);
         completeLogin.setValue(false);
     }
 
     public void setSharedPreferences(JSONObject response, String username, String password) {
-        editor.putString(PREF_AUTH_TOKEN, response.optString("AuthorizationToken"));
-        editor.putString(PREF_SECURITY_USER_ID, response.optString("SecurityUserId"));
-        editor.putString(PREF_INSPECTOR_ID, response.optString("InspectorId"));
-        editor.putString(PREF_INSPECTOR_DIVISION_ID, response.optString("DivisionId"));
-        editor.putString(PREF_LOGIN_NAME, username);
-        editor.putString(PREF_LOGIN_PASSWORD, password);
-        editor.putInt(PREF_IND_INSPECTIONS_REMAINING, 0);
-        editor.putInt(PREF_TEAM_INSPECTIONS_REMAINING, 0);
-        editor.putLong(PREF_AUTH_TOKEN_AGE, System.currentTimeMillis());
-        editor.apply();
+        sharedPreferences.setAuthToken(response.optString("AuthorizationToken"));
+        sharedPreferences.setSecurityUserId(response.optString("SecurityUserId"));
+        sharedPreferences.setInspectorId(response.optString("InspectorId"));
+        sharedPreferences.setDivisionId(response.optString("DivisionId"));
+        sharedPreferences.setLoginName(username);
+        sharedPreferences.setLoginPassword(password);
+        sharedPreferences.setIndividualRemaining(0);
+        sharedPreferences.setTeamRemaining(0);
+        sharedPreferences.setAuthTokenAge(System.currentTimeMillis());
     }
 
     public LiveData<String> getSnackbarMessage() {
@@ -107,7 +105,7 @@ public class LoginViewModel extends AndroidViewModel {
         JsonObjectRequest loginRequest = LoginAPI.loginUser(loginObj, this, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                updateCannedComments(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
+                updateCannedComments(sharedPreferences.getAuthToken());
             }
 
             @Override
@@ -120,7 +118,7 @@ public class LoginViewModel extends AndroidViewModel {
         JsonArrayRequest cannedCommentsRequest = LoginAPI.getCannedComments(this, authToken, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                updateBuilders(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
+                updateBuilders(sharedPreferences.getAuthToken());
             }
 
             @Override
@@ -133,7 +131,7 @@ public class LoginViewModel extends AndroidViewModel {
         JsonArrayRequest buildersRequest = LoginAPI.getBuilders(this, authToken, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                updateInspectors(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
+                updateInspectors(sharedPreferences.getAuthToken());
             }
 
             @Override
@@ -146,7 +144,7 @@ public class LoginViewModel extends AndroidViewModel {
         JsonArrayRequest inspectorsRequest = LoginAPI.getInspectorsV2(this, authToken, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                updateRooms(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
+                updateRooms(sharedPreferences.getAuthToken());
             }
             @Override
             public void onFailure(String message) { showSnackbarMessage(message); }
@@ -158,7 +156,7 @@ public class LoginViewModel extends AndroidViewModel {
         JsonArrayRequest roomsRequest = LoginAPI.getRooms(this, authToken, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                updateDirections(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
+                updateDirections(sharedPreferences.getAuthToken());
             }
             @Override
             public void onFailure(String message) { showSnackbarMessage(message); }
@@ -170,7 +168,7 @@ public class LoginViewModel extends AndroidViewModel {
         JsonArrayRequest directionsRequest = LoginAPI.getDirections(this, authToken, new ServerCallback() {
             @Override
             public void onSuccess(String message) {
-                updateFaults(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
+                updateFaults(sharedPreferences.getAuthToken());
             }
 
             @Override
@@ -200,23 +198,18 @@ public class LoginViewModel extends AndroidViewModel {
     public void insertCannedComment(CannedComment_Table cannedComment) {
         mCannedCommentRepository.insert(cannedComment);
     }
-
     public void insertBuilder(Builder_Table builder) {
         mBuilderRepository.insert(builder);
     }
-
     public void insertInspector(Inspector_Table inspector) {
         mInspectorRepository.insert(inspector);
     }
-
     public void insertRoom(Room_Table room) {
         mRoomRepository.insert(room);
     }
-
     public void insertDirection(Direction_Table direction) {
         mDirectionRepository.insert(direction);
     }
-
     public void insertFault(Fault_Table fault) {
         mFaultRepository.insert(fault);
     }

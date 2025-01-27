@@ -3,16 +3,12 @@ package com.burgess.bridge.login;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -27,14 +23,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.burgess.bridge.BridgeHelper;
+import com.burgess.bridge.SharedPreferencesRepository;
 import com.burgess.bridge.apiqueue.BridgeAPIQueue;
 import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.R;
-import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -45,8 +38,8 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginVM;
     private ConstraintLayout constraintLayout;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedPreferencesEditor;
+    //private SharedPreferences sharedPreferences;
+    //private SharedPreferences.Editor sharedPreferencesEditor;
     private TextView tUserName;
     private TextView tPassword;
     private ImageView ivShowPassword;
@@ -58,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tStatus;
     private ProgressBar progressBar;
 
+    private SharedPreferencesRepository sharedPreferences;
     private String userName;
     private String password;
 
@@ -70,10 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         loginVM = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(LoginViewModel.class);
 
         // Prepare Shared Preferences...
-        sharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-        sharedPreferencesEditor = sharedPreferences.edit();
-        sharedPreferencesEditor.putBoolean(PREF_IS_ONLINE, true);
-        sharedPreferencesEditor.apply();
+        sharedPreferences = new SharedPreferencesRepository(this);
+        //sharedPreferencesEditor = sharedPreferences.edit();
 
         // Prepare Logger and API...
         BridgeLogger.getInstance(this);
@@ -122,14 +114,11 @@ public class LoginActivity extends AppCompatActivity {
             userName = tUserName.getText().toString();
             password = tPassword.getText().toString();
 
-            sharedPreferencesEditor.putBoolean(REMEMBER_CREDENTIALS, cbRememberCredentials.isChecked());
-            sharedPreferencesEditor.apply();
+            sharedPreferences.setRememberCredentials(cbRememberCredentials.isChecked());
 
             if (!isNetworkAvailable()) {
                 showWorkOfflineSnackbar("No network available!");
             } else {
-                sharedPreferencesEditor.putBoolean(PREF_IS_ONLINE, true);
-                sharedPreferencesEditor.apply();
                 workOnline();
             }
         });
@@ -142,10 +131,10 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void initializeDisplayContent() {
-        if (sharedPreferences.getBoolean(REMEMBER_CREDENTIALS, false)) {
+        if (sharedPreferences.getRememberCredentials()) {
             cbRememberCredentials.setChecked(true);
-            tUserName.setText(sharedPreferences.getString(PREF_LOGIN_NAME, ""));
-            tPassword.setText(sharedPreferences.getString(PREF_LOGIN_PASSWORD, ""));
+            tUserName.setText(sharedPreferences.getLoginName());
+            tPassword.setText(sharedPreferences.getLoginPassword());
         }
 
         // Set the version label to display the version number...
@@ -159,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         tVersionName.setText(String.format("Version %s", versionName));
 
-        if (!BridgeAPIQueue.getInstance().isProd()) {
+        if (!BridgeAPIQueue.isProd()) {
             tStaging.setVisibility(View.VISIBLE);
         } else {
             tStaging.setVisibility(View.GONE);
@@ -185,10 +174,10 @@ public class LoginActivity extends AppCompatActivity {
     private void workOnline() {
         BridgeHelper.showSpinner(lockScreen, progressBar, tStatus, getWindow());
 
-        long tokenAge = sharedPreferences.getLong(PREF_AUTH_TOKEN_AGE, 0);
+        long tokenAge = sharedPreferences.getAuthTokenAge();
         if (tokenAge > System.currentTimeMillis() - (60 * 60 * 12 * 1000)) {
             if (checkSavedLogin()) {
-                loginVM.updateCannedComments(sharedPreferences.getString(PREF_AUTH_TOKEN, ""));
+                loginVM.updateCannedComments(sharedPreferences.getAuthToken());
             } else {
                 loginVM.requestLogin(userName, password);
             }
@@ -211,8 +200,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean checkSavedLogin() {
-        String savedUsername = sharedPreferences.getString(PREF_LOGIN_NAME, null);
-        String savedPassword = sharedPreferences.getString(PREF_LOGIN_PASSWORD, null);
+        String savedUsername = sharedPreferences.getLoginName();
+        String savedPassword = sharedPreferences.getLoginPassword();
         return userName != null && password != null && userName.equalsIgnoreCase(savedUsername) && password.equals(savedPassword);
     }
     private boolean isNetworkAvailable() {
@@ -224,8 +213,6 @@ public class LoginActivity extends AppCompatActivity {
         Snackbar snackbar = Snackbar
                 .make(constraintLayout, message + " Continue offline?", Snackbar.LENGTH_INDEFINITE)
                 .setAction("YES", v-> {
-                    sharedPreferencesEditor.putBoolean(PREF_IS_ONLINE, false);
-                    sharedPreferencesEditor.apply();
                     workOffline();
                 });
         View snackbarView = snackbar.getView();

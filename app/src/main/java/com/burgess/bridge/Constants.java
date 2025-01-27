@@ -16,7 +16,7 @@ public final class Constants {
     public static final String PREF_TEAM_INSPECTIONS_REMAINING = "InspectionsRemaining";
     public static final String PREF_ROUTE_SHEET_LAST_UPDATED = "RouteSheetLastUpdated";
 
-    public static final String REMEMBER_CREDENTIALS = "RememberCredentials";
+    public static final String PREF_REMEMBER_CREDENTIALS = "RememberCredentials";
     public static final String CANCEL_TAG = "CANCEL_ALL";
 
     public static final String API_STAGE_URL = "https://apistage.burgess-inc.com/api/Bridge/";

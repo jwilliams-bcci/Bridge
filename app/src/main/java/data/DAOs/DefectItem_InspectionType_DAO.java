@@ -8,6 +8,6 @@ import data.Tables.DefectItem_InspectionType_XRef;
 
 @Dao
 public interface DefectItem_InspectionType_DAO {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(DefectItem_InspectionType_XRef relation);
 }

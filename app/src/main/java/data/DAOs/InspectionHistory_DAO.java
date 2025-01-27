@@ -26,12 +26,15 @@ public interface InspectionHistory_DAO {
 
     @Query("SELECT * " +
             "FROM inspection_history_table " +
-            "WHERE InspectionID = :inspection_id " +
+            "WHERE InspectionID = :inspection_id AND DefectStatusID != 7 " +
             "ORDER BY IsReviewed, Comment COLLATE NOCASE ASC")
     LiveData<List<InspectionHistory_Table>> getInspectionHistory(int inspection_id);
 
     @Query("SELECT * FROM inspection_history_table WHERE InspectionDetailID = :inspection_history_id")
     InspectionHistory_Table getInspectionHistorySync(int inspection_history_id);
+
+    @Query("SELECT * FROM inspection_history_table WHERE InspectionID = :inspection_id AND DefectStatusID = 7")
+    List<InspectionHistory_Table> getNotes(int inspection_id);
 
     @Query("SELECT Comment FROM inspection_history_table WHERE InspectionDetailID = :inspection_history_id")
     String getComment(int inspection_history_id);
@@ -45,6 +48,6 @@ public interface InspectionHistory_DAO {
     @Query("UPDATE inspection_history_table SET InspectionDefectID = :inspection_defect_id WHERE InspectionDetailID = :inspection_history_id")
     void updateInspectionDefectId(int inspection_defect_id, int inspection_history_id);
 
-    @Query("SELECT COUNT(*) FROM inspection_history_table WHERE InspectionID = :inspection_id AND IsReviewed = 0")
+    @Query("SELECT COUNT(*) FROM inspection_history_table WHERE InspectionID = :inspection_id AND IsReviewed = 0 AND DefectStatusID != 7")
     int getItemsToReview(int inspection_id);
 }

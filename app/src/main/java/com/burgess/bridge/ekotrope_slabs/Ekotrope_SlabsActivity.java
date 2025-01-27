@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.burgess.bridge.BridgeHelper;
@@ -40,10 +42,12 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
     private SharedPreferences.Editor mEditor;
     private Toolbar mToolbar;
     private TextView mTextName;
+    private TextView mLabelUnderSlabInsulationR;
     private EditText mTextUnderSlabInsulationR;
     private CheckBox mCheckBoxFullyInsulated;
     private EditText mTextUnderSlabInsulationWidth;
     private EditText mTextPerimeterInsulationDepth;
+    private TextView mLabelPerimeterInsulationR;
     private EditText mTextPerimeterInsulationR;
     private CheckBox mCheckBoxThermalBreak;
     private Button mButtonSave;
@@ -90,10 +94,12 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
         mConstraintLayout = findViewById(R.id.ekotrope_slabs_constraint_layout);
         mToolbar = findViewById(R.id.ekotrope_slabs_toolbar);
         mTextName = findViewById(R.id.ekotrope_slabs_text_name);
+        mLabelUnderSlabInsulationR = findViewById(R.id.ekotrope_slabs_label_underslab_insulation_r);
         mTextUnderSlabInsulationR = findViewById(R.id.ekotrope_slabs_text_underslab_insulation_r);
         mCheckBoxFullyInsulated = findViewById(R.id.ekotrope_slabs_checkbox_fully_insulated);
         mTextUnderSlabInsulationWidth = findViewById(R.id.ekotrope_slabs_text_underslab_insulation_width);
         mTextPerimeterInsulationDepth = findViewById(R.id.ekotrope_slabs_text_perimeter_insulation_depth);
+        mLabelPerimeterInsulationR = findViewById(R.id.ekotrope_slabs_label_perimeter_insulation_r);
         mTextPerimeterInsulationR = findViewById(R.id.ekotrope_slabs_text_perimeter_insulation_r);
         mCheckBoxThermalBreak = findViewById(R.id.ekotrope_slabs_checkbox_thermal_break);
         mButtonSave = findViewById(R.id.ekotrope_slabs_button_save);
@@ -169,10 +175,24 @@ public class Ekotrope_SlabsActivity extends AppCompatActivity {
     private void initializeDisplayContent() {
         mToolbar.setTitle(String.format("Slab - %s", mSlab.name));
         mTextName.setText(mSlab.typeName);
-        mTextUnderSlabInsulationR.setText(String.format(mSlab.underslabInsulationR.toString()));
-        mTextUnderSlabInsulationWidth.setText(String.format(mSlab.underslabInsulationWidth.toString()));
-        mTextPerimeterInsulationDepth.setText(String.format(mSlab.perimeterInsulationDepth.toString()));
-        mTextPerimeterInsulationR.setText(String.format(mSlab.perimeterInsulationR.toString()));
+        if (mSlab.isFullyInsulated) {
+            mLabelUnderSlabInsulationR.setVisibility(View.GONE);
+            mTextUnderSlabInsulationR.setVisibility(View.GONE);
+            mLabelPerimeterInsulationR.setVisibility(View.GONE);
+            mTextPerimeterInsulationR.setVisibility(View.GONE);
+        } else {
+            mLabelUnderSlabInsulationR.setVisibility(View.VISIBLE);
+            mTextUnderSlabInsulationR.setText(String.format(mSlab.underslabInsulationR.toString()));
+            mLabelPerimeterInsulationR.setVisibility(View.VISIBLE);
+            mTextPerimeterInsulationR.setText(String.format(mSlab.perimeterInsulationR.toString()));
+        }
+        if (mSlab.underslabInsulationWidth != null) {
+            mTextUnderSlabInsulationWidth.setText(String.format(mSlab.underslabInsulationWidth.toString()));
+        }
+        if (mSlab.perimeterInsulationDepth != null) {
+            mTextPerimeterInsulationDepth.setText(String.format(mSlab.perimeterInsulationDepth.toString()));
+        }
+
         mCheckBoxFullyInsulated.setChecked(mSlab.isFullyInsulated);
         mCheckBoxThermalBreak.setChecked(mSlab.thermalBreak);
     }

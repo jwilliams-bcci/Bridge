@@ -1,20 +1,13 @@
 package data.Tables;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
-import java.time.OffsetDateTime;
-
-import data.DateConverter;
 
 @Entity(tableName = "past_inspection_table")
 public class PastInspection_Table {
     @PrimaryKey
     public int InspectionID;
-    @TypeConverters({DateConverter.class})
-    public String InspectionSubmitTime;
+    public String InspectionSubmitDate;
     public int LocationID;
     public String Inspector;
     public String InspectionType;
@@ -23,11 +16,11 @@ public class PastInspection_Table {
 
     public PastInspection_Table(){}
 
-    public PastInspection_Table(int InspectionID, String InspectionSubmitTime,
+    public PastInspection_Table(int InspectionID, String InspectionSubmitDate,
                                 int LocationID, String inspector, String InspectionType,
                                 int InspectionStatusID, String IncompleteReason) {
         this.InspectionID = InspectionID;
-        this.InspectionSubmitTime = InspectionSubmitTime;
+        this.InspectionSubmitDate = InspectionSubmitDate;
         this.LocationID = LocationID;
         this.Inspector = inspector;
         this.InspectionType = InspectionType;

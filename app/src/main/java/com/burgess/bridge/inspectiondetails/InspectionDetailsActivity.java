@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.burgess.bridge.Constants;
+import com.burgess.bridge.apiqueue.APIConstants;
 import com.burgess.bridge.attachments.AttachmentsActivity;
+import com.burgess.bridge.notes.NotesActivity;
 import com.burgess.bridge.pastinspections.PastInspectionsActivity;
 import com.burgess.bridge.R;
 import com.burgess.bridge.assigntrainee.AssignTraineeActivity;
@@ -53,6 +57,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
     private Button mEditResolutionButton;
     private Button mAttachmentsButton;
     private Button bJotformLink;
+    private Button bNotes;
 
     private static final String TAG = "INSPECTION_DETAILS";
 
@@ -87,6 +92,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mEditResolutionButton = findViewById(R.id.inspection_details_button_edit_resolution);
         mAttachmentsButton = findViewById(R.id.inspection_details_button_attachments);
         bJotformLink = findViewById(R.id.inspection_details_button_jotform_link);
+        bNotes = findViewById(R.id.inspection_details_button_notes);
     }
     private void initializeButtonListeners() {
         mInspectButton.setOnClickListener(view -> {
@@ -141,10 +147,17 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         });
 
         bJotformLink.setOnClickListener(view -> {
+            mInspectionDetailsViewModel.updateJotformAccessed(mInspectionId);
             if (mInspection.JotformLink != null) {
                 Intent showJotFormIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mInspection.JotformLink));
                 startActivity(showJotFormIntent);
             }
+        });
+
+        bNotes.setOnClickListener(view -> {
+            Intent notesIntent = new Intent(InspectionDetailsActivity.this, NotesActivity.class);
+            notesIntent.putExtra(Constants.INSPECTION_ID, mInspectionId);
+            startActivity(notesIntent);
         });
     }
     private void initializeDisplayContent() {
@@ -161,7 +174,7 @@ public class InspectionDetailsActivity extends AppCompatActivity {
         mTextSuperintendent.setMovementMethod(LinkMovementMethod.getInstance());
         mTextNotes.setText(mInspection.Notes);
 
-        if (!Objects.equals(mInspection.JotformLink, "")) {
+        if (!TextUtils.isEmpty(mInspection.JotformLink)) {
             bJotformLink.setVisibility(View.VISIBLE);
         } else {
             bJotformLink.setVisibility(View.GONE);

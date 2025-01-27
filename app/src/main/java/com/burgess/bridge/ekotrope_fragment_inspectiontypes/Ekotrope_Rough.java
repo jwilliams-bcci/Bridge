@@ -1,5 +1,8 @@
 package com.burgess.bridge.ekotrope_fragment_inspectiontypes;
 
+import static com.burgess.bridge.Constants.COMPONENT_DISTRIBUTION_SYSTEM;
+import static com.burgess.bridge.Constants.COMPONENT_TYPE;
+import static com.burgess.bridge.Constants.EKOTROPE_PLAN_ID;
 import static com.burgess.bridge.Constants.EKOTROPE_PROJECT_ID;
 import static com.burgess.bridge.Constants.INSPECTION_ID;
 import static com.burgess.bridge.ekotrope_framedfloors.Ekotrope_FramedFloorsActivity.PLAN_ID;
@@ -136,7 +139,8 @@ public class Ekotrope_Rough extends Fragment {
             Intent distributionSystemsIntent = new Intent(getActivity(), Ekotrope_ComponentListActivity.class);
             distributionSystemsIntent.putExtra(INSPECTION_ID, mInspectionId);
             distributionSystemsIntent.putExtra(EKOTROPE_PROJECT_ID, mInspection.EkotropeProjectID);
-            distributionSystemsIntent.putExtra(PLAN_ID, mInspection.EkotropePlanID);
+            distributionSystemsIntent.putExtra(EKOTROPE_PLAN_ID, mInspection.EkotropePlanID);
+            distributionSystemsIntent.putExtra(COMPONENT_TYPE, COMPONENT_DISTRIBUTION_SYSTEM);
             startActivity(distributionSystemsIntent);
         });
     }

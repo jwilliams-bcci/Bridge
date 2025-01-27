@@ -9,9 +9,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,6 +40,9 @@ import com.burgess.bridge.routesheet.RouteSheetActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
@@ -154,7 +159,8 @@ public class InspectActivity extends AppCompatActivity {
             if ((mInspection.BuilderName.toLowerCase().contains("dwh") || mInspection.BuilderName.toLowerCase().contains("weekley"))
                     && mInspection.InspectionType.toLowerCase().contains("final")
                     && !(mInspection.InspectionType.toLowerCase().contains("roof") || mInspection.InspectionType.toLowerCase().contains("airplus"))
-                    && mInspection.DivisionID == 1 && mInspection.InspectionClass != 7 && allGood) {
+                    && mInspection.DivisionID == 1 && mInspection.InspectionClass != 7
+                    && !mInspection.ReInspect && allGood) {
                 needsSewerCam = true;
             } else {
                 needsSewerCam = false;
@@ -162,7 +168,25 @@ public class InspectActivity extends AppCompatActivity {
 
             if (allGood) {
                 if (needsSewerCam) {
-                    showSewerCamCheck();
+                    List<InspectionDefect_Table> inspectionDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
+                    boolean defectExists = false;
+                    for (InspectionDefect_Table inspectionDefect : inspectionDefects) {
+                        if (inspectionDefect.DefectItemID == 9591) {
+                            defectExists = true;
+                            break;
+                        }
+                    }
+                    if (!defectExists) {
+                        showSewerCamCheck();
+                    } else {
+                        Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
+                        reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+                        startActivity(reviewAndSubmitIntent);
+                    }
+                }
+
+                if (mInspection.JotformLink != null && !mInspection.JotformAccessed) {
+                    showJotformDialog();
                 } else {
                     Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
                     reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
@@ -181,8 +205,8 @@ public class InspectActivity extends AppCompatActivity {
                     mInspectListAdapter.setCurrentList(defectItems));
         });
         mButtonViewEkotropeData.setOnClickListener(v -> {
-            if (mInspection.EkotropeProjectID.isEmpty() || mInspection.EkotropePlanID.isEmpty()) {
-                Snackbar.make(mConstraintLayout, "Ekotrope data not available, refresh route sheet or contact support", Snackbar.LENGTH_LONG).show();
+            if (TextUtils.isEmpty(mInspection.EkotropeProjectID) || TextUtils.isEmpty(mInspection.EkotropePlanID)) {
+                Snackbar.make(mConstraintLayout, "Ekotrope data not available, contact support", Snackbar.LENGTH_LONG).show();
             } else {
                 Intent viewEkotropeDataIntent = new Intent(InspectActivity.this, Ekotrope_DataActivity.class);
                 viewEkotropeDataIntent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
@@ -226,6 +250,7 @@ public class InspectActivity extends AppCompatActivity {
             mInspectListAdapter.setInspection(mInspection);
             mInspectListAdapter.setFilter(mFilter);
             mRecyclerDefectItems.setAdapter(mInspectListAdapter);
+            mRecyclerDefectItems.setItemAnimator(new InspectViewAnimator());
             displayDefectItems(mFilter);
         }
         mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
@@ -315,6 +340,7 @@ public class InspectActivity extends AppCompatActivity {
             }
         });
         mRecyclerDefectItems.setAdapter(mReinspectListAdapter);
+        mRecyclerDefectItems.setItemAnimator(new InspectViewAnimator());
 
         // Add swipe functionality to defect item list
         ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -349,7 +375,11 @@ public class InspectActivity extends AppCompatActivity {
                             }
                         } else {
                             InspectionDefect_Table newFailedDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 2, selectedComment, selectedHistoryId, selectedFirstDetailId, null, null, false, null, null);
-                            newId = mInspectViewModel.insertInspectionDefect(newFailedDefect);
+                            try {
+                                newId = mInspectViewModel.insertInspectionDefect(newFailedDefect);
+                            } catch (ExecutionException | InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                             mInspectViewModel.updateReviewedStatus(2, selectedHistoryId);
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);
                             mInspectViewModel.updateInspectionDefectId((int) newId, selectedHistoryId);
@@ -380,7 +410,11 @@ public class InspectActivity extends AppCompatActivity {
                             }
                         } else {
                             InspectionDefect_Table newCompleteDefect = new InspectionDefect_Table(mInspectionId, selectedDefectItemId, 3, selectedComment, selectedHistoryId, selectedFirstDetailId, null, null, false, null, null);
-                            newId = mInspectViewModel.insertInspectionDefect(newCompleteDefect);
+                            try {
+                                newId = mInspectViewModel.insertInspectionDefect(newCompleteDefect);
+                            } catch (ExecutionException | InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                             mInspectViewModel.updateReviewedStatus(3, selectedHistoryId);
                             mInspectViewModel.updateIsReviewed(selectedHistoryId);
                             mInspectViewModel.updateInspectionDefectId((int) newId, selectedHistoryId);
@@ -408,17 +442,38 @@ public class InspectActivity extends AppCompatActivity {
     public void showSewerCamCheck() {
         AlertDialog sewerCamDialog = new AlertDialog.Builder(this)
                 .setTitle("Sewer Cam?")
-                .setMessage("Has the sewer cam inspection passed?")
+                .setMessage("For DWH finals, you must record if the sewer cam inspection has passed. Would you like " +
+                        "to add that now?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
-                    reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
-                    startActivity(reviewAndSubmitIntent);
+                    Intent intent = new Intent(InspectActivity.this, DefectItemActivity.class);
+                    intent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
+                    intent.putExtra(DefectItemActivity.DEFECT_ID, 9591);
+                    startActivity(intent);
                 })
                 .setNegativeButton("No", (dialog, which) -> {
                     Snackbar.make(mConstraintLayout, "Sewer cam must be completed first! Please contact CSRs.", Snackbar.LENGTH_LONG).show();
                 })
                 .create();
         sewerCamDialog.show();
+    }
+
+    public void showJotformDialog() {
+        AlertDialog jotformDialog = new AlertDialog.Builder(this)
+                .setTitle("Jotform not accessed!")
+                .setMessage("There is a jotform for this inspection that has not been accessed." +
+                        " Would you like to access it now?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    mInspectViewModel.updateJotformAccessed(mInspectionId);
+                    Intent showJotFormIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mInspection.JotformLink));
+                    startActivity(showJotFormIntent);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
+                    reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+                    startActivity(reviewAndSubmitIntent);
+                })
+                .create();
+        jotformDialog.show();
     }
 //        // Create the object of AlertDialog Builder class
 //        AlertDialog.Builder builder = new AlertDialog.Builder(InspectActivity.this);

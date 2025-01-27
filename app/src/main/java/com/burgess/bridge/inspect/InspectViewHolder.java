@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.burgess.bridge.defectitem.DefectItemActivity;
@@ -85,3 +86,4 @@ public class InspectViewHolder extends RecyclerView.ViewHolder {
     }
     //endregion
 }
+

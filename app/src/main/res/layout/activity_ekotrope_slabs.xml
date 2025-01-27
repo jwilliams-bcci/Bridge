@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ekotrope_slabs_toolbar" />
 
     <TextView
-        android:id="@+id/textView87"
+        android:id="@+id/ekotrope_slabs_label_underslab_insulation_r"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -55,16 +55,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="@string/FullyInsulated"
-        app:layout_constraintStart_toStartOf="@+id/textView87"
-        app:layout_constraintTop_toBottomOf="@+id/textView87" />
+        app:layout_constraintStart_toStartOf="@+id/textView86"
+        app:layout_constraintTop_toBottomOf="@+id/ekotrope_slabs_label_underslab_insulation_r" />
 
     <TextView
-        android:id="@+id/textView89"
+        android:id="@+id/ekotrope_slabs_label_underslab_insulation_width"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="@string/UnderSlabInsulationWidth"
-        app:layout_constraintStart_toStartOf="@+id/textView88"
+        app:layout_constraintStart_toStartOf="@+id/textView86"
         app:layout_constraintTop_toBottomOf="@+id/textView88" />
 
     <TextView
@@ -73,16 +73,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="@string/PerimeterInsulationDepth"
-        app:layout_constraintStart_toStartOf="@+id/textView89"
-        app:layout_constraintTop_toBottomOf="@+id/textView89" />
+        app:layout_constraintStart_toStartOf="@+id/textView86"
+        app:layout_constraintTop_toBottomOf="@+id/ekotrope_slabs_label_underslab_insulation_width" />
 
     <TextView
-        android:id="@+id/textView91"
+        android:id="@+id/ekotrope_slabs_label_perimeter_insulation_r"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="@string/PerimeterInsulationR"
-        app:layout_constraintStart_toStartOf="@+id/textView90"
+        app:layout_constraintStart_toStartOf="@+id/textView86"
         app:layout_constraintTop_toBottomOf="@+id/textView90" />
 
     <TextView
@@ -91,8 +91,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="@string/ThermalBreak"
-        app:layout_constraintStart_toStartOf="@+id/textView91"
-        app:layout_constraintTop_toBottomOf="@+id/textView91" />
+        app:layout_constraintStart_toStartOf="@+id/textView86"
+        app:layout_constraintTop_toBottomOf="@+id/ekotrope_slabs_label_perimeter_insulation_r" />
 
     <Button
         android:id="@+id/ekotrope_slabs_button_save"
@@ -120,7 +120,7 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView86"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView91"
+        app:layout_constraintStart_toEndOf="@+id/ekotrope_slabs_label_underslab_insulation_width"
         app:layout_constraintTop_toTopOf="@+id/textView86" />
 
     <EditText
@@ -132,10 +132,10 @@
         android:hint="@string/NotFound"
         android:inputType="number|numberDecimal"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView87"
+        app:layout_constraintBottom_toBottomOf="@+id/ekotrope_slabs_label_underslab_insulation_r"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_name"
-        app:layout_constraintTop_toTopOf="@+id/textView87" />
+        app:layout_constraintTop_toTopOf="@+id/ekotrope_slabs_label_underslab_insulation_r" />
 
     <CheckBox
         android:id="@+id/ekotrope_slabs_checkbox_fully_insulated"
@@ -146,7 +146,7 @@
         android:text="@string/remove_yes"
         app:layout_constraintBottom_toBottomOf="@+id/textView88"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_underslab_insulation_r"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_name"
         app:layout_constraintTop_toTopOf="@+id/textView88" />
 
     <EditText
@@ -158,10 +158,10 @@
         android:hint="@string/NotFound"
         android:inputType="number|numberDecimal"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView89"
+        app:layout_constraintBottom_toBottomOf="@+id/ekotrope_slabs_label_underslab_insulation_width"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_checkbox_fully_insulated"
-        app:layout_constraintTop_toTopOf="@+id/textView89" />
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_name"
+        app:layout_constraintTop_toTopOf="@+id/ekotrope_slabs_label_underslab_insulation_width" />
 
     <EditText
         android:id="@+id/ekotrope_slabs_text_perimeter_insulation_depth"
@@ -174,7 +174,7 @@
         android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView90"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_underslab_insulation_width"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_name"
         app:layout_constraintTop_toTopOf="@+id/textView90" />
 
     <EditText
@@ -186,10 +186,10 @@
         android:hint="@string/NotFound"
         android:inputType="number|numberDecimal"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView91"
+        app:layout_constraintBottom_toBottomOf="@+id/ekotrope_slabs_label_perimeter_insulation_r"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_perimeter_insulation_depth"
-        app:layout_constraintTop_toTopOf="@+id/textView91" />
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_name"
+        app:layout_constraintTop_toTopOf="@+id/ekotrope_slabs_label_perimeter_insulation_r" />
 
     <CheckBox
         android:id="@+id/ekotrope_slabs_checkbox_thermal_break"
@@ -200,6 +200,6 @@
         android:text="@string/remove_yes"
         app:layout_constraintBottom_toBottomOf="@+id/textView92"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_perimeter_insulation_r"
+        app:layout_constraintStart_toStartOf="@+id/ekotrope_slabs_text_name"
         app:layout_constraintTop_toTopOf="@+id/textView92" />
 </androidx.constraintlayout.widget.ConstraintLayout>

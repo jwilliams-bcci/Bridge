@@ -56,6 +56,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -204,7 +205,11 @@ public class EditResolutionActivity extends AppCompatActivity {
             BridgeLogger.log('I', TAG, "problem here in editresolutionactivity 197");
             inspectionDefect = new InspectionDefect_Table(mInspectionId, 1, 7, mTextComment.getText().toString(), 0, 0, null, null, false, null, null);
         }
-        newId = mEditResolutionViewModel.addInspectionDefect(inspectionDefect);
+        try {
+            newId = mEditResolutionViewModel.addInspectionDefect(inspectionDefect);
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         InspectionDefect_Table newInspectionDefect = mEditResolutionViewModel.getInspectionDefect((int) newId);
         BridgeAPIQueue.getInstance().getRequestQueue().add(getUploadInspectionDefectRequest(newInspectionDefect));

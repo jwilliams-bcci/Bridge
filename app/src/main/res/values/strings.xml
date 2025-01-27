@@ -209,4 +209,6 @@
     <string name="ReUpload">Re-Upload</string>
     <string name="ResetInspection">Reset Inspection</string>
     <string name="ViewQueue">View Queue</string>
+    <string name="Scratchpad">Scratchpad</string>
+    <string name="Notes">Notes</string>
 </resources>

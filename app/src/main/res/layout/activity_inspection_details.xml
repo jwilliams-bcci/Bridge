@@ -268,5 +268,17 @@
             app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_edit_resolution"
             app:layout_constraintStart_toStartOf="@+id/inspection_details_button_edit_resolution"
             app:layout_constraintTop_toBottomOf="@+id/inspection_details_button_edit_resolution" />
+
+        <Button
+            android:id="@+id/inspection_details_button_notes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_rounded_orange"
+            android:text="@string/Notes"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="@+id/inspection_details_button_attachments"
+            app:layout_constraintStart_toStartOf="@+id/inspection_details_button_attachments"
+            app:layout_constraintTop_toBottomOf="@+id/inspection_details_button_attachments" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

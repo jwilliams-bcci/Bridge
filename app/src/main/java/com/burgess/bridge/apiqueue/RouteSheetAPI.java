@@ -14,6 +14,7 @@ import static com.burgess.bridge.apiqueue.APIConstants.BRIDGE_GET_DEFECT_ITEM_IN
 import static com.burgess.bridge.apiqueue.APIConstants.BRIDGE_GET_INSPECTIONS_V5_URL;
 import static com.burgess.bridge.apiqueue.APIConstants.BRIDGE_GET_INSPECTION_DEFECT_HISTORY_URL;
 import static com.burgess.bridge.apiqueue.APIConstants.BRIDGE_GET_PAST_INSPECTIONS_URL;
+import static com.burgess.bridge.apiqueue.APIConstants.BRIDGE_GET_REMAINING_INSPECTIONS_URL;
 import static com.burgess.bridge.apiqueue.APIConstants.BRIDGE_GET_REPORT_DATA_URL;
 
 import android.text.TextUtils;
@@ -85,6 +86,7 @@ public class RouteSheetAPI {
             inspectionDefectHistoryRequests.clear();
             pastInspectionRequests.clear();
             ekotropePlansIdRequests.clear();
+            vm.updateIndividualRemaining(response.length());
             for (int lcv = 0; lcv < response.length(); lcv++) {
                 try {
                     JSONObject obj = response.getJSONObject(lcv);
@@ -100,7 +102,7 @@ public class RouteSheetAPI {
                     pastInspectionRequests.add(updatePastInspections(vm, authToken, inspection.LocationID, callback));
                     vm.insertInspection(inspection);
                 } catch (Exception e) {
-                    BridgeLogger.log('E', TAG, "ERROR in updateRouteSheet: " + e.getMessage());
+                    BridgeLogger.log('E', TAG, "ERROR in updateInspections: " + e.getMessage());
                     callback.onFailure("Error reading inspections, please contact support");
                 }
             }
@@ -124,7 +126,7 @@ public class RouteSheetAPI {
                 callback.onFailure("No internet connection, check connection and try again");
             } else if (error instanceof AuthFailureError) {
                 BridgeLogger.log('E', TAG, String.format("AuthFailureError in updateInspections - %s",error.getMessage()));
-                callback.onFailure("Token error, please contact support");
+                callback.onFailure("Security token expired, please log out and back in");
             } else if (error instanceof ServerError) {
                 BridgeLogger.log('E', TAG, String.format("ServerError in updateInspections - %s",error.getMessage()));
                 callback.onFailure("Server error, please contact support");
@@ -164,7 +166,9 @@ public class RouteSheetAPI {
                     inspectionHistory.InspectionID = inspectionId;
                     inspectionHistory.InspectionDefectID = -1;
 
-                    if (inspection.DivisionID != 20 || (isReobservation && inspectionHistory.DefectStatusID == 2)) {
+                    if (inspection.DivisionID != 20
+                        || (isReobservation && inspectionHistory.DefectStatusID == 2)
+                        || (inspectionHistory.DefectStatusID == 7)) {
                         vm.insertInspectionHistory(inspectionHistory);
                     } else {
                         InspectionDefect_Table newDefect = new InspectionDefect_Table();
@@ -179,7 +183,7 @@ public class RouteSheetAPI {
                         newDefect.IsUploaded = false;
                         newDefect.IsEditable = false;
 
-                        int existingDefectId = vm.getExistingMFCDefect(inspectionHistory.FirstDefectInspectionDetailID, inspectionId);
+                        int existingDefectId = vm.getExistingMFCDefectThread(inspectionHistory.FirstDefectInspectionDetailID, inspectionId);
                         if (existingDefectId > 0) {
                             vm.updateExistingMFCDefect(inspectionHistory.DefectStatusID, inspectionHistory.Comment, existingDefectId);
                         } else {
@@ -187,21 +191,21 @@ public class RouteSheetAPI {
                         }
                     }
                 } catch (Exception e) {
-                    BridgeLogger.log('E', TAG, "ERROR in updateMultifamilyHistory: " + e.getMessage());
-                    callback.onFailure("Error reading multifamily history, please contact support");
+                    BridgeLogger.log('E', TAG, "ERROR in updateInspectionDefectHistory: " + e.getMessage());
+                    callback.onFailure("Error reading inspection defect history, please contact support");
                 }
             }
             callback.onSuccess("Inspection Defect Histories Updated");
         }, error -> {
             if (error instanceof TimeoutError) {
                 BridgeLogger.log('E', TAG, String.format("TimeoutError in updateInspectionDefectHistory - %s",error.getMessage()));
-                callback.onFailure("Request timed out while getting multifamily history, check connection and try again");
+                callback.onFailure("Request timed out while getting inspection defect history, check connection and try again");
             } else if (error instanceof NoConnectionError) {
                 BridgeLogger.log('E', TAG, String.format("NoConnectionError in updateInspectionDefectHistory - %s",error.getMessage()));
                 callback.onFailure("No internet connection, check connection and try again");
             } else if (error instanceof AuthFailureError) {
                 BridgeLogger.log('E', TAG, String.format("AuthFailureError in updateInspectionDefectHistory - %s",error.getMessage()));
-                callback.onFailure("Authentication error, verify username and password and try again");
+                callback.onFailure("Security token expired, please log out and back in");
             } else if (error instanceof ServerError) {
                 BridgeLogger.log('E', TAG, String.format("ServerError in updateInspectionDefectHistory - %s",error.getMessage()));
                 callback.onFailure("Server error, please contact support");
@@ -422,13 +426,54 @@ public class RouteSheetAPI {
         request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(15), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
+    public static JsonObjectRequest updateInspectionsRemaining(RouteSheetViewModel vm, String authToken, int inspectorId, final ServerCallback callback) {
+        String url = BridgeAPIQueue.isProd() ? API_PROD_URL : API_STAGE_URL;
+        url += String.format(BRIDGE_GET_REMAINING_INSPECTIONS_URL, inspectorId);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            int inspectionsRemaining = response.optInt("Remaining");
+            vm.setTeamRemainingMessage(String.valueOf(inspectionsRemaining));
+            callback.onSuccess(String.valueOf(inspectionsRemaining));
+        }, error -> {
+            if (error instanceof TimeoutError) {
+                BridgeLogger.log('E', TAG, String.format("TimeoutError in updateInspectionsRemaining - %s",error.getMessage()));
+                callback.onFailure("Request timed out while getting canned comments, check connection and try again");
+            } else if (error instanceof NoConnectionError) {
+                BridgeLogger.log('E', TAG, String.format("NoConnectionError in updateInspectionsRemaining - %s",error.getMessage()));
+                callback.onFailure("No internet connection, check connection and try again");
+            } else if (error instanceof AuthFailureError) {
+                BridgeLogger.log('E', TAG, String.format("AuthFailureError in updateInspectionsRemaining - %s",error.getMessage()));
+                callback.onFailure("Token error, please contact support");
+            } else if (error instanceof ServerError) {
+                BridgeLogger.log('E', TAG, String.format("ServerError in updateInspectionsRemaining - %s",error.getMessage()));
+                callback.onFailure("Server error, please contact support");
+            } else if (error instanceof NetworkError) {
+                BridgeLogger.log('E', TAG, String.format("NetworkError in updateInspectionsRemaining - %s",error.getMessage()));
+                callback.onFailure("Network error, please contact support");
+            } else if (error instanceof ParseError) {
+                BridgeLogger.log('E', TAG, String.format("ParseError in updateInspectionsRemaining - %s",error.getMessage()));
+                callback.onFailure("Parse error, please contact support");
+            } else {
+                BridgeLogger.log('E', TAG, String.format("Unknown error in updateInspectionsRemaining - %s",error.getMessage()));
+                callback.onFailure("Unknown error, please contact support");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> params = new HashMap<>();
+                params.put(AUTH_HEADER, AUTH_BEARER + authToken);
+                return params;
+            }
+        };
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(10), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        return request;
+    }
     public static StringRequest getReportData(RouteSheetViewModel vm, String authToken, int inspectorId, String inspectionDate, final ServerCallback callback) {
         String url = BridgeAPIQueue.isProd() ? API_PROD_URL : API_STAGE_URL;
         url += String.format(BRIDGE_GET_REPORT_DATA_URL, inspectorId, inspectionDate);
 
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-            vm.setReportUrl(response.substring(1, response.length()-1));
-            callback.onSuccess("Route sheet report link updated");
+            callback.onSuccess(response.substring(1, response.length()-1));
         }, error -> {
             if (error instanceof TimeoutError) {
                 BridgeLogger.log('E', TAG, String.format("TimeoutError in getReportData - %s", error.getMessage()));

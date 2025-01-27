@@ -4,16 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.burgess.bridge.RouteSheetDragEventListener;
+
 public class RouteSheetTouchHelper extends ItemTouchHelper.Callback {
-    private final ItemTouchHelperAdapter mAdapter;
+    private final RouteSheetListAdapter adapter;
 
-    public RouteSheetTouchHelper(ItemTouchHelperAdapter adapter) {
-        mAdapter = adapter;
-    }
-
-    @Override
-    public boolean isLongPressDragEnabled() {
-        return true;
+    public RouteSheetTouchHelper(RouteSheetListAdapter adapter) {
+        super();
+        this.adapter = adapter;
     }
 
     public boolean isItemViewSwipeEnabled() {
@@ -28,7 +26,7 @@ public class RouteSheetTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        mAdapter.onItemMove(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
+        adapter.moveItem(viewHolder.getAbsoluteAdapterPosition(), target.getAbsoluteAdapterPosition());
         return true;
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import data.Repositories.CannedCommentRepository;
 import data.Repositories.DefectItemRepository;
@@ -69,12 +70,8 @@ public class DefectItemViewModel extends AndroidViewModel {
         return mCannedCommentRepository.getCannedCommentsSync();
     }
 
-    public long insertInspectionDefect(InspectionDefect_Table inspectionDefect) {
+    public long insertInspectionDefect(InspectionDefect_Table inspectionDefect) throws ExecutionException, InterruptedException {
         return mInspectionDefectRepository.insert(inspectionDefect);
-    }
-
-    public LiveData<Inspection_Table> getInspection(int inspection_id) {
-        return mInspectionRepository.getInspection(inspection_id);
     }
 
     public Inspection_Table getInspectionSync(int inspection_id) {

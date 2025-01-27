@@ -14,10 +14,11 @@ public class APIConstants {
     public static final String BRIDGE_GET_DIRECTIONS_URL = "GetDirections";
     public static final String BRIDGE_GET_FAULTS_URL = "GetFaults";
     public static final String BRIDGE_GET_INSPECTIONS_V5_URL = "GetInspectionsV5?inspectorid=%s";
-    public static final String BRIDGE_GET_INSPECTION_DEFECT_HISTORY_URL = "GetInspectionDefectHistory?inspectionid=%s";
-    public static final String BRIDGE_GET_PAST_INSPECTIONS_URL = "GetPastInspections?locationid=%s";
+    public static final String BRIDGE_GET_INSPECTION_DEFECT_HISTORY_URL = "GetInspectionDefectHistoryV2?inspectionid=%s";
+    public static final String BRIDGE_GET_PAST_INSPECTIONS_URL = "GetPastInspectionsV2?locationid=%s";
     public static final String BRIDGE_GET_DEFECT_ITEMS_V3_URL = "GetDefectItemsV3?inspectorid=%s";
     public static final String BRIDGE_GET_DEFECT_ITEM_INSPECTION_TYPE_XREF_V3_URL = "GetDefectItem_InspectionType_XRefV3?inspectorid=%s";
+    public static final String BRIDGE_GET_REMAINING_INSPECTIONS_URL = "GetRemainingInspectionsV2?inspectorid=%s";
     public static final String BRIDGE_GET_REPORT_DATA_URL = "GetReportData?inspectorId=%s&inspectionDate=%s";
     public static final String BRIDGE_GET_CHECK_EXISTING_INSPECTION_V2_URL = "CheckExistingInspectionV2?inspectionid=%s&inspectorid=%s";
 

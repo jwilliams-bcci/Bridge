@@ -124,7 +124,7 @@ public class BridgeAPIQueue {
 
         // TODO: If true, all endpoints are pointing to BORE, otherwise BOREStage
         isProd = true;
-        isEkotropeProd = false;
+        isEkotropeProd = true;
     }
 
     public static synchronized BridgeAPIQueue getInstance(Context context) {
@@ -564,7 +564,6 @@ public class BridgeAPIQueue {
         url += String.format(GET_REPORT_DATA_URL, inspectorId, inspectionDate);
 
         StringRequest request = new StringRequest(Request.Method.GET, url, response -> {
-            vm.setReportUrl(response.substring(1, response.length()-1));
             callback.onSuccess("Success");
         }, error -> {
             if (error instanceof NoConnectionError) {
@@ -735,7 +734,7 @@ public class BridgeAPIQueue {
             }
         };
 
-        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(30), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(60), 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         return request;
     }
     public void addFramedFloors(JSONArray framedFloorsArray, String planId, RouteSheetViewModel vm) {

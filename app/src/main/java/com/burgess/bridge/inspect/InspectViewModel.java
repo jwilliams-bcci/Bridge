@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import data.Repositories.DefectItemRepository;
 import data.Repositories.InspectionDefectRepository;
@@ -55,10 +56,6 @@ public class InspectViewModel extends AndroidViewModel {
         return mDefectItemRepository.getDefectCategories(inspection_type_id);
     }
 
-    public LiveData<Inspection_Table> getInspection(int inspection_id) {
-        return mInspectionRepository.getInspection(inspection_id);
-    }
-
     public Inspection_Table getInspectionSync(int inspection_id) {
         return mInspectionRepository.getInspectionSync(inspection_id);
     }
@@ -79,7 +76,7 @@ public class InspectViewModel extends AndroidViewModel {
         mInspectionHistoryRepository.updateReviewedStatus(defectStatusId, inspectionHistoryId);
     }
 
-    public long insertInspectionDefect(InspectionDefect_Table inspectionDefect) {
+    public long insertInspectionDefect(InspectionDefect_Table inspectionDefect) throws ExecutionException, InterruptedException {
         return mInspectionDefectRepository.insert(inspectionDefect);
     }
 
@@ -97,5 +94,13 @@ public class InspectViewModel extends AndroidViewModel {
 
     public int getInspectionDefectCount(int inspectionId) {
         return mInspectionDefectRepository.getInspectionDefectCount(inspectionId);
+    }
+
+    public List<InspectionDefect_Table> getAllInspectionDefects(int inspectionId) {
+        return mInspectionDefectRepository.getAllInspectionDefectsSync(inspectionId);
+    }
+
+    public void updateJotformAccessed(int inspectionId) {
+        mInspectionRepository.updateJotformAccessed(inspectionId);
     }
 }
