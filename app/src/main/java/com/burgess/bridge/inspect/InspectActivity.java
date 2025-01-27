@@ -475,45 +475,4 @@ public class InspectActivity extends AppCompatActivity {
                 .create();
         jotformDialog.show();
     }
-//        // Create the object of AlertDialog Builder class
-//        AlertDialog.Builder builder = new AlertDialog.Builder(InspectActivity.this);
-//
-//        // Set the message show for the Alert time
-//        builder.setMessage("Has the sewer cam inspection passed?");
-//
-//        // Set Alert Title
-//        builder.setTitle("Alert!");
-//
-//        // Set Cancelable false for when the user clicks on the outside the Dialog Box then it will remain show
-//        builder.setCancelable(false);
-//
-//        // Set the positive button with yes name Lambda OnClickListener method is use of DialogInterface interface.
-//        builder.setPositiveButton("Yes", alertListener);
-//
-//        // Set the Negative button with No name Lambda OnClickListener method is use of DialogInterface interface.
-//        builder.setNegativeButton("No", alertListener);
-//
-//        // Create the Alert dialog
-//        AlertDialog alertDialog = builder.create();
-//        // Show the Alert Dialog box
-//        alertDialog.show();
-//    }
-//    DialogInterface.OnClickListener alertListener = new DialogInterface.OnClickListener() {
-//        @Override
-//        public void onClick(DialogInterface dialog, int which) {
-//            switch (which){
-//                case DialogInterface.BUTTON_POSITIVE:
-//                    //Yes button clicked
-//                    Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
-//                    reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
-//                    startActivity(reviewAndSubmitIntent);
-//                    break;
-//
-//                case DialogInterface.BUTTON_NEGATIVE:
-//                    //No button clicked
-//                    Snackbar.make(mConstraintLayout, "Please check Sewer Cam defect present.", Snackbar.LENGTH_LONG).show();
-//                    break;
-//            }
-//        }
-//    };
 }
