@@ -7,6 +7,7 @@ import static com.burgess.bridge.Constants.PREF_TEAM_INSPECTIONS_REMAINING;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -74,6 +75,7 @@ import data.Tables.Room_Table;
 
 public class DefectItemActivity extends AppCompatActivity {
     private static final String TAG = "DEFECT_ITEM";
+    private static final String CAMERA_TAG = "CAMERA";
     public static final String INSPECTION_ID = "com.burgess.bridge.INSPECTION_ID";
     public static final int INSPECTION_ID_NOT_FOUND = -1;
     public static final String DEFECT_ID = "com.burgess.bridge.DEFECT_ID";
@@ -107,6 +109,7 @@ public class DefectItemActivity extends AppCompatActivity {
     private DefectItemViewModel mDefectItemViewModel;
     private DefectItem_Table mDefectItem;
     private RadioGroup mRadioGroupDefectStatus;
+    private RadioButton mRadioButtonC;
     private RadioButton mRadioButtonNC;
     private RadioButton mRadioButtonR;
     private RadioButton mRadioButtonNA;
@@ -194,6 +197,7 @@ public class DefectItemActivity extends AppCompatActivity {
         mTextToolbarTeamRemaining = findViewById(R.id.toolbar_team_inspections_remaining);
         mDefectItemDetails = findViewById(R.id.defect_item_text_defect_item_details);
         mRadioGroupDefectStatus = findViewById(R.id.defect_item_radio_group);
+        mRadioButtonC = findViewById(R.id.defect_item_radio_c);
         mRadioButtonNC = findViewById(R.id.defect_item_radio_nc);
         mRadioButtonR = findViewById(R.id.defect_item_radio_r);
         mRadioButtonNA = findViewById(R.id.defect_item_radio_na);
@@ -279,6 +283,11 @@ public class DefectItemActivity extends AppCompatActivity {
                 return;
             }
 
+            if (mDefectItem.RequiresPhoto && !mPictureTaken) {
+                Snackbar.make(mConstraintLayout, "A picture is required for this defect item.", Snackbar.LENGTH_LONG).show();
+                return;
+            }
+
             // If it's Multifamily and not in Observation categories, require a picture
             if (mInspection.DivisionID == 20 && !mDefectItem.CategoryName.contains("Observation") && defectStatusId == 3 && !mPictureTaken) {
                 Snackbar.make(mConstraintLayout, "MFC Inspections require a photo for items marked C in this category.", Snackbar.LENGTH_LONG).show();
@@ -305,7 +314,37 @@ public class DefectItemActivity extends AppCompatActivity {
                 }
             }
 
-            // Custom rules for MHI
+            // Custom rules for Pacesetter Homes
+            int[] builderIds_Pacesetter = { 3311 };
+            int[] inspectionTypeIds_Pacesetter = { 2253, 2254 };
+            for (int builderId : builderIds_Pacesetter) {
+                if (builderId == mInspection.BuilderID) {
+                    for (int inspectionTypeId : inspectionTypeIds_Pacesetter) {
+                        if (inspectionTypeId == mInspection.InspectionTypeID) {
+                            if (defectStatusId == 2 && !mPictureTaken) {
+                                Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items.", Snackbar.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Custom rules for Camden
+            int[] builderIds_Camden = { 2733 };
+            int[] inspectionTypeIds_Camden = { 21 };
+            for (int builderId : builderIds_Camden) {
+                if (builderId == mInspection.BuilderID) {
+                    for (int inspectionTypeId : inspectionTypeIds_Camden) {
+                        if (inspectionTypeId == mInspection.InspectionTypeID) {
+                            if (defectStatusId == 2 && !mPictureTaken) {
+                                Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items.", Snackbar.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
 
 
             // Custom rules for Coventry / Dreamfinders
@@ -314,6 +353,37 @@ public class DefectItemActivity extends AppCompatActivity {
                 if (builderId == mInspection.BuilderID && (mInspection.InspectionClass == 1 || mInspection.InspectionClass == 2) ) {
                     if (!mInspection.ReInspect && defectStatusId == 2 && !mPictureTaken) {
                         Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items during 1st time inspections.", Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+            }
+
+            // Custom rules for Trophy Signature
+            int[] builderIds_TrophySignature = { 2169, 2269 };
+            for (int builderId : builderIds_TrophySignature) {
+                if (builderId == mInspection.BuilderID && mInspection.InspectionTypeID == 21 ) {
+                    if (!mInspection.ReInspect && defectStatusId == 2 && !mPictureTaken) {
+                        Snackbar.make(mConstraintLayout, "A picture is required for this builder on NC items during 1st time inspections.", Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+            }
+
+            // Custom rules for Oakwood Beford
+            int [] builderIds_OakwoodBedford = { 3120 };
+            for (int builderId : builderIds_OakwoodBedford) {
+                if (builderId == mInspection.BuilderID && !mPictureTaken) {
+                    Snackbar.make(mConstraintLayout, "A picture is required for this builder.", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
+            // Custom rules for Energy Star types
+            int[] energyStarTypes = { 2541, 2542, 2543, 2544, 2545, 2546, 2547, 2548 };
+            for (int typeId : energyStarTypes) {
+                if (typeId == mInspection.InspectionTypeID && mDefectItem.CategoryName.toLowerCase().contains("mrf")) {
+                    if (defectStatusId != 4 && !mPictureTaken) {
+                        Snackbar.make(mConstraintLayout, "A picture is required for this item unless NA is checked.", Snackbar.LENGTH_LONG).show();
                         return;
                     }
                 }
@@ -379,12 +449,46 @@ public class DefectItemActivity extends AppCompatActivity {
                     mDefectItemViewModel.updateReviewedStatus(defectStatusId, mInspectionHistoryId);
                     mDefectItemViewModel.updateInspectionDefectId((int) newId, mInspectionHistoryId);
                 }
-                Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
-                inspectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
-                inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
-                inspectIntent.putExtra(InspectActivity.SCROLL_POSITION, mScrollPosition);
-                startActivity(inspectIntent);
+
+                // If this is an energy star and the defect item was 15053, we need to add 15052
+                boolean isEnergyStar15053 = false;
+                int[] energyStarThermalEnclosureTypes = { 2545, 2546, 2547, 2548 };
+                for (int typeId : energyStarThermalEnclosureTypes) {
+                    // Check against the inspection type ID *and* defect ID
+                    if (typeId == mInspection.InspectionTypeID && mDefectItem.DefectItemID == 15053) {
+                        isEnergyStar15053 = true;
+                        break;
+                    }
+                }
+
+                if (isEnergyStar15053) {
+                    // Show the dialog
+                    new AlertDialog.Builder(DefectItemActivity.this)
+                            .setTitle("Add Required Item")
+                            .setMessage("You have added item 15053. This item requires a corresponding MRF item (15052). Would you like to add it now?")
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                // User wants to add 15052. Launch DefectItemActivity for 15052.
+                                Intent add15052Intent = new Intent(DefectItemActivity.this, DefectItemActivity.class);
+                                add15052Intent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
+                                add15052Intent.putExtra(DefectItemActivity.DEFECT_ID, 15052); // The new Defect ID
+                                add15052Intent.putExtra(DefectItemActivity.INSPECTION_HISTORY_ID, INSPECTION_HISTORY_ID_NOT_FOUND);
+                                add15052Intent.putExtra(DefectItemActivity.FIRST_DETAIL_ID, FIRST_DETAIL_ID_NOT_FOUND);
+                                add15052Intent.putExtra(DefectItemActivity.INSPECTION_DEFECT_ID, INSPECTION_DEFECT_ID_NOT_FOUND);
+                                add15052Intent.putExtra(DefectItemActivity.SCROLL_POSITION, mScrollPosition);
+                                add15052Intent.putExtra(DefectItemActivity.FILTER_OPTION, mFilter);
+                                startActivity(add15052Intent);
+                                finish(); // Close the current activity (for 15053)
+                            })
+                            .setNegativeButton("No", (dialog, which) -> {
+                                // User does not want to add 15052. Proceed as normal.
+                                launchInspectActivity();
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                } else {
+                    // Not the special Energy Star case, just launch InspectActivity
+                    launchInspectActivity();
+                }
             }
         });
         mButtonCancel.setOnClickListener(v -> {
@@ -433,10 +537,27 @@ public class DefectItemActivity extends AppCompatActivity {
         mDefectItemDetails.append(" - ");
         mDefectItemDetails.append(mDefectItem.ItemDescription);
 
-        // Set up spinner
-        //String[] spinnerItems = new String[]{"--Choose an option--", "Preliminary", "Prime", "Critical"};
-        //mSpinnerConstructionStageAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, spinnerItems);
-        //mSpinnerConstructionStage.setAdapter(mSpinnerConstructionStageAdapter);
+        if (!mDefectItem.ShowC) {
+            mRadioButtonC.setVisibility(View.GONE);
+        }
+        if (!mDefectItem.ShowNC) {
+            mRadioButtonNC.setVisibility(View.GONE);
+        }
+        if (!mDefectItem.ShowR) {
+            mRadioButtonR.setVisibility(View.GONE);
+        }
+        if (!mDefectItem.ShowNA) {
+            mRadioButtonNA.setVisibility(View.GONE);
+        }
+
+        int[] energyStarTypes = { 2541, 2542, 2543, 2544, 2545, 2546, 2547, 2548 };
+        for (int typeId : energyStarTypes) {
+            if (typeId == mInspection.InspectionTypeID && mDefectItem.CategoryName.toLowerCase().contains("mrf")) {
+                mRadioButtonNC.setVisibility(View.GONE);
+                mRadioButtonR.setVisibility(View.GONE);
+                mRadioGroupDefectStatus.check(R.id.defect_item_radio_c);
+            }
+        }
 
         if (!mInspection.RequireRiskAssessment) {
             mLabelLotNumber.setVisibility(View.GONE);
@@ -518,6 +639,15 @@ public class DefectItemActivity extends AppCompatActivity {
             mDefectItemTextPreviousComment.setVisibility(View.VISIBLE);
             mDefectItemTextPreviousComment.setText(mDefectItemViewModel.getInspectionHistoryComment(mInspectionHistoryId));
         }
+    }
+
+    private void launchInspectActivity() {
+        Intent inspectIntent = new Intent(DefectItemActivity.this, InspectActivity.class);
+        inspectIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        inspectIntent.putExtra(InspectActivity.INSPECTION_ID, mInspectionId);
+        inspectIntent.putExtra(InspectActivity.FILTER_OPTION, mFilter);
+        inspectIntent.putExtra(InspectActivity.SCROLL_POSITION, mScrollPosition);
+        startActivity(inspectIntent);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -609,23 +739,48 @@ public class DefectItemActivity extends AppCompatActivity {
         try {
             image = File.createTempFile(imageFileName, ".png", storageDir);
             mCurrentPhotoPath = image.getAbsolutePath();
-            BridgeLogger.log('I', TAG, "Created image for InspectionId: " + mInspectionId + ", DefectId: " + mDefectId);
+            BridgeLogger.log('I', CAMERA_TAG, "Created image for InspectionId: " + mInspectionId + ", DefectId: " + mDefectId);
             return image;
         } catch (IOException e) {
-            BridgeLogger.log('E', TAG, "ERROR in createImageFile: " + e.getMessage());
+            BridgeLogger.log('E', CAMERA_TAG, "ERROR in createImageFile: " + e.getMessage());
             return null;
         }
     }
     private void displayThumbnail() {
+        if (mCurrentPhotoPath == null || mCurrentPhotoPath.isEmpty()) {
+            BridgeLogger.log('E', CAMERA_TAG, "displayThumbnail - Error: mCurrentPhotoPath is null or empty.");
+            mImageViewThumbnail.setImageResource(R.drawable.ic_no_picture);
+            return;
+        }
+
+        BridgeLogger.log('I', CAMERA_TAG, "displayThumbnail - Attempting to display thumbnail for: " + mCurrentPhotoPath);
+        File imageFile = new File(mCurrentPhotoPath);
+
+        if (!imageFile.exists()) {
+            BridgeLogger.log('E', CAMERA_TAG, "displayThumbnail - Error: Image file does not exist at path: " + mCurrentPhotoPath);
+            mImageViewThumbnail.setImageResource(R.drawable.ic_no_picture);
+            return;
+        }
+
         try {
-            Bitmap imageThumbnailBitmap = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(mCurrentPhotoPath), 128, 128);
+            Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            if (imageBitmap == null) {
+                BridgeLogger.log('E', CAMERA_TAG, "displayThumbnail - Error: BitmapFactory.decodeFile returned null. The file may be corrupt or not a valid image: " + mCurrentPhotoPath);
+                mImageViewThumbnail.setImageResource(R.drawable.ic_no_picture);
+                return;
+            }
+
+            Bitmap imageThumbnailBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, 128, 128);
             Bitmap outBmp;
             float degrees = 90;
             Matrix matrix = new Matrix();
             matrix.setRotate(degrees);
             outBmp = Bitmap.createBitmap(imageThumbnailBitmap, 0, 0, imageThumbnailBitmap.getWidth(), imageThumbnailBitmap.getHeight(), matrix, true);
             mImageViewThumbnail.setImageBitmap(outBmp);
-        } catch (NullPointerException e) {
+
+        } catch (Exception e) {
+            BridgeLogger.log('E', CAMERA_TAG, "displayThumbnail - An unexpected error occurred: " + e.getMessage());
+            Log.e(CAMERA_TAG, "displayThumbnail StackTrace", e);
             mImageViewThumbnail.setImageResource(R.drawable.ic_no_picture);
         }
     }

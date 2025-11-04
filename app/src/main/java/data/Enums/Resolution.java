@@ -21,7 +21,8 @@ public enum Resolution {
     PERFORMED("Performed", 27, false),
     DEFERRED_BY_WEATHER("Deferred by Weather", 30, true),
     DEFERRED_DUE_TO_CANCELLATION("Deferred Due to Cancellation", 31, true),
-    CORRECT_AND_PROCEED("Correct & Proceed", 32, false)
+    CORRECT_AND_PROCEED("Correct & Proceed", 32, false),
+    REVIEW("Review", 33, false)
     ;
 
     public String description;

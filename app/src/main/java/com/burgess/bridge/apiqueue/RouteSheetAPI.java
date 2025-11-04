@@ -35,10 +35,17 @@ import com.burgess.bridge.BridgeLogger;
 import com.burgess.bridge.ServerCallback;
 import com.burgess.bridge.routesheet.RouteSheetViewModel;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -328,11 +335,15 @@ public class RouteSheetAPI {
         String url = BridgeAPIQueue.isProd() ? API_PROD_URL : API_STAGE_URL;
         url += String.format(BRIDGE_GET_DEFECT_ITEMS_V3_URL, inspectorId);
 
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanAsIntDeserializer());
+        gsonBuilder.registerTypeAdapter(boolean.class, new BooleanAsIntDeserializer());
+        Gson gson = gsonBuilder.create();
+
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
             for (int lcv = 0; lcv < response.length(); lcv++) {
                 try {
                     JSONObject obj = response.getJSONObject(lcv);
-                    Gson gson = new Gson();
                     DefectItem_Table defectItem = gson.fromJson(obj.toString(), DefectItem_Table.class);
                     vm.insertDefectItem(defectItem);
                 } catch (Exception e) {
@@ -854,19 +865,27 @@ public class RouteSheetAPI {
         for (int lcv = 0; lcv < distributionSystemsArray.length(); lcv++) {
             JSONObject distributionSystemObj = distributionSystemsArray.optJSONObject(lcv);
             JSONObject testedDetailsObj = distributionSystemObj.optJSONObject("testedDetails");
-            JSONArray ductsArray = testedDetailsObj.optJSONArray("ducts");
+            JSONArray ductsArray = null;
+            if (testedDetailsObj != null) {
+                ductsArray = testedDetailsObj.optJSONArray("ducts");
+            }
 
             Ekotrope_DistributionSystem_Table distributionSystem = new Ekotrope_DistributionSystem_Table();
             distributionSystem.plan_id = planId;
             distributionSystem.index = lcv;
             distributionSystem.system_type = distributionSystemObj.optString("systemType");
-            distributionSystem.is_leakage_to_outside_tested = testedDetailsObj.optBoolean("isLeakageToOutsideTested");
-            distributionSystem.leakage_to_outside = testedDetailsObj.optDouble("leakageToOutside");
-            distributionSystem.total_leakage = testedDetailsObj.optDouble("totalLeakage");
-            distributionSystem.total_duct_leakage_test_condition = testedDetailsObj.optString("totalLeakageTestCondition");
-            distributionSystem.number_of_returns = testedDetailsObj.optInt("numberOfReturnGrilles");
-            distributionSystem.sq_feet_served = testedDetailsObj.optDouble("sqFtServed");
-            addDucts(ductsArray, planId, lcv, vm);
+            if (testedDetailsObj != null) {
+                distributionSystem.is_leakage_to_outside_tested = testedDetailsObj.optBoolean("isLeakageToOutsideTested");
+                distributionSystem.leakage_to_outside = testedDetailsObj.optDouble("leakageToOutside");
+                distributionSystem.total_leakage = testedDetailsObj.optDouble("totalLeakage");
+                distributionSystem.total_duct_leakage_test_condition = testedDetailsObj.optString("totalLeakageTestCondition");
+                distributionSystem.number_of_returns = testedDetailsObj.optInt("numberOfReturnGrilles");
+                distributionSystem.sq_feet_served = testedDetailsObj.optDouble("sqFtServed");
+            }
+
+            if (ductsArray != null) {
+                addDucts(ductsArray, planId, lcv, vm);
+            }
             distributionSystem.is_changed = false;
 
             vm.insertDistributionSystem(distributionSystem);
@@ -1001,5 +1020,27 @@ public class RouteSheetAPI {
         infiltration.is_changed = false;
 
         vm.insertInfiltration(infiltration);
+    }
+
+    public static class BooleanAsIntDeserializer implements JsonDeserializer<Boolean> {
+        @Override
+        public Boolean deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            if (json.isJsonPrimitive()) {
+                JsonPrimitive primitive = json.getAsJsonPrimitive();
+                if (primitive.isBoolean()) {
+                    return primitive.getAsBoolean();
+                }
+                if (primitive.isNumber()) {
+                    // Treats any non-zero number as true
+                    return primitive.getAsInt() != 0;
+                }
+            }
+            // Handle nulls by returning false (assuming the field is a primitive 'boolean')
+            if (json.isJsonNull()) {
+                return false;
+            }
+            // Throw an error if it's an unexpected type (like an object or array)
+            throw new JsonParseException("Cannot parse " + json.toString() + " as a boolean");
+        }
     }
 }

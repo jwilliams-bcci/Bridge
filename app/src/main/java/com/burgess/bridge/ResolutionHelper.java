@@ -36,25 +36,13 @@ public class ResolutionHelper {
             resolutionList.add(new Resolution(11, "Passed"));
         }
         resolutionList.add(new Resolution(3, "Not Ready"));
-        if (mDivisionId == 5) {
-            if (mBuilderId == 2997) {
-                if (mInspectionType.contains("Pre-Drywall")) {
-                    resolutionList.add(new Resolution(32, "Correct & Proceed"));
-                }
-                else if (mInspectionType.contains("Final") && mIsReinspect) {
-                    resolutionList.add(new Resolution(32, "Correct & Proceed"));
-                }
-            }
-        } else {
-            resolutionList.add(new Resolution(32, "Correct & Proceed"));
-        }
+        resolutionList.add(new Resolution(32, "Correct & Proceed"));
         if (mInspectionClass == 7) {
             resolutionList.add(new Resolution(24, "Builder to Verify"));
-            if (mDivisionId == 5 || mDivisionId == 17) {
-                resolutionList.add(new Resolution(21, "Batch"));
-            }
         }
+        resolutionList.add(new Resolution(21, "Batch"));
         resolutionList.add(new Resolution(27, "Performed"));
+        resolutionList.add(new Resolution(33, "Review"));
 
         return resolutionList;
     }

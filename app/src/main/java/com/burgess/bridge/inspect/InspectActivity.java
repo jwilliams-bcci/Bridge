@@ -41,9 +41,13 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import data.Tables.DefectItem_Table;
 import data.Tables.InspectionDefect_Table;
 import data.Tables.Inspection_Table;
 
@@ -83,6 +87,7 @@ public class InspectActivity extends AppCompatActivity {
     private TextView mTextTotalDefectCountLabel;
     private TextView mTextTotalDefectCount;
     private Button mButtonReviewAndSubmit;
+    private List<DefectItem_Table> mAllDefectItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +160,7 @@ public class InspectActivity extends AppCompatActivity {
                 allGood = true;
             }
 
-            // David Weekley Final - Has the sewer cam inspection passed? Yes or No buttons.
+            // David Weekley Final - Has the sewer cam inspection passed?
             if ((mInspection.BuilderName.toLowerCase().contains("dwh") || mInspection.BuilderName.toLowerCase().contains("weekley"))
                     && mInspection.InspectionType.toLowerCase().contains("final")
                     && !(mInspection.InspectionType.toLowerCase().contains("roof") || mInspection.InspectionType.toLowerCase().contains("airplus"))
@@ -167,42 +172,59 @@ public class InspectActivity extends AppCompatActivity {
             }
 
             if (allGood) {
-                if (needsSewerCam) {
-                    List<InspectionDefect_Table> inspectionDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
-                    boolean defectExists = false;
-                    for (InspectionDefect_Table inspectionDefect : inspectionDefects) {
-                        if (inspectionDefect.DefectItemID == 9591) {
-                            defectExists = true;
+                // --- NEW CHECK FOR RequiresEntry ---
+                boolean hasMissingRequiredItems = false;
+                if (!mReinspection) { // Only run this check on new inspections
+                    List<InspectionDefect_Table> enteredDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
+                    Set<Integer> enteredDefectIds = new HashSet<>();
+                    for (InspectionDefect_Table defect : enteredDefects) {
+                        enteredDefectIds.add(defect.DefectItemID);
+                    }
+
+                    // Use the pre-fetched list of all defect items
+                    for (DefectItem_Table defectItem : mAllDefectItems) {
+                        if (defectItem.RequiresEntry && !enteredDefectIds.contains(defectItem.DefectItemID)) {
+                            hasMissingRequiredItems = true;
                             break;
                         }
                     }
-                    if (!defectExists) {
-                        showSewerCamCheck();
-                    } else {
-                        Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
-                        reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
-                        startActivity(reviewAndSubmitIntent);
-                    }
                 }
 
-                if (mInspection.JotformLink != null && !mInspection.JotformAccessed) {
-                    showJotformDialog();
+                if (hasMissingRequiredItems) {
+                    // Show a dialog asking to double-check
+                    new AlertDialog.Builder(InspectActivity.this)
+                            .setTitle("Missing Required Items")
+                            .setMessage("You have items marked with an asterisk (*) that must be entered before you can submit.")
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                // User wants to continue, proceed with the other checks
+                                dialog.dismiss();
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    // Don't proceed further, wait for dialog choice
                 } else {
-                    Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
-                    reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
-                    startActivity(reviewAndSubmitIntent);
+                    // No missing items, or it's a reinspection, so proceed immediately.
+                    performSubmitChecks(needsSewerCam);
                 }
+                // --- END OF NEW CHECK ---
+
             } else {
                 Snackbar.make(mConstraintLayout, "Please review all items", Snackbar.LENGTH_LONG).show();
             }
         });
         mButtonSortItemNumber.setOnClickListener(v -> {
-            mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
-                    mInspectListAdapter.setCurrentList(defectItems));
+            mInspectViewModel.getAllDefectItemsFilteredNumberSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems -> {
+                List<InspectionDefect_Table> enteredDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
+                mInspectListAdapter.setEnteredDefects(enteredDefects);
+                mInspectListAdapter.setCurrentList(defectItems);
+            });
         });
         mButtonSortDescription.setOnClickListener(v -> {
-            mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems ->
-                    mInspectListAdapter.setCurrentList(defectItems));
+            mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(mSpinnerDefectCategories.getSelectedItem().toString(), mInspectionTypeId, mInspectionId).observe(this, defectItems -> {
+                List<InspectionDefect_Table> enteredDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
+                mInspectListAdapter.setEnteredDefects(enteredDefects);
+                mInspectListAdapter.setCurrentList(defectItems);
+            });
         });
         mButtonViewEkotropeData.setOnClickListener(v -> {
             if (TextUtils.isEmpty(mInspection.EkotropeProjectID) || TextUtils.isEmpty(mInspection.EkotropePlanID)) {
@@ -254,6 +276,13 @@ public class InspectActivity extends AppCompatActivity {
             displayDefectItems(mFilter);
         }
         mRecyclerDefectItems.setLayoutManager(new LinearLayoutManager(this));
+        if (!mReinspection) {
+            mInspectViewModel.getAllDefectItemsFilteredDescriptionSort("ALL", mInspectionTypeId, mInspectionId).observe(this, allItems -> {
+                if (allItems != null) {
+                    mAllDefectItems = allItems;
+                }
+            });
+        }
         if(mScrollPosition > 0) {
             new Handler().postDelayed(() -> mRecyclerDefectItems.scrollToPosition(mScrollPosition), 1000);
         }
@@ -288,8 +317,11 @@ public class InspectActivity extends AppCompatActivity {
     }
 
     private void displayDefectItems(String filter) {
-        mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(filter, mInspectionTypeId, mInspectionId).observe(this, defectItems ->
-                mInspectListAdapter.setCurrentList(defectItems));
+        mInspectViewModel.getAllDefectItemsFilteredDescriptionSort(filter, mInspectionTypeId, mInspectionId).observe(this, defectItems -> {
+            List<InspectionDefect_Table> enteredDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
+            mInspectListAdapter.setEnteredDefects(enteredDefects);
+            mInspectListAdapter.setCurrentList(defectItems);
+        });
     }
     private void displayReinspectItems(int scrollPosition) {
         mInspectViewModel.getInspectionHistory(mInspectionId).observe(this, defectItems -> {
@@ -438,6 +470,69 @@ public class InspectActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(mRecyclerDefectItems);
     }
 
+    private void performSubmitChecks(boolean needsSewerCam) {
+        boolean has15053 = false;
+        boolean has15052 = false;
+        boolean isEnergyStarThermal = false;
+        int[] energyStarThermalEnclosureTypes = { 2545, 2546, 2547, 2548 };
+
+        for (int typeId : energyStarThermalEnclosureTypes) {
+            if (typeId == mInspection.InspectionTypeID) {
+                isEnergyStarThermal = true;
+                break;
+            }
+        }
+
+        if (isEnergyStarThermal) {
+            List<InspectionDefect_Table> inspectionDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
+            for (InspectionDefect_Table defect : inspectionDefects) {
+                if (defect.DefectItemID == 15053) {
+                    has15053 = true;
+                }
+                if (defect.DefectItemID == 15052) {
+                    has15052 = true;
+                }
+                if (has15053 && has15052) {
+                    break;
+                }
+            }
+
+            if (has15053 && !has15052) {
+                // Show the dialog and stop further execution
+                showEnergyStarCheck();
+                return;
+            }
+        }
+
+        if (needsSewerCam) {
+            List<InspectionDefect_Table> inspectionDefects = mInspectViewModel.getAllInspectionDefects(mInspectionId);
+            boolean defectExists = false;
+            for (InspectionDefect_Table inspectionDefect : inspectionDefects) {
+                if (inspectionDefect.DefectItemID == 9591) {
+                    defectExists = true;
+                    break;
+                }
+            }
+            if (!defectExists) {
+                // Show dialog and stop further execution
+                showSewerCamCheck();
+                return;
+            }
+            // If defect *does* exist, fall through to Jotform check
+        }
+
+        if (mInspection.JotformLink != null && !mInspection.JotformAccessed) {
+            // Show dialog and stop further execution
+            showJotformDialog();
+            return;
+        }
+
+        // All checks passed, proceed to Review & Submit
+        Intent reviewAndSubmitIntent = new Intent(InspectActivity.this, ReviewAndSubmitActivity.class);
+        reviewAndSubmitIntent.putExtra(ReviewAndSubmitActivity.INSPECTION_ID, mInspectionId);
+        startActivity(reviewAndSubmitIntent);
+    }
+
     // Custom action Alert check Sewer Cam passed?
     public void showSewerCamCheck() {
         AlertDialog sewerCamDialog = new AlertDialog.Builder(this)
@@ -455,6 +550,25 @@ public class InspectActivity extends AppCompatActivity {
                 })
                 .create();
         sewerCamDialog.show();
+    }
+
+    // Custom action Alert check Energy Star 15052
+    public void showEnergyStarCheck() {
+        AlertDialog energyStarDialog = new AlertDialog.Builder(this)
+                .setTitle("Missing Required Item")
+                .setMessage("This inspection requires item 15052 (MRF) because item 15053 has been added. " +
+                        "Would you like to add it now?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Intent intent = new Intent(InspectActivity.this, DefectItemActivity.class);
+                    intent.putExtra(DefectItemActivity.INSPECTION_ID, mInspectionId);
+                    intent.putExtra(DefectItemActivity.DEFECT_ID, 15052); // The required Defect ID
+                    startActivity(intent);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    Snackbar.make(mConstraintLayout, "Item 15052 must be added before submitting.", Snackbar.LENGTH_LONG).show();
+                })
+                .create();
+        energyStarDialog.show();
     }
 
     public void showJotformDialog() {

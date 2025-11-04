@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
@@ -49,7 +50,8 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
     @Override
     public void onBindViewHolder(@NonNull @NotNull InspectViewHolder holder, int position) {
         InspectionHistory_Table inspectionHistory = getCurrentList().get(position);
-        Group group = holder.itemView.findViewById(R.id.item_defect_item_group);
+        ConstraintLayout itemLayout = holder.getConstraintLayout();
+        TextView textStatusIcon = holder.getTextStatusIcon();
 
         TextView textSection = holder.getTextDefectItemSection();
         TextView textNumber = holder.getTextDefectItemNumber();
@@ -57,6 +59,7 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
 
         // Set text fields
         textSection.setVisibility(View.GONE);
+        textStatusIcon.setVisibility(View.GONE);
         textNumber.setText(Integer.toString(inspectionHistory.ItemNumber));
         textDescription.setText(inspectionHistory.Comment + "\n" + inspectionHistory.ItemDescription);
 
@@ -64,16 +67,16 @@ public class ReinspectListAdapter extends ListAdapter<InspectionHistory_Table, I
         if (!inspectionHistory.IsReviewed) {
             textNumber.setTextColor(Color.WHITE);
             textDescription.setTextColor(Color.WHITE);
-            group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_not_reviewed));
+            itemLayout.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_not_reviewed));
         } else {
             switch (inspectionHistory.ReviewedStatus) {
                 case 2:
-                    group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_reviewed_failed));
+                    itemLayout.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_reviewed_failed));
                     textDescription.setTextColor(Color.WHITE);
                     textNumber.setTextColor(Color.WHITE);
                     break;
                 default:
-                    group.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_reviewed_complete));
+                    itemLayout.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(), R.drawable.defect_border_reviewed_complete));
                     textDescription.setTextColor(Color.BLACK);
                     textNumber.setTextColor(Color.BLACK);
                     break;

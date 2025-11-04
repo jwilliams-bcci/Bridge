@@ -1,5 +1,6 @@
 package com.burgess.bridge.reviewandsubmit;
 
+import static androidx.core.view.WindowCompat.*;
 import static com.burgess.bridge.Constants.PREF;
 import static com.burgess.bridge.Constants.PREF_IND_INSPECTIONS_REMAINING;
 import static com.burgess.bridge.Constants.PREF_IS_ONLINE;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.WindowCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -115,7 +117,7 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review_and_submit);
         setSupportActionBar(findViewById(R.id.review_and_submit_toolbar));
-        mReviewAndSubmitViewModel = new ViewModelProvider(this, (ViewModelProvider.Factory) new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
+        mReviewAndSubmitViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(ReviewAndSubmitViewModel.class);
 
         // Prepare shared preferences...
         mSharedPreferences = getSharedPreferences(PREF, Context.MODE_PRIVATE);
@@ -322,6 +324,26 @@ public class ReviewAndSubmitActivity extends AppCompatActivity {
                     status = 27;
                     break;
                 }
+            }
+
+            int[] defaultToCP = { 1828, 1901, 2352 };
+            for (int typeId : defaultToCP) {
+                if (typeId == mInspection.InspectionTypeID) {
+                    status = 32;
+                    break;
+                }
+            }
+
+            int[] defaultToReview = { 2130, 2129, 2131, 1513, 2482 };
+            for (int typeId : defaultToReview) {
+                if (typeId == mInspection.InspectionTypeID) {
+                    status = 33;
+                    break;
+                }
+            }
+
+            if (mInspection.InspectionTypeID == 2410 && mInspection.BuilderID == 2997) {
+                status = 21;
             }
 
             return status;
